@@ -58,6 +58,8 @@ def create_refresh_token(user_id: str) -> tuple[str, datetime]:
     expire = datetime.now(timezone.utc) + timedelta(
         days=settings.REFRESH_TOKEN_EXPIRE_DAYS
     )
+    # DB column is TIMESTAMP WITHOUT TIME ZONE — strip tzinfo for storage
+    expire_naive = expire.replace(tzinfo=None)
 
     to_encode = {
         "sub": user_id,
@@ -72,7 +74,7 @@ def create_refresh_token(user_id: str) -> tuple[str, datetime]:
         algorithm=settings.JWT_ALGORITHM
     )
 
-    return token, expire
+    return token, expire_naive
 
 
 def decode_token(token: str) -> Optional[dict]:
