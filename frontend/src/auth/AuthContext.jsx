@@ -14,9 +14,36 @@ export function AuthProvider({ children }) {
         if (accessToken) {
             fetchUser(accessToken);
         } else {
-            setLoading(false);
+            // Auto-login as guest
+            autoGuestLogin();
         }
     }, []);
+
+    const autoGuestLogin = async () => {
+        try {
+            const guestId = crypto.randomUUID().slice(0, 8);
+            const guestEmail = `guest-${guestId}@guest.local`;
+            const guestPassword = crypto.randomUUID();
+
+            const res = await fetch(`${API_BASE}/auth/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: guestEmail, password: guestPassword })
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                localStorage.setItem('access_token', data.access_token);
+                localStorage.setItem('refresh_token', data.refresh_token);
+                await fetchUser(data.access_token);
+            } else {
+                setLoading(false);
+            }
+        } catch (err) {
+            console.error('Auto guest login failed:', err);
+            setLoading(false);
+        }
+    };
 
     const fetchUser = async (token) => {
         try {
