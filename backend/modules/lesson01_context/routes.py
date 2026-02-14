@@ -113,7 +113,7 @@ async def upload_conversation(
         data = json.loads(content.decode('utf-8'))
     except json.JSONDecodeError as e:
         raise HTTPException(status_code=400, detail=f"Invalid JSON: {str(e)}")
-    except Exception as e:
+    except (UnicodeDecodeError, IOError) as e:
         raise HTTPException(status_code=400, detail=f"Error reading file: {str(e)}")
 
     # Handle various formats

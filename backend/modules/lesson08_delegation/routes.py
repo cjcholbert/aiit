@@ -1,4 +1,5 @@
 """Lesson 8: Delegation Tracker API routes."""
+import json
 import logging
 from typing import Optional
 import uuid
@@ -408,7 +409,7 @@ async def analyze_task_output(
 
     except AnalyzerError as e:
         raise HTTPException(status_code=422, detail=str(e))
-    except Exception as e:
+    except (ValueError, json.JSONDecodeError, ConnectionError) as e:
         logger.error(f"Analysis failed: {e}")
         raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
 

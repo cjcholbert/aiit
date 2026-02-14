@@ -1,4 +1,5 @@
 """Admin API for AI Manager Skills Platform."""
+import json
 import logging
 import os
 from datetime import datetime, timezone
@@ -179,9 +180,14 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+cors_origins = [
+    origin.strip()
+    for origin in os.getenv("CORS_ORIGINS", "http://localhost:3001").split(",")
+    if origin.strip()
+]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

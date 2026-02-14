@@ -215,7 +215,7 @@ async def test_template(
     # Send to Claude
     try:
         ai_response = await test_template_with_ai(rendered)
-    except Exception as e:
+    except (ValueError, ConnectionError) as e:
         raise HTTPException(status_code=503, detail=f"AI test failed: {str(e)}")
 
     # Save the test result
