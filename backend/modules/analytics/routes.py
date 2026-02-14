@@ -1,5 +1,5 @@
 """API routes for analytics module."""
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import List, Optional
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy import select, func, and_, desc
@@ -38,7 +38,7 @@ LESSON_TITLES = {
 
 def get_date_range(range_str: str) -> datetime:
     """Get start date based on range string."""
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     if range_str == "day":
         return now - timedelta(days=1)
     elif range_str == "week":
@@ -132,80 +132,23 @@ async def get_overview_stats(
     )
     lessons_visited = (await db.execute(lessons_query)).scalar() or 0
 
-    # Count items created across all lesson tables
-    items_created = 0
+    # Count items created across all lesson tables in a single UNION query
+    from sqlalchemy import union_all, literal
+    count_queries = []
+    for model in [
+        Conversation, Template, Prediction, Checklist, Decomposition,
+        Delegation, IterationTask, FeedbackEntry, WorkflowTemplate,
+        ContextDoc, FrontierZone, FrontierEncounter
+    ]:
+        count_queries.append(
+            select(func.count(model.id).label("cnt")).where(
+                and_(model.user_id == current_user.id, model.created_at >= start_date)
+            )
+        )
 
-    # Count conversations
-    conv_query = select(func.count(Conversation.id)).where(
-        and_(Conversation.user_id == current_user.id, Conversation.created_at >= start_date)
-    )
-    items_created += (await db.execute(conv_query)).scalar() or 0
-
-    # Count templates
-    tmpl_query = select(func.count(Template.id)).where(
-        and_(Template.user_id == current_user.id, Template.created_at >= start_date)
-    )
-    items_created += (await db.execute(tmpl_query)).scalar() or 0
-
-    # Count predictions
-    pred_query = select(func.count(Prediction.id)).where(
-        and_(Prediction.user_id == current_user.id, Prediction.created_at >= start_date)
-    )
-    items_created += (await db.execute(pred_query)).scalar() or 0
-
-    # Count checklists
-    check_query = select(func.count(Checklist.id)).where(
-        and_(Checklist.user_id == current_user.id, Checklist.created_at >= start_date)
-    )
-    items_created += (await db.execute(check_query)).scalar() or 0
-
-    # Count decompositions
-    decomp_query = select(func.count(Decomposition.id)).where(
-        and_(Decomposition.user_id == current_user.id, Decomposition.created_at >= start_date)
-    )
-    items_created += (await db.execute(decomp_query)).scalar() or 0
-
-    # Count delegations
-    deleg_query = select(func.count(Delegation.id)).where(
-        and_(Delegation.user_id == current_user.id, Delegation.created_at >= start_date)
-    )
-    items_created += (await db.execute(deleg_query)).scalar() or 0
-
-    # Count iteration tasks
-    iter_query = select(func.count(IterationTask.id)).where(
-        and_(IterationTask.user_id == current_user.id, IterationTask.created_at >= start_date)
-    )
-    items_created += (await db.execute(iter_query)).scalar() or 0
-
-    # Count feedback entries
-    fb_query = select(func.count(FeedbackEntry.id)).where(
-        and_(FeedbackEntry.user_id == current_user.id, FeedbackEntry.created_at >= start_date)
-    )
-    items_created += (await db.execute(fb_query)).scalar() or 0
-
-    # Count workflow templates
-    wf_query = select(func.count(WorkflowTemplate.id)).where(
-        and_(WorkflowTemplate.user_id == current_user.id, WorkflowTemplate.created_at >= start_date)
-    )
-    items_created += (await db.execute(wf_query)).scalar() or 0
-
-    # Count context docs
-    ctx_query = select(func.count(ContextDoc.id)).where(
-        and_(ContextDoc.user_id == current_user.id, ContextDoc.created_at >= start_date)
-    )
-    items_created += (await db.execute(ctx_query)).scalar() or 0
-
-    # Count frontier zones
-    zone_query = select(func.count(FrontierZone.id)).where(
-        and_(FrontierZone.user_id == current_user.id, FrontierZone.created_at >= start_date)
-    )
-    items_created += (await db.execute(zone_query)).scalar() or 0
-
-    # Count frontier encounters
-    enc_query = select(func.count(FrontierEncounter.id)).where(
-        and_(FrontierEncounter.user_id == current_user.id, FrontierEncounter.created_at >= start_date)
-    )
-    items_created += (await db.execute(enc_query)).scalar() or 0
+    combined = union_all(*count_queries).subquery()
+    total_items_query = select(func.sum(combined.c.cnt))
+    items_created = (await db.execute(total_items_query)).scalar() or 0
 
     # Calculate streak (days with activity)
     # Get all dates with page views
@@ -218,7 +161,7 @@ async def get_overview_stats(
     current_streak = 0
     longest_streak = 0
     temp_streak = 0
-    today = datetime.utcnow().date()
+    today = datetime.now(timezone.utc).date()
 
     for i, date in enumerate(activity_dates):
         if i == 0:
@@ -274,55 +217,43 @@ async def get_lesson_stats(
     current_user: User = Depends(get_current_user)
 ):
     """Get statistics for each lesson."""
+    # Batch: page views per lesson
+    views_query = (
+        select(PageView.lesson, func.count(PageView.id).label("views"))
+        .where(and_(PageView.user_id == current_user.id, PageView.lesson.isnot(None)))
+        .group_by(PageView.lesson)
+    )
+    views_result = await db.execute(views_query)
+    views_by_lesson = {row[0]: row[1] for row in views_result.all()}
+
+    # Batch: feedback per lesson
+    feedback_query = (
+        select(Feedback.lesson, func.count(Feedback.id), func.avg(Feedback.rating))
+        .where(and_(Feedback.user_id == current_user.id, Feedback.lesson.isnot(None)))
+        .group_by(Feedback.lesson)
+    )
+    feedback_result = await db.execute(feedback_query)
+    feedback_by_lesson = {
+        row[0]: {"count": row[1] or 0, "avg_rating": float(row[2]) if row[2] else None}
+        for row in feedback_result.all()
+    }
+
+    # Batch: item counts for specific lessons (4 queries instead of conditional per-loop)
+    items_by_lesson = {}
+    for lesson_num, model in [(1, Conversation), (3, Template), (5, Prediction), (11, FrontierZone)]:
+        q = select(func.count(model.id)).where(model.user_id == current_user.id)
+        items_by_lesson[lesson_num] = (await db.execute(q)).scalar() or 0
+
     stats = []
-
     for lesson_num in range(1, 13):
-        # Count page views for this lesson
-        views_query = select(func.count(PageView.id)).where(
-            and_(
-                PageView.user_id == current_user.id,
-                PageView.lesson == lesson_num
-            )
-        )
-        views = (await db.execute(views_query)).scalar() or 0
-
-        # Get feedback for this lesson
-        feedback_query = select(
-            func.count(Feedback.id),
-            func.avg(Feedback.rating)
-        ).where(
-            and_(
-                Feedback.user_id == current_user.id,
-                Feedback.lesson == lesson_num
-            )
-        )
-        feedback_result = await db.execute(feedback_query)
-        feedback_row = feedback_result.fetchone()
-        feedback_count = feedback_row[0] or 0
-        avg_rating = float(feedback_row[1]) if feedback_row[1] else None
-
-        # Count items for this lesson (simplified - could be expanded)
-        items_created = 0
-        if lesson_num == 1:
-            q = select(func.count(Conversation.id)).where(Conversation.user_id == current_user.id)
-            items_created = (await db.execute(q)).scalar() or 0
-        elif lesson_num == 3:
-            q = select(func.count(Template.id)).where(Template.user_id == current_user.id)
-            items_created = (await db.execute(q)).scalar() or 0
-        elif lesson_num == 5:
-            q = select(func.count(Prediction.id)).where(Prediction.user_id == current_user.id)
-            items_created = (await db.execute(q)).scalar() or 0
-        elif lesson_num == 11:
-            q = select(func.count(FrontierZone.id)).where(FrontierZone.user_id == current_user.id)
-            items_created = (await db.execute(q)).scalar() or 0
-
+        fb = feedback_by_lesson.get(lesson_num, {"count": 0, "avg_rating": None})
         stats.append(LessonStats(
             lesson=lesson_num,
             title=LESSON_TITLES.get(lesson_num, f"Lesson {lesson_num}"),
-            views=views,
-            items_created=items_created,
-            avg_rating=avg_rating,
-            feedback_count=feedback_count
+            views=views_by_lesson.get(lesson_num, 0),
+            items_created=items_by_lesson.get(lesson_num, 0),
+            avg_rating=fb["avg_rating"],
+            feedback_count=fb["count"]
         ))
 
     return stats

@@ -3,7 +3,7 @@ import logging
 from collections import Counter
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from fastapi import APIRouter, Depends, HTTPException, Request, UploadFile, File
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 import json
@@ -17,6 +17,7 @@ from .schemas import (
     ConversationSummary, PatternStats, InsightsResponse, Analysis,
     HabitCount, GapItem, StrengthItem, AuditEntry, Turn, ParsedTranscript
 )
+from backend.rate_limit import limiter
 from .parser import parse_transcript, validate_transcript
 from .analyzer import analyze_transcript, normalize_transcript, check_api_connection, AnalyzerError
 
@@ -37,8 +38,10 @@ async def get_status():
 
 
 @router.post("/analyze", response_model=ConversationResponse)
+@limiter.limit("3/minute")
 async def analyze_conversation(
-    request: ConversationCreate,
+    request: Request,
+    body: ConversationCreate,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
@@ -50,13 +53,13 @@ async def analyze_conversation(
     if not connected:
         raise HTTPException(status_code=503, detail=message)
 
-    parsed = parse_transcript(request.raw_transcript)
+    parsed = parse_transcript(body.raw_transcript)
     is_valid, error_msg = validate_transcript(parsed)
 
     if not is_valid:
         logger.info("Direct parsing failed, attempting AI normalization...")
         try:
-            normalized_text = await normalize_transcript(request.raw_transcript)
+            normalized_text = await normalize_transcript(body.raw_transcript)
             parsed = parse_transcript(normalized_text)
             is_valid, error_msg = validate_transcript(parsed)
 
@@ -77,7 +80,7 @@ async def analyze_conversation(
     # Save to database
     conversation = Conversation(
         user_id=current_user.id,
-        raw_transcript=request.raw_transcript,
+        raw_transcript=body.raw_transcript,
         analysis=analysis.model_dump()
     )
     db.add(conversation)

@@ -4,7 +4,7 @@ from collections import Counter
 from datetime import datetime
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 
@@ -17,6 +17,7 @@ from .schemas import (
     TemplateTestCreate, TemplateTestResponse, TemplateTestFeedback,
     TemplateSuggestion, TemplateStats, RenderRequest, RenderResponse
 )
+from backend.rate_limit import limiter
 from .renderer import render_template, extract_variables_from_content
 from .suggester import (
     generate_suggestions, generate_template_from_conversation, test_template_with_ai
@@ -338,7 +339,9 @@ async def get_template_test_history(
 # =============================================================================
 
 @router.get("/suggestions", response_model=list[TemplateSuggestion])
+@limiter.limit("3/minute")
 async def get_template_suggestions(
+    request: Request,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):

@@ -3,12 +3,13 @@ FROM node:20-alpine as builder
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 
 COPY . .
 
 ARG VITE_ADMIN_API_URL=http://localhost:8001
 ENV VITE_ADMIN_API_URL=$VITE_ADMIN_API_URL
+ENV NODE_ENV=production
 
 RUN npm run build
 

@@ -5,8 +5,8 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# Install dependencies (including devDependencies needed for build)
+RUN npm ci
 
 # Copy source code
 COPY . .
@@ -14,6 +14,7 @@ COPY . .
 # Build argument for API URL
 ARG VITE_API_URL=http://localhost:8001
 ENV VITE_API_URL=$VITE_API_URL
+ENV NODE_ENV=production
 
 # Build the app
 RUN chmod +x node_modules/.bin/* && npm run build

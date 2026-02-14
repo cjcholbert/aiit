@@ -1,14 +1,13 @@
 """API routes for admin module - Cohort tracking and A/B testing."""
 import hashlib
-import random
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select, func, and_, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.database import get_db
-from backend.auth import get_current_user
+from backend.auth import get_current_user, get_current_admin_user
 from backend.database.models import (
     User, Cohort, CohortMember, Experiment, ExperimentAssignment as ExperimentAssignmentModel,
     PageView
@@ -22,12 +21,6 @@ from .schemas import (
 router = APIRouter(prefix="/admin", tags=["admin"])
 
 
-def require_admin(user: User):
-    """Raise exception if user is not admin."""
-    if not user.is_admin:
-        raise HTTPException(status_code=403, detail="Admin access required")
-
-
 # =============================================================================
 # Cohort Management
 # =============================================================================
@@ -36,10 +29,8 @@ def require_admin(user: User):
 async def create_cohort(
     cohort: CohortCreate,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_admin_user)
 ):
-    """Create a new cohort (admin only)."""
-    require_admin(current_user)
 
     new_cohort = Cohort(
         name=cohort.name,
@@ -68,23 +59,21 @@ async def create_cohort(
 @router.get("/cohorts", response_model=List[CohortResponse])
 async def list_cohorts(
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_admin_user)
 ):
-    """List all cohorts (admin only)."""
-    require_admin(current_user)
 
-    query = select(Cohort).order_by(desc(Cohort.created_at))
+    # Single query with LEFT JOIN to get member counts
+    query = (
+        select(Cohort, func.count(CohortMember.id).label("member_count"))
+        .outerjoin(CohortMember, CohortMember.cohort_id == Cohort.id)
+        .group_by(Cohort.id)
+        .order_by(desc(Cohort.created_at))
+    )
     result = await db.execute(query)
-    cohorts = result.scalars().all()
+    rows = result.all()
 
     responses = []
-    for cohort in cohorts:
-        # Count members
-        count_query = select(func.count(CohortMember.id)).where(
-            CohortMember.cohort_id == cohort.id
-        )
-        member_count = (await db.execute(count_query)).scalar() or 0
-
+    for cohort, member_count in rows:
         responses.append(CohortResponse(
             id=cohort.id,
             name=cohort.name,
@@ -104,10 +93,8 @@ async def list_cohorts(
 async def get_cohort(
     cohort_id: str,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_admin_user)
 ):
-    """Get a specific cohort (admin only)."""
-    require_admin(current_user)
 
     query = select(Cohort).where(Cohort.id == cohort_id)
     result = await db.execute(query)
@@ -139,10 +126,8 @@ async def update_cohort(
     cohort_id: str,
     updates: CohortUpdate,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_admin_user)
 ):
-    """Update a cohort (admin only)."""
-    require_admin(current_user)
 
     query = select(Cohort).where(Cohort.id == cohort_id)
     result = await db.execute(query)
@@ -181,10 +166,8 @@ async def add_cohort_member(
     cohort_id: str,
     member: CohortMemberAdd,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_admin_user)
 ):
-    """Add a user to a cohort (admin only)."""
-    require_admin(current_user)
 
     # Verify cohort exists
     cohort_query = select(Cohort).where(Cohort.id == cohort_id)
@@ -223,10 +206,8 @@ async def remove_cohort_member(
     cohort_id: str,
     user_id: str,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_admin_user)
 ):
-    """Remove a user from a cohort (admin only)."""
-    require_admin(current_user)
 
     query = select(CohortMember).where(
         and_(
@@ -250,10 +231,8 @@ async def remove_cohort_member(
 async def get_cohort_stats(
     cohort_id: str,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_admin_user)
 ):
-    """Get statistics for a cohort (admin only)."""
-    require_admin(current_user)
 
     # Get cohort
     cohort_query = select(Cohort).where(Cohort.id == cohort_id)
@@ -278,7 +257,7 @@ async def get_cohort_stats(
         )
 
     # Count active members (activity in last 7 days)
-    week_ago = datetime.utcnow() - timedelta(days=7)
+    week_ago = datetime.now(timezone.utc) - timedelta(days=7)
     active_query = select(func.count(func.distinct(PageView.user_id))).where(
         and_(
             PageView.user_id.in_(member_ids),
@@ -323,10 +302,8 @@ async def get_cohort_stats(
 async def create_experiment(
     experiment: ExperimentCreate,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_admin_user)
 ):
-    """Create a new A/B test experiment (admin only)."""
-    require_admin(current_user)
 
     # Check for existing active experiment with same feature key
     existing_query = select(Experiment).where(
@@ -371,10 +348,8 @@ async def create_experiment(
 async def list_experiments(
     active_only: bool = Query(False),
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_admin_user)
 ):
-    """List all experiments (admin only)."""
-    require_admin(current_user)
 
     query = select(Experiment)
     if active_only:
@@ -406,10 +381,8 @@ async def update_experiment(
     experiment_id: str,
     updates: ExperimentUpdate,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_admin_user)
 ):
-    """Update an experiment (admin only)."""
-    require_admin(current_user)
 
     query = select(Experiment).where(Experiment.id == experiment_id)
     result = await db.execute(query)
@@ -423,7 +396,7 @@ async def update_experiment(
     # If setting a winner, conclude the experiment
     if 'winner' in update_data and update_data['winner']:
         update_data['is_active'] = False
-        update_data['concluded_at'] = datetime.utcnow()
+        update_data['concluded_at'] = datetime.now(timezone.utc)
 
     for field, value in update_data.items():
         setattr(experiment, field, value)
@@ -502,10 +475,8 @@ async def get_user_assignments(
 async def get_experiment_stats(
     experiment_id: str,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_admin_user)
 ):
-    """Get statistics for an experiment (admin only)."""
-    require_admin(current_user)
 
     # Get experiment
     exp_query = select(Experiment).where(Experiment.id == experiment_id)
@@ -513,18 +484,22 @@ async def get_experiment_stats(
     if not experiment:
         raise HTTPException(status_code=404, detail="Experiment not found")
 
-    # Get assignments by variant
+    # Single query to get all variant counts at once
+    counts_query = (
+        select(
+            ExperimentAssignmentModel.variant,
+            func.count(ExperimentAssignmentModel.id).label("count")
+        )
+        .where(ExperimentAssignmentModel.experiment_id == experiment_id)
+        .group_by(ExperimentAssignmentModel.variant)
+    )
+    counts_result = await db.execute(counts_query)
+    variant_counts = {row[0]: row[1] for row in counts_result.all()}
+
     variant_stats = {}
     for variant in experiment.variants:
-        count_query = select(func.count(ExperimentAssignmentModel.id)).where(
-            and_(
-                ExperimentAssignmentModel.experiment_id == experiment_id,
-                ExperimentAssignmentModel.variant == variant
-            )
-        )
-        count = (await db.execute(count_query)).scalar() or 0
         variant_stats[variant] = {
-            "participants": count,
+            "participants": variant_counts.get(variant, 0),
             "events": 0,  # Would require event tracking table
             "conversion_rate": 0.0
         }
@@ -548,37 +523,51 @@ async def list_users(
     limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0),
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_admin_user)
 ):
-    """List all users with admin details (admin only)."""
-    require_admin(current_user)
 
-    query = select(User).order_by(desc(User.created_at)).offset(offset).limit(limit)
+    # Single query with LEFT JOINs and subqueries to avoid N+1
+    cohort_sub = (
+        select(
+            CohortMember.user_id,
+            Cohort.id.label("cohort_id"),
+            Cohort.name.label("cohort_name")
+        )
+        .join(Cohort, Cohort.id == CohortMember.cohort_id)
+        .distinct(CohortMember.user_id)
+        .subquery()
+    )
+
+    pageview_sub = (
+        select(
+            PageView.user_id,
+            func.count(func.distinct(PageView.lesson)).label("lessons_visited"),
+            func.max(PageView.created_at).label("last_activity")
+        )
+        .where(PageView.lesson.isnot(None))
+        .group_by(PageView.user_id)
+        .subquery()
+    )
+
+    query = (
+        select(
+            User,
+            cohort_sub.c.cohort_id,
+            cohort_sub.c.cohort_name,
+            func.coalesce(pageview_sub.c.lessons_visited, 0).label("lessons_visited"),
+            pageview_sub.c.last_activity
+        )
+        .outerjoin(cohort_sub, cohort_sub.c.user_id == User.id)
+        .outerjoin(pageview_sub, pageview_sub.c.user_id == User.id)
+        .order_by(desc(User.created_at))
+        .offset(offset)
+        .limit(limit)
+    )
     result = await db.execute(query)
-    users = result.scalars().all()
+    rows = result.all()
 
     responses = []
-    for user in users:
-        # Get cohort membership
-        cohort_query = select(Cohort.id, Cohort.name).join(
-            CohortMember, CohortMember.cohort_id == Cohort.id
-        ).where(CohortMember.user_id == user.id)
-        cohort_result = (await db.execute(cohort_query)).fetchone()
-        cohort_id = cohort_result[0] if cohort_result else None
-        cohort_name = cohort_result[1] if cohort_result else None
-
-        # Get page view stats
-        lesson_count_query = select(func.count(func.distinct(PageView.lesson))).where(
-            and_(PageView.user_id == user.id, PageView.lesson.isnot(None))
-        )
-        lessons_visited = (await db.execute(lesson_count_query)).scalar() or 0
-
-        # Get last activity
-        last_activity_query = select(func.max(PageView.created_at)).where(
-            PageView.user_id == user.id
-        )
-        last_activity = (await db.execute(last_activity_query)).scalar()
-
+    for user, cohort_id, cohort_name, lessons_visited, last_activity in rows:
         responses.append(UserAdminView(
             id=user.id,
             email=user.email,

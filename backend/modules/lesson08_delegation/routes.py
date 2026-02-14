@@ -4,7 +4,7 @@ import logging
 from typing import Optional
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from sqlalchemy.orm import attributes
@@ -19,6 +19,7 @@ from .schemas import (
     DelegationStats, DelegationReview, AnalyzeRequest,
     TEMPLATE_ELEMENTS, EXAMPLE_TEMPLATES
 )
+from backend.rate_limit import limiter
 from .analyzer import analyze_delegation_output, AnalyzerError
 
 logger = logging.getLogger(__name__)
@@ -347,10 +348,12 @@ async def delete_task(
 # =============================================================================
 
 @router.post("/delegations/{delegation_id}/tasks/{task_id}/analyze", response_model=DelegationReview)
+@limiter.limit("3/minute")
 async def analyze_task_output(
     delegation_id: str,
     task_id: str,
-    request: AnalyzeRequest,
+    request: Request,
+    body: AnalyzeRequest,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
@@ -380,7 +383,7 @@ async def analyze_task_output(
 
     try:
         review = await analyze_delegation_output(
-            raw_output=request.raw_output,
+            raw_output=body.raw_output,
             template=deleg.template or "",
             expected_output=task.get('expected_output', ''),
             task_title=task.get('title', ''),

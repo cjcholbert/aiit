@@ -62,7 +62,7 @@ class UserProgress(Base):
     __tablename__ = "user_progress"
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
-    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     lesson = Column(Integer, nullable=False)  # 1-12
     completed_exercises = Column(JSON, default=list)  # List of exercise IDs completed
     last_activity = Column(DateTime, server_default=func.now(), onupdate=func.now())
@@ -80,7 +80,7 @@ class Conversation(Base):
     __tablename__ = "conversations"
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
-    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     created_at = Column(DateTime, server_default=func.now())
     raw_transcript = Column(Text, nullable=False)
 
@@ -102,7 +102,7 @@ class Template(Base):
     __tablename__ = "templates"
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
-    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     name = Column(String(100), nullable=False)
     category = Column(String(50), nullable=False)  # user-defined category
     description = Column(Text, nullable=True)
@@ -124,8 +124,8 @@ class TemplateTest(Base):
     __tablename__ = "template_tests"
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
-    template_id = Column(UUID(as_uuid=False), ForeignKey("templates.id", ondelete="CASCADE"), nullable=False)
-    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    template_id = Column(UUID(as_uuid=False), ForeignKey("templates.id", ondelete="CASCADE"), nullable=False, index=True)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     test_prompt = Column(Text, nullable=False)  # User's test question
     variable_values = Column(JSON, default=dict)  # {variable_name: value}
     rendered_prompt = Column(Text, nullable=False)  # Template + variables + test question
@@ -147,7 +147,7 @@ class OutputType(Base):
     __tablename__ = "output_types"
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
-    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     name = Column(String(100), nullable=False)  # e.g., "PowerShell Scripts"
     category = Column(String(50), nullable=False)  # e.g., "Code", "Documentation", "Analysis"
     trust_level = Column(String(20), nullable=False)  # "high", "medium", "low"
@@ -166,8 +166,8 @@ class Prediction(Base):
     __tablename__ = "predictions"
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
-    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    output_type_id = Column(UUID(as_uuid=False), ForeignKey("output_types.id", ondelete="SET NULL"), nullable=True)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    output_type_id = Column(UUID(as_uuid=False), ForeignKey("output_types.id", ondelete="SET NULL"), nullable=True, index=True)
 
     # The prediction
     output_description = Column(Text, nullable=False)  # What the AI output was about
@@ -195,9 +195,9 @@ class CalibrationInsight(Base):
     __tablename__ = "calibration_insights"
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
-    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     insight_type = Column(String(50), nullable=False)  # "over_trust", "over_verify", "well_calibrated", "recommendation"
-    output_type_id = Column(UUID(as_uuid=False), ForeignKey("output_types.id", ondelete="SET NULL"), nullable=True)
+    output_type_id = Column(UUID(as_uuid=False), ForeignKey("output_types.id", ondelete="SET NULL"), nullable=True, index=True)
     description = Column(Text, nullable=False)
     evidence = Column(JSON, nullable=True)  # Supporting data
     created_at = Column(DateTime, server_default=func.now())
@@ -215,7 +215,7 @@ class Checklist(Base):
     __tablename__ = "checklists"
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
-    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     name = Column(String(255), nullable=False)
     output_type = Column(String(100), nullable=False)  # type of output this checklist is for
     items = Column(JSON, nullable=False)  # List of checklist items
@@ -235,7 +235,7 @@ class Decomposition(Base):
     __tablename__ = "decompositions"
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
-    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     project_name = Column(String(255), nullable=False)
     tasks = Column(JSON, nullable=False)  # List of task objects
     categories = Column(JSON, nullable=False)  # ai_optimal, collaborative, human_only categorization
@@ -250,7 +250,7 @@ class Delegation(Base):
     __tablename__ = "delegations"
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
-    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     name = Column(String(255), nullable=False)
     template = Column(Text, nullable=False)  # The delegation prompt template
     task_sequence = Column(JSON, nullable=False)  # Ordered list of tasks
@@ -270,7 +270,7 @@ class IterationTask(Base):
     __tablename__ = "iteration_tasks"
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
-    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     task_name = Column(String(255), nullable=False)
     target_outcome = Column(Text, nullable=True)  # What "done" looks like
     passes = Column(JSON, default=list)  # Array of pass feedback objects
@@ -289,7 +289,7 @@ class Iteration(Base):
     __tablename__ = "iterations"
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
-    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     task_name = Column(String(255), nullable=False)
     pass_number = Column(Integer, nullable=False)  # 1, 2, 3 (70%, 85%, 95%)
     pass_label = Column(String(20), nullable=False)  # "70%", "85%", "95%"
@@ -305,7 +305,7 @@ class FeedbackEntry(Base):
     __tablename__ = "feedback_entries"
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
-    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     original_feedback = Column(Text, nullable=False)  # The original feedback text
     context = Column(Text, nullable=True)  # Optional context about what the feedback was for
     analysis = Column(JSON, nullable=False)  # Quality analysis result
@@ -327,7 +327,7 @@ class WorkflowTemplate(Base):
     __tablename__ = "workflow_templates"
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
-    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     name = Column(String(255), nullable=False)
     description = Column(Text)
     frequency = Column(String(50))  # "daily", "weekly", "biweekly", "monthly"
@@ -349,8 +349,8 @@ class StatusReport(Base):
     __tablename__ = "status_reports"
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
-    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    template_id = Column(UUID(as_uuid=False), ForeignKey("workflow_templates.id", ondelete="SET NULL"), nullable=True)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    template_id = Column(UUID(as_uuid=False), ForeignKey("workflow_templates.id", ondelete="SET NULL"), nullable=True, index=True)
     title = Column(String(255), nullable=False)
     inputs_used = Column(JSON, default=dict)  # Actual inputs for this run
     generated_content = Column(Text)  # AI-generated or manual report content
@@ -368,7 +368,7 @@ class ContextDoc(Base):
     __tablename__ = "context_docs"
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
-    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     project_name = Column(String(255), nullable=False)
     description = Column(Text, nullable=True)
 
@@ -396,8 +396,8 @@ class ContextSession(Base):
     __tablename__ = "context_sessions"
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
-    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    context_doc_id = Column(UUID(as_uuid=False), ForeignKey("context_docs.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    context_doc_id = Column(UUID(as_uuid=False), ForeignKey("context_docs.id", ondelete="CASCADE"), nullable=False, index=True)
 
     started_at = Column(DateTime, server_default=func.now())
     ended_at = Column(DateTime, nullable=True)
@@ -426,7 +426,7 @@ class FrontierZone(Base):
     __tablename__ = "frontier_zones"
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
-    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     name = Column(String(255), nullable=False)  # e.g., "Python scripting", "Legal advice"
     category = Column(String(100), nullable=False)  # e.g., "coding", "writing", "analysis"
     reliability = Column(String(20), nullable=False)  # "reliable", "mixed", "unreliable"
@@ -447,8 +447,8 @@ class FrontierEncounter(Base):
     __tablename__ = "frontier_encounters"
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
-    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    zone_id = Column(UUID(as_uuid=False), ForeignKey("frontier_zones.id", ondelete="SET NULL"), nullable=True)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    zone_id = Column(UUID(as_uuid=False), ForeignKey("frontier_zones.id", ondelete="SET NULL"), nullable=True, index=True)
     encounter_type = Column(String(20), nullable=False)  # "success", "failure", "surprise"
     task_description = Column(Text, nullable=False)  # What you asked the AI to do
     outcome = Column(Text, nullable=False)  # What happened
@@ -470,7 +470,7 @@ class ReferenceCard(Base):
     __tablename__ = "reference_cards"
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
-    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     name = Column(String(255), nullable=False, default="My AI Reference Card")
 
     # Aggregated insights from weeks 1-11
@@ -506,9 +506,9 @@ class PageView(Base):
     __tablename__ = "page_views"
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
-    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     page = Column(String(255), nullable=False)  # Page path (e.g., "/lesson/1", "/analytics")
-    lesson = Column(Integer, nullable=True)  # Lesson number if applicable (1-12)
+    lesson = Column(Integer, nullable=True, index=True)  # Lesson number if applicable (1-12)
     created_at = Column(DateTime, server_default=func.now())
 
     user = relationship("User", back_populates="page_views")
@@ -519,8 +519,8 @@ class Feedback(Base):
     __tablename__ = "feedback"
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
-    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    lesson = Column(Integer, nullable=True)  # Lesson number if applicable (1-12)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    lesson = Column(Integer, nullable=True, index=True)  # Lesson number if applicable (1-12)
     page = Column(String(255), nullable=False)  # Page path
     rating = Column(Integer, nullable=False)  # 1-5 star rating
     comment = Column(Text, nullable=True)  # Optional feedback text
@@ -538,7 +538,7 @@ class RefreshToken(Base):
     __tablename__ = "refresh_tokens"
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
-    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     token = Column(String(500), unique=True, nullable=False, index=True)
     expires_at = Column(DateTime, nullable=False)
     created_at = Column(DateTime, server_default=func.now())
@@ -571,8 +571,8 @@ class CohortMember(Base):
     __tablename__ = "cohort_members"
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
-    cohort_id = Column(UUID(as_uuid=False), ForeignKey("cohorts.id", ondelete="CASCADE"), nullable=False)
-    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    cohort_id = Column(UUID(as_uuid=False), ForeignKey("cohorts.id", ondelete="CASCADE"), nullable=False, index=True)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     joined_at = Column(DateTime, server_default=func.now())
 
     cohort = relationship("Cohort", back_populates="members")
@@ -606,8 +606,8 @@ class ExperimentAssignment(Base):
     __tablename__ = "experiment_assignments"
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
-    experiment_id = Column(UUID(as_uuid=False), ForeignKey("experiments.id", ondelete="CASCADE"), nullable=False)
-    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    experiment_id = Column(UUID(as_uuid=False), ForeignKey("experiments.id", ondelete="CASCADE"), nullable=False, index=True)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     variant = Column(String(50), nullable=False)  # Which variant the user is in
     assigned_at = Column(DateTime, server_default=func.now())
 

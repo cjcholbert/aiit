@@ -47,86 +47,85 @@ export default function NavDropdown() {
     }, []);
 
     return (
-        <div className="nav-dropdown-container" ref={dropdownRef}>
-            <button
-                className="nav-dropdown-trigger"
-                onClick={() => setIsOpen(!isOpen)}
-                aria-expanded={isOpen}
-                aria-haspopup="true"
-            >
-                <span className="nav-dropdown-current">{getCurrentPageName()}</span>
-                <span className={`nav-dropdown-arrow ${isOpen ? 'open' : ''}`}>▼</span>
-            </button>
+        <>
+            <div className="nav-dropdown-container" ref={dropdownRef}>
+                <button
+                    className="nav-dropdown-trigger"
+                    onClick={() => setIsOpen(!isOpen)}
+                    aria-expanded={isOpen}
+                    aria-haspopup="true"
+                >
+                    <span className="nav-dropdown-current">{getCurrentPageName()}</span>
+                    <span className={`nav-dropdown-arrow ${isOpen ? 'open' : ''}`}>▼</span>
+                </button>
 
-            {isOpen && (
-                <div className="nav-dropdown-menu" role="menu">
-                    <div className="nav-dropdown-section">
-                        <div className="nav-dropdown-section-title">Pages</div>
-                        <NavLink
-                            to="/"
-                            className={({ isActive }) => `nav-dropdown-item ${isActive ? 'active' : ''}`}
-                            role="menuitem"
-                            end
-                        >
-                            Dashboard
-                        </NavLink>
-                        <NavLink
-                            to="/concepts"
-                            className={({ isActive }) => `nav-dropdown-item ${isActive ? 'active' : ''}`}
-                            role="menuitem"
-                        >
-                            Core Concepts
-                        </NavLink>
-                        <NavLink
-                            to="/analytics"
-                            className={({ isActive }) => `nav-dropdown-item ${isActive ? 'active' : ''}`}
-                            role="menuitem"
-                        >
-                            Analytics
-                        </NavLink>
-                        {user?.is_admin && (
+                {isOpen && (
+                    <div className="nav-dropdown-menu" role="menu">
+                        <div className="nav-dropdown-section">
+                            <div className="nav-dropdown-section-title">Pages</div>
                             <NavLink
-                                to="/admin"
+                                to="/"
+                                className={({ isActive }) => `nav-dropdown-item ${isActive ? 'active' : ''}`}
+                                role="menuitem"
+                                end
+                            >
+                                Dashboard
+                            </NavLink>
+                            <NavLink
+                                to="/concepts"
                                 className={({ isActive }) => `nav-dropdown-item ${isActive ? 'active' : ''}`}
                                 role="menuitem"
                             >
-                                Admin
+                                Core Concepts
                             </NavLink>
-                        )}
-                    </div>
-
-                    <div className="nav-dropdown-divider" />
-
-                    <div className="nav-dropdown-section">
-                        <div className="nav-dropdown-section-title">Settings</div>
-                        <button
-                            className="nav-dropdown-item"
-                            onClick={toggleTheme}
-                            role="menuitem"
-                        >
-                            {theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-                        </button>
-                    </div>
-
-                    <div className="nav-dropdown-divider" />
-
-                    <div className="nav-dropdown-section">
-                        <div className="nav-dropdown-user">
-                            <div className="user-avatar-sm">
-                                {user?.email?.charAt(0).toUpperCase() || 'U'}
-                            </div>
-                            <span className="nav-dropdown-email">{user?.email || 'User'}</span>
+                            <NavLink
+                                to="/analytics"
+                                className={({ isActive }) => `nav-dropdown-item ${isActive ? 'active' : ''}`}
+                                role="menuitem"
+                            >
+                                Analytics
+                            </NavLink>
+                            {user?.is_admin && (
+                                <NavLink
+                                    to="/admin"
+                                    className={({ isActive }) => `nav-dropdown-item ${isActive ? 'active' : ''}`}
+                                    role="menuitem"
+                                >
+                                    Admin
+                                </NavLink>
+                            )}
                         </div>
-                        <button
-                            className="nav-dropdown-item nav-dropdown-logout"
-                            onClick={logout}
-                            role="menuitem"
-                        >
-                            Sign Out
-                        </button>
+
+                        <div className="nav-dropdown-divider" />
+
+                        <div className="nav-dropdown-section">
+                            <div className="nav-dropdown-section-title">Settings</div>
+                            <button
+                                className="nav-dropdown-item"
+                                onClick={toggleTheme}
+                                role="menuitem"
+                            >
+                                {theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                            </button>
+                        </div>
                     </div>
+                )}
+            </div>
+
+            {/* Always-visible user info and sign out */}
+            <div className="nav-user-bar">
+                <div className="user-avatar-sm">
+                    {user?.email?.charAt(0).toUpperCase() || 'U'}
                 </div>
-            )}
-        </div>
+                <span className="nav-user-email">{user?.email || 'User'}</span>
+                <button
+                    className="nav-signout-btn"
+                    onClick={logout}
+                    aria-label="Sign out"
+                >
+                    Sign Out
+                </button>
+            </div>
+        </>
     );
 }

@@ -1,11 +1,11 @@
 """Lesson 5: Trust Matrix API routes."""
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func
+from sqlalchemy import select, func, Integer
 
 from backend.database import get_db
 from backend.database.models import User, OutputType, Prediction, CalibrationInsight
@@ -17,6 +17,7 @@ from .schemas import (
     CalibrationStats, CalibrationInsightResponse, OutputTypeStats, TrustLevelStats,
     DEFAULT_OUTPUT_TYPES
 )
+from backend.rate_limit import limiter
 from .analyzer import analyze_calibration
 
 logger = logging.getLogger(__name__)
@@ -73,10 +74,32 @@ async def list_output_types(
     result = await db.execute(query)
     output_types = result.scalars().all()
 
-    # Get prediction stats for each output type
+    # Batch query for prediction stats across all output types
+    if output_types:
+        ot_ids = [ot.id for ot in output_types]
+        stats_query = (
+            select(
+                Prediction.output_type_id,
+                func.count(Prediction.id).label("total"),
+                func.count(Prediction.was_correct).label("verified"),
+                func.sum(func.cast(Prediction.was_correct == True, Integer)).label("correct")
+            )
+            .where(Prediction.output_type_id.in_(ot_ids))
+            .group_by(Prediction.output_type_id)
+        )
+        stats_result = await db.execute(stats_query)
+        stats_map = {}
+        for row in stats_result.all():
+            verified = row[2] or 0
+            correct = row[3] or 0
+            accuracy = round(correct / verified * 100, 1) if verified else 0.0
+            stats_map[row[0]] = (row[1] or 0, accuracy)
+    else:
+        stats_map = {}
+
     summaries = []
     for ot in output_types:
-        pred_count, accuracy = await _get_output_type_stats(ot.id, db)
+        pred_count, accuracy = stats_map.get(ot.id, (0, 0.0))
         summaries.append(OutputTypeSummary(
             id=ot.id,
             name=ot.name,
@@ -286,7 +309,7 @@ async def verify_prediction(
     prediction.verification_method = verification.verification_method
     prediction.verification_time_seconds = verification.verification_time_seconds
     prediction.calibration_note = verification.calibration_note
-    prediction.verified_at = datetime.utcnow()
+    prediction.verified_at = datetime.now(timezone.utc)
 
     await db.commit()
     await db.refresh(prediction)
@@ -415,7 +438,9 @@ async def get_calibration_insights(
 
 
 @router.post("/calibration/analyze")
+@limiter.limit("3/minute")
 async def trigger_calibration_analysis(
+    request: Request,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):

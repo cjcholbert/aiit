@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './auth/AuthContext';
 import Sidebar from './components/Sidebar';
 import NavDropdown from './components/NavDropdown';
+import ErrorBoundary from './components/ErrorBoundary';
 import FeedbackWidget from './components/FeedbackWidget';
 import SkipLink from './components/SkipLink';
 import Login from './pages/Login';
@@ -107,7 +108,7 @@ function AppLayout({ children }) {
 
                 {/* Main content area */}
                 <main id="main-content" className="main-content" tabIndex="-1">
-                    {children}
+                    <ErrorBoundary>{children}</ErrorBoundary>
                 </main>
             </div>
 
