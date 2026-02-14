@@ -638,7 +638,7 @@ export default function Lesson02() {
                 </button>
               )}
               {entries.length > 0 && (
-                <button className="btn btn-danger" onClick={handleClearAll} style={{ background: 'var(--accent-red)' }}>
+                <button className="btn btn-danger" onClick={handleClearAll}>
                   Clear All
                 </button>
               )}
@@ -688,7 +688,7 @@ export default function Lesson02() {
                       </div>
                       <button
                         className="btn btn-danger"
-                        style={{ padding: '4px 8px', background: 'var(--accent-red)', marginLeft: '12px' }}
+                        style={{ padding: '4px 8px', marginLeft: '12px' }}
                         onClick={(e) => { e.stopPropagation(); handleDeleteEntry(entry.id); }}
                       >
                         Delete

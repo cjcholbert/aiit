@@ -690,7 +690,7 @@ export default function Lesson09() {
                     + New Task
                   </button>
                   {tasks.length > 0 && (
-                    <button className="btn btn-danger" onClick={handleClearAll} style={{ background: 'var(--accent-red)' }}>
+                    <button className="btn btn-danger" onClick={handleClearAll}>
                       Clear All
                     </button>
                   )}
@@ -758,7 +758,7 @@ export default function Lesson09() {
                       </button>
                       <button
                         className="btn btn-danger"
-                        style={{ padding: '4px 12px', fontSize: '0.8rem', background: 'var(--accent-red)' }}
+                        style={{ padding: '4px 12px', fontSize: '0.8rem' }}
                         onClick={(e) => { e.stopPropagation(); handleDeleteTask(task.id); }}
                       >
                         Delete

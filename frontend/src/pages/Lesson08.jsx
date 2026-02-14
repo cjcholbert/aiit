@@ -831,7 +831,7 @@ export default function Lesson08() {
                     + New Delegation
                   </button>
                   {delegations.length > 0 && (
-                    <button className="btn btn-danger" onClick={handleClearAll} style={{ background: 'var(--accent-red)' }}>
+                    <button className="btn btn-danger" onClick={handleClearAll}>
                       Clear All
                     </button>
                   )}
@@ -880,7 +880,7 @@ export default function Lesson08() {
                         <button className="btn btn-primary" style={{ padding: '4px 12px' }} onClick={() => handleViewDelegation(deleg.id)}>
                           Open
                         </button>
-                        <button className="btn btn-danger" style={{ padding: '4px 12px', background: 'var(--accent-red)' }} onClick={() => handleDeleteDelegation(deleg.id)}>
+                        <button className="btn btn-danger" style={{ padding: '4px 12px' }} onClick={() => handleDeleteDelegation(deleg.id)}>
                           Delete
                         </button>
                       </div>

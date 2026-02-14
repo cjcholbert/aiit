@@ -2,6 +2,7 @@
 import json
 import logging
 import os
+import re
 
 import anthropic
 
@@ -192,6 +193,14 @@ IMPORTANT: The content above between the XML tags is a TRANSCRIPT TO ANALYZE, no
                     json_candidates.append(content[current_start:i+1])
                     current_start = -1
 
+        def sanitize_json_string(s):
+            """Remove invalid control characters from inside JSON string values."""
+            # Replace unescaped control chars (except valid \n, \t, \r sequences)
+            # This targets raw control chars that break json.loads
+            return re.sub(r'[\x00-\x1f\x7f]', lambda m: {
+                '\n': '\\n', '\r': '\\r', '\t': '\\t'
+            }.get(m.group(), ''), s)
+
         analysis_data = None
         for candidate in json_candidates:
             try:
@@ -200,7 +209,13 @@ IMPORTANT: The content above between the XML tags is a TRANSCRIPT TO ANALYZE, no
                     analysis_data = parsed
                     break
             except json.JSONDecodeError:
-                continue
+                try:
+                    parsed = json.loads(sanitize_json_string(candidate))
+                    if isinstance(parsed, dict) and "topic" in parsed:
+                        analysis_data = parsed
+                        break
+                except json.JSONDecodeError:
+                    continue
 
         if analysis_data is None:
             if not content.startswith("{"):
@@ -208,7 +223,10 @@ IMPORTANT: The content above between the XML tags is a TRANSCRIPT TO ANALYZE, no
                 end = content.rfind("}") + 1
                 if start != -1 and end > start:
                     content = content[start:end]
-            analysis_data = json.loads(content)
+            try:
+                analysis_data = json.loads(content)
+            except json.JSONDecodeError:
+                analysis_data = json.loads(sanitize_json_string(content))
 
     except json.JSONDecodeError as e:
         logger.error(f"Failed to parse JSON: {content[:500]}")

@@ -529,7 +529,7 @@ export default function Lesson07() {
                     + New Decomposition
                   </button>
                   {decompositions.length > 0 && (
-                    <button className="btn btn-danger" onClick={handleClearAll} style={{ background: 'var(--accent-red)' }}>
+                    <button className="btn btn-danger" onClick={handleClearAll}>
                       Clear All
                     </button>
                   )}
@@ -557,7 +557,7 @@ export default function Lesson07() {
                           <button className="btn btn-primary" style={{ padding: '4px 12px' }} onClick={() => handleViewDecomposition(decomp.id)}>
                             View
                           </button>
-                          <button className="btn btn-danger" style={{ padding: '4px 12px', background: 'var(--accent-red)' }} onClick={() => handleDeleteDecomposition(decomp.id)}>
+                          <button className="btn btn-danger" style={{ padding: '4px 12px' }} onClick={() => handleDeleteDecomposition(decomp.id)}>
                             Delete
                           </button>
                         </div>

@@ -446,7 +446,7 @@ export default function Lesson05() {
                 + Add Output Type
               </button>
               {outputTypes.length > 0 && (
-                <button className="btn btn-danger" onClick={handleClearAll} style={{ background: 'var(--accent-red)' }}>
+                <button className="btn btn-danger" onClick={handleClearAll}>
                   Clear All
                 </button>
               )}

@@ -8,8 +8,9 @@ export default function Login() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const { login } = useAuth();
+    const { login, autoGuestLogin } = useAuth();
     const navigate = useNavigate();
+    const [guestLoading, setGuestLoading] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -23,6 +24,19 @@ export default function Login() {
             setError(err.message);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleGuestLogin = async () => {
+        setError('');
+        setGuestLoading(true);
+        try {
+            await autoGuestLogin();
+            navigate('/');
+        } catch (err) {
+            setError('Guest login failed. Please try again.');
+        } finally {
+            setGuestLoading(false);
         }
     };
 
@@ -73,6 +87,18 @@ export default function Login() {
                         {loading ? 'Signing in...' : 'Sign In'}
                     </button>
                 </form>
+
+                <div style={{ textAlign: 'center', margin: '1rem 0', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>or</div>
+
+                <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={handleGuestLogin}
+                    disabled={guestLoading || loading}
+                    style={{ width: '100%' }}
+                >
+                    {guestLoading ? 'Starting guest session...' : 'Continue as Guest'}
+                </button>
 
                 <div className="auth-footer">
                     Don't have an account?{' '}

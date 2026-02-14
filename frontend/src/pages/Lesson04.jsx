@@ -807,7 +807,7 @@ export default function Lesson04() {
                         <span>v{doc.version} | {doc.session_count} sessions</span>
                         <button
                           className="btn btn-danger"
-                          style={{ padding: '2px 8px', fontSize: '0.75rem', background: 'var(--accent-red)' }}
+                          style={{ padding: '2px 8px', fontSize: '0.75rem', background: 'var(--accent-red)', color: '#fff' }}
                           onClick={(e) => { e.stopPropagation(); handleDeleteDoc(doc.id); }}
                         >
                           Delete

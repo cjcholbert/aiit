@@ -388,7 +388,7 @@ export default function Lesson06() {
                 + New Checklist
               </button>
               {checklists.length > 0 && (
-                <button className="btn btn-danger" onClick={handleClearAll} style={{ background: 'var(--accent-red)' }}>
+                <button className="btn btn-danger" onClick={handleClearAll}>
                   Clear All
                 </button>
               )}
@@ -587,7 +587,6 @@ export default function Lesson06() {
                       </button>
                       <button
                         className="btn btn-danger"
-                        style={{ background: 'var(--accent-red)' }}
                         onClick={() => handleDeleteChecklist(checklist.id)}
                       >
                         Delete
@@ -744,7 +743,7 @@ export default function Lesson06() {
                   <button className="btn btn-primary" style={{ background: 'var(--accent-green)' }} onClick={() => completeSession(true)}>
                     Complete - Passed
                   </button>
-                  <button className="btn btn-primary" style={{ background: 'var(--accent-red)' }} onClick={() => completeSession(false)}>
+                  <button className="btn btn-danger" onClick={() => completeSession(false)}>
                     Complete - Issues Found
                   </button>
                   <button className="btn btn-secondary" onClick={cancelSession}>

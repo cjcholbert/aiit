@@ -657,7 +657,7 @@ export default function Lesson10() {
                         </label>
                         <button
                           onClick={() => handleRemoveInput(idx)}
-                          style={{ background: 'var(--accent-red)', border: 'none', color: 'var(--text-primary)', padding: '4px 8px', borderRadius: '4px', cursor: 'pointer' }}
+                          style={{ background: 'var(--accent-red)', border: 'none', color: '#fff', padding: '4px 8px', borderRadius: '4px', cursor: 'pointer' }}
                         >
                           X
                         </button>
@@ -708,7 +708,7 @@ export default function Lesson10() {
                         </label>
                         <button
                           onClick={() => handleRemoveStep(idx)}
-                          style={{ background: 'var(--accent-red)', border: 'none', color: 'var(--text-primary)', padding: '4px 8px', borderRadius: '4px', cursor: 'pointer' }}
+                          style={{ background: 'var(--accent-red)', border: 'none', color: '#fff', padding: '4px 8px', borderRadius: '4px', cursor: 'pointer' }}
                         >
                           X
                         </button>
@@ -809,7 +809,7 @@ export default function Lesson10() {
                         </span>
                         <button
                           className="btn btn-danger"
-                          style={{ padding: '2px 8px', fontSize: '0.75rem', background: 'var(--accent-red)' }}
+                          style={{ padding: '2px 8px', fontSize: '0.75rem', background: 'var(--accent-red)', color: '#fff' }}
                           onClick={(e) => { e.stopPropagation(); handleDeleteTemplate(template.id); }}
                         >
                           Delete
@@ -1187,7 +1187,7 @@ export default function Lesson10() {
                           )}
                           <button
                             className="btn btn-danger"
-                            style={{ padding: '4px 8px', fontSize: '0.75rem', background: 'var(--accent-red)' }}
+                            style={{ padding: '4px 8px', fontSize: '0.75rem', background: 'var(--accent-red)', color: '#fff' }}
                             onClick={(e) => { e.stopPropagation(); handleDeleteReport(report.id); }}
                           >
                             Delete

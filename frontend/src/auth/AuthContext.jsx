@@ -43,7 +43,7 @@ export function AuthProvider({ children }) {
         const init = async () => {
             const accessToken = localStorage.getItem('access_token');
             if (!accessToken) {
-                await autoGuestLogin();
+                setLoading(false);
                 return;
             }
 
@@ -86,18 +86,18 @@ export function AuthProvider({ children }) {
                         }
                     }
                 } catch (err) {
-                    // fall through to guest
+                    // fall through
                 }
             }
 
-            // All failed — clear and auto-guest
+            // All failed — clear tokens, send to login
             localStorage.removeItem('access_token');
             localStorage.removeItem('refresh_token');
-            await autoGuestLogin();
+            setLoading(false);
         };
 
         init();
-    }, [autoGuestLogin]);
+    }, []);
 
     const login = async (email, password) => {
         const res = await fetch(`${API_BASE}/auth/login`, {

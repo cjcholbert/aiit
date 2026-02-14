@@ -46,9 +46,9 @@ const isNetworkError = (error) => {
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 export function useApi() {
-    const { getAuthHeaders, logout, autoGuestLogin } = useAuth();
+    const { getAuthHeaders, logout } = useAuth();
 
-    const fetchWithAuth = async (endpoint, options = {}, retryConfig = {}, _isRetryAfterReauth = false) => {
+    const fetchWithAuth = async (endpoint, options = {}, retryConfig = {}) => {
         const {
             maxRetries = 3,
             retryDelay = 1000,
@@ -78,13 +78,10 @@ export function useApi() {
 
                 clearTimeout(timeoutId);
 
-                // Handle 401 by re-authenticating as guest
-                if (res.status === 401 && !_isRetryAfterReauth) {
-                    await autoGuestLogin();
-                    return fetchWithAuth(endpoint, options, retryConfig, true);
-                }
+                // Handle 401 by logging out (redirects to login page)
                 if (res.status === 401) {
-                    throw new ApiError('Authentication failed. Please refresh the page.', 401, false);
+                    logout();
+                    throw new ApiError('Session expired. Please sign in again.', 401, false);
                 }
 
                 // Check if we should retry
@@ -195,7 +192,7 @@ export function useApi() {
         return res.json();
     };
 
-    const uploadFile = async (endpoint, file, retryConfig, _isRetryAfterReauth = false) => {
+    const uploadFile = async (endpoint, file) => {
         const formData = new FormData();
         formData.append('file', file);
 
@@ -205,12 +202,9 @@ export function useApi() {
             body: formData
         });
 
-        if (res.status === 401 && !_isRetryAfterReauth) {
-            await autoGuestLogin();
-            return uploadFile(endpoint, file, retryConfig, true);
-        }
         if (res.status === 401) {
-            throw new ApiError('Authentication failed. Please refresh the page.', 401, false);
+            logout();
+            throw new ApiError('Session expired. Please sign in again.', 401, false);
         }
 
         if (!res.ok) {
