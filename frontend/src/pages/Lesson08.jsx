@@ -1,0 +1,880 @@
+import { useState, useEffect } from 'react';
+import { useApi } from '../hooks/useApi';
+
+// Task status colors
+const STATUS_COLORS = {
+  pending: { bg: 'var(--bg-tertiary)', color: 'var(--text-secondary)', label: 'Pending', icon: '⏳' },
+  delegated: { bg: 'var(--bg-tertiary)', color: 'var(--accent-blue)', label: 'Delegated', icon: '📤' },
+  reviewing: { bg: 'var(--warning-bg)', color: 'var(--accent-yellow)', label: 'Reviewing', icon: '👀' },
+  completed: { bg: 'var(--success-bg)', color: 'var(--accent-green)', label: 'Completed', icon: '✅' },
+  blocked: { bg: 'var(--error-bg)', color: 'var(--accent-red)', label: 'Blocked', icon: '🚫' }
+};
+
+const CATEGORY_INFO = {
+  ai_optimal: { color: 'var(--accent-green)', icon: '🤖', label: 'AI-Optimal' },
+  collaborative: { color: 'var(--accent-yellow)', icon: '🤝', label: 'Collaborative' },
+  human_primary: { color: 'var(--accent-red)', icon: '👤', label: 'Human-Primary' }
+};
+
+export default function Lesson08() {
+  const api = useApi();
+  const [activeTab, setActiveTab] = useState('learn');
+  const [delegations, setDelegations] = useState([]);
+  const [templateElements, setTemplateElements] = useState(null);
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Create delegation state
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [newDelegation, setNewDelegation] = useState({ name: '', template: '', task_sequence: [], notes: '' });
+  const [newTask, setNewTask] = useState({
+    title: '', description: '', category: 'ai_optimal', prompt: '', expected_output: '', is_decision_gate: false
+  });
+
+  // View/edit delegation state
+  const [selectedDelegation, setSelectedDelegation] = useState(null);
+  const [analyzingTaskId, setAnalyzingTaskId] = useState(null);
+  const [sharedOutput, setSharedOutput] = useState('');
+  const [selectedTaskId, setSelectedTaskId] = useState(null);
+
+  // Fetch data
+  const fetchDelegations = async () => {
+    try {
+      const data = await api.get('/lesson8/delegations');
+      setDelegations(data);
+    } catch (err) {
+      console.error('Failed to fetch delegations:', err);
+    }
+  };
+
+  const fetchTemplateElements = async () => {
+    try {
+      const data = await api.get('/lesson8/template-elements');
+      setTemplateElements(data);
+    } catch (err) {
+      console.error('Failed to fetch template elements:', err);
+    }
+  };
+
+  const fetchStats = async () => {
+    try {
+      const data = await api.get('/lesson8/stats');
+      setStats(data);
+    } catch (err) {
+      console.error('Failed to fetch stats:', err);
+    }
+  };
+
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      await Promise.all([fetchDelegations(), fetchTemplateElements(), fetchStats()]);
+      setLoading(false);
+    };
+    loadData();
+  }, []);
+
+  // Handlers
+  const handleSeedExamples = async () => {
+    try {
+      await api.post('/lesson8/delegations/seed-examples', {});
+      await fetchDelegations();
+      await fetchStats();
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleClearAll = async () => {
+    if (!confirm('Delete ALL delegations? This cannot be undone.')) return;
+    try {
+      for (const d of delegations) {
+        await api.del(`/lesson8/delegations/${d.id}`);
+      }
+      await fetchDelegations();
+      await fetchStats();
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleAddTask = () => {
+    if (!newTask.title.trim()) return;
+    setNewDelegation({
+      ...newDelegation,
+      task_sequence: [...newDelegation.task_sequence, { ...newTask, order: newDelegation.task_sequence.length }]
+    });
+    setNewTask({ title: '', description: '', category: 'ai_optimal', prompt: '', expected_output: '', is_decision_gate: false });
+  };
+
+  const handleRemoveTask = (index) => {
+    setNewDelegation({
+      ...newDelegation,
+      task_sequence: newDelegation.task_sequence.filter((_, i) => i !== index)
+    });
+  };
+
+  const handleCreateDelegation = async () => {
+    if (!newDelegation.name.trim()) {
+      setError('Delegation name is required');
+      return;
+    }
+    try {
+      await api.post('/lesson8/delegations', newDelegation);
+      await fetchDelegations();
+      await fetchStats();
+      setShowCreateForm(false);
+      setNewDelegation({ name: '', template: '', task_sequence: [], notes: '' });
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleDeleteDelegation = async (id) => {
+    if (!confirm('Delete this delegation?')) return;
+    try {
+      await api.del(`/lesson8/delegations/${id}`);
+      await fetchDelegations();
+      await fetchStats();
+      if (selectedDelegation?.id === id) setSelectedDelegation(null);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleViewDelegation = async (id) => {
+    try {
+      const full = await api.get(`/lesson8/delegations/${id}`);
+      setSelectedDelegation(full);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleUpdateTaskStatus = async (taskId, newStatus) => {
+    if (!selectedDelegation) return;
+    try {
+      const updated = await api.put(`/lesson8/delegations/${selectedDelegation.id}/tasks/${taskId}`, {
+        status: newStatus
+      });
+      setSelectedDelegation(updated);
+      await fetchDelegations();
+      await fetchStats();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleUpdateTaskOutput = async (taskId, field, value) => {
+    if (!selectedDelegation) return;
+    try {
+      const updated = await api.put(`/lesson8/delegations/${selectedDelegation.id}/tasks/${taskId}`, {
+        [field]: value
+      });
+      setSelectedDelegation(updated);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleAnalyzeTask = async (taskId, rawOutput) => {
+    if (!selectedDelegation || !rawOutput?.trim()) {
+      setError('Please paste some output to analyze');
+      return;
+    }
+    setAnalyzingTaskId(taskId);
+    setError(null);
+    try {
+      const review = await api.post(
+        `/lesson8/delegations/${selectedDelegation.id}/tasks/${taskId}/analyze`,
+        { raw_output: rawOutput }
+      );
+      // Refresh the delegation to get updated task with ai_review
+      const updated = await api.get(`/lesson8/delegations/${selectedDelegation.id}`);
+      setSelectedDelegation(updated);
+    } catch (err) {
+      setError(err.message || 'Analysis failed');
+    } finally {
+      setAnalyzingTaskId(null);
+    }
+  };
+
+  const handleAnalyzeSelectedTask = async () => {
+    if (!selectedTaskId) {
+      setError('Please select a task to analyze');
+      return;
+    }
+    if (!sharedOutput?.trim()) {
+      setError('Please paste output to analyze');
+      return;
+    }
+    await handleAnalyzeTask(selectedTaskId, sharedOutput);
+  };
+
+  const getTasksByCategory = (tasks) => {
+    return {
+      ai_optimal: tasks.filter(t => t.category === 'ai_optimal'),
+      collaborative: tasks.filter(t => t.category === 'collaborative'),
+      human_primary: tasks.filter(t => t.category === 'human_primary')
+    };
+  };
+
+  const applyTemplateSection = (section) => {
+    if (!templateElements?.[section]) return;
+    const placeholder = templateElements[section].placeholder;
+    const current = newDelegation.template;
+    const header = `## ${templateElements[section].label}\n`;
+    setNewDelegation({
+      ...newDelegation,
+      template: current + (current ? '\n\n' : '') + header + placeholder
+    });
+  };
+
+  const renderStatusBadge = (status) => {
+    const s = STATUS_COLORS[status] || STATUS_COLORS.pending;
+    return (
+      <span style={{
+        background: s.bg,
+        color: s.color,
+        padding: '4px 10px',
+        borderRadius: '4px',
+        fontSize: '0.75rem',
+        fontWeight: 'bold'
+      }}>
+        {s.icon} {s.label}
+      </span>
+    );
+  };
+
+  const renderCategoryBadge = (category) => {
+    const cat = CATEGORY_INFO[category] || CATEGORY_INFO.ai_optimal;
+    return (
+      <span style={{
+        color: cat.color,
+        fontSize: '0.875rem',
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '4px'
+      }}>
+        {cat.icon} {cat.label}
+      </span>
+    );
+  };
+
+  const renderTaskCard = (task, idx) => (
+    <div
+      key={task.id}
+      className="card"
+      style={{
+        padding: '16px',
+        marginBottom: '12px',
+        background: STATUS_COLORS[task.status]?.bg || 'var(--bg-secondary)',
+        borderLeft: task.is_decision_gate ? '4px solid #0078d4' : 'none'
+      }}
+    >
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '4px' }}>
+            <h4 style={{ margin: 0 }}>{task.title}</h4>
+            {task.is_decision_gate && (
+              <span style={{ background: 'var(--accent-blue)', color: 'var(--text-primary)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.7rem' }}>
+                Decision Gate
+              </span>
+            )}
+          </div>
+          {renderStatusBadge(task.status)}
+        </div>
+        {/* Status actions */}
+        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+          {task.status === 'pending' && (
+            <button className="btn btn-primary" style={{ padding: '4px 10px', fontSize: '0.75rem' }}
+              onClick={() => handleUpdateTaskStatus(task.id, 'delegated')}>Delegate</button>
+          )}
+          {task.status === 'delegated' && (
+            <button className="btn btn-primary" style={{ padding: '4px 10px', fontSize: '0.75rem' }}
+              onClick={() => handleUpdateTaskStatus(task.id, 'reviewing')}>Review</button>
+          )}
+          {task.status === 'reviewing' && (
+            <>
+              <button className="btn btn-primary" style={{ padding: '4px 10px', fontSize: '0.75rem', background: 'var(--accent-green)' }}
+                onClick={() => handleUpdateTaskStatus(task.id, 'completed')}>Approve</button>
+              <button className="btn btn-secondary" style={{ padding: '4px 10px', fontSize: '0.75rem' }}
+                onClick={() => handleUpdateTaskStatus(task.id, 'delegated')}>Revise</button>
+            </>
+          )}
+          {task.status === 'completed' && (
+            <button className="btn btn-secondary" style={{ padding: '4px 10px', fontSize: '0.75rem' }}
+              onClick={() => handleUpdateTaskStatus(task.id, 'reviewing')}>Reopen</button>
+          )}
+          {task.status === 'blocked' && (
+            <button className="btn btn-secondary" style={{ padding: '4px 10px', fontSize: '0.75rem' }}
+              onClick={() => handleUpdateTaskStatus(task.id, 'pending')}>Unblock</button>
+          )}
+        </div>
+      </div>
+
+      {task.description && (
+        <p style={{ color: 'var(--text-secondary)', margin: '0 0 12px', fontSize: '0.85rem' }}>{task.description}</p>
+      )}
+
+      {/* AI Review Results */}
+      {task.ai_review && (
+        <div style={{
+          padding: '12px',
+          background: task.ai_review.overall_pass ? 'var(--success-bg)' : 'var(--error-bg)',
+          borderRadius: '8px',
+          border: `1px solid ${task.ai_review.overall_pass ? 'var(--accent-green)' : 'var(--accent-red)'}`
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+            <strong style={{ color: task.ai_review.overall_pass ? 'var(--accent-green)' : 'var(--accent-red)' }}>
+              {task.ai_review.overall_pass ? 'PASSED' : 'NEEDS WORK'}
+            </strong>
+          </div>
+
+          {task.ai_review.criteria_results?.length > 0 && (
+            <div style={{ marginBottom: '8px' }}>
+              {task.ai_review.criteria_results.map((result, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px 0' }}>
+                  <span style={{ color: result.passed ? 'var(--accent-green)' : 'var(--accent-red)' }}>
+                    {result.passed ? '[OK]' : '[X]'}
+                  </span>
+                  <span style={{ fontSize: '0.85rem' }}>{result.criterion}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {task.ai_review.summary && (
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{task.ai_review.summary}</div>
+          )}
+
+          {task.ai_review.suggestions?.length > 0 && (
+            <div style={{ marginTop: '8px' }}>
+              <strong style={{ color: 'var(--accent-yellow)', fontSize: '0.75rem' }}>Suggestions:</strong>
+              <ul style={{ margin: '4px 0 0', paddingLeft: '16px' }}>
+                {task.ai_review.suggestions.map((s, i) => (
+                  <li key={i} style={{ fontSize: '0.8rem', color: 'var(--accent-yellow)' }}>{s}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Show if no review yet */}
+      {!task.ai_review && task.status !== 'pending' && (
+        <div style={{ padding: '12px', background: 'var(--bg-tertiary)', borderRadius: '8px', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+          No AI review yet. Paste output above and select this task to analyze.
+        </div>
+      )}
+    </div>
+  );
+
+  if (loading) {
+    return (
+      <div className="page-container">
+        <div className="loading">Loading...</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="page-container">
+      <header className="page-header">
+        <h1>Delegation Tracker</h1>
+        <p className="page-description">
+          <strong>The Problem:</strong> Knowing what to delegate is only half the battle. Without structured
+          delegation practices, you'll give vague instructions and get disappointing results, or spend more time
+          explaining than doing the work yourself.
+        </p>
+        <p className="page-description" style={{ marginTop: '8px' }}>
+          <strong>The Skill:</strong> Create delegation templates with clear context, objectives, scope, deliverables,
+          and success criteria. Then execute decomposed tasks in sequence, tracking what you delegated, what you received,
+          and what decisions you made at each gate.
+        </p>
+      </header>
+
+      {error && (
+        <div className="error-banner" style={{ background: 'var(--error-bg)', padding: '12px', marginBottom: '16px', borderRadius: '8px', color: 'var(--accent-red)' }}>
+          {error}
+          <button onClick={() => setError(null)} style={{ marginLeft: '12px', cursor: 'pointer' }}>Dismiss</button>
+        </div>
+      )}
+
+      {/* Tabs */}
+      <div className="tabs" style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
+        {['learn', 'delegate', 'history'].map((tab) => (
+          <button
+            key={tab}
+            className={`tab-btn ${activeTab === tab ? 'active' : ''}`}
+            onClick={() => setActiveTab(tab)}
+            style={{
+              padding: '10px 20px',
+              background: activeTab === tab ? 'var(--accent-blue)' : 'var(--bg-tertiary)',
+              border: 'none',
+              borderRadius: '8px',
+              color: 'var(--text-primary)',
+              cursor: 'pointer',
+              textTransform: 'capitalize',
+            }}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+
+      {/* Learn Tab */}
+      {activeTab === 'learn' && (
+        <div className="learn-section">
+          <h2>The Delegation Template</h2>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>
+            A well-structured delegation has five essential elements. Master these to get consistent, high-quality results from AI.
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
+            {templateElements && Object.entries(templateElements).map(([key, element]) => (
+              <div key={key} className="card" style={{ padding: '20px' }}>
+                <h3 style={{ margin: '0 0 8px', color: 'var(--accent-blue)' }}>{element.label}</h3>
+                <p style={{ color: 'var(--text-secondary)', marginBottom: '12px' }}>{element.description}</p>
+                <div style={{ background: 'var(--bg-secondary)', padding: '12px', borderRadius: '8px', fontSize: '0.875rem', marginBottom: '12px' }}>
+                  <code style={{ color: 'var(--text-secondary)' }}>{element.placeholder}</code>
+                </div>
+                <div>
+                  <strong style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>TIPS:</strong>
+                  <ul style={{ margin: '4px 0 0', paddingLeft: '16px' }}>
+                    {element.tips.map((tip, i) => (
+                      <li key={i} style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '2px' }}>{tip}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ marginTop: '32px', padding: '24px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
+            <h3>Task Sequence Workflow</h3>
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+              Break your delegation into a sequence of tasks. For each task in sequence:
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
+              {[
+                { step: 1, title: 'Delegate', desc: 'Hand off with clear prompt', color: 'var(--accent-blue)' },
+                { step: 2, title: 'Receive', desc: 'Capture AI output', color: 'var(--accent-yellow)' },
+                { step: 3, title: 'Review', desc: 'Check against criteria', color: 'var(--accent-purple)' },
+                { step: 4, title: 'Decide', desc: 'Approve, revise, or escalate', color: 'var(--accent-green)' }
+              ].map(({ step, title, desc, color }) => (
+                <div key={step} style={{ textAlign: 'center', padding: '16px', background: 'var(--bg-tertiary)', borderRadius: '8px' }}>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color }}>{step}</div>
+                  <div style={{ fontWeight: 'bold', marginTop: '8px' }}>{title}</div>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delegate Tab */}
+      {activeTab === 'delegate' && (
+        <div className="delegate-section">
+          {selectedDelegation ? (
+            // View/Execute Delegation
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                <div>
+                  <h2 style={{ margin: 0 }}>{selectedDelegation.name}</h2>
+                  <div style={{ color: 'var(--text-secondary)', marginTop: '4px' }}>
+                    {selectedDelegation.task_sequence.length} tasks in sequence
+                  </div>
+                </div>
+                <button className="btn btn-secondary" onClick={() => { setSelectedDelegation(null); setSharedOutput(''); setSelectedTaskId(null); }}>
+                  Back to List
+                </button>
+              </div>
+
+              {/* Template display */}
+              {selectedDelegation.template && (
+                <div className="card" style={{ padding: '16px', marginBottom: '24px', background: 'var(--bg-secondary)' }}>
+                  <h4 style={{ margin: '0 0 8px' }}>Delegation Template</h4>
+                  <pre style={{ margin: 0, whiteSpace: 'pre-wrap', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                    {selectedDelegation.template}
+                  </pre>
+                </div>
+              )}
+
+              {/* Single Output Area */}
+              <div className="card" style={{ padding: '20px', marginBottom: '24px', background: 'var(--bg-tertiary)', borderLeft: '4px solid #0078d4' }}>
+                <h4 style={{ margin: '0 0 12px', color: 'var(--accent-blue)' }}>Paste AI Output</h4>
+                <textarea
+                  value={sharedOutput}
+                  onChange={(e) => setSharedOutput(e.target.value)}
+                  placeholder="Paste your AI conversation or output here..."
+                  className="input"
+                  rows={5}
+                  style={{ width: '100%', marginBottom: '12px', fontSize: '0.9rem' }}
+                />
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+                  <select
+                    value={selectedTaskId || ''}
+                    onChange={(e) => setSelectedTaskId(e.target.value)}
+                    className="input"
+                    style={{ flex: 1, minWidth: '200px' }}
+                  >
+                    <option value="">-- Select task to analyze --</option>
+                    {selectedDelegation.task_sequence.map((task, idx) => (
+                      <option key={task.id} value={task.id}>
+                        #{idx + 1} {task.title} ({CATEGORY_INFO[task.category]?.label})
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    className="btn btn-primary"
+                    style={{ background: '#4a1a6a', padding: '10px 20px' }}
+                    onClick={handleAnalyzeSelectedTask}
+                    disabled={!selectedTaskId || !sharedOutput?.trim() || analyzingTaskId}
+                  >
+                    {analyzingTaskId ? 'Analyzing...' : 'Analyze with AI'}
+                  </button>
+                </div>
+              </div>
+
+              {/* Results by Category */}
+              <h3>Results by Category</h3>
+              {(() => {
+                const grouped = getTasksByCategory(selectedDelegation.task_sequence);
+                return (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                    {/* AI-Optimal Tasks */}
+                    {grouped.ai_optimal.length > 0 && (
+                      <div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                          <span style={{ fontSize: '1.25rem' }}>🤖</span>
+                          <h4 style={{ margin: 0, color: 'var(--accent-green)' }}>AI-Optimal Tasks</h4>
+                          <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>({grouped.ai_optimal.length})</span>
+                        </div>
+                        {grouped.ai_optimal.map((task, idx) => renderTaskCard(task, idx))}
+                      </div>
+                    )}
+
+                    {/* Collaborative Tasks */}
+                    {grouped.collaborative.length > 0 && (
+                      <div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                          <span style={{ fontSize: '1.25rem' }}>🤝</span>
+                          <h4 style={{ margin: 0, color: 'var(--accent-yellow)' }}>Collaborative Tasks</h4>
+                          <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>({grouped.collaborative.length})</span>
+                        </div>
+                        {grouped.collaborative.map((task, idx) => renderTaskCard(task, idx))}
+                      </div>
+                    )}
+
+                    {/* Human-Primary Tasks */}
+                    {grouped.human_primary.length > 0 && (
+                      <div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                          <span style={{ fontSize: '1.25rem' }}>👤</span>
+                          <h4 style={{ margin: 0, color: 'var(--accent-red)' }}>Human-Primary Tasks</h4>
+                          <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>({grouped.human_primary.length})</span>
+                        </div>
+                        {grouped.human_primary.map((task, idx) => renderTaskCard(task, idx))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
+            </div>
+          ) : showCreateForm ? (
+            // Create Form
+            <div className="card" style={{ padding: '24px' }}>
+              <h2>Create Delegation</h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '16px' }}>
+                <div>
+                  <label style={{ display: 'block', marginBottom: '4px' }}>Delegation Name</label>
+                  <input
+                    type="text"
+                    value={newDelegation.name}
+                    onChange={(e) => setNewDelegation({ ...newDelegation, name: e.target.value })}
+                    placeholder="e.g., API Documentation Sprint"
+                    className="input"
+                    style={{ width: '100%' }}
+                  />
+                </div>
+
+                {/* Template builder */}
+                <div>
+                  <label style={{ display: 'block', marginBottom: '4px' }}>
+                    Delegation Template
+                    <span style={{ marginLeft: '8px', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>(optional)</span>
+                  </label>
+                  <div style={{ display: 'flex', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
+                    {templateElements && Object.entries(templateElements).map(([key, el]) => (
+                      <button
+                        key={key}
+                        className="btn btn-secondary"
+                        style={{ padding: '4px 10px', fontSize: '0.75rem' }}
+                        onClick={() => applyTemplateSection(key)}
+                      >
+                        + {el.label}
+                      </button>
+                    ))}
+                  </div>
+                  <textarea
+                    value={newDelegation.template}
+                    onChange={(e) => setNewDelegation({ ...newDelegation, template: e.target.value })}
+                    placeholder="Build your delegation template using the buttons above, or write your own..."
+                    className="input"
+                    rows={8}
+                    style={{ width: '100%', fontFamily: 'monospace', fontSize: '0.875rem' }}
+                  />
+                </div>
+
+                {/* Task sequence */}
+                <div>
+                  <label style={{ display: 'block', marginBottom: '8px' }}>Task Sequence ({newDelegation.task_sequence.length})</label>
+                  {newDelegation.task_sequence.map((task, idx) => (
+                    <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', padding: '12px', background: 'var(--bg-tertiary)', borderRadius: '8px' }}>
+                      <span style={{ color: 'var(--text-muted)' }}>#{idx + 1}</span>
+                      <span style={{ flex: 1 }}>{task.title}</span>
+                      {renderCategoryBadge(task.category)}
+                      {task.is_decision_gate && (
+                        <span style={{ background: 'var(--accent-blue)', color: 'var(--text-primary)', padding: '2px 6px', borderRadius: '4px', fontSize: '0.7rem' }}>Gate</span>
+                      )}
+                      <button onClick={() => handleRemoveTask(idx)} style={{ color: 'var(--accent-red)', background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.25rem' }}>x</button>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Add task form */}
+                <div style={{ padding: '16px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
+                  <h4 style={{ margin: '0 0 12px' }}>Add Task to Sequence</h4>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    <input
+                      type="text"
+                      value={newTask.title}
+                      onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
+                      placeholder="Task title..."
+                      className="input"
+                    />
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                      <select
+                        value={newTask.category}
+                        onChange={(e) => setNewTask({ ...newTask, category: e.target.value })}
+                        className="input"
+                        style={{ flex: 1 }}
+                      >
+                        <option value="ai_optimal">AI-Optimal</option>
+                        <option value="collaborative">Collaborative</option>
+                        <option value="human_primary">Human-Primary</option>
+                      </select>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <input
+                          type="checkbox"
+                          checked={newTask.is_decision_gate}
+                          onChange={(e) => setNewTask({ ...newTask, is_decision_gate: e.target.checked })}
+                        />
+                        Decision Gate
+                      </label>
+                    </div>
+                    <textarea
+                      value={newTask.prompt}
+                      onChange={(e) => setNewTask({ ...newTask, prompt: e.target.value })}
+                      placeholder="Delegation prompt for this task (optional)..."
+                      className="input"
+                      rows={2}
+                    />
+                    <button className="btn btn-secondary" onClick={handleAddTask}>+ Add Task</button>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
+                  <button className="btn btn-primary" onClick={handleCreateDelegation}>
+                    Save Delegation
+                  </button>
+                  <button className="btn btn-secondary" onClick={() => { setShowCreateForm(false); setNewDelegation({ name: '', template: '', task_sequence: [], notes: '' }); }}>
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            // Delegation List
+            <div>
+              {/* Explanation Section */}
+              <div style={{ marginBottom: '24px', padding: '20px', background: 'var(--bg-tertiary)', borderRadius: '8px', borderLeft: '4px solid #0078d4' }}>
+                <h3 style={{ margin: '0 0 12px', color: 'var(--accent-blue)' }}>How to Use Delegation Tracker</h3>
+                <ol style={{ margin: 0, paddingLeft: '20px', color: 'var(--text-secondary)', lineHeight: '1.8' }}>
+                  <li><strong>Create a Delegation</strong> - Define a project with a template containing context, objectives, and success criteria</li>
+                  <li><strong>Add Tasks</strong> - Break the work into sequential tasks (AI-optimal, collaborative, or human-primary)</li>
+                  <li><strong>Execute the Workflow</strong> - For each task:
+                    <ul style={{ marginTop: '4px', marginBottom: '4px' }}>
+                      <li><strong>Delegate</strong>: Copy the prompt to your AI tool and mark as "Delegated"</li>
+                      <li><strong>Receive</strong>: Paste the AI's response into "Output Received"</li>
+                      <li><strong>Review</strong>: Click "Analyze with AI" to auto-check against success criteria</li>
+                      <li><strong>Decide</strong>: Approve, request revision, or mark blocked</li>
+                    </ul>
+                  </li>
+                </ol>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                <h2>Your Delegations</h2>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  {delegations.length === 0 && (
+                    <button className="btn btn-secondary" onClick={handleSeedExamples}>
+                      Load Examples
+                    </button>
+                  )}
+                  <button className="btn btn-primary" onClick={() => setShowCreateForm(true)}>
+                    + New Delegation
+                  </button>
+                  {delegations.length > 0 && (
+                    <button className="btn btn-danger" onClick={handleClearAll} style={{ background: 'var(--accent-red)' }}>
+                      Clear All
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {delegations.length === 0 ? (
+                <div className="empty-state" style={{ textAlign: 'center', padding: '48px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
+                  <h3>No delegations yet</h3>
+                  <p>Create a delegation to practice structured AI task handoffs.</p>
+                </div>
+              ) : (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '16px' }}>
+                  {delegations.map((deleg) => (
+                    <div key={deleg.id} className="card" style={{ padding: '16px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                        <h3 style={{ margin: 0 }}>{deleg.name}</h3>
+                        {deleg.has_template && (
+                          <span style={{ background: 'var(--accent-blue)', color: 'var(--text-primary)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.7rem' }}>
+                            Template
+                          </span>
+                        )}
+                      </div>
+                      <div style={{ marginBottom: '12px' }}>
+                        <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                          {deleg.task_count} tasks ({deleg.completed_count} done)
+                        </div>
+                        {deleg.current_task && (
+                          <div style={{ fontSize: '0.8rem', color: 'var(--accent-blue)', marginTop: '4px' }}>
+                            Current: {deleg.current_task}
+                          </div>
+                        )}
+                      </div>
+                      {/* Progress bar */}
+                      <div style={{ height: '6px', background: 'var(--border-color)', borderRadius: '3px', marginBottom: '12px', overflow: 'hidden' }}>
+                        <div
+                          style={{
+                            height: '100%',
+                            width: deleg.task_count > 0 ? `${(deleg.completed_count / deleg.task_count) * 100}%` : '0%',
+                            background: 'var(--accent-green)',
+                            borderRadius: '3px'
+                          }}
+                        />
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+                        <button className="btn btn-primary" style={{ padding: '4px 12px' }} onClick={() => handleViewDelegation(deleg.id)}>
+                          Open
+                        </button>
+                        <button className="btn btn-danger" style={{ padding: '4px 12px', background: 'var(--accent-red)' }} onClick={() => handleDeleteDelegation(deleg.id)}>
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* History Tab */}
+      {activeTab === 'history' && (
+        <div className="history-section">
+          <h2>Delegation Statistics</h2>
+
+          {stats && stats.total_delegations > 0 ? (
+            <div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-blue)' }}>{stats.total_delegations}</div>
+                  <div style={{ color: 'var(--text-secondary)' }}>Delegations</div>
+                </div>
+                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-blue)' }}>{stats.total_tasks}</div>
+                  <div style={{ color: 'var(--text-secondary)' }}>Total Tasks</div>
+                </div>
+                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-green)' }}>{stats.tasks_completed}</div>
+                  <div style={{ color: 'var(--text-secondary)' }}>Completed</div>
+                </div>
+                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-yellow)' }}>{stats.tasks_pending}</div>
+                  <div style={{ color: 'var(--text-secondary)' }}>Pending</div>
+                </div>
+              </div>
+
+              <div className="card" style={{ padding: '24px', marginBottom: '16px' }}>
+                <h3>Completion Rate</h3>
+                <div style={{ marginTop: '16px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                    <span>Tasks Completed</span>
+                    <span style={{ fontWeight: 'bold', color: 'var(--accent-green)' }}>{stats.completion_rate}%</span>
+                  </div>
+                  <div style={{ height: '12px', background: 'var(--border-color)', borderRadius: '6px', overflow: 'hidden' }}>
+                    <div
+                      style={{
+                        height: '100%',
+                        width: `${stats.completion_rate}%`,
+                        background: 'linear-gradient(90deg, #4ade80, #22c55e)',
+                        borderRadius: '6px'
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
+                <div className="card" style={{ padding: '24px' }}>
+                  <h3>Averages</h3>
+                  <div style={{ marginTop: '12px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--border-color)' }}>
+                      <span style={{ color: 'var(--text-secondary)' }}>Tasks per Delegation</span>
+                      <span style={{ fontWeight: 'bold' }}>{stats.avg_tasks_per_delegation}</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0' }}>
+                      <span style={{ color: 'var(--text-secondary)' }}>With Templates</span>
+                      <span style={{ fontWeight: 'bold' }}>{stats.delegations_with_templates}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="card" style={{ padding: '24px' }}>
+                  <h3>Your Pattern</h3>
+                  <p style={{ marginTop: '12px', color: 'var(--text-secondary)' }}>
+                    {stats.delegations_with_templates === stats.total_delegations
+                      ? "You're using templates for all delegations. This ensures consistent, structured handoffs."
+                      : stats.delegations_with_templates > stats.total_delegations / 2
+                      ? "You use templates for most delegations. Consider templating the rest for better consistency."
+                      : "Consider creating templates for your delegations. Structured prompts lead to better AI outputs."}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="empty-state" style={{ textAlign: 'center', padding: '48px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
+              <h3>No statistics yet</h3>
+              <p>Create and complete some delegations to see your patterns.</p>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
