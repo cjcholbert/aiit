@@ -43,6 +43,11 @@ export default function Lesson10() {
   const [reportNotes, setReportNotes] = useState('');
   const [saving, setSaving] = useState(false);
 
+  // Import from Context Docs state
+  const [contextDocs, setContextDocs] = useState([]);
+  const [showDocImport, setShowDocImport] = useState(false);
+  const [loadingDocs, setLoadingDocs] = useState(false);
+
   // View report state
   const [viewingReport, setViewingReport] = useState(null);
 
@@ -227,6 +232,63 @@ export default function Lesson10() {
       if (editingTemplate?.id === id) resetTemplateForm();
     } catch (err) {
       setError(err.message);
+    }
+  };
+
+  const handleOpenDocImport = async () => {
+    if (showDocImport) { setShowDocImport(false); return; }
+    setLoadingDocs(true);
+    try {
+      const data = await api.get('/lesson4/docs');
+      setContextDocs(data);
+      setShowDocImport(true);
+    } catch (err) {
+      setError('Could not load context docs from Context Docs: ' + err.message);
+    } finally {
+      setLoadingDocs(false);
+    }
+  };
+
+  const handleImportContextDoc = async (id) => {
+    try {
+      const doc = await api.get(`/lesson4/docs/${id}`);
+      const parts = [];
+      if (doc.description) parts.push(`Project: ${doc.description}`);
+      if (doc.current_state) {
+        const state = doc.current_state;
+        if (state.complete?.length) parts.push(`Completed: ${state.complete.join(', ')}`);
+        if (state.in_progress?.length) parts.push(`In Progress: ${state.in_progress.join(', ')}`);
+        if (state.blocked?.length) parts.push(`Blocked: ${state.blocked.join(', ')}`);
+      }
+      if (doc.key_decisions?.length) parts.push(`Key Decisions: ${doc.key_decisions.join('; ')}`);
+      if (doc.known_issues?.length) parts.push(`Known Issues: ${doc.known_issues.join('; ')}`);
+
+      const summary = parts.join('\n');
+      const newValues = { ...inputValues };
+
+      Object.keys(newValues).forEach(key => {
+        const lowerKey = key.toLowerCase();
+        if (lowerKey.includes('status') || lowerKey.includes('project') || lowerKey.includes('update') || lowerKey.includes('summary')) {
+          newValues[key] = summary;
+        } else if (lowerKey.includes('accomplishment') || lowerKey.includes('complete')) {
+          newValues[key] = (doc.current_state?.complete || []).join('\n');
+        } else if (lowerKey.includes('blocker') || lowerKey.includes('block') || lowerKey.includes('issue')) {
+          newValues[key] = [...(doc.current_state?.blocked || []), ...(doc.known_issues || [])].join('\n');
+        } else if (lowerKey.includes('goal') || lowerKey.includes('next') || lowerKey.includes('plan')) {
+          newValues[key] = (doc.next_goals || []).join('\n');
+        }
+      });
+
+      const anyFilled = Object.values(newValues).some(v => v && v.trim());
+      if (!anyFilled && Object.keys(newValues).length > 0) {
+        const firstKey = Object.keys(newValues)[0];
+        newValues[firstKey] = summary;
+      }
+
+      setInputValues(newValues);
+      setShowDocImport(false);
+    } catch (err) {
+      setError('Could not load context doc: ' + err.message);
     }
   };
 
@@ -879,6 +941,74 @@ export default function Lesson10() {
                   {/* Input Fields */}
                   <div className="card" style={{ padding: '20px' }}>
                     <h3 style={{ marginTop: 0 }}>Provide Inputs</h3>
+
+                    {/* Import from Context Docs */}
+                    {(selectedTemplate.inputs || []).length > 0 && (
+                      <div style={{ marginBottom: '16px' }}>
+                        <button
+                          className="btn btn-secondary"
+                          onClick={handleOpenDocImport}
+                          disabled={loadingDocs}
+                          style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                        >
+                          {loadingDocs ? 'Loading...' : showDocImport ? 'Hide Import' : 'Import from Context Docs'}
+                        </button>
+
+                        {showDocImport && (
+                          <div className="card" style={{ padding: '16px', marginTop: '12px', maxHeight: '250px', overflowY: 'auto' }}>
+                            <h4 style={{ margin: '0 0 12px' }}>Select a Context Doc</h4>
+                            {contextDocs.length === 0 ? (
+                              <div style={{ textAlign: 'center', padding: '24px', color: 'var(--text-secondary)' }}>
+                                <p>No context docs saved yet.</p>
+                                <p style={{ fontSize: '0.85rem' }}>
+                                  Go to <a href="/lesson/4" style={{ color: 'var(--accent-blue)' }}>Lesson 4 — Context Docs</a> to create a project document first.
+                                </p>
+                              </div>
+                            ) : (
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                {contextDocs.map((doc) => (
+                                  <div
+                                    key={doc.id}
+                                    onClick={() => handleImportContextDoc(doc.id)}
+                                    style={{
+                                      padding: '12px',
+                                      background: 'var(--bg-tertiary)',
+                                      borderRadius: '6px',
+                                      cursor: 'pointer',
+                                      border: '1px solid var(--border-color)',
+                                      transition: 'border-color 0.2s',
+                                    }}
+                                    onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--accent-blue)'}
+                                    onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border-color)'}
+                                  >
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                      <strong style={{ color: 'var(--text-primary)' }}>{doc.project_name || 'Untitled'}</strong>
+                                      {doc.is_active && (
+                                        <span style={{
+                                          fontSize: '0.75rem',
+                                          padding: '2px 8px',
+                                          borderRadius: '4px',
+                                          background: 'var(--success-bg)',
+                                          color: 'var(--accent-green)',
+                                        }}>
+                                          Active
+                                        </span>
+                                      )}
+                                    </div>
+                                    {doc.description && (
+                                      <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                                        {doc.description}
+                                      </div>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     {(selectedTemplate.inputs || []).length === 0 ? (
                       <p style={{ color: 'var(--text-secondary)' }}>This template has no defined inputs.</p>
                     ) : (

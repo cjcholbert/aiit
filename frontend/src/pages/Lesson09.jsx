@@ -22,6 +22,11 @@ export default function Lesson09() {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newTask, setNewTask] = useState({ task_name: '', target_outcome: '', notes: '' });
 
+  // Import from Context Tracker state
+  const [conversations, setConversations] = useState([]);
+  const [showConvImport, setShowConvImport] = useState(false);
+  const [loadingConvs, setLoadingConvs] = useState(false);
+
   // Selected task state (for Practice tab)
   const [selectedTask, setSelectedTask] = useState(null);
   const [passForm, setPassForm] = useState({ key_question_answer: '', feedback: '' });
@@ -161,6 +166,37 @@ export default function Lesson09() {
       setError(err.message);
     } finally {
       setSubmittingPass(false);
+    }
+  };
+
+  const handleOpenConvImport = async () => {
+    if (showConvImport) { setShowConvImport(false); return; }
+    setLoadingConvs(true);
+    try {
+      const data = await api.get('/lesson1/conversations');
+      setConversations(data);
+      setShowConvImport(true);
+    } catch (err) {
+      setError('Could not load conversations from Context Tracker: ' + err.message);
+    } finally {
+      setLoadingConvs(false);
+    }
+  };
+
+  const handleImportConversation = async (id) => {
+    try {
+      const conv = await api.get(`/lesson1/conversations/${id}`);
+      const analysis = conv.analysis || {};
+      setNewTask({
+        ...newTask,
+        task_name: analysis.topic || 'Imported conversation',
+        target_outcome: analysis.coaching || '',
+        notes: `Imported from Context Tracker conversation on ${new Date(conv.created_at).toLocaleDateString()}`
+      });
+      setShowConvImport(false);
+      if (!showCreateForm) setShowCreateForm(true);
+    } catch (err) {
+      setError('Could not load conversation: ' + err.message);
     }
   };
 
@@ -526,7 +562,73 @@ export default function Lesson09() {
             // Create form
             <div className="card" style={{ padding: '24px' }}>
               <h2>Start New Iteration Task</h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '16px' }}>
+
+              {/* Import from Context Tracker */}
+              <div style={{ marginTop: '12px', marginBottom: '16px' }}>
+                <button
+                  className="btn btn-secondary"
+                  onClick={handleOpenConvImport}
+                  disabled={loadingConvs}
+                  style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                >
+                  {loadingConvs ? 'Loading...' : showConvImport ? 'Hide Import' : 'Import from Context Tracker'}
+                </button>
+
+                {showConvImport && (
+                  <div className="card" style={{ padding: '16px', marginTop: '12px', maxHeight: '300px', overflowY: 'auto' }}>
+                    <h4 style={{ margin: '0 0 12px' }}>Select a Conversation</h4>
+                    {conversations.length === 0 ? (
+                      <div style={{ textAlign: 'center', padding: '24px', color: 'var(--text-secondary)' }}>
+                        <p>No conversations saved yet.</p>
+                        <p style={{ fontSize: '0.85rem' }}>
+                          Go to <a href="/lesson/1" style={{ color: 'var(--accent-blue)' }}>Lesson 1 — Context Tracker</a> to analyze a conversation first.
+                        </p>
+                      </div>
+                    ) : (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        {conversations.map((conv) => (
+                          <div
+                            key={conv.id}
+                            onClick={() => handleImportConversation(conv.id)}
+                            style={{
+                              padding: '12px',
+                              background: 'var(--bg-tertiary)',
+                              borderRadius: '6px',
+                              cursor: 'pointer',
+                              border: '1px solid var(--border-color)',
+                              transition: 'border-color 0.2s',
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--accent-blue)'}
+                            onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border-color)'}
+                          >
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <strong style={{ color: 'var(--text-primary)' }}>{conv.topic || 'Untitled'}</strong>
+                              {conv.pattern_category && (
+                                <span style={{
+                                  fontSize: '0.75rem',
+                                  padding: '2px 8px',
+                                  borderRadius: '4px',
+                                  background: 'var(--bg-secondary)',
+                                  color: 'var(--text-secondary)',
+                                }}>
+                                  {conv.pattern_category}
+                                </span>
+                              )}
+                            </div>
+                            {conv.created_at && (
+                              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                                {new Date(conv.created_at).toLocaleDateString()}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <div>
                   <label style={{ display: 'block', marginBottom: '4px' }}>Task Name *</label>
                   <input

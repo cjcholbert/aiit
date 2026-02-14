@@ -38,6 +38,11 @@ export default function Lesson08() {
   const [sharedOutput, setSharedOutput] = useState('');
   const [selectedTaskId, setSelectedTaskId] = useState(null);
 
+  // Import from Task Decomposer state
+  const [decompositions, setDecompositions] = useState([]);
+  const [showDecompImport, setShowDecompImport] = useState(false);
+  const [loadingDecomps, setLoadingDecomps] = useState(false);
+
   // Fetch data
   const fetchDelegations = async () => {
     try {
@@ -221,6 +226,43 @@ export default function Lesson08() {
       collaborative: tasks.filter(t => t.category === 'collaborative'),
       human_primary: tasks.filter(t => t.category === 'human_primary')
     };
+  };
+
+  const handleOpenDecompImport = async () => {
+    if (showDecompImport) { setShowDecompImport(false); return; }
+    setLoadingDecomps(true);
+    try {
+      const data = await api.get('/lesson7/decompositions');
+      setDecompositions(data);
+      setShowDecompImport(true);
+    } catch (err) {
+      setError('Could not load decompositions from Task Decomposer: ' + err.message);
+    } finally {
+      setLoadingDecomps(false);
+    }
+  };
+
+  const handleImportDecomposition = async (id) => {
+    try {
+      const decomp = await api.get(`/lesson7/decompositions/${id}`);
+      setNewDelegation({
+        ...newDelegation,
+        name: decomp.project_name || '',
+        task_sequence: (decomp.tasks || []).map((task, idx) => ({
+          title: task.title || '',
+          description: task.description || '',
+          category: task.category || 'ai_optimal',
+          prompt: '',
+          expected_output: '',
+          is_decision_gate: task.is_decision_gate || false,
+          order: idx
+        }))
+      });
+      setShowDecompImport(false);
+      if (!showCreateForm) setShowCreateForm(true);
+    } catch (err) {
+      setError('Could not load decomposition: ' + err.message);
+    }
   };
 
   const applyTemplateSection = (section) => {
@@ -582,7 +624,73 @@ export default function Lesson08() {
             // Create Form
             <div className="card" style={{ padding: '24px' }}>
               <h2>Create Delegation</h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '16px' }}>
+
+              {/* Import from Task Decomposer */}
+              <div style={{ marginTop: '12px', marginBottom: '16px' }}>
+                <button
+                  className="btn btn-secondary"
+                  onClick={handleOpenDecompImport}
+                  disabled={loadingDecomps}
+                  style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                >
+                  {loadingDecomps ? 'Loading...' : showDecompImport ? 'Hide Import' : 'Import from Task Decomposer'}
+                </button>
+
+                {showDecompImport && (
+                  <div className="card" style={{ padding: '16px', marginTop: '12px', maxHeight: '300px', overflowY: 'auto' }}>
+                    <h4 style={{ margin: '0 0 12px' }}>Select a Decomposition</h4>
+                    {decompositions.length === 0 ? (
+                      <div style={{ textAlign: 'center', padding: '24px', color: 'var(--text-secondary)' }}>
+                        <p>No decompositions saved yet.</p>
+                        <p style={{ fontSize: '0.85rem' }}>
+                          Go to <a href="/lesson/7" style={{ color: 'var(--accent-blue)' }}>Lesson 7 — Task Decomposer</a> to break down a project first.
+                        </p>
+                      </div>
+                    ) : (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        {decompositions.map((decomp) => (
+                          <div
+                            key={decomp.id}
+                            onClick={() => handleImportDecomposition(decomp.id)}
+                            style={{
+                              padding: '12px',
+                              background: 'var(--bg-tertiary)',
+                              borderRadius: '6px',
+                              cursor: 'pointer',
+                              border: '1px solid var(--border-color)',
+                              transition: 'border-color 0.2s',
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--accent-blue)'}
+                            onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border-color)'}
+                          >
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <strong style={{ color: 'var(--text-primary)' }}>{decomp.project_name || 'Untitled'}</strong>
+                              <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                                {decomp.task_count || 0} tasks
+                              </span>
+                            </div>
+                            {decomp.categories && (
+                              <div style={{ display: 'flex', gap: '8px', marginTop: '6px', fontSize: '0.75rem' }}>
+                                {decomp.categories.ai_optimal > 0 && (
+                                  <span style={{ color: 'var(--accent-green)' }}>{decomp.categories.ai_optimal} AI-Optimal</span>
+                                )}
+                                {decomp.categories.collaborative > 0 && (
+                                  <span style={{ color: 'var(--accent-yellow)' }}>{decomp.categories.collaborative} Collaborative</span>
+                                )}
+                                {decomp.categories.human_primary > 0 && (
+                                  <span style={{ color: 'var(--accent-red)' }}>{decomp.categories.human_primary} Human</span>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <div>
                   <label style={{ display: 'block', marginBottom: '4px' }}>Delegation Name</label>
                   <input

@@ -65,6 +65,11 @@ export default function Lesson11() {
     const [filterCategory, setFilterCategory] = useState('');
     const [filterReliability, setFilterReliability] = useState('');
 
+    // Import from Trust Matrix state
+    const [trustTypes, setTrustTypes] = useState([]);
+    const [showTrustImport, setShowTrustImport] = useState(false);
+    const [loadingTrust, setLoadingTrust] = useState(false);
+
     useEffect(() => {
         fetchReferenceData();
         if (activeTab === 'zones') fetchZones();
@@ -208,6 +213,33 @@ export default function Lesson11() {
         }
     };
 
+    const handleOpenTrustImport = async () => {
+        if (showTrustImport) { setShowTrustImport(false); return; }
+        setLoadingTrust(true);
+        try {
+            const data = await api.get('/lesson5/output-types');
+            setTrustTypes(data);
+            setShowTrustImport(true);
+        } catch (err) {
+            setError('Could not load output types from Trust Matrix: ' + (err.message || err));
+        } finally {
+            setLoadingTrust(false);
+        }
+    };
+
+    const handleImportTrustType = (outputType) => {
+        const reliabilityMap = { high: 'reliable', medium: 'mixed', low: 'unreliable' };
+        setZoneForm({
+            ...zoneForm,
+            name: outputType.name,
+            category: outputType.category || 'coding',
+            reliability: reliabilityMap[outputType.trust_level] || 'mixed',
+            verification_needs: outputType.verification_approach || '',
+            notes: outputType.reasoning || ''
+        });
+        setShowTrustImport(false);
+    };
+
     const getReliabilityColor = (level) => {
         switch (level) {
             case 'reliable': return 'badge-green';
@@ -298,6 +330,69 @@ export default function Lesson11() {
                             <button className="btn btn-secondary" onClick={() => seedExamples('zones')} disabled={loading}>
                                 {loading ? 'Seeding...' : 'Seed Examples'}
                             </button>
+                        </div>
+
+                        {/* Import from Trust Matrix */}
+                        <div style={{ marginBottom: '1rem' }}>
+                            <button
+                                className="btn btn-secondary"
+                                onClick={handleOpenTrustImport}
+                                disabled={loadingTrust}
+                                style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                            >
+                                {loadingTrust ? 'Loading...' : showTrustImport ? 'Hide Import' : 'Import from Trust Matrix'}
+                            </button>
+
+                            {showTrustImport && (
+                                <div style={{ padding: '16px', marginTop: '12px', maxHeight: '300px', overflowY: 'auto', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
+                                    <h4 style={{ margin: '0 0 12px' }}>Select an Output Type</h4>
+                                    {trustTypes.length === 0 ? (
+                                        <div style={{ textAlign: 'center', padding: '24px', color: 'var(--text-muted)' }}>
+                                            <p>No output types defined yet.</p>
+                                            <p style={{ fontSize: '0.85rem' }}>
+                                                Go to <a href="/lesson/5" style={{ color: 'var(--accent-blue)' }}>Lesson 5 — Trust Matrix</a> to define output types first.
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                            {trustTypes.map((ot) => (
+                                                <div
+                                                    key={ot.id}
+                                                    onClick={() => handleImportTrustType(ot)}
+                                                    style={{
+                                                        padding: '12px',
+                                                        background: 'var(--bg-tertiary)',
+                                                        borderRadius: '6px',
+                                                        cursor: 'pointer',
+                                                        border: '1px solid var(--border-color)',
+                                                        transition: 'border-color 0.2s',
+                                                    }}
+                                                    onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--accent-blue)'}
+                                                    onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border-color)'}
+                                                >
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                        <strong>{ot.name}</strong>
+                                                        <span style={{
+                                                            fontSize: '0.75rem',
+                                                            padding: '2px 8px',
+                                                            borderRadius: '4px',
+                                                            background: ot.trust_level === 'high' ? 'var(--success-bg)' : ot.trust_level === 'low' ? 'var(--error-bg)' : 'var(--warning-bg)',
+                                                            color: ot.trust_level === 'high' ? 'var(--accent-green)' : ot.trust_level === 'low' ? 'var(--accent-red)' : 'var(--accent-yellow)',
+                                                        }}>
+                                                            {ot.trust_level} trust
+                                                        </span>
+                                                    </div>
+                                                    {ot.category && (
+                                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                                                            {ot.category}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
 
                         <form onSubmit={createZone}>

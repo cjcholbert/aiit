@@ -24,6 +24,11 @@ export default function Lesson02() {
   const [analyzing, setAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState(null);
 
+  // Import from Context Tracker state
+  const [conversations, setConversations] = useState([]);
+  const [showImport, setShowImport] = useState(false);
+  const [loadingConversations, setLoadingConversations] = useState(false);
+
   // Selected entry state
   const [selectedEntry, setSelectedEntry] = useState(null);
   const [rewriteInput, setRewriteInput] = useState('');
@@ -105,6 +110,34 @@ export default function Lesson02() {
     setContextInput('');
     setCategoryInput('other');
     setAnalysisResult(null);
+  };
+
+  const handleOpenImport = async () => {
+    if (showImport) {
+      setShowImport(false);
+      return;
+    }
+    setLoadingConversations(true);
+    try {
+      const data = await api.get('/lesson1/conversations');
+      setConversations(data);
+      setShowImport(true);
+    } catch (err) {
+      setError('Could not load conversations from Context Tracker: ' + err.message);
+    } finally {
+      setLoadingConversations(false);
+    }
+  };
+
+  const handleImportConversation = async (id) => {
+    try {
+      const conv = await api.get(`/lesson1/conversations/${id}`);
+      setFeedbackInput(conv.raw_transcript || '');
+      setContextInput(conv.topic || '');
+      setShowImport(false);
+    } catch (err) {
+      setError('Could not load conversation: ' + err.message);
+    }
   };
 
   const handleSelectEntry = async (id) => {
@@ -451,6 +484,71 @@ export default function Lesson02() {
                 Paste feedback you've given (or are about to give) to an AI. We'll analyze it for vague patterns
                 and suggest improvements.
               </p>
+
+              {/* Import from Context Tracker */}
+              <div style={{ marginBottom: '16px' }}>
+                <button
+                  className="btn btn-secondary"
+                  onClick={handleOpenImport}
+                  disabled={loadingConversations}
+                  style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                >
+                  {loadingConversations ? 'Loading...' : showImport ? 'Hide Import' : 'Import from Context Tracker'}
+                </button>
+
+                {showImport && (
+                  <div className="card" style={{ padding: '16px', marginTop: '12px', maxHeight: '300px', overflowY: 'auto' }}>
+                    <h4 style={{ margin: '0 0 12px' }}>Select a Conversation</h4>
+                    {conversations.length === 0 ? (
+                      <div style={{ textAlign: 'center', padding: '24px', color: 'var(--text-secondary)' }}>
+                        <p>No conversations saved yet.</p>
+                        <p style={{ fontSize: '0.85rem' }}>
+                          Go to <a href="/lesson/1" style={{ color: 'var(--accent-blue)' }}>Lesson 1 — Context Tracker</a> to analyze and save a conversation first.
+                        </p>
+                      </div>
+                    ) : (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        {conversations.map((conv) => (
+                          <div
+                            key={conv.id}
+                            onClick={() => handleImportConversation(conv.id)}
+                            style={{
+                              padding: '12px',
+                              background: 'var(--bg-tertiary)',
+                              borderRadius: '6px',
+                              cursor: 'pointer',
+                              border: '1px solid var(--border-color)',
+                              transition: 'border-color 0.2s',
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--accent-blue)'}
+                            onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border-color)'}
+                          >
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <strong style={{ color: 'var(--text-primary)' }}>{conv.topic || 'Untitled'}</strong>
+                              {conv.pattern_category && (
+                                <span style={{
+                                  fontSize: '0.75rem',
+                                  padding: '2px 8px',
+                                  borderRadius: '4px',
+                                  background: 'var(--bg-secondary)',
+                                  color: 'var(--text-secondary)',
+                                }}>
+                                  {conv.pattern_category}
+                                </span>
+                              )}
+                            </div>
+                            {conv.created_at && (
+                              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                                {new Date(conv.created_at).toLocaleDateString()}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
 
               <div className="card" style={{ padding: '24px', marginBottom: '24px' }}>
                 <div style={{ marginBottom: '16px' }}>

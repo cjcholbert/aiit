@@ -54,6 +54,10 @@ export default function Lesson06() {
   // Expanded view
   const [expandedChecklist, setExpandedChecklist] = useState(null);
 
+  // Import from Trust Matrix state
+  const [showTrustImport, setShowTrustImport] = useState(false);
+  const [loadingTrustTypes, setLoadingTrustTypes] = useState(false);
+
   // Fetch data
   const fetchChecklists = async () => {
     try {
@@ -216,6 +220,30 @@ export default function Lesson06() {
     }
   };
 
+  const handleOpenTrustImport = async () => {
+    if (showTrustImport) { setShowTrustImport(false); return; }
+    setLoadingTrustTypes(true);
+    try {
+      const data = await api.get('/lesson5/output-types');
+      setOutputTypes(data);
+      setShowTrustImport(true);
+    } catch (err) {
+      setError('Could not load output types from Trust Matrix: ' + err.message);
+    } finally {
+      setLoadingTrustTypes(false);
+    }
+  };
+
+  const handleImportOutputType = (outputType) => {
+    setNewChecklist({
+      ...newChecklist,
+      name: `Verify: ${outputType.name}`,
+      output_type: outputType.name,
+    });
+    setShowTrustImport(false);
+    if (!showCreateForm) setShowCreateForm(true);
+  };
+
   // Practice session handlers
   const startSession = async (checklistSummary) => {
     try {
@@ -371,6 +399,70 @@ export default function Lesson06() {
           {showCreateForm && (
             <div className="card" style={{ marginBottom: '24px', padding: '20px' }}>
               <h3>Create New Checklist</h3>
+
+              {/* Import from Trust Matrix */}
+              <div style={{ marginTop: '8px', marginBottom: '12px' }}>
+                <button
+                  className="btn btn-secondary"
+                  onClick={handleOpenTrustImport}
+                  disabled={loadingTrustTypes}
+                  style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                >
+                  {loadingTrustTypes ? 'Loading...' : showTrustImport ? 'Hide Import' : 'Import from Trust Matrix'}
+                </button>
+
+                {showTrustImport && (
+                  <div className="card" style={{ padding: '16px', marginTop: '12px', maxHeight: '300px', overflowY: 'auto' }}>
+                    <h4 style={{ margin: '0 0 12px' }}>Select an Output Type</h4>
+                    {outputTypes.length === 0 ? (
+                      <div style={{ textAlign: 'center', padding: '24px', color: 'var(--text-secondary)' }}>
+                        <p>No output types defined yet.</p>
+                        <p style={{ fontSize: '0.85rem' }}>
+                          Go to <a href="/lesson/5" style={{ color: 'var(--accent-blue)' }}>Lesson 5 — Trust Matrix</a> to define output types first.
+                        </p>
+                      </div>
+                    ) : (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        {outputTypes.map((ot) => (
+                          <div
+                            key={ot.id}
+                            onClick={() => handleImportOutputType(ot)}
+                            style={{
+                              padding: '12px',
+                              background: 'var(--bg-tertiary)',
+                              borderRadius: '6px',
+                              cursor: 'pointer',
+                              border: '1px solid var(--border-color)',
+                              transition: 'border-color 0.2s',
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--accent-blue)'}
+                            onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border-color)'}
+                          >
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <strong style={{ color: 'var(--text-primary)' }}>{ot.name}</strong>
+                              <span style={{
+                                fontSize: '0.75rem',
+                                padding: '2px 8px',
+                                borderRadius: '4px',
+                                background: ot.trust_level === 'high' ? 'var(--success-bg)' : ot.trust_level === 'low' ? 'var(--error-bg)' : 'var(--warning-bg)',
+                                color: ot.trust_level === 'high' ? 'var(--accent-green)' : ot.trust_level === 'low' ? 'var(--accent-red)' : 'var(--accent-yellow)',
+                              }}>
+                                {TRUST_COLORS[ot.trust_level]?.icon} {TRUST_COLORS[ot.trust_level]?.label || ot.trust_level}
+                              </span>
+                            </div>
+                            {ot.category && (
+                              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                                {ot.category}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '12px' }}>
                 <input
                   type="text"
