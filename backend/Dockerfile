@@ -11,8 +11,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
-COPY . .
+# Copy application code into backend/ package
+COPY . ./backend/
 
 # Create non-root user
 RUN useradd --create-home appuser && chown -R appuser:appuser /app

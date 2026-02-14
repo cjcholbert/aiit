@@ -16,7 +16,7 @@ ARG VITE_API_URL=http://localhost:8001
 ENV VITE_API_URL=$VITE_API_URL
 
 # Build the app
-RUN npm run build
+RUN chmod +x node_modules/.bin/* && npm run build
 
 # Production stage
 FROM nginx:alpine
