@@ -164,3 +164,51 @@ def call_anthropic(func, *args, **kwargs):
 
     # All retries exhausted
     raise last_exc  # type: ignore[misc]
+
+
+async def async_call_anthropic(func, *args, **kwargs):
+    """Execute *func* with retry + circuit-breaker protection (async).
+
+    Like :func:`call_anthropic` but uses ``asyncio.sleep`` for non-blocking
+    retries. ``func`` is a sync callable (Anthropic SDK is sync) that receives
+    the client as its first argument.
+
+    Example::
+
+        response = await async_call_anthropic(
+            lambda client: client.messages.create(model=..., messages=...)
+        )
+    """
+    import asyncio
+
+    _circuit_breaker.check()
+
+    client = get_anthropic_client()
+    last_exc: Exception | None = None
+
+    for attempt in range(MAX_RETRIES):
+        try:
+            result = func(client, *args, **kwargs)
+            _circuit_breaker.record_success()
+            return result
+        except (anthropic.RateLimitError, anthropic.APIConnectionError, anthropic.InternalServerError) as exc:
+            last_exc = exc
+            _circuit_breaker.record_failure()
+            if attempt < MAX_RETRIES - 1:
+                delay = RETRY_DELAYS[attempt]
+                logger.warning(
+                    "Anthropic call failed (attempt %d/%d), retrying in %ds: %s",
+                    attempt + 1,
+                    MAX_RETRIES,
+                    delay,
+                    exc,
+                )
+                await asyncio.sleep(delay)
+        except anthropic.AuthenticationError:
+            raise  # never retry auth errors
+        except anthropic.APIError as exc:
+            _circuit_breaker.record_failure()
+            raise  # surface unexpected API errors immediately
+
+    # All retries exhausted
+    raise last_exc  # type: ignore[misc]

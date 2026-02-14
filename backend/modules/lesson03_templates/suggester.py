@@ -7,7 +7,7 @@ import anthropic
 
 from .schemas import TemplateSuggestion, Variable
 from backend.services.anthropic_client import (
-    get_anthropic_client,
+    async_call_anthropic,
     ANTHROPIC_MODEL,
     CircuitBreakerError,
 )
@@ -72,14 +72,6 @@ Return a JSON object:
 Return ONLY valid JSON, no markdown formatting.'''
 
 
-def get_client():
-    """Get shared Anthropic client with circuit breaker."""
-    try:
-        return get_anthropic_client()
-    except (ValueError, CircuitBreakerError):
-        raise
-
-
 async def generate_suggestions(
     gaps_summary: str,
     patterns_summary: str,
@@ -104,11 +96,12 @@ async def generate_suggestions(
     )
 
     try:
-        client = get_client()
-        message = client.messages.create(
-            model=model,
-            max_tokens=2048,
-            messages=[{"role": "user", "content": prompt}]
+        message = await async_call_anthropic(
+            lambda client: client.messages.create(
+                model=model,
+                max_tokens=2048,
+                messages=[{"role": "user", "content": prompt}]
+            )
         )
 
         content = message.content[0].text.strip()
@@ -143,14 +136,17 @@ async def generate_suggestions(
                 reasoning=s["reasoning"]
             ))
 
-        logger.info(f"Generated {len(suggestions)} template suggestions")
+        logger.info("Generated %d template suggestions", len(suggestions))
         return suggestions
 
+    except CircuitBreakerError:
+        logger.error("AI service unavailable (circuit breaker open) for template suggestions")
+        return []
     except json.JSONDecodeError as e:
-        logger.error(f"Failed to parse suggestions JSON: {e}")
+        logger.error("Failed to parse suggestions JSON: %s", e)
         return []
     except Exception as e:
-        logger.error(f"Failed to generate suggestions: {e}")
+        logger.error("Failed to generate suggestions: %s", e)
         return []
 
 
@@ -184,11 +180,12 @@ async def generate_template_from_conversation(
     )
 
     try:
-        client = get_client()
-        message = client.messages.create(
-            model=model,
-            max_tokens=1024,
-            messages=[{"role": "user", "content": prompt}]
+        message = await async_call_anthropic(
+            lambda client: client.messages.create(
+                model=model,
+                max_tokens=1024,
+                messages=[{"role": "user", "content": prompt}]
+            )
         )
 
         content = message.content[0].text.strip()
@@ -222,11 +219,14 @@ async def generate_template_from_conversation(
             reasoning=data["reasoning"]
         )
 
+    except CircuitBreakerError:
+        logger.error("AI service unavailable (circuit breaker open) for template generation")
+        return None
     except json.JSONDecodeError as e:
-        logger.error(f"Failed to parse template JSON: {e}")
+        logger.error("Failed to parse template JSON: %s", e)
         return None
     except Exception as e:
-        logger.error(f"Failed to generate template from conversation: {e}")
+        logger.error("Failed to generate template from conversation: %s", e)
         return None
 
 
@@ -247,15 +247,18 @@ async def test_template_with_ai(
     model = model or ANTHROPIC_MODEL
 
     try:
-        client = get_client()
-        message = client.messages.create(
-            model=model,
-            max_tokens=2048,
-            messages=[{"role": "user", "content": rendered_prompt}]
+        message = await async_call_anthropic(
+            lambda client: client.messages.create(
+                model=model,
+                max_tokens=2048,
+                messages=[{"role": "user", "content": rendered_prompt}]
+            )
         )
 
         return message.content[0].text
 
+    except CircuitBreakerError:
+        raise RuntimeError("AI service temporarily unavailable — too many recent failures. Try again shortly.")
     except Exception as e:
-        logger.error(f"Template test failed: {e}")
+        logger.error("Template test failed: %s", e)
         raise

@@ -11,7 +11,7 @@ import anthropic
 
 from .schemas import CriterionResult, DelegationReview
 from backend.services.anthropic_client import (
-    get_anthropic_client,
+    async_call_anthropic,
     ANTHROPIC_MODEL,
     CircuitBreakerError,
 )
@@ -24,12 +24,9 @@ class AnalyzerError(Exception):
     pass
 
 
-def get_client():
-    """Get shared Anthropic client with circuit breaker."""
-    try:
-        return get_anthropic_client()
-    except (ValueError, CircuitBreakerError) as exc:
-        raise AnalyzerError(str(exc))
+def _raise_for_circuit_breaker(exc):
+    """Convert CircuitBreakerError to AnalyzerError with user-friendly message."""
+    raise AnalyzerError("AI service temporarily unavailable — too many recent failures. Try again shortly.") from exc
 
 
 # =============================================================================
@@ -78,23 +75,28 @@ async def parse_delegation_output(raw_text: str, model: str = None) -> str:
     model = model or ANTHROPIC_MODEL
 
     try:
-        client = get_client()
-        message = client.messages.create(
-            model=model,
-            max_tokens=4096,
-            messages=[
-                {"role": "user", "content": f"{EXTRACT_OUTPUT_PROMPT}\n{raw_text}"}
-            ]
+        message = await async_call_anthropic(
+            lambda client: client.messages.create(
+                model=model,
+                max_tokens=4096,
+                messages=[
+                    {"role": "user", "content": f"{EXTRACT_OUTPUT_PROMPT}\n{raw_text}"}
+                ]
+            )
         )
 
         extracted = message.content[0].text.strip()
-        logger.info(f"Extracted AI output: {len(raw_text)} -> {len(extracted)} chars")
+        logger.info("Extracted AI output: %d -> %d chars", len(raw_text), len(extracted))
         return extracted
 
+    except CircuitBreakerError as exc:
+        _raise_for_circuit_breaker(exc)
     except anthropic.AuthenticationError:
         raise AnalyzerError("Invalid Anthropic API key")
     except anthropic.RateLimitError:
         raise AnalyzerError("Anthropic rate limit exceeded")
+    except AnalyzerError:
+        raise
     except Exception as e:
         raise AnalyzerError(f"Output extraction failed: {str(e)}")
 
@@ -242,23 +244,28 @@ async def review_against_criteria(
     )
 
     try:
-        client = get_client()
-        message = client.messages.create(
-            model=model,
-            max_tokens=2048,
-            system="You are a task review assistant. Evaluate outputs against criteria and return ONLY valid JSON. Be objective and specific.",
-            messages=[
-                {"role": "user", "content": prompt}
-            ]
+        message = await async_call_anthropic(
+            lambda client: client.messages.create(
+                model=model,
+                max_tokens=2048,
+                system="You are a task review assistant. Evaluate outputs against criteria and return ONLY valid JSON. Be objective and specific.",
+                messages=[
+                    {"role": "user", "content": prompt}
+                ]
+            )
         )
 
         content = message.content[0].text.strip()
-        logger.info(f"Review response (first 300 chars): {content[:300]}")
+        logger.info("Review response (first 300 chars): %s", content[:300])
 
+    except CircuitBreakerError as exc:
+        _raise_for_circuit_breaker(exc)
     except anthropic.AuthenticationError:
         raise AnalyzerError("Invalid Anthropic API key")
     except anthropic.RateLimitError:
         raise AnalyzerError("Anthropic rate limit exceeded")
+    except AnalyzerError:
+        raise
     except Exception as e:
         raise AnalyzerError(f"Review failed: {str(e)}")
 

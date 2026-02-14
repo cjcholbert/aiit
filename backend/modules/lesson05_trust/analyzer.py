@@ -1,13 +1,12 @@
 """Week 3: Calibration Analyzer - AI-powered insight generation."""
 import json
 import logging
-from datetime import datetime
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from backend.database.models import Prediction, OutputType, CalibrationInsight
-from backend.services.anthropic_client import get_anthropic_client, CircuitBreakerError
+from backend.services.anthropic_client import async_call_anthropic, ANTHROPIC_MODEL, CircuitBreakerError
 
 logger = logging.getLogger(__name__)
 
@@ -103,20 +102,20 @@ async def analyze_calibration(user_id: str, db: AsyncSession) -> list[Calibratio
             "over_verify_count": sum(1 for p in ot_preds if p.confidence_rating <= 4 and p.was_correct)
         }
 
-    # Call Claude API
-    client = get_anthropic_client()
-
+    # Call Claude API with circuit breaker + retry
     try:
-        response = client.messages.create(
-            model="claude-sonnet-4-20250514",
-            max_tokens=1500,
-            messages=[{
-                "role": "user",
-                "content": CALIBRATION_PROMPT.format(
-                    predictions_json=json.dumps(predictions_data, indent=2),
-                    output_type_stats_json=json.dumps(output_type_stats, indent=2)
-                )
-            }]
+        response = await async_call_anthropic(
+            lambda client: client.messages.create(
+                model=ANTHROPIC_MODEL,
+                max_tokens=1500,
+                messages=[{
+                    "role": "user",
+                    "content": CALIBRATION_PROMPT.format(
+                        predictions_json=json.dumps(predictions_data, indent=2),
+                        output_type_stats_json=json.dumps(output_type_stats, indent=2)
+                    )
+                }]
+            )
         )
 
         response_text = response.content[0].text.strip()
@@ -131,12 +130,15 @@ async def analyze_calibration(user_id: str, db: AsyncSession) -> list[Calibratio
         data = json.loads(response_text)
         insights_data = data.get("insights", [])
 
+    except CircuitBreakerError:
+        logger.error("AI service unavailable (circuit breaker open) for calibration analysis")
+        return []
     except json.JSONDecodeError as e:
-        logger.error(f"Failed to parse AI response as JSON: {e}")
-        logger.error(f"Response was: {response_text[:500]}")
+        logger.error("Failed to parse AI response as JSON: %s", e)
+        logger.error("Response was: %s", response_text[:500])
         return []
     except Exception as e:
-        logger.error(f"Calibration analysis failed: {e}")
+        logger.error("Calibration analysis failed: %s", e)
         return []
 
     # Save insights to database
@@ -165,5 +167,5 @@ async def analyze_calibration(user_id: str, db: AsyncSession) -> list[Calibratio
 
     await db.commit()
 
-    logger.info(f"Generated {len(created_insights)} calibration insights for user {user_id}")
+    logger.info("Generated %d calibration insights for user %s", len(created_insights), user_id)
     return created_insights

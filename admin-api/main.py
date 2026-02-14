@@ -41,15 +41,20 @@ logger = logging.getLogger(__name__)
 
 class Settings(BaseSettings):
     DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/ai_manager_skills"
-    ADMIN_SECRET_KEY: str = "admin_change_me"
-    JWT_SECRET_KEY: str = "change_me"
+    ADMIN_SECRET_KEY: str  # Required — must be set in .env
+    JWT_SECRET_KEY: str  # Required — must be set in .env
 
     class Config:
         env_file = ".env"
         extra = "ignore"
 
 
-settings = Settings()
+try:
+    settings = Settings()
+except Exception as e:
+    logger.critical("Failed to load settings: %s", e)
+    logger.critical("Ensure ADMIN_SECRET_KEY and JWT_SECRET_KEY are set in .env")
+    raise SystemExit(1) from e
 
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
