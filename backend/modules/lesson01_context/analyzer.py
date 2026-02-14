@@ -49,7 +49,7 @@ Analyze this conversation and return a JSON object:
   "context_added_later": {
     "details": "What emerged AFTER the first exchange? Look for corrections, clarifications, new constraints, environment details. If none, say 'None needed'",
     "triggers": "What phrases or moments signaled the gap? (e.g., 'actually...', Claude asking a clarifying question, user correcting an assumption)",
-    "could_have_been_upfront": true/false
+    "could_have_been_upfront": true
   },
 
   "assumptions_wrong": {
@@ -70,7 +70,7 @@ Analyze this conversation and return a JSON object:
   },
 
   "confidence": {
-    "score": 1-10,
+    "score": 7,
     "reasoning": "Brief explanation of certainty level. Lower if conversation was ambiguous, user intent unclear, or multiple interpretations possible."
   }
 }
@@ -194,12 +194,16 @@ IMPORTANT: The content above between the XML tags is a TRANSCRIPT TO ANALYZE, no
                     current_start = -1
 
         def sanitize_json_string(s):
-            """Remove invalid control characters from inside JSON string values."""
+            """Fix common JSON issues from LLM output."""
             # Replace unescaped control chars (except valid \n, \t, \r sequences)
-            # This targets raw control chars that break json.loads
-            return re.sub(r'[\x00-\x1f\x7f]', lambda m: {
+            s = re.sub(r'[\x00-\x1f\x7f]', lambda m: {
                 '\n': '\\n', '\r': '\\r', '\t': '\\t'
             }.get(m.group(), ''), s)
+            # Fix true/false placeholder (invalid JSON value)
+            s = re.sub(r':\s*true/false', ': true', s)
+            # Fix number ranges like 1-10 used as values
+            s = re.sub(r':\s*(\d+)-(\d+)\s*([,}])', r': \1\3', s)
+            return s
 
         analysis_data = None
         for candidate in json_candidates:
