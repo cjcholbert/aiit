@@ -87,22 +87,22 @@ npm run dev
 | `ANTHROPIC_MODEL` | Model to use | claude-3-haiku-20240307 |
 | `ADMIN_SECRET_KEY` | Admin API key | (change in prod!) |
 
-## Week Modules
+## Lesson Modules
 
-| Week | Module | Status |
-|------|--------|--------|
+| Lesson | Module | Status |
+|--------|--------|--------|
 | 1 | Context Tracker | Active |
-| 2 | Template Builder | Planned |
-| 3 | Trust Matrix | Planned |
-| 4 | Verification Tools | Planned |
-| 5 | Task Decomposer | Planned |
-| 6 | Delegation Tracker | Planned |
-| 7 | Iteration Passes | Planned |
-| 8 | Feedback Analyzer | Planned |
-| 9 | Status Reporter | Planned |
-| 10 | Context Docs | Planned |
-| 11 | Frontier Mapper | Planned |
-| 12 | Reference Card | Planned |
+| 2 | Feedback Analyzer | Active |
+| 3 | Template Builder | Active |
+| 4 | Context Docs | Active |
+| 5 | Trust Matrix | Active |
+| 6 | Verification Tools | Active |
+| 7 | Task Decomposer | Active |
+| 8 | Delegation Tracker | Active |
+| 9 | Iteration Passes | Active |
+| 10 | Status Reporter | Active |
+| 11 | Frontier Mapper | Active |
+| 12 | Reference Card | Active |
 
 ## API Endpoints
 
@@ -112,15 +112,15 @@ npm run dev
 - `POST /auth/refresh` - Refresh tokens
 - `GET /auth/me` - Current user profile
 
-### Week 1: Context Tracker
-- `POST /week1/analyze` - Analyze transcript
-- `POST /week1/upload` - Upload JSON file
-- `GET /week1/conversations` - List conversations
-- `GET /week1/conversations/{id}` - Get conversation
-- `PUT /week1/conversations/{id}` - Update with edits
-- `DELETE /week1/conversations/{id}` - Delete
-- `GET /week1/patterns` - Pattern statistics
-- `GET /week1/insights` - Aggregated insights
+### Lesson 1: Context Tracker
+- `POST /lesson1/analyze` - Analyze transcript
+- `POST /lesson1/upload` - Upload JSON file
+- `GET /lesson1/conversations` - List conversations
+- `GET /lesson1/conversations/{id}` - Get conversation
+- `PUT /lesson1/conversations/{id}` - Update with edits
+- `DELETE /lesson1/conversations/{id}` - Delete
+- `GET /lesson1/patterns` - Pattern statistics
+- `GET /lesson1/insights` - Aggregated insights
 
 ### Admin (separate container)
 - `GET /admin/users` - List users
@@ -129,6 +129,23 @@ npm run dev
 - `POST /admin/users/{id}/toggle-active` - Enable/disable
 - `DELETE /admin/users/{id}` - Delete user
 - `GET /admin/stats` - Platform statistics
+
+## Testing
+
+Run the test suite with pytest:
+
+```bash
+# Run all tests
+pytest tests/ -v
+
+# Run with coverage
+pytest tests/ -v --tb=short
+
+# Run a specific test file
+pytest tests/test_auth.py -v
+```
+
+Tests use SQLite in-memory databases and do not require a running PostgreSQL instance.
 
 ## License
 

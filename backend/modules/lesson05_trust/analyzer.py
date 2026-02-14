@@ -1,14 +1,13 @@
 """Week 3: Calibration Analyzer - AI-powered insight generation."""
 import json
 import logging
-import os
 from datetime import datetime
 
-from anthropic import Anthropic
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from backend.database.models import Prediction, OutputType, CalibrationInsight
+from backend.services.anthropic_client import get_anthropic_client, CircuitBreakerError
 
 logger = logging.getLogger(__name__)
 
@@ -105,7 +104,7 @@ async def analyze_calibration(user_id: str, db: AsyncSession) -> list[Calibratio
         }
 
     # Call Claude API
-    client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+    client = get_anthropic_client()
 
     try:
         response = client.messages.create(

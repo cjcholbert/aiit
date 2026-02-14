@@ -1,22 +1,18 @@
 """AI-powered template suggestions based on Week 1 patterns."""
 import json
 import logging
-import os
-from pathlib import Path
 from typing import Optional
-from dotenv import load_dotenv
+
 import anthropic
 
 from .schemas import TemplateSuggestion, Variable
-
-# Load .env from AI-ManagerSkills parent folder
-env_path = Path(__file__).resolve().parents[4] / ".env"
-load_dotenv(env_path)
+from backend.services.anthropic_client import (
+    get_anthropic_client,
+    ANTHROPIC_MODEL,
+    CircuitBreakerError,
+)
 
 logger = logging.getLogger(__name__)
-
-ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
-ANTHROPIC_MODEL = os.getenv("ANTHROPIC_MODEL", "claude-3-haiku-20240307")
 
 SUGGESTION_PROMPT = '''Analyze this user's conversation history patterns and suggest context templates.
 
@@ -77,10 +73,11 @@ Return ONLY valid JSON, no markdown formatting.'''
 
 
 def get_client():
-    """Get Anthropic client."""
-    if not ANTHROPIC_API_KEY:
-        raise ValueError("ANTHROPIC_API_KEY not set in environment")
-    return anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+    """Get shared Anthropic client with circuit breaker."""
+    try:
+        return get_anthropic_client()
+    except (ValueError, CircuitBreakerError):
+        raise
 
 
 async def generate_suggestions(

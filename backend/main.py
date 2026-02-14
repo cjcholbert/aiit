@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.database import init_db, close_db
+from backend.middleware import RequestIDMiddleware
 from backend.auth import auth_router
 from backend.modules.lesson01_context import router as lesson01_router
 from backend.modules.lesson02_feedback import router as lesson02_router
@@ -50,6 +51,9 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan
 )
+
+# Request tracing middleware
+app.add_middleware(RequestIDMiddleware)
 
 # CORS middleware
 cors_origins = [

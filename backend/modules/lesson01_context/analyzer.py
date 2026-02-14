@@ -2,20 +2,19 @@
 import json
 import logging
 import os
-from pathlib import Path
-from dotenv import load_dotenv
+
 import anthropic
 
 from .schemas import Analysis, ParsedTranscript
-
-# Load .env from AI-ManagerSkills parent folder (shared across all projects)
-env_path = Path(__file__).resolve().parents[4] / ".env"
-load_dotenv(env_path)
+from backend.services.anthropic_client import (
+    get_anthropic_client,
+    call_anthropic,
+    ANTHROPIC_MODEL,
+    ANTHROPIC_API_KEY,
+    CircuitBreakerError,
+)
 
 logger = logging.getLogger(__name__)
-
-ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
-ANTHROPIC_MODEL = os.getenv("ANTHROPIC_MODEL", "claude-3-haiku-20240307")
 
 NORMALIZE_PROMPT = '''Extract the conversation from this text and format it as:
 
@@ -86,10 +85,11 @@ class AnalyzerError(Exception):
 
 
 def get_client():
-    """Get Anthropic client."""
-    if not ANTHROPIC_API_KEY:
-        raise AnalyzerError("ANTHROPIC_API_KEY not set in environment")
-    return anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+    """Get shared Anthropic client with circuit breaker."""
+    try:
+        return get_anthropic_client()
+    except (ValueError, CircuitBreakerError) as exc:
+        raise AnalyzerError(str(exc))
 
 
 async def normalize_transcript(raw_text: str, model: str = None) -> str:
