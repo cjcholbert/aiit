@@ -146,6 +146,28 @@ body {
    Navigation Dropdown
    ============================================================================= */
 
+/* Persistent header links (outside dropdown) */
+.nav-header-link {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  margin-right: var(--space-sm);
+}
+
+.nav-header-link:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.nav-header-link.active {
+  color: var(--accent-blue);
+  font-weight: 600;
+}
+
 .nav-dropdown-container {
   position: relative;
 }

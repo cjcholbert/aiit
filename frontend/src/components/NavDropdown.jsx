@@ -49,6 +49,10 @@ export default function NavDropdown() {
 
     return (
         <>
+            <NavLink to="/curriculum" className="nav-header-link">
+                Curriculum
+            </NavLink>
+
             <div className="nav-dropdown-container" ref={dropdownRef}>
                 <button
                     className="nav-dropdown-trigger"
