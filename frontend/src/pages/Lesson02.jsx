@@ -253,7 +253,7 @@ export default function Lesson02() {
 
         {/* Rewrite suggestion */}
         {showRewriteSuggestion && analysis.rewrite_suggestion && (
-          <div style={{ padding: '12px', background: 'var(--bg-tertiary)', borderRadius: '6px', borderLeft: '3px solid #60a5fa' }}>
+          <div style={{ padding: '12px', background: 'var(--bg-tertiary)', borderRadius: '6px', borderLeft: '3px solid var(--accent-blue)' }}>
             <h5 style={{ margin: '0 0 8px', color: 'var(--accent-blue)' }}>How to Improve</h5>
             <pre style={{ margin: 0, whiteSpace: 'pre-wrap', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
               {analysis.rewrite_suggestion}
@@ -294,21 +294,12 @@ export default function Lesson02() {
       )}
 
       {/* Tabs */}
-      <div className="tabs" style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
+      <div className="tabs">
         {['learn', 'analyze', 'history', 'stats'].map((tab) => (
           <button
             key={tab}
-            className={`tab-btn ${activeTab === tab ? 'active' : ''}`}
+            className={`tab ${activeTab === tab ? 'active' : ''}`}
             onClick={() => setActiveTab(tab)}
-            style={{
-              padding: '10px 20px',
-              background: activeTab === tab ? 'var(--accent-blue)' : 'var(--bg-tertiary)',
-              border: 'none',
-              borderRadius: '8px',
-              color: 'var(--text-primary)',
-              cursor: 'pointer',
-              textTransform: 'capitalize',
-            }}
           >
             {tab}
           </button>
@@ -707,7 +698,7 @@ export default function Lesson02() {
                     <div style={{
                       height: '100%',
                       width: `${stats.improvement_rate}%`,
-                      background: 'linear-gradient(90deg, #4ade80, #22c55e)',
+                      background: 'linear-gradient(90deg, var(--accent-green), var(--accent-green-hover))',
                       borderRadius: '6px'
                     }} />
                   </div>

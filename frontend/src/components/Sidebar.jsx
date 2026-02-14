@@ -118,8 +118,8 @@ export default function Sidebar({ isMobileMenuOpen, setIsMobileMenuOpen }) {
                                 className="module-header"
                                 onClick={() => toggleModule(module.name)}
                                 style={{
-                                    '--module-color': module.color,
-                                    '--module-text': module.textColor
+                                    '--module-color': theme === 'dark' ? module.darkColor : module.color,
+                                    '--module-text': theme === 'dark' ? module.darkTextColor : module.textColor
                                 }}
                                 aria-expanded={expandedModules[module.name]}
                             >

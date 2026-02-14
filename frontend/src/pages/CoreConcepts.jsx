@@ -66,10 +66,10 @@ export default function CoreConcepts() {
                     <div
                         key={concept.id}
                         style={{
-                            background: '#1e1e1e',
+                            background: 'var(--bg-secondary)',
                             borderRadius: '8px',
                             overflow: 'hidden',
-                            border: '1px solid #333'
+                            border: '1px solid var(--border-color)'
                         }}
                     >
                         <div
@@ -91,7 +91,7 @@ export default function CoreConcepts() {
                                     height: '36px',
                                     borderRadius: '50%',
                                     background: concept.color,
-                                    color: '#fff',
+                                    color: '#ffffff',
                                     fontWeight: 600,
                                     fontSize: '1rem'
                                 }}
@@ -103,7 +103,7 @@ export default function CoreConcepts() {
                                     margin: 0,
                                     fontSize: '1.1rem',
                                     fontWeight: 600,
-                                    color: '#e0e0e0'
+                                    color: 'var(--text-primary)'
                                 }}>
                                     {concept.name}
                                 </h2>
@@ -121,7 +121,7 @@ export default function CoreConcepts() {
                             <p style={{
                                 margin: '0 0 16px 0',
                                 fontSize: '0.9rem',
-                                color: '#b0b0b0',
+                                color: 'var(--text-secondary)',
                                 lineHeight: 1.6
                             }}>
                                 {concept.description}
@@ -131,11 +131,11 @@ export default function CoreConcepts() {
                                 alignItems: 'center',
                                 gap: '8px',
                                 paddingTop: '12px',
-                                borderTop: '1px solid #333'
+                                borderTop: '1px solid var(--border-color)'
                             }}>
                                 <span style={{
                                     fontSize: '0.75rem',
-                                    color: '#808080',
+                                    color: 'var(--text-muted)',
                                     textTransform: 'uppercase',
                                     letterSpacing: '0.5px'
                                 }}>

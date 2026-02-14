@@ -199,7 +199,7 @@ export default function Lesson12() {
                     <h3 style={{ marginTop: '1.5rem' }}>What's Included</h3>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', marginTop: '1rem' }}>
                         {Object.entries(sections).map(([key, section]) => (
-                            <div key={key} style={{ padding: '1rem', border: '1px solid #e5e7eb', borderRadius: '8px' }}>
+                            <div key={key} style={{ padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
                                 <strong>{section.name}</strong>
                                 <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.9rem', color: 'var(--text-muted)' }}>{section.description}</p>
                                 <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Source: {section.source}</p>
@@ -269,7 +269,7 @@ export default function Lesson12() {
                             <h3>Top Templates</h3>
                             <div style={{ display: 'grid', gap: '1rem', marginTop: '1rem' }}>
                                 {card.top_templates.map((t, i) => (
-                                    <div key={i} style={{ padding: '1rem', border: '1px solid #e5e7eb', borderRadius: '8px' }}>
+                                    <div key={i} style={{ padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
                                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                             <strong>{t.name}</strong>
                                             <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Used {t.usage_count}x</span>
@@ -326,7 +326,7 @@ export default function Lesson12() {
                         {card?.personal_rules?.length > 0 ? (
                             <ul style={{ marginTop: '1rem' }}>
                                 {card.personal_rules.map((rule, i) => (
-                                    <li key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem 0', borderBottom: '1px solid #e5e7eb' }}>
+                                    <li key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem 0', borderBottom: '1px solid var(--border-color)' }}>
                                         <span>{rule}</span>
                                         <button className="btn btn-secondary" onClick={() => removePersonalRule(i)} style={{ padding: '0.25rem 0.5rem', fontSize: '0.8rem' }}>
                                             Remove
@@ -440,7 +440,7 @@ export default function Lesson12() {
                                             gap: '1rem',
                                             alignItems: 'center',
                                             padding: '0.75rem',
-                                            borderBottom: '1px solid #e5e7eb'
+                                            borderBottom: '1px solid var(--border-color)'
                                         }}>
                                             <span style={{ fontWeight: 'bold' }}>Week {week.week}</span>
                                             <span>{week.name}</span>
@@ -460,7 +460,7 @@ export default function Lesson12() {
                                         <div style={{
                                             height: '100%',
                                             width: `${stats.completion_percentage}%`,
-                                            background: 'linear-gradient(90deg, #4f46e5, #7c3aed)',
+                                            background: 'linear-gradient(90deg, var(--accent-blue), var(--accent-purple))',
                                             borderRadius: '12px',
                                             transition: 'width 0.5s ease'
                                         }} />

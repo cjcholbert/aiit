@@ -406,7 +406,7 @@ export default function Lesson04() {
 
       {/* Active Session Banner */}
       {activeSession && (
-        <div style={{ background: 'var(--success-bg)', padding: '16px', borderRadius: '8px', marginBottom: '16px', borderLeft: '4px solid #4ade80' }}>
+        <div style={{ background: 'var(--success-bg)', padding: '16px', borderRadius: '8px', marginBottom: '16px', borderLeft: '4px solid var(--accent-green)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
               <strong style={{ color: 'var(--accent-green)' }}>Active Session:</strong> {activeSession.project_name}
@@ -422,21 +422,12 @@ export default function Lesson04() {
       )}
 
       {/* Tabs */}
-      <div className="tabs" style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
+      <div className="tabs">
         {['learn', 'docs', 'sessions', 'stats'].map((tab) => (
           <button
             key={tab}
-            className={`tab-btn ${activeTab === tab ? 'active' : ''}`}
+            className={`tab ${activeTab === tab ? 'active' : ''}`}
             onClick={() => setActiveTab(tab)}
-            style={{
-              padding: '10px 20px',
-              background: activeTab === tab ? 'var(--accent-blue)' : 'var(--bg-tertiary)',
-              border: 'none',
-              borderRadius: '8px',
-              color: 'var(--text-primary)',
-              cursor: 'pointer',
-              textTransform: 'capitalize',
-            }}
           >
             {tab}
           </button>
@@ -801,7 +792,7 @@ export default function Lesson04() {
                       style={{
                         padding: '16px',
                         cursor: 'pointer',
-                        border: editingDoc?.id === doc.id ? '2px solid #0078d4' : 'none',
+                        border: editingDoc?.id === doc.id ? '2px solid var(--accent-blue)' : 'none',
                         opacity: doc.is_active ? 1 : 0.6
                       }}
                       onClick={() => handleEditDoc(doc.id)}
@@ -849,10 +840,10 @@ export default function Lesson04() {
                         key={doc.id}
                         style={{
                           padding: '12px',
-                          background: selectedDoc?.id === doc.id ? '#1a3a5a' : 'var(--bg-secondary)',
+                          background: selectedDoc?.id === doc.id ? 'var(--bg-hover)' : 'var(--bg-secondary)',
                           borderRadius: '8px',
                           cursor: 'pointer',
-                          border: selectedDoc?.id === doc.id ? '2px solid #0078d4' : '2px solid transparent'
+                          border: selectedDoc?.id === doc.id ? '2px solid var(--accent-blue)' : '2px solid transparent'
                         }}
                         onClick={() => setSelectedDoc(doc)}
                       >
@@ -887,7 +878,7 @@ export default function Lesson04() {
 
           {/* Generated Prompt */}
           {generatedPrompt && (
-            <div className="card" style={{ padding: '24px', marginBottom: '24px', background: 'var(--bg-tertiary)', borderLeft: '4px solid #0078d4' }}>
+            <div className="card" style={{ padding: '24px', marginBottom: '24px', background: 'var(--bg-tertiary)', borderLeft: '4px solid var(--accent-blue)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
                 <h3 style={{ margin: 0 }}>Context Prompt</h3>
                 <button

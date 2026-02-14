@@ -891,7 +891,7 @@ export default function Lesson05() {
       {activeTab === 'predictions' && (
         <div>
           {/* Daily Practice Reminder */}
-          <div style={{ marginBottom: '20px', padding: '12px 16px', background: 'var(--bg-tertiary)', border: '1px solid #2d4a6b', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ marginBottom: '20px', padding: '12px 16px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '12px' }}>
             <span style={{ fontSize: '20px' }}>*</span>
             <div>
               <div style={{ fontSize: '13px', color: 'var(--accent-blue)', fontWeight: 'bold' }}>Daily Practice</div>

@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
 import { MODULES, CONCEPTS, APP_NAME } from '../config/modules';
+import { useTheme } from '../contexts/ThemeContext';
 
 export default function Dashboard() {
+    const { theme } = useTheme();
     return (
         <div>
             <div className="page-header">
@@ -15,8 +17,8 @@ export default function Dashboard() {
                 <div key={module.name} style={{ marginBottom: '32px' }}>
                     <div
                         style={{
-                            backgroundColor: module.color,
-                            borderLeft: `4px solid ${module.borderColor}`,
+                            backgroundColor: theme === 'dark' ? module.darkColor : module.color,
+                            borderLeft: `4px solid ${theme === 'dark' ? module.darkBorderColor : module.borderColor}`,
                             padding: '12px 16px',
                             borderRadius: '4px',
                             marginBottom: '16px'
@@ -26,7 +28,7 @@ export default function Dashboard() {
                             margin: 0,
                             fontSize: '0.9rem',
                             fontWeight: 600,
-                            color: module.textColor,
+                            color: theme === 'dark' ? module.darkTextColor : module.textColor,
                             textTransform: 'uppercase',
                             letterSpacing: '0.5px'
                         }}>

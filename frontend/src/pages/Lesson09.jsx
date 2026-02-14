@@ -213,7 +213,7 @@ export default function Lesson09() {
           padding: '16px',
           cursor: 'pointer',
           background: task.is_complete ? 'var(--success-bg)' : passStyle.bg,
-          borderLeft: task.is_complete ? '4px solid #4ade80' : `4px solid ${passStyle.color}`,
+          borderLeft: task.is_complete ? '4px solid var(--accent-green)' : `4px solid ${passStyle.color}`,
         }}
         onClick={() => onClick(task.id)}
       >
@@ -263,21 +263,12 @@ export default function Lesson09() {
       )}
 
       {/* Tabs */}
-      <div className="tabs" style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
+      <div className="tabs">
         {['learn', 'practice', 'history', 'stats'].map((tab) => (
           <button
             key={tab}
-            className={`tab-btn ${activeTab === tab ? 'active' : ''}`}
+            className={`tab ${activeTab === tab ? 'active' : ''}`}
             onClick={() => setActiveTab(tab)}
-            style={{
-              padding: '10px 20px',
-              background: activeTab === tab ? 'var(--accent-blue)' : 'var(--bg-tertiary)',
-              border: 'none',
-              borderRadius: '8px',
-              color: 'var(--text-primary)',
-              cursor: 'pointer',
-              textTransform: 'capitalize',
-            }}
           >
             {tab}
           </button>
@@ -474,7 +465,7 @@ export default function Lesson09() {
 
               {/* Completed message */}
               {selectedTask.is_complete && (
-                <div className="card" style={{ padding: '24px', background: 'var(--success-bg)', borderLeft: '4px solid #4ade80', marginBottom: '24px' }}>
+                <div className="card" style={{ padding: '24px', background: 'var(--success-bg)', borderLeft: '4px solid var(--accent-green)', marginBottom: '24px' }}>
                   <h3 style={{ margin: '0 0 8px', color: 'var(--accent-green)' }}>Task Complete!</h3>
                   <p style={{ margin: 0, color: 'var(--text-secondary)' }}>
                     All three passes have been recorded. This task has been refined through the full 70-85-95 framework.
@@ -521,7 +512,7 @@ export default function Lesson09() {
                         </div>
                         <div>
                           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '4px' }}>ITERATION FEEDBACK</div>
-                          <pre style={{ margin: 0, whiteSpace: 'pre-wrap', fontSize: '0.85rem', color: 'var(--text-muted)', background: '#0a0a0a', padding: '12px', borderRadius: '6px' }}>
+                          <pre style={{ margin: 0, whiteSpace: 'pre-wrap', fontSize: '0.85rem', color: 'var(--text-muted)', background: 'var(--bg-tertiary)', padding: '12px', borderRadius: '6px' }}>
                             {pass.feedback}
                           </pre>
                         </div>
@@ -641,7 +632,7 @@ export default function Lesson09() {
                   style={{
                     padding: '16px',
                     background: 'var(--success-bg)',
-                    borderLeft: '4px solid #4ade80',
+                    borderLeft: '4px solid var(--accent-green)',
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
@@ -719,7 +710,7 @@ export default function Lesson09() {
                       style={{
                         height: '100%',
                         width: `${stats.completion_rate}%`,
-                        background: 'linear-gradient(90deg, #4ade80, #22c55e)',
+                        background: 'linear-gradient(90deg, var(--accent-green), var(--accent-green-hover))',
                         borderRadius: '6px'
                       }}
                     />

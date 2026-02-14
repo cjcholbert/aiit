@@ -251,19 +251,19 @@ export default function Lesson11() {
 
                     <h3 style={{ marginTop: '1.5rem' }}>Reliability Zones</h3>
                     <div style={{ display: 'grid', gap: '1rem', marginTop: '1rem' }}>
-                        <div style={{ padding: '1rem', border: '1px solid #e5e7eb', borderRadius: '8px' }}>
+                        <div style={{ padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
                             <strong>Reliable Zone</strong>
                             <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
                                 AI consistently performs well. Quick verification is sufficient. Examples: boilerplate code, email drafting, documentation formatting.
                             </p>
                         </div>
-                        <div style={{ padding: '1rem', border: '1px solid #e5e7eb', borderRadius: '8px' }}>
+                        <div style={{ padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
                             <strong>Mixed Zone</strong>
                             <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
                                 AI performance varies. Careful verification needed. Examples: code logic, data analysis, technical explanations.
                             </p>
                         </div>
-                        <div style={{ padding: '1rem', border: '1px solid #e5e7eb', borderRadius: '8px' }}>
+                        <div style={{ padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
                             <strong>Unreliable Zone</strong>
                             <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
                                 AI often struggles. High verification or human expertise required. Examples: legal interpretation, financial advice, current events.
@@ -432,7 +432,7 @@ export default function Lesson11() {
                         ) : (
                             <div style={{ display: 'grid', gap: '1rem' }}>
                                 {zones.map(zone => (
-                                    <div key={zone.id} style={{ padding: '1rem', border: '1px solid #e5e7eb', borderRadius: '8px' }}>
+                                    <div key={zone.id} style={{ padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                             <div>
                                                 <h3 style={{ margin: 0 }}>{zone.name}</h3>
@@ -570,7 +570,7 @@ export default function Lesson11() {
                         ) : (
                             <div style={{ display: 'grid', gap: '1rem' }}>
                                 {encounters.map(enc => (
-                                    <div key={enc.id} style={{ padding: '1rem', border: '1px solid #e5e7eb', borderRadius: '8px' }}>
+                                    <div key={enc.id} style={{ padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                             <div>
                                                 <span className={`badge ${getEncounterColor(enc.encounter_type)}`}>{enc.encounter_type}</span>
@@ -620,15 +620,15 @@ export default function Lesson11() {
                             <div className="card">
                                 <h2>Zones by Reliability</h2>
                                 <div style={{ display: 'flex', gap: '2rem', marginTop: '1rem' }}>
-                                    <div style={{ flex: 1, textAlign: 'center', padding: '1rem', border: '1px solid #e5e7eb', borderRadius: '8px' }}>
+                                    <div style={{ flex: 1, textAlign: 'center', padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
                                         <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.zones_by_reliability.reliable || 0}</div>
                                         <div style={{ color: 'var(--text-muted)' }}>Reliable</div>
                                     </div>
-                                    <div style={{ flex: 1, textAlign: 'center', padding: '1rem', border: '1px solid #e5e7eb', borderRadius: '8px' }}>
+                                    <div style={{ flex: 1, textAlign: 'center', padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
                                         <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.zones_by_reliability.mixed || 0}</div>
                                         <div style={{ color: 'var(--text-muted)' }}>Mixed</div>
                                     </div>
-                                    <div style={{ flex: 1, textAlign: 'center', padding: '1rem', border: '1px solid #e5e7eb', borderRadius: '8px' }}>
+                                    <div style={{ flex: 1, textAlign: 'center', padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
                                         <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.zones_by_reliability.unreliable || 0}</div>
                                         <div style={{ color: 'var(--text-muted)' }}>Unreliable</div>
                                     </div>
@@ -638,15 +638,15 @@ export default function Lesson11() {
                             <div className="card">
                                 <h2>Encounters by Type</h2>
                                 <div style={{ display: 'flex', gap: '2rem', marginTop: '1rem' }}>
-                                    <div style={{ flex: 1, textAlign: 'center', padding: '1rem', border: '1px solid #e5e7eb', borderRadius: '8px' }}>
+                                    <div style={{ flex: 1, textAlign: 'center', padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
                                         <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.encounters_by_type.success || 0}</div>
                                         <div style={{ color: 'var(--text-muted)' }}>Successes</div>
                                     </div>
-                                    <div style={{ flex: 1, textAlign: 'center', padding: '1rem', border: '1px solid #e5e7eb', borderRadius: '8px' }}>
+                                    <div style={{ flex: 1, textAlign: 'center', padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
                                         <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.encounters_by_type.failure || 0}</div>
                                         <div style={{ color: 'var(--text-muted)' }}>Failures</div>
                                     </div>
-                                    <div style={{ flex: 1, textAlign: 'center', padding: '1rem', border: '1px solid #e5e7eb', borderRadius: '8px' }}>
+                                    <div style={{ flex: 1, textAlign: 'center', padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
                                         <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.encounters_by_type.surprise || 0}</div>
                                         <div style={{ color: 'var(--text-muted)' }}>Surprises</div>
                                     </div>

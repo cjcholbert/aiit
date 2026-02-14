@@ -46,9 +46,9 @@ const isNetworkError = (error) => {
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 export function useApi() {
-    const { getAuthHeaders, logout } = useAuth();
+    const { getAuthHeaders, logout, autoGuestLogin } = useAuth();
 
-    const fetchWithAuth = async (endpoint, options = {}, retryConfig = {}) => {
+    const fetchWithAuth = async (endpoint, options = {}, retryConfig = {}, _isRetryAfterReauth = false) => {
         const {
             maxRetries = 3,
             retryDelay = 1000,
@@ -78,10 +78,13 @@ export function useApi() {
 
                 clearTimeout(timeoutId);
 
-                // Handle 401 by logging out
+                // Handle 401 by re-authenticating as guest
+                if (res.status === 401 && !_isRetryAfterReauth) {
+                    await autoGuestLogin();
+                    return fetchWithAuth(endpoint, options, retryConfig, true);
+                }
                 if (res.status === 401) {
-                    logout();
-                    throw new ApiError('Session expired. Please login again.', 401, false);
+                    throw new ApiError('Authentication failed. Please refresh the page.', 401, false);
                 }
 
                 // Check if we should retry
@@ -192,7 +195,7 @@ export function useApi() {
         return res.json();
     };
 
-    const uploadFile = async (endpoint, file, retryConfig) => {
+    const uploadFile = async (endpoint, file, retryConfig, _isRetryAfterReauth = false) => {
         const formData = new FormData();
         formData.append('file', file);
 
@@ -202,9 +205,12 @@ export function useApi() {
             body: formData
         });
 
+        if (res.status === 401 && !_isRetryAfterReauth) {
+            await autoGuestLogin();
+            return uploadFile(endpoint, file, retryConfig, true);
+        }
         if (res.status === 401) {
-            logout();
-            throw new ApiError('Session expired. Please login again.', 401, false);
+            throw new ApiError('Authentication failed. Please refresh the page.', 401, false);
         }
 
         if (!res.ok) {

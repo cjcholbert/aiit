@@ -273,7 +273,7 @@ export default function Lesson08() {
         padding: '16px',
         marginBottom: '12px',
         background: STATUS_COLORS[task.status]?.bg || 'var(--bg-secondary)',
-        borderLeft: task.is_decision_gate ? '4px solid #0078d4' : 'none'
+        borderLeft: task.is_decision_gate ? '4px solid var(--accent-blue)' : 'none'
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
@@ -406,21 +406,12 @@ export default function Lesson08() {
       )}
 
       {/* Tabs */}
-      <div className="tabs" style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
+      <div className="tabs">
         {['learn', 'delegate', 'history'].map((tab) => (
           <button
             key={tab}
-            className={`tab-btn ${activeTab === tab ? 'active' : ''}`}
+            className={`tab ${activeTab === tab ? 'active' : ''}`}
             onClick={() => setActiveTab(tab)}
-            style={{
-              padding: '10px 20px',
-              background: activeTab === tab ? 'var(--accent-blue)' : 'var(--bg-tertiary)',
-              border: 'none',
-              borderRadius: '8px',
-              color: 'var(--text-primary)',
-              cursor: 'pointer',
-              textTransform: 'capitalize',
-            }}
           >
             {tab}
           </button>
@@ -507,7 +498,7 @@ export default function Lesson08() {
               )}
 
               {/* Single Output Area */}
-              <div className="card" style={{ padding: '20px', marginBottom: '24px', background: 'var(--bg-tertiary)', borderLeft: '4px solid #0078d4' }}>
+              <div className="card" style={{ padding: '20px', marginBottom: '24px', background: 'var(--bg-tertiary)', borderLeft: '4px solid var(--accent-blue)' }}>
                 <h4 style={{ margin: '0 0 12px', color: 'var(--accent-blue)' }}>Paste AI Output</h4>
                 <textarea
                   value={sharedOutput}
@@ -533,7 +524,7 @@ export default function Lesson08() {
                   </select>
                   <button
                     className="btn btn-primary"
-                    style={{ background: '#4a1a6a', padding: '10px 20px' }}
+                    style={{ background: 'var(--accent-purple)', padding: '10px 20px' }}
                     onClick={handleAnalyzeSelectedTask}
                     disabled={!selectedTaskId || !sharedOutput?.trim() || analyzingTaskId}
                   >
@@ -704,7 +695,7 @@ export default function Lesson08() {
             // Delegation List
             <div>
               {/* Explanation Section */}
-              <div style={{ marginBottom: '24px', padding: '20px', background: 'var(--bg-tertiary)', borderRadius: '8px', borderLeft: '4px solid #0078d4' }}>
+              <div style={{ marginBottom: '24px', padding: '20px', background: 'var(--bg-tertiary)', borderRadius: '8px', borderLeft: '4px solid var(--accent-blue)' }}>
                 <h3 style={{ margin: '0 0 12px', color: 'var(--accent-blue)' }}>How to Use Delegation Tracker</h3>
                 <ol style={{ margin: 0, paddingLeft: '20px', color: 'var(--text-secondary)', lineHeight: '1.8' }}>
                   <li><strong>Create a Delegation</strong> - Define a project with a template containing context, objectives, and success criteria</li>
@@ -832,7 +823,7 @@ export default function Lesson08() {
                       style={{
                         height: '100%',
                         width: `${stats.completion_rate}%`,
-                        background: 'linear-gradient(90deg, #4ade80, #22c55e)',
+                        background: 'linear-gradient(90deg, var(--accent-green), var(--accent-green-hover))',
                         borderRadius: '6px'
                       }}
                     />

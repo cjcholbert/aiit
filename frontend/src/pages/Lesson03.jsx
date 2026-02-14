@@ -1187,7 +1187,7 @@ ${gapSections}
                       <span
                         key={cat.value}
                         style={{
-                          backgroundColor: '#5a7a9a',
+                          backgroundColor: 'var(--accent-blue)',
                           color: 'white',
                           display: 'inline-flex',
                           alignItems: 'center',

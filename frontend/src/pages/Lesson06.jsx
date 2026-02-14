@@ -333,21 +333,12 @@ export default function Lesson06() {
       )}
 
       {/* Tabs */}
-      <div className="tabs" style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
+      <div className="tabs">
         {['checklists', 'practice', 'stats'].map((tab) => (
           <button
             key={tab}
-            className={`tab-btn ${activeTab === tab ? 'active' : ''}`}
+            className={`tab ${activeTab === tab ? 'active' : ''}`}
             onClick={() => setActiveTab(tab)}
-            style={{
-              padding: '10px 20px',
-              background: activeTab === tab ? 'var(--accent-blue)' : 'var(--bg-tertiary)',
-              border: 'none',
-              borderRadius: '8px',
-              color: 'var(--text-primary)',
-              cursor: 'pointer',
-              textTransform: 'capitalize',
-            }}
           >
             {tab}
           </button>
@@ -618,7 +609,7 @@ export default function Lesson06() {
                         marginTop: '8px',
                         background: checkedItems[item.id] ? 'var(--success-bg)' : 'var(--bg-tertiary)',
                         borderRadius: '8px',
-                        border: item.is_critical ? '1px solid #6b2d2d' : '1px solid transparent',
+                        border: item.is_critical ? '1px solid var(--accent-red)' : '1px solid transparent',
                       }}
                     >
                       <input

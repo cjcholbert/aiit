@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -8,22 +8,11 @@ export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        // Check for existing tokens on mount
-        const accessToken = localStorage.getItem('access_token');
-        if (accessToken) {
-            fetchUser(accessToken);
-        } else {
-            // Auto-login as guest
-            autoGuestLogin();
-        }
-    }, []);
-
-    const autoGuestLogin = async () => {
+    const autoGuestLogin = useCallback(async () => {
         try {
-            const guestId = crypto.randomUUID().slice(0, 8);
-            const guestEmail = `guest-${guestId}@guest.local`;
-            const guestPassword = crypto.randomUUID();
+            const guestId = Math.random().toString(36).slice(2, 10);
+            const guestEmail = `guest-${guestId}@guest.ams.app`;
+            const guestPassword = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
 
             const res = await fetch(`${API_BASE}/auth/register`, {
                 method: 'POST',
@@ -35,65 +24,80 @@ export function AuthProvider({ children }) {
                 const data = await res.json();
                 localStorage.setItem('access_token', data.access_token);
                 localStorage.setItem('refresh_token', data.refresh_token);
-                await fetchUser(data.access_token);
-            } else {
-                setLoading(false);
+                const userRes = await fetch(`${API_BASE}/auth/me`, {
+                    headers: { 'Authorization': `Bearer ${data.access_token}` }
+                });
+                if (userRes.ok) {
+                    const userData = await userRes.json();
+                    setUser(userData);
+                }
             }
         } catch (err) {
             console.error('Auto guest login failed:', err);
-            setLoading(false);
-        }
-    };
-
-    const fetchUser = async (token) => {
-        try {
-            const res = await fetch(`${API_BASE}/auth/me`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            if (res.ok) {
-                const userData = await res.json();
-                setUser(userData);
-            } else {
-                // Token invalid, try refresh
-                await refreshToken();
-            }
-        } catch (err) {
-            console.error('Failed to fetch user:', err);
-            logout();
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
-    const refreshToken = async () => {
-        const refreshTokenValue = localStorage.getItem('refresh_token');
-        if (!refreshTokenValue) {
-            logout();
-            return;
-        }
-
-        try {
-            const res = await fetch(`${API_BASE}/auth/refresh`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ refresh_token: refreshTokenValue })
-            });
-
-            if (res.ok) {
-                const data = await res.json();
-                localStorage.setItem('access_token', data.access_token);
-                localStorage.setItem('refresh_token', data.refresh_token);
-                await fetchUser(data.access_token);
-            } else {
-                logout();
+    useEffect(() => {
+        const init = async () => {
+            const accessToken = localStorage.getItem('access_token');
+            if (!accessToken) {
+                await autoGuestLogin();
+                return;
             }
-        } catch (err) {
-            console.error('Token refresh failed:', err);
-            logout();
-        }
-    };
+
+            // Try existing token
+            try {
+                const res = await fetch(`${API_BASE}/auth/me`, {
+                    headers: { 'Authorization': `Bearer ${accessToken}` }
+                });
+                if (res.ok) {
+                    const userData = await res.json();
+                    setUser(userData);
+                    setLoading(false);
+                    return;
+                }
+            } catch (err) {
+                // fall through to refresh
+            }
+
+            // Try refresh
+            const refreshTokenValue = localStorage.getItem('refresh_token');
+            if (refreshTokenValue) {
+                try {
+                    const res = await fetch(`${API_BASE}/auth/refresh`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ refresh_token: refreshTokenValue })
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        localStorage.setItem('access_token', data.access_token);
+                        localStorage.setItem('refresh_token', data.refresh_token);
+                        const userRes = await fetch(`${API_BASE}/auth/me`, {
+                            headers: { 'Authorization': `Bearer ${data.access_token}` }
+                        });
+                        if (userRes.ok) {
+                            const userData = await userRes.json();
+                            setUser(userData);
+                            setLoading(false);
+                            return;
+                        }
+                    }
+                } catch (err) {
+                    // fall through to guest
+                }
+            }
+
+            // All failed — clear and auto-guest
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+            await autoGuestLogin();
+        };
+
+        init();
+    }, [autoGuestLogin]);
 
     const login = async (email, password) => {
         const res = await fetch(`${API_BASE}/auth/login`, {
@@ -110,7 +114,12 @@ export function AuthProvider({ children }) {
         const data = await res.json();
         localStorage.setItem('access_token', data.access_token);
         localStorage.setItem('refresh_token', data.refresh_token);
-        await fetchUser(data.access_token);
+        const userRes = await fetch(`${API_BASE}/auth/me`, {
+            headers: { 'Authorization': `Bearer ${data.access_token}` }
+        });
+        if (userRes.ok) {
+            setUser(await userRes.json());
+        }
     };
 
     const register = async (email, password) => {
@@ -128,7 +137,12 @@ export function AuthProvider({ children }) {
         const data = await res.json();
         localStorage.setItem('access_token', data.access_token);
         localStorage.setItem('refresh_token', data.refresh_token);
-        await fetchUser(data.access_token);
+        const userRes = await fetch(`${API_BASE}/auth/me`, {
+            headers: { 'Authorization': `Bearer ${data.access_token}` }
+        });
+        if (userRes.ok) {
+            setUser(await userRes.json());
+        }
     };
 
     const logout = () => {
@@ -152,6 +166,7 @@ export function AuthProvider({ children }) {
             login,
             register,
             logout,
+            autoGuestLogin,
             getAuthHeaders,
             isAuthenticated: !!user
         }}>

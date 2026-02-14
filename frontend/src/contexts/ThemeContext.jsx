@@ -5,12 +5,7 @@ const ThemeContext = createContext(null);
 export function ThemeProvider({ children }) {
     const [theme, setTheme] = useState(() => {
         // Check localStorage first, then system preference
-        const saved = localStorage.getItem('theme');
-        if (saved) return saved;
-        if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-            return 'light';
-        }
-        return 'dark';
+        return 'light';
     });
 
     useEffect(() => {

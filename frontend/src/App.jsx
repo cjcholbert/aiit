@@ -25,7 +25,7 @@ import CoreConcepts from './pages/CoreConcepts';
 import Admin from './pages/Admin';
 
 function ProtectedRoute({ children }) {
-    const { isAuthenticated, loading } = useAuth();
+    const { loading } = useAuth();
 
     if (loading) {
         return (
@@ -36,10 +36,6 @@ function ProtectedRoute({ children }) {
                 </div>
             </div>
         );
-    }
-
-    if (!isAuthenticated) {
-        return <Navigate to="/login" replace />;
     }
 
     return children;

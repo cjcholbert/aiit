@@ -377,21 +377,12 @@ export default function Lesson10() {
       )}
 
       {/* Tabs */}
-      <div className="tabs" style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
+      <div className="tabs">
         {['learn', 'design', 'run', 'stats'].map((tab) => (
           <button
             key={tab}
-            className={`tab-btn ${activeTab === tab ? 'active' : ''}`}
+            className={`tab ${activeTab === tab ? 'active' : ''}`}
             onClick={() => setActiveTab(tab)}
-            style={{
-              padding: '10px 20px',
-              background: activeTab === tab ? 'var(--accent-blue)' : 'var(--bg-tertiary)',
-              border: 'none',
-              borderRadius: '8px',
-              color: 'var(--text-primary)',
-              cursor: 'pointer',
-              textTransform: 'capitalize',
-            }}
           >
             {tab}
           </button>
@@ -414,7 +405,7 @@ export default function Lesson10() {
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
               {Object.entries(criteria).map(([key, value]) => (
-                <div key={key} style={{ padding: '16px', background: 'var(--success-bg)', borderRadius: '8px', borderLeft: '4px solid #4ade80' }}>
+                <div key={key} style={{ padding: '16px', background: 'var(--success-bg)', borderRadius: '8px', borderLeft: '4px solid var(--accent-green)' }}>
                   <div style={{ fontWeight: 'bold', color: 'var(--accent-green)', marginBottom: '8px' }}>{value.label}</div>
                   <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>{value.description}</div>
                 </div>
@@ -735,7 +726,7 @@ export default function Lesson10() {
                       style={{
                         padding: '16px',
                         cursor: 'pointer',
-                        border: editingTemplate?.id === template.id ? '2px solid #0078d4' : 'none'
+                        border: editingTemplate?.id === template.id ? '2px solid var(--accent-blue)' : 'none'
                       }}
                       onClick={() => handleEditTemplate(template.id)}
                     >
@@ -876,7 +867,7 @@ export default function Lesson10() {
                           </span>
                           <span style={{ flex: 1 }}>{step.description}</span>
                           {step.is_ai_step && (
-                            <span style={{ color: 'var(--accent-blue)', fontSize: '0.75rem', background: '#1a3a5a', padding: '2px 8px', borderRadius: '4px' }}>
+                            <span style={{ color: 'var(--accent-blue)', fontSize: '0.75rem', background: 'var(--bg-hover)', padding: '2px 8px', borderRadius: '4px' }}>
                               AI
                             </span>
                           )}
