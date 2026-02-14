@@ -15,6 +15,7 @@ export default function NavDropdown() {
         const path = location.pathname;
         if (path === '/') return 'Dashboard';
         if (path === '/concepts') return 'Core Concepts';
+        if (path === '/curriculum') return 'Curriculum';
         if (path === '/analytics') return 'Analytics';
         if (path === '/admin') return 'Admin';
         if (path.startsWith('/lesson/')) return `Lesson ${path.split('/')[2]}`;
@@ -77,6 +78,13 @@ export default function NavDropdown() {
                                 role="menuitem"
                             >
                                 Core Concepts
+                            </NavLink>
+                            <NavLink
+                                to="/curriculum"
+                                className={({ isActive }) => `nav-dropdown-item ${isActive ? 'active' : ''}`}
+                                role="menuitem"
+                            >
+                                Curriculum
                             </NavLink>
                             <NavLink
                                 to="/analytics"

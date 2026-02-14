@@ -90,6 +90,12 @@ export default function Sidebar({ isMobileMenuOpen, setIsMobileMenuOpen }) {
                         Core Concepts
                     </NavLink>
                     <NavLink
+                        to="/curriculum"
+                        className={({ isActive }) => `sidebar-mobile-link ${isActive ? 'active' : ''}`}
+                    >
+                        Curriculum
+                    </NavLink>
+                    <NavLink
                         to="/analytics"
                         className={({ isActive }) => `sidebar-mobile-link ${isActive ? 'active' : ''}`}
                     >

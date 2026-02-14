@@ -23,6 +23,7 @@ import Lesson10 from './pages/Lesson10';
 import Lesson11 from './pages/Lesson11';
 import Lesson12 from './pages/Lesson12';
 import CoreConcepts from './pages/CoreConcepts';
+import Curriculum from './pages/Curriculum';
 import Admin from './pages/Admin';
 
 function ProtectedRoute({ children }) {
@@ -145,6 +146,14 @@ export default function App() {
                 <ProtectedRoute>
                     <AppLayout>
                         <CoreConcepts />
+                    </AppLayout>
+                </ProtectedRoute>
+            } />
+
+            <Route path="/curriculum" element={
+                <ProtectedRoute>
+                    <AppLayout>
+                        <Curriculum />
                     </AppLayout>
                 </ProtectedRoute>
             } />
