@@ -83,6 +83,8 @@ async def create_zone(
     await db.commit()
     await db.refresh(db_zone)
 
+    logger.info(f"Created frontier zone '{zone.name}' for user {current_user.email}")
+
     return ZoneResponse(
         id=db_zone.id,
         name=db_zone.name,
@@ -121,6 +123,8 @@ async def list_zones(
 
     result = await db.execute(query)
     zones = result.scalars().all()
+
+    logger.info(f"Listed {len(zones)} frontier zones for user {current_user.email}")
 
     return [
         ZoneSummary(
@@ -216,6 +220,8 @@ async def update_zone(
     await db.commit()
     await db.refresh(zone)
 
+    logger.info(f"Updated frontier zone {zone_id}")
+
     return ZoneResponse(
         id=zone.id,
         name=zone.name,
@@ -254,6 +260,8 @@ async def delete_zone(
     await db.delete(zone)
     await db.commit()
 
+    logger.info(f"Deleted frontier zone {zone_id}")
+
     return {"message": "Zone deleted successfully"}
 
 
@@ -280,6 +288,8 @@ async def seed_example_zones(
         zones_created.append(example["name"])
 
     await db.commit()
+
+    logger.info(f"Seeded {len(zones_created)} example zones for user {current_user.email}")
 
     return {"message": f"Created {len(zones_created)} example zones", "zones": zones_created}
 
@@ -321,6 +331,8 @@ async def create_encounter(
     db.add(db_encounter)
     await db.commit()
     await db.refresh(db_encounter)
+
+    logger.info(f"Created {encounter.encounter_type} encounter for user {current_user.email}")
 
     return EncounterResponse(
         id=db_encounter.id,
@@ -471,6 +483,8 @@ async def delete_encounter(
 
     await db.delete(encounter)
     await db.commit()
+
+    logger.info(f"Deleted encounter {encounter_id}")
 
     return {"message": "Encounter deleted successfully"}
 

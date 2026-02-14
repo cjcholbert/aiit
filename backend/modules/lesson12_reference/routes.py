@@ -78,6 +78,8 @@ async def create_card(
     await db.commit()
     await db.refresh(db_card)
 
+    logger.info(f"Created reference card '{card.name}' for user {current_user.email}")
+
     return _card_to_response(db_card)
 
 
@@ -181,6 +183,8 @@ async def update_card(
     await db.commit()
     await db.refresh(card)
 
+    logger.info(f"Updated reference card {card_id}")
+
     return _card_to_response(card)
 
 
@@ -206,6 +210,8 @@ async def delete_card(
 
     await db.delete(card)
     await db.commit()
+
+    logger.info(f"Deleted reference card {card_id}")
 
     return {"message": "Card deleted successfully"}
 
@@ -264,6 +270,8 @@ async def generate_card_content(
     await db.commit()
     await db.refresh(card)
 
+    logger.info(f"Generated content for reference card {card_id}")
+
     return _card_to_response(card)
 
 
@@ -289,6 +297,8 @@ async def export_card(
     if not card:
         raise HTTPException(status_code=404, detail="Card not found")
 
+    logger.info(f"Exported reference card {card_id} as {request.format}")
+
     if request.format == "json":
         return _card_to_response(card)
     elif request.format == "markdown":
@@ -311,6 +321,7 @@ async def get_stats(
     current_user: User = Depends(get_current_user)
 ):
     """Get curriculum progress and reference card statistics."""
+    logger.info(f"Retrieved curriculum stats for user {current_user.email}")
     user_id = current_user.id
 
     # Check for primary card

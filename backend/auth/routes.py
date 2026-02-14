@@ -2,11 +2,12 @@
 from datetime import datetime, timezone
 import logging
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from backend.database import get_db
+from backend.rate_limit import limiter
 from backend.database.models import User, RefreshToken
 from .jwt import (
     get_password_hash, verify_password,
@@ -23,7 +24,9 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 
 @router.post("/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
+@limiter.limit("5/minute")
 async def register(
+    request: Request,
     user_data: UserCreate,
     db: AsyncSession = Depends(get_db)
 ):
@@ -73,7 +76,9 @@ async def register(
 
 
 @router.post("/login", response_model=TokenResponse)
+@limiter.limit("5/minute")
 async def login(
+    request: Request,
     credentials: UserLogin,
     db: AsyncSession = Depends(get_db)
 ):
@@ -120,15 +125,17 @@ async def login(
 
 
 @router.post("/refresh", response_model=TokenResponse)
+@limiter.limit("10/minute")
 async def refresh_tokens(
-    request: RefreshRequest,
+    request: Request,
+    body: RefreshRequest,
     db: AsyncSession = Depends(get_db)
 ):
     """
     Refresh access token using a valid refresh token.
     """
     # Decode refresh token
-    payload = decode_token(request.refresh_token)
+    payload = decode_token(body.refresh_token)
 
     if not payload or payload.get("type") != "refresh":
         raise HTTPException(
@@ -147,7 +154,7 @@ async def refresh_tokens(
     # Verify token exists and not revoked
     result = await db.execute(
         select(RefreshToken).where(
-            RefreshToken.token == request.refresh_token,
+            RefreshToken.token == body.refresh_token,
             RefreshToken.revoked == False
         )
     )
