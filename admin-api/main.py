@@ -91,7 +91,7 @@ class UserProgress(Base):
     __tablename__ = "user_progress"
     id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
     user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    week = Column(Integer, nullable=False)
+    lesson = Column(Integer, nullable=False)
     completed_exercises = Column(JSON, default=list)
     last_activity = Column(DateTime, server_default=sql_func.now())
 
@@ -275,7 +275,7 @@ class UserResponse(BaseModel):
 class UserDetailResponse(UserResponse):
     conversation_count: int
     last_activity: Optional[datetime]
-    progress_by_week: dict
+    progress_by_lesson: dict
 
 
 class UserListResponse(BaseModel):
@@ -293,7 +293,7 @@ class PlatformStats(BaseModel):
     total_users: int
     active_users: int
     total_conversations: int
-    users_by_week: dict
+    users_by_lesson: dict
 
 
 class LessonAnalyticsItem(BaseModel):
@@ -466,13 +466,13 @@ async def get_user(
     )
     last_activity = last_conv.scalar_one_or_none()
 
-    # Get progress by week
+    # Get progress by lesson
     progress_result = await db.execute(
         select(UserProgress).where(UserProgress.user_id == user_id)
     )
     progress_records = progress_result.scalars().all()
-    progress_by_week = {
-        p.week: {
+    progress_by_lesson = {
+        p.lesson: {
             "completed_exercises": p.completed_exercises or [],
             "last_activity": p.last_activity.isoformat() if p.last_activity else None
         }
@@ -487,7 +487,7 @@ async def get_user(
         created_at=user.created_at,
         conversation_count=conv_count,
         last_activity=last_activity,
-        progress_by_week=progress_by_week
+        progress_by_lesson=progress_by_lesson
     )
 
 
@@ -596,18 +596,18 @@ async def get_platform_stats(
     conv_result = await db.execute(select(func.count(Conversation.id)))
     total_conversations = conv_result.scalar() or 0
 
-    # Users with activity per week
+    # Users with activity per lesson
     progress_result = await db.execute(
-        select(UserProgress.week, func.count(UserProgress.user_id.distinct()))
-        .group_by(UserProgress.week)
+        select(UserProgress.lesson, func.count(UserProgress.user_id.distinct()))
+        .group_by(UserProgress.lesson)
     )
-    users_by_week = {row[0]: row[1] for row in progress_result.all()}
+    users_by_lesson = {row[0]: row[1] for row in progress_result.all()}
 
     return PlatformStats(
         total_users=total_users,
         active_users=active_users,
         total_conversations=total_conversations,
-        users_by_week=users_by_week
+        users_by_lesson=users_by_lesson
     )
 
 
