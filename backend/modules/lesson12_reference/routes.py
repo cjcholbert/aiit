@@ -2,10 +2,12 @@
 import logging
 from datetime import datetime
 from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import PlainTextResponse
 from sqlalchemy import select, func, desc
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from backend.rate_limit import limiter
 
 from backend.database import get_db
 from backend.database.models import (
@@ -427,6 +429,57 @@ async def get_stats(
         most_active_week=most_active_week,
         weeks_with_data=weeks_with_data
     )
+
+
+# =============================================================================
+# Integration Challenge Endpoints
+# =============================================================================
+
+@router.get("/challenges/scenarios")
+async def get_challenge_scenarios():
+    """Get available integration challenge scenarios."""
+    from .analyzer import SCENARIOS
+    return [
+        {"id": s["id"], "title": s["title"], "description": s["description"], "hints": s["hints"]}
+        for s in SCENARIOS
+    ]
+
+
+@router.post("/challenges/evaluate")
+@limiter.limit("3/minute")
+async def evaluate_challenge_response(
+    request: Request,
+    current_user: User = Depends(get_current_user)
+):
+    """Evaluate integration challenge responses using AI."""
+    body = await request.json()
+    scenario_id = body.get("scenario_id")
+    responses = body.get("responses", {})
+
+    if not scenario_id:
+        raise HTTPException(status_code=400, detail="scenario_id is required")
+
+    required_keys = [
+        "context_assembly", "quality_judgment", "task_decomposition",
+        "iterative_refinement", "workflow_integration", "frontier_recognition"
+    ]
+    missing = [k for k in required_keys if not responses.get(k, "").strip()]
+    if missing:
+        raise HTTPException(
+            status_code=400,
+            detail=f"All six concept responses are required. Missing: {', '.join(missing)}"
+        )
+
+    from .analyzer import evaluate_challenge, AnalyzerError
+
+    try:
+        evaluation = await evaluate_challenge(scenario_id, responses)
+        return evaluation
+    except AnalyzerError as e:
+        raise HTTPException(status_code=422, detail=str(e))
+    except Exception as e:
+        logger.error("L12 challenge evaluation failed: %s", str(e))
+        raise HTTPException(status_code=500, detail="Evaluation failed")
 
 
 # =============================================================================

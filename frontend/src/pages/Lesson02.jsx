@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
+import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
+import { LESSON_CRITERIA } from '../config/assessmentCriteria';
+import ConnectionCallout from '../components/ConnectionCallout';
+import LessonNav from '../components/LessonNav';
 
 // Quality level styles
 const QUALITY_STYLES = {
@@ -317,6 +321,7 @@ export default function Lesson02() {
           <strong>The Skill:</strong> Write feedback that identifies specific locations, states clear actions,
           and explains reasoning. Learn to spot vague patterns in your own feedback and rewrite them.
         </p>
+        <SelfAssessmentChecklist lessonNumber={2} criteria={LESSON_CRITERIA[2]} />
       </header>
 
       {error && (
@@ -342,6 +347,11 @@ export default function Lesson02() {
       {/* Learn Tab */}
       {activeTab === 'learn' && (
         <div className="learn-section">
+          <ConnectionCallout
+            lessonNumber={1}
+            lessonTitle="Context Tracker"
+            message="In Lesson 1, you identified context gaps in your AI conversations. Now learn to give specific, actionable feedback about those gaps instead of vague directions."
+          />
           <h2>Vague vs. Specific Feedback</h2>
           <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>
             Learn to recognize these common patterns of vague feedback and how to fix them.
@@ -818,6 +828,7 @@ export default function Lesson02() {
           </div>
         </div>
       )}
+      <LessonNav currentLesson={2} />
     </div>
   );
 }

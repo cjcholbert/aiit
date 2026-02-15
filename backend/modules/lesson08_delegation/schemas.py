@@ -1,4 +1,4 @@
-"""Week 6: Delegation Tracker - Pydantic schemas."""
+"""Lesson 8: Delegation Tracker - Pydantic schemas."""
 from datetime import datetime
 from typing import Optional, Any
 from pydantic import BaseModel, Field
@@ -14,7 +14,7 @@ TEMPLATE_ELEMENTS = {
         "description": "Background information the AI needs to understand the task",
         "placeholder": "You are working on [project]. The current state is [state]. Key constraints include [constraints].",
         "tips": [
-            "Reference your Week 2 context templates",
+            "Reference your Lesson 3 context templates",
             "Include relevant technical environment details",
             "Mention any previous related work"
         ]
@@ -55,7 +55,7 @@ TEMPLATE_ELEMENTS = {
         "placeholder": "Success means: [criteria 1], [criteria 2], [criteria 3].",
         "tips": [
             "List specific checkpoints",
-            "Reference your Week 4 verification checklists",
+            "Reference your Lesson 6 verification checklists",
             "Make criteria binary (pass/fail) when possible"
         ]
     }

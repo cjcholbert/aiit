@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
+import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
+import { LESSON_CRITERIA } from '../config/assessmentCriteria';
+import ConnectionCallout from '../components/ConnectionCallout';
+import LessonNav from '../components/LessonNav';
 
 // Task status colors
 const STATUS_COLORS = {
@@ -438,6 +442,7 @@ export default function Lesson08() {
           and success criteria. Then execute decomposed tasks in sequence, tracking what you delegated, what you received,
           and what decisions you made at each gate.
         </p>
+        <SelfAssessmentChecklist lessonNumber={8} criteria={LESSON_CRITERIA[8]} />
       </header>
 
       {error && (
@@ -463,6 +468,11 @@ export default function Lesson08() {
       {/* Learn Tab */}
       {activeTab === 'learn' && (
         <div className="learn-section">
+          <ConnectionCallout
+            lessonNumber={7}
+            lessonTitle="Task Decomposer"
+            message="Lesson 7 broke your tasks into AI-appropriate chunks. Now learn to delegate those chunks effectively using structured templates that get consistent results."
+          />
           <h2>The Delegation Template</h2>
           <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>
             A well-structured delegation has five essential elements. Master these to get consistent, high-quality results from AI.
@@ -974,6 +984,7 @@ export default function Lesson08() {
           )}
         </div>
       )}
+      <LessonNav currentLesson={8} />
     </div>
   );
 }

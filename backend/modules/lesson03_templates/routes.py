@@ -345,8 +345,8 @@ async def get_template_suggestions(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """Get AI-generated template suggestions based on Week 1 patterns."""
-    # Fetch user's Week 1 conversations
+    """Get AI-generated template suggestions based on Lesson 1 patterns."""
+    # Fetch user's Lesson 1 conversations
     result = await db.execute(
         select(Conversation)
         .where(Conversation.user_id == current_user.id)
@@ -358,7 +358,7 @@ async def get_template_suggestions(
     if len(conversations) < 3:
         raise HTTPException(
             status_code=400,
-            detail="Need at least 3 analyzed conversations for suggestions. Add more in Week 1."
+            detail="Need at least 3 analyzed conversations for suggestions. Add more in Lesson 1."
         )
 
     # Aggregate patterns and gaps
@@ -389,7 +389,7 @@ async def generate_from_conversation(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """Generate a template from a Week 1 conversation with context gaps."""
+    """Generate a template from a Lesson 1 conversation with context gaps."""
     result = await db.execute(
         select(Conversation).where(
             Conversation.id == conversation_id,

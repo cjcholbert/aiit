@@ -3,11 +3,12 @@ import logging
 from typing import Optional
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 
 from backend.database import get_db
+from backend.rate_limit import limiter
 from backend.database.models import User, Decomposition
 from backend.auth.dependencies import get_current_user
 
@@ -430,6 +431,44 @@ async def get_decomposition_stats(
         completed_tasks=completed_tasks,
         completion_rate=round((completed_tasks / total_tasks * 100) if total_tasks > 0 else 0, 1)
     )
+
+
+# =============================================================================
+# AI Analysis
+# =============================================================================
+
+@router.post("/decompositions/{decomposition_id}/analyze")
+@limiter.limit("3/minute")
+async def analyze_decomposition(
+    decomposition_id: str,
+    request: Request,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Analyze task categorizations using AI.
+
+    Evaluates whether tasks are in the right category, identifies borderline
+    cases, checks dependency logic, and validates decision gates.
+    """
+    from .analyzer import analyze_decomposition as run_analysis, AnalyzerError
+
+    decomp = await _get_user_decomposition(decomposition_id, current_user.id, db)
+
+    tasks = decomp.tasks or []
+    if not tasks:
+        raise HTTPException(status_code=400, detail="No tasks to analyze")
+
+    try:
+        analysis = await run_analysis(
+            project_name=decomp.project_name,
+            tasks=tasks,
+        )
+    except AnalyzerError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+    logger.info("Analyzed decomposition %s for user %s", decomposition_id, current_user.email)
+
+    return analysis
 
 
 # =============================================================================

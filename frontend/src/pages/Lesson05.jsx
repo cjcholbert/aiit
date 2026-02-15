@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
+import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
+import { LESSON_CRITERIA } from '../config/assessmentCriteria';
+import LessonNav from '../components/LessonNav';
 
 // Trust level colors and guidelines
 const TRUST_LEVELS = {
@@ -305,14 +308,6 @@ export default function Lesson05() {
   const pendingPredictions = predictions.filter((p) => p.was_correct === null);
   const verifiedPredictions = predictions.filter((p) => p.was_correct !== null);
 
-  // Calculate weekly progress
-  const weeklyProgress = {
-    hasMatrix: outputTypes.length > 0,
-    predictionCount: stats?.verified_predictions || 0,
-    hasCalibrationAdjustment: insights.some(i => i.insight_type === 'recommendation') ||
-      (stats?.over_trust_count > 0 || stats?.over_verify_count > 0),
-  };
-
   if (loading) {
     return (
       <div className="loading">
@@ -340,66 +335,7 @@ export default function Lesson05() {
           </p>
         </div>
 
-        {/* End-of-Week Progress Checklist */}
-        <div style={{ marginTop: '16px', padding: '16px', background: 'var(--bg-secondary)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-          <h3 style={{ margin: '0 0 12px', fontSize: '14px', color: 'var(--text-primary)' }}>End-of-Week Checklist</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: weeklyProgress.hasMatrix ? 'var(--text-primary)' : 'var(--text-muted)' }}>
-              <span style={{
-                width: '20px',
-                height: '20px',
-                borderRadius: '4px',
-                border: '2px solid',
-                borderColor: weeklyProgress.hasMatrix ? 'var(--accent-green)' : 'var(--border-color)',
-                background: weeklyProgress.hasMatrix ? 'var(--success-bg)' : 'transparent',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '12px',
-                color: 'var(--accent-green)',
-              }}>
-                {weeklyProgress.hasMatrix && '✓'}
-              </span>
-              Trust matrix created for your domain
-            </label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: weeklyProgress.predictionCount >= 10 ? 'var(--text-primary)' : 'var(--text-muted)' }}>
-              <span style={{
-                width: '20px',
-                height: '20px',
-                borderRadius: '4px',
-                border: '2px solid',
-                borderColor: weeklyProgress.predictionCount >= 10 ? 'var(--accent-green)' : 'var(--border-color)',
-                background: weeklyProgress.predictionCount >= 10 ? 'var(--success-bg)' : 'transparent',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '12px',
-                color: 'var(--accent-green)',
-              }}>
-                {weeklyProgress.predictionCount >= 10 && '✓'}
-              </span>
-              Tracked predictions on 10+ outputs ({weeklyProgress.predictionCount}/10)
-            </label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: weeklyProgress.hasCalibrationAdjustment ? 'var(--text-primary)' : 'var(--text-muted)' }}>
-              <span style={{
-                width: '20px',
-                height: '20px',
-                borderRadius: '4px',
-                border: '2px solid',
-                borderColor: weeklyProgress.hasCalibrationAdjustment ? 'var(--accent-green)' : 'var(--border-color)',
-                background: weeklyProgress.hasCalibrationAdjustment ? 'var(--success-bg)' : 'transparent',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '12px',
-                color: 'var(--accent-green)',
-              }}>
-                {weeklyProgress.hasCalibrationAdjustment && '✓'}
-              </span>
-              Identified at least one calibration adjustment needed
-            </label>
-          </div>
-        </div>
+        <SelfAssessmentChecklist lessonNumber={5} criteria={LESSON_CRITERIA[5]} />
       </div>
 
       {error && <div className="alert alert-error">{error}</div>}
@@ -1456,6 +1392,7 @@ export default function Lesson05() {
           )}
         </div>
       )}
+      <LessonNav currentLesson={5} />
     </div>
   );
 }

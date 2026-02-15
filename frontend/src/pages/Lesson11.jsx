@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
+import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
+import { LESSON_CRITERIA } from '../config/assessmentCriteria';
+import ConnectionCallout from '../components/ConnectionCallout';
+import LessonNav from '../components/LessonNav';
 
 // Icon mappings for categories and reliability
 const CATEGORY_ICONS = {
@@ -70,6 +74,10 @@ export default function Lesson11() {
     const [showTrustImport, setShowTrustImport] = useState(false);
     const [loadingTrust, setLoadingTrust] = useState(false);
 
+    // AI Pattern Analysis state
+    const [patternAnalysis, setPatternAnalysis] = useState(null);
+    const [analyzingPatterns, setAnalyzingPatterns] = useState(false);
+
     useEffect(() => {
         fetchReferenceData();
         if (activeTab === 'zones') fetchZones();
@@ -122,6 +130,20 @@ export default function Lesson11() {
             setStats(data);
         } catch (err) {
             setError('Failed to fetch stats');
+        }
+    };
+
+    const handleAnalyzePatterns = async () => {
+        setAnalyzingPatterns(true);
+        setPatternAnalysis(null);
+        try {
+            const result = await api.post('/lesson11/encounters/analyze', {});
+            setPatternAnalysis(result);
+            setError('');
+        } catch (err) {
+            setError(err.message || 'Pattern analysis failed');
+        } finally {
+            setAnalyzingPatterns(false);
         }
     };
 
@@ -265,6 +287,7 @@ export default function Lesson11() {
                 <p className="page-description">
                     Map AI reliability zones and log frontier encounters to build your personal AI capability map.
                 </p>
+                <SelfAssessmentChecklist lessonNumber={11} criteria={LESSON_CRITERIA[11]} />
             </div>
 
             {error && <div className="error-message">{error}</div>}
@@ -278,6 +301,11 @@ export default function Lesson11() {
 
             {activeTab === 'learn' && (
                 <div className="card">
+                    <ConnectionCallout
+                        lessonNumber={5}
+                        lessonTitle="Trust Matrix"
+                        message="Lesson 5 tracked where AI succeeds and fails across your tasks. Now map those patterns into reliability zones to build your personal AI capability map."
+                    />
                     <h2>Understanding Frontier Mapping</h2>
                     <p>Frontier mapping helps you build a mental model of where AI excels and where it struggles in your specific work context.</p>
 
@@ -769,6 +797,141 @@ export default function Lesson11() {
                                     </div>
                                 </div>
                             )}
+
+                            {/* AI Pattern Analysis */}
+                            <div className="card l11-analyze-section">
+                                <h2>AI Pattern Analysis</h2>
+                                <p style={{ color: 'var(--text-muted)', marginBottom: '1rem' }}>
+                                    Let AI find patterns in your encounter data — failure clusters, capability boundaries, and areas worth exploring.
+                                </p>
+                                <button
+                                    className="btn btn-primary"
+                                    onClick={handleAnalyzePatterns}
+                                    disabled={analyzingPatterns || stats.total_encounters < 3}
+                                >
+                                    {analyzingPatterns ? 'Analyzing Patterns...' : 'Analyze My Patterns'}
+                                </button>
+                                {stats.total_encounters < 3 && (
+                                    <p className="l11-min-notice">Log at least 3 encounters before analysis ({stats.total_encounters}/3).</p>
+                                )}
+                            </div>
+
+                            {analyzingPatterns && (
+                                <div className="card l11-loading">
+                                    <div className="spinner"></div>
+                                    <span>Analyzing your frontier data with AI...</span>
+                                </div>
+                            )}
+
+                            {patternAnalysis && !analyzingPatterns && (
+                                <div className="l11-analysis-results">
+                                    {/* Overall Insight */}
+                                    <div className="card l11-insight-card">
+                                        <h3>Overall Insight</h3>
+                                        <p className="l11-insight-summary">{patternAnalysis.overall_insight?.summary}</p>
+                                        <div className="l11-insight-grid">
+                                            <div className="l11-insight-item">
+                                                <strong>Strongest Area:</strong>
+                                                <span>{patternAnalysis.overall_insight?.strongest_area}</span>
+                                            </div>
+                                            <div className="l11-insight-item">
+                                                <strong>Weakest Area:</strong>
+                                                <span>{patternAnalysis.overall_insight?.weakest_area}</span>
+                                            </div>
+                                            <div className="l11-insight-item l11-highlight">
+                                                <strong>Most Interesting Finding:</strong>
+                                                <span>{patternAnalysis.overall_insight?.most_interesting_finding}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Pattern Clusters */}
+                                    {patternAnalysis.pattern_clusters?.length > 0 && (
+                                        <div className="card">
+                                            <h3>Pattern Clusters</h3>
+                                            {patternAnalysis.pattern_clusters.map((cluster, i) => (
+                                                <div key={i} className={`l11-cluster l11-cluster-${cluster.encounter_type}`}>
+                                                    <div className="l11-cluster-header">
+                                                        <span className="l11-cluster-name">{cluster.cluster_name}</span>
+                                                        <span className={`l11-cluster-type l11-type-${cluster.encounter_type}`}>
+                                                            {cluster.encounter_type}
+                                                        </span>
+                                                    </div>
+                                                    <p className="l11-cluster-insight">{cluster.insight}</p>
+                                                    {cluster.evidence?.length > 0 && (
+                                                        <ul className="l11-cluster-evidence">
+                                                            {cluster.evidence.map((ev, j) => (
+                                                                <li key={j}>{ev}</li>
+                                                            ))}
+                                                        </ul>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {/* Capability Boundaries */}
+                                    {patternAnalysis.capability_boundaries?.length > 0 && (
+                                        <div className="card">
+                                            <h3>Capability Boundaries</h3>
+                                            {patternAnalysis.capability_boundaries.map((b, i) => (
+                                                <div key={i} className="l11-boundary">
+                                                    <p className="l11-boundary-desc">{b.boundary}</p>
+                                                    <p className="l11-boundary-evidence">{b.supporting_evidence}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {/* Zone Accuracy */}
+                                    {patternAnalysis.zone_accuracy?.filter(z => z.needs_adjustment).length > 0 && (
+                                        <div className="card">
+                                            <h3>Zone Adjustments Suggested</h3>
+                                            {patternAnalysis.zone_accuracy.filter(z => z.needs_adjustment).map((z, i) => (
+                                                <div key={i} className="l11-zone-adjust">
+                                                    <div className="l11-zone-adjust-header">
+                                                        <span className="l11-zone-name">{z.zone_name}</span>
+                                                        <span className="l11-zone-change">
+                                                            {z.current_reliability} &rarr; {z.suggested_reliability}
+                                                        </span>
+                                                    </div>
+                                                    <p className="l11-zone-reason">{z.reasoning}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {/* Exploration Suggestions */}
+                                    {patternAnalysis.exploration_suggestions?.length > 0 && (
+                                        <div className="card">
+                                            <h3>Worth Exploring</h3>
+                                            {patternAnalysis.exploration_suggestions.map((s, i) => (
+                                                <div key={i} className="l11-explore-item">
+                                                    <strong>{s.area}</strong>
+                                                    <p>{s.why}</p>
+                                                    {s.test_idea && (
+                                                        <div className="l11-test-idea">
+                                                            Try: {s.test_idea}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {/* Blind Spots */}
+                                    {patternAnalysis.blind_spots?.length > 0 && (
+                                        <div className="card">
+                                            <h3>Blind Spots</h3>
+                                            <ul className="l11-blind-spots">
+                                                {patternAnalysis.blind_spots.map((b, i) => (
+                                                    <li key={i}>{b}</li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                         </>
                     ) : (
                         <div className="card">
@@ -777,6 +940,7 @@ export default function Lesson11() {
                     )}
                 </div>
             )}
+            <LessonNav currentLesson={11} />
         </div>
     );
 }

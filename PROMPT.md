@@ -1,115 +1,50 @@
-# Week 5: Task Decomposer - Implementation Task
+# Ralph: AI Manager Skills — Educational Review Improvements
+
+Read /root/ClaudeProjects/skills/claude-code-ralph-skill/SKILL.md first.
+Then read RALPH_PLAN.md in the project root to see current progress.
+Continue from where you left off.
 
 ## Context
-You are building Week 5 of the AI Manager Skills platform - a 12-week curriculum teaching common workers (not super users) how to use AI more productively. The focus is on building systematic habits, not advanced technical skills.
+You are improving the AI Manager Skills platform — a 12-lesson interactive web application teaching everyday workers to collaborate effectively with AI. All 12 lessons are fully implemented and functional.
 
-**Weeks 1-4 are complete:**
-- Week 1: Context Tracker (analyze transcripts, identify patterns)
-- Week 2: Template Builder (create/test context templates)
-- Week 3: Trust Matrix (output types, predictions, calibration)
-- Week 4: Verification Tools (checklists, practice sessions, skip criteria)
+Four educational reviews identified prioritized improvements:
+- `EDUCATIONAL_REVIEW.md` — Overall B+ assessment with strategic gaps
+- `review_curriculum_findings.md` — Curriculum design findings
+- `review_exercise_findings.md` — Exercise quality findings
+- `review_ux_findings.md` — UX/learning experience findings
 
-## Week 5 Focus: Task Decomposition - Mapping Skills
-Learning to see tasks as decomposable chunks and categorize them appropriately.
+## Tech Stack
+- **Backend:** FastAPI + SQLAlchemy async + PostgreSQL
+- **Frontend:** React (Vite) with JSX components
+- **AI:** Anthropic Claude via shared service
+- **Theme:** Dark theme (GitHub-dark palette)
+- **Styling:** External CSS only (no inline styles)
 
-### The Three Categories
+## Key Files
+- Frontend pages: `frontend/src/pages/Lesson01.jsx` through `Lesson12.jsx`
+- Frontend components: `frontend/src/components/`
+- Backend modules: `backend/modules/lesson01_context/` through `lesson12_reference/`
+- Backend AI service: `backend/services/anthropic_client.py`
+- Database models: `backend/database/models.py`
+- Main app: `backend/main.py`
+- CSS: `frontend/src/styles/`
 
-**AI-Optimal (Delegate Freely)**
-- Well-defined input -> well-defined output
-- Pattern-based work, no institutional knowledge required
-- Examples: Boilerplate generation, data formatting, research summaries
+## Team Agents
+Work is divided among 3 specialist agents:
+1. **foundation-agent**: Quick wins — L1 Learn tab, terminology, prev/next nav, Dashboard guidance, connection callouts
+2. **assessment-agent**: Assessment & progress — self-assessment checklists, completion tracking, celebrations
+3. **ai-integration-agent**: AI gaps — L7/L9/L11 AI feedback, L12 capstone strengthening
 
-**Collaborative (Work Together)**
-- Requires judgment calls
-- Benefits from your context + AI capability
-- Examples: Strategy development, complex analysis, creative refinement
+## Critical Rules
+- All stylesheets MUST be external CSS — no inline styles
+- Never break existing functionality
+- Follow existing code patterns in the codebase
+- Git commit after each completed checkpoint
+- Update RALPH_PLAN.md after each checkpoint
 
-**Human-Primary (You Lead)**
-- Requires your authority or credentials
-- Involves institutional knowledge AI can't have
-- Examples: Final decisions, sensitive communications, real-world actions
+## Completion Criteria
+All items in RALPH_PLAN.md "Completion Criteria" section must be verified.
+Output `<ralph:complete>` only after ALL criteria are verified with evidence.
 
-### Core Features Required
-
-1. **Project Decomposition**
-   - Create a new project/task to decompose
-   - Break it into subtasks
-   - Categorize each subtask (AI-Optimal, Collaborative, Human-Primary)
-   - Add notes/reasoning for categorization
-
-2. **Task Sequencing**
-   - Order tasks by dependencies
-   - Mark which tasks can run in parallel
-   - Identify decision gates (review points)
-   - Visual dependency flow
-
-3. **Category Learning**
-   - Interactive guide explaining each category
-   - Examples for each category
-   - Quiz/self-assessment on categorization
-
-4. **Decomposition History**
-   - View past decompositions
-   - Track patterns in how you categorize
-   - Statistics on category distribution
-
-### Database Model (Already Exists)
-```python
-class Decomposition(Base):
-    __tablename__ = "decompositions"
-    id = Column(UUID, primary_key=True)
-    user_id = Column(UUID, ForeignKey("users.id"))
-    project_name = Column(String(255), nullable=False)
-    tasks = Column(JSON, nullable=False)  # List of task objects
-    categories = Column(JSON, nullable=False)  # Category counts/stats
-    created_at = Column(DateTime)
-    updated_at = Column(DateTime)
-```
-
-### Task Object Structure
-```json
-{
-  "id": "uuid",
-  "title": "Task title",
-  "description": "What needs to be done",
-  "category": "ai_optimal|collaborative|human_primary",
-  "reasoning": "Why this category",
-  "order": 0,
-  "dependencies": ["task_id1", "task_id2"],
-  "is_decision_gate": false,
-  "parallel_group": null,
-  "status": "pending|in_progress|completed"
-}
-```
-
-### Tech Stack
-- Backend: FastAPI + SQLAlchemy + async SQLite
-- Frontend: React (Vite) with existing component patterns
-- Follow patterns from week04_verification module
-
-### Files to Create
-1. `backend/modules/week05_decomposer/__init__.py`
-2. `backend/modules/week05_decomposer/schemas.py`
-3. `backend/modules/week05_decomposer/routes.py`
-4. `frontend/src/pages/Week05.jsx`
-5. Update `backend/main.py` to include week05 router
-6. Update `frontend/src/components/Sidebar.jsx` to activate Week 5
-7. Update `frontend/src/pages/Dashboard.jsx` to mark Week 5 active
-8. Update `frontend/src/App.jsx` to add Week 5 route
-
-### UI Design Guidelines
-- Dark theme consistent with Weeks 1-4
-- Card-based layout for decompositions
-- Color-coded categories (green=AI-optimal, yellow=collaborative, red=human-primary)
-- Drag-and-drop for task reordering (optional)
-- Visual dependency lines or flow diagram
-
-### End State
-User can:
-1. Create a project and break it into categorized subtasks
-2. Sequence tasks with dependencies
-3. Learn the three categories through examples
-4. View history and patterns in their decompositions
-
-## Instructions
-Read RALPH_PLAN.md and work through checkpoints sequentially. Mark each checkpoint complete after verification. Commit after each major checkpoint.
+## If Stuck
+After 5 attempts on any issue: document blocker in RALPH_PLAN.md, move to next checkpoint.

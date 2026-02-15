@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
 import { useAuth } from '../auth/AuthContext';
+import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
+import { LESSON_CRITERIA } from '../config/assessmentCriteria';
+import LessonNav from '../components/LessonNav';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -32,10 +35,25 @@ export default function Lesson12() {
     const [newPrompt, setNewPrompt] = useState({ trigger: '', prompt: '' });
     const [exportFormat, setExportFormat] = useState('markdown');
 
+    // Challenge
+    const [scenarios, setScenarios] = useState([]);
+    const [selectedScenario, setSelectedScenario] = useState(null);
+    const [challengeResponses, setChallengeResponses] = useState({
+        context_assembly: '',
+        quality_judgment: '',
+        task_decomposition: '',
+        iterative_refinement: '',
+        workflow_integration: '',
+        frontier_recognition: ''
+    });
+    const [evaluation, setEvaluation] = useState(null);
+    const [evaluating, setEvaluating] = useState(false);
+
     useEffect(() => {
         fetchSections();
         if (activeTab === 'card') fetchPrimaryCard();
         if (activeTab === 'progress') fetchStats();
+        if (activeTab === 'challenge') fetchScenarios();
     }, [activeTab]);
 
     const fetchSections = async () => {
@@ -165,6 +183,63 @@ export default function Lesson12() {
         }
     };
 
+    const fetchScenarios = async () => {
+        try {
+            const data = await api.get('/lesson12/challenges/scenarios');
+            setScenarios(data);
+        } catch (err) {
+            console.error('Failed to fetch scenarios:', err);
+        }
+    };
+
+    const selectScenario = (scenario) => {
+        setSelectedScenario(scenario);
+        setChallengeResponses({
+            context_assembly: '',
+            quality_judgment: '',
+            task_decomposition: '',
+            iterative_refinement: '',
+            workflow_integration: '',
+            frontier_recognition: ''
+        });
+        setEvaluation(null);
+    };
+
+    const handleEvaluate = async () => {
+        if (!selectedScenario) return;
+        setEvaluating(true);
+        setError('');
+
+        try {
+            const data = await api.post('/lesson12/challenges/evaluate', {
+                scenario_id: selectedScenario.id,
+                responses: challengeResponses
+            });
+            setEvaluation(data);
+        } catch (err) {
+            setError(err.message || 'Failed to evaluate responses');
+        } finally {
+            setEvaluating(false);
+        }
+    };
+
+    const allResponsesFilled = Object.values(challengeResponses).every(v => v.trim().length > 0);
+
+    const CONCEPT_LABELS = {
+        context_assembly: 'Context Assembly',
+        quality_judgment: 'Quality Judgment',
+        task_decomposition: 'Task Decomposition',
+        iterative_refinement: 'Iterative Refinement',
+        workflow_integration: 'Workflow Integration',
+        frontier_recognition: 'Frontier Recognition'
+    };
+
+    const getScoreClass = (score) => {
+        if (score >= 80) return 'high';
+        if (score >= 60) return 'medium';
+        return 'low';
+    };
+
     const getStatusBadge = (status) => {
         switch (status) {
             case 'completed': return 'badge-green';
@@ -179,8 +254,9 @@ export default function Lesson12() {
             <div className="page-header">
                 <h1 className="page-title">Reference Card</h1>
                 <p className="page-description">
-                    Generate your personal AI collaboration quick reference card from your learnings across all weeks.
+                    Generate your personal AI collaboration quick reference card from your learnings across all lessons.
                 </p>
+                <SelfAssessmentChecklist lessonNumber={12} criteria={LESSON_CRITERIA[12]} />
             </div>
 
             {error && <div className="error-message">{error}</div>}
@@ -188,13 +264,14 @@ export default function Lesson12() {
             <div className="tabs">
                 <button className={`tab ${activeTab === 'learn' ? 'active' : ''}`} onClick={() => setActiveTab('learn')}>Learn</button>
                 <button className={`tab ${activeTab === 'card' ? 'active' : ''}`} onClick={() => setActiveTab('card')}>My Card</button>
+                <button className={`tab ${activeTab === 'challenge' ? 'active' : ''}`} onClick={() => setActiveTab('challenge')}>Challenge</button>
                 <button className={`tab ${activeTab === 'progress' ? 'active' : ''}`} onClick={() => setActiveTab('progress')}>Progress</button>
             </div>
 
             {activeTab === 'learn' && (
                 <div className="card">
                     <h2>Your Personal AI Reference Card</h2>
-                    <p>The reference card is the culmination of your 12-week journey, capturing your personalized AI collaboration practices.</p>
+                    <p>The reference card is the culmination of your 12-lesson curriculum, capturing your personalized AI collaboration practices.</p>
 
                     <h3 style={{ marginTop: '1.5rem' }}>What's Included</h3>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', marginTop: '1rem' }}>
@@ -209,7 +286,7 @@ export default function Lesson12() {
 
                     <h3 style={{ marginTop: '1.5rem' }}>How to Use Your Card</h3>
                     <ol>
-                        <li><strong>Generate from data:</strong> Click "Generate from My Data" to pull insights from all your previous weeks</li>
+                        <li><strong>Generate from data:</strong> Click "Generate from My Data" to pull insights from all your previous lessons</li>
                         <li><strong>Add personal rules:</strong> Document your own AI collaboration principles</li>
                         <li><strong>Save quick prompts:</strong> Store frequently-used prompt patterns</li>
                         <li><strong>Export and print:</strong> Download as Markdown or HTML for easy reference</li>
@@ -407,6 +484,149 @@ export default function Lesson12() {
                 </div>
             )}
 
+            {activeTab === 'challenge' && (
+                <div className="l12-challenge">
+                    {!selectedScenario ? (
+                        <div>
+                            <div className="card">
+                                <h2>Integration Challenge</h2>
+                                <p>Put all six AI collaboration concepts to the test. Choose a realistic workplace scenario and describe how you'd apply each concept. AI will evaluate your responses for completeness and quality.</p>
+                            </div>
+                            <div className="l12-scenario-grid">
+                                {scenarios.map(scenario => (
+                                    <div key={scenario.id} className="card l12-scenario-card" onClick={() => selectScenario(scenario)}>
+                                        <h3>{scenario.title}</h3>
+                                        <p className="l12-scenario-desc">{scenario.description}</p>
+                                        <button className="btn btn-primary" style={{ marginTop: 'auto' }}>Start Challenge</button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ) : (
+                        <div>
+                            <div className="card">
+                                <div className="l12-challenge-header">
+                                    <div>
+                                        <h2>{selectedScenario.title}</h2>
+                                        <p className="l12-scenario-desc">{selectedScenario.description}</p>
+                                    </div>
+                                    <button className="btn btn-secondary" onClick={() => { setSelectedScenario(null); setEvaluation(null); }}>
+                                        Back to Scenarios
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="l12-concept-responses">
+                                {Object.entries(CONCEPT_LABELS).map(([key, label]) => (
+                                    <div key={key} className="card l12-concept-card">
+                                        <h3>{label}</h3>
+                                        {selectedScenario.hints && selectedScenario.hints[key] && (
+                                            <p className="l12-concept-hint">{selectedScenario.hints[key]}</p>
+                                        )}
+                                        <textarea
+                                            className="l12-concept-textarea"
+                                            value={challengeResponses[key]}
+                                            onChange={(e) => setChallengeResponses({ ...challengeResponses, [key]: e.target.value })}
+                                            placeholder={`Describe how you'd apply ${label} to this scenario...`}
+                                            rows={4}
+                                        />
+                                        {evaluation && evaluation.concept_scores && (() => {
+                                            const cs = evaluation.concept_scores.find(c => c.concept === key);
+                                            if (!cs) return null;
+                                            return (
+                                                <div className="l12-concept-eval">
+                                                    <div className="l12-concept-eval-header">
+                                                        <span className={`l12-score-badge l12-score-${getScoreClass(cs.score)}`}>{cs.score}/100</span>
+                                                    </div>
+                                                    {cs.strengths && cs.strengths.length > 0 && (
+                                                        <div className="l12-eval-section l12-eval-strengths">
+                                                            <strong>Strengths:</strong>
+                                                            <ul>{cs.strengths.map((s, i) => <li key={i}>{s}</li>)}</ul>
+                                                        </div>
+                                                    )}
+                                                    {cs.gaps && cs.gaps.length > 0 && (
+                                                        <div className="l12-eval-section l12-eval-gaps">
+                                                            <strong>Gaps:</strong>
+                                                            <ul>{cs.gaps.map((g, i) => <li key={i}>{g}</li>)}</ul>
+                                                        </div>
+                                                    )}
+                                                    {cs.suggestion && (
+                                                        <div className="l12-eval-section l12-eval-suggestion">
+                                                            <strong>Suggestion:</strong> {cs.suggestion}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            );
+                                        })()}
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="card l12-evaluate-bar">
+                                <button
+                                    className="btn btn-primary"
+                                    onClick={handleEvaluate}
+                                    disabled={!allResponsesFilled || evaluating}
+                                >
+                                    {evaluating ? 'Evaluating...' : 'Evaluate My Responses'}
+                                </button>
+                                {!allResponsesFilled && (
+                                    <span className="l12-eval-hint">Complete all six concept responses to enable evaluation</span>
+                                )}
+                            </div>
+
+                            {evaluation && (
+                                <div className="l12-evaluation-results">
+                                    <div className="card l12-overall-result">
+                                        <div className="l12-overall-header">
+                                            <h2>Evaluation Results</h2>
+                                            <span className={`l12-overall-score l12-score-${getScoreClass(evaluation.overall_score)}`}>
+                                                {evaluation.overall_score}/100
+                                            </span>
+                                        </div>
+                                        <p className="l12-overall-feedback">{evaluation.overall_feedback}</p>
+                                        <div className="l12-overall-meta">
+                                            {evaluation.strongest_concept && (
+                                                <div className="l12-meta-item l12-meta-strength">
+                                                    <strong>Strongest:</strong> {evaluation.strongest_concept}
+                                                </div>
+                                            )}
+                                            {evaluation.growth_area && (
+                                                <div className="l12-meta-item l12-meta-growth">
+                                                    <strong>Growth Area:</strong> {evaluation.growth_area}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {evaluation.connections_found && evaluation.connections_found.length > 0 && (
+                                        <div className="card">
+                                            <h3>Cross-Concept Connections</h3>
+                                            <ul className="l12-connections-list">
+                                                {evaluation.connections_found.map((c, i) => (
+                                                    <li key={i}>{c}</li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+
+                                    {evaluation.next_steps && evaluation.next_steps.length > 0 && (
+                                        <div className="card">
+                                            <h3>Next Steps</h3>
+                                            <ul className="l12-next-steps">
+                                                {evaluation.next_steps.map((step, i) => (
+                                                    <li key={i}>{step}</li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+            )}
+
             {activeTab === 'progress' && (
                 <div style={{ display: 'grid', gap: '1.5rem' }}>
                     {stats ? (
@@ -418,7 +638,7 @@ export default function Lesson12() {
                                 </div>
                                 <div className="card" style={{ textAlign: 'center' }}>
                                     <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-green)' }}>{stats.weeks_with_data}/12</div>
-                                    <div style={{ color: 'var(--text-muted)' }}>Weeks with Activity</div>
+                                    <div style={{ color: 'var(--text-muted)' }}>Lessons with Activity</div>
                                 </div>
                                 <div className="card" style={{ textAlign: 'center' }}>
                                     <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-yellow)' }}>{stats.total_items_created}</div>
@@ -426,12 +646,12 @@ export default function Lesson12() {
                                 </div>
                                 <div className="card" style={{ textAlign: 'center' }}>
                                     <div style={{ fontSize: '1rem', fontWeight: 'bold', color: 'var(--accent-purple)' }}>{stats.most_active_week || 'N/A'}</div>
-                                    <div style={{ color: 'var(--text-muted)' }}>Most Active Week</div>
+                                    <div style={{ color: 'var(--text-muted)' }}>Most Active Lesson</div>
                                 </div>
                             </div>
 
                             <div className="card">
-                                <h2>Week-by-Week Progress</h2>
+                                <h2>Lesson-by-Lesson Progress</h2>
                                 <div style={{ marginTop: '1rem' }}>
                                     {stats.curriculum_progress.map((week) => (
                                         <div key={week.week} style={{
@@ -442,7 +662,7 @@ export default function Lesson12() {
                                             padding: '0.75rem',
                                             borderBottom: '1px solid var(--border-color)'
                                         }}>
-                                            <span style={{ fontWeight: 'bold' }}>Week {week.week}</span>
+                                            <span style={{ fontWeight: 'bold' }}>Lesson {week.week}</span>
                                             <span>{week.name}</span>
                                             <span style={{ color: 'var(--text-muted)' }}>{week.items_created} items</span>
                                             <span className={`badge ${getStatusBadge(week.status)}`}>
@@ -476,7 +696,7 @@ export default function Lesson12() {
                                     <div style={{ marginTop: '1.5rem', padding: '1rem', background: 'var(--bg-tertiary)', borderRadius: '8px' }}>
                                         <strong>Next Steps</strong>
                                         <p style={{ margin: '0.5rem 0 0 0', color: 'var(--accent-blue)' }}>
-                                            Complete more weeks to unlock a richer reference card. Each week adds new insights!
+                                            Complete more lessons to unlock a richer reference card. Each lesson adds new insights!
                                         </p>
                                     </div>
                                 )}
@@ -485,7 +705,7 @@ export default function Lesson12() {
                                     <div style={{ marginTop: '1.5rem', padding: '1rem', background: 'var(--success-bg)', borderRadius: '8px' }}>
                                         <strong>Congratulations!</strong>
                                         <p style={{ margin: '0.5rem 0 0 0', color: 'var(--accent-green)' }}>
-                                            You've completed the entire 12-week curriculum. Your reference card now reflects your full AI collaboration journey!
+                                            You've completed the entire 12-lesson curriculum. Your reference card now reflects your full AI collaboration journey!
                                         </p>
                                     </div>
                                 )}
@@ -498,6 +718,7 @@ export default function Lesson12() {
                     )}
                 </div>
             )}
+            <LessonNav currentLesson={12} />
         </div>
     );
 }

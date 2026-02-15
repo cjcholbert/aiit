@@ -26,6 +26,7 @@ from backend.modules.lesson11_frontier import router as lesson11_router
 from backend.modules.lesson12_reference import router as lesson12_router
 from backend.modules.analytics import router as analytics_router
 from backend.modules.admin import router as admin_router
+from backend.modules.progress import router as progress_router
 
 # Configure logging
 logging.basicConfig(
@@ -93,6 +94,7 @@ app.include_router(lesson11_router)
 app.include_router(lesson12_router)
 app.include_router(analytics_router)
 app.include_router(admin_router)
+app.include_router(progress_router)
 
 
 @app.get("/")

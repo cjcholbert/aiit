@@ -1,4 +1,4 @@
-"""Week 10: Context Docs - Pydantic schemas."""
+"""Lesson 4: Context Docs - Pydantic schemas."""
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field

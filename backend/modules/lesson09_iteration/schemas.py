@@ -1,4 +1,4 @@
-"""Week 7: Iterative Refinement - Pydantic schemas."""
+"""Lesson 9: Iterative Refinement - Pydantic schemas."""
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field

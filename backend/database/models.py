@@ -473,16 +473,16 @@ class ReferenceCard(Base):
     user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     name = Column(String(255), nullable=False, default="My AI Reference Card")
 
-    # Aggregated insights from weeks 1-11
-    top_templates = Column(JSON, default=list)  # Best templates from Module 2
-    trust_zones = Column(JSON, default=list)  # Trust matrix summary from Module 3
-    verification_shortcuts = Column(JSON, default=list)  # From Module 4
-    delegation_patterns = Column(JSON, default=list)  # From Weeks 5-6
-    iteration_style = Column(JSON, default=dict)  # From Module 7
-    feedback_principles = Column(JSON, default=list)  # From Module 8
-    workflow_highlights = Column(JSON, default=list)  # From Module 9
-    context_best_practices = Column(JSON, default=list)  # From Module 10
-    frontier_map = Column(JSON, default=dict)  # From Module 11
+    # Aggregated insights from Lessons 1-11
+    top_templates = Column(JSON, default=list)  # Best templates from Lesson 3
+    trust_zones = Column(JSON, default=list)  # Trust matrix summary from Lesson 5
+    verification_shortcuts = Column(JSON, default=list)  # From Lesson 6
+    delegation_patterns = Column(JSON, default=list)  # From Lessons 7-8
+    iteration_style = Column(JSON, default=dict)  # From Lesson 9
+    feedback_principles = Column(JSON, default=list)  # From Lesson 2
+    workflow_highlights = Column(JSON, default=list)  # From Lesson 10
+    context_best_practices = Column(JSON, default=list)  # From Lesson 4
+    frontier_map = Column(JSON, default=dict)  # From Lesson 11
 
     # Personal notes and customizations
     personal_rules = Column(JSON, default=list)  # User's personal AI rules

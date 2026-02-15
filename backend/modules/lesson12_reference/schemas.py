@@ -1,4 +1,4 @@
-"""Week 12: Reference Card - Pydantic schemas."""
+"""Lesson 12: Reference Card - Pydantic schemas."""
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field
@@ -12,47 +12,47 @@ CARD_SECTIONS = {
     "trust_zones": {
         "name": "Trust Zones",
         "description": "Quick reference for output types and verification needs",
-        "source": "Week 3: Trust Matrix"
+        "source": "Lesson 5: Trust Matrix"
     },
     "templates": {
         "name": "Go-To Templates",
         "description": "Your most effective context templates",
-        "source": "Week 2: Template Builder"
+        "source": "Lesson 3: Template Builder"
     },
     "verification": {
         "name": "Verification Shortcuts",
         "description": "Quick checks for different output types",
-        "source": "Week 4: Verification Tools"
+        "source": "Lesson 6: Verification Tools"
     },
     "delegation": {
         "name": "Delegation Patterns",
         "description": "Effective task handoff strategies",
-        "source": "Weeks 5-6: Decomposer & Delegation"
+        "source": "Lessons 7-8: Decomposer & Delegation"
     },
     "iteration": {
         "name": "Iteration Style",
         "description": "Your preferred 70-85-95 approach",
-        "source": "Week 7: Iteration Passes"
+        "source": "Lesson 9: Iteration Passes"
     },
     "feedback": {
         "name": "Feedback Principles",
         "description": "Rules for effective AI feedback",
-        "source": "Week 8: Feedback Analyzer"
+        "source": "Lesson 2: Feedback Analyzer"
     },
     "workflows": {
         "name": "Workflow Highlights",
         "description": "Your most time-saving workflows",
-        "source": "Week 9: Status Reporter"
+        "source": "Lesson 10: Status Reporter"
     },
     "context": {
         "name": "Context Best Practices",
         "description": "Key patterns for session continuity",
-        "source": "Week 10: Context Docs"
+        "source": "Lesson 4: Context Docs"
     },
     "frontier": {
         "name": "Frontier Map",
         "description": "AI reliability zones at a glance",
-        "source": "Week 11: Frontier Mapper"
+        "source": "Lesson 11: Frontier Mapper"
     },
     "personal": {
         "name": "Personal Rules",
@@ -246,7 +246,7 @@ class ExportRequest(BaseModel):
 # =============================================================================
 
 class CurriculumProgress(BaseModel):
-    """Progress through the 12-week curriculum."""
+    """Progress through the 12-lesson curriculum."""
     week: int
     name: str
     status: str  # "completed", "in_progress", "not_started"

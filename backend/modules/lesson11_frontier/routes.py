@@ -2,12 +2,13 @@
 import logging
 from datetime import datetime, timedelta
 from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy import select, func, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from backend.database import get_db
+from backend.rate_limit import limiter
 from backend.database.models import User, FrontierZone, FrontierEncounter
 from backend.auth import get_current_user
 
@@ -514,6 +515,87 @@ async def seed_example_encounters(
     await db.commit()
 
     return {"message": f"Created {len(encounters_created)} example encounters"}
+
+
+# =============================================================================
+# AI Pattern Analysis
+# =============================================================================
+
+@router.post("/encounters/analyze")
+@limiter.limit("3/minute")
+async def analyze_encounter_patterns(
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Analyze frontier encounter patterns using AI.
+
+    Clusters failures by task type, identifies capability boundaries,
+    suggests areas worth exploring, and compares evidence against zone ratings.
+    Requires at least 3 encounters.
+    """
+    from .analyzer import analyze_frontier_patterns, AnalyzerError
+
+    # Get all encounters with zone info
+    enc_query = select(FrontierEncounter).where(
+        FrontierEncounter.user_id == current_user.id
+    ).options(selectinload(FrontierEncounter.zone)).order_by(
+        desc(FrontierEncounter.created_at)
+    )
+    enc_result = await db.execute(enc_query)
+    encounters = enc_result.scalars().all()
+
+    if len(encounters) < 3:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Need at least 3 encounters for pattern analysis. You have {len(encounters)}."
+        )
+
+    # Get all zones
+    zone_query = select(FrontierZone).where(
+        FrontierZone.user_id == current_user.id
+    )
+    zone_result = await db.execute(zone_query)
+    zones = zone_result.scalars().all()
+
+    # Format data for analyzer
+    zone_data = [
+        {
+            "name": z.name,
+            "category": z.category,
+            "reliability": z.reliability,
+            "confidence": z.confidence,
+            "strengths": z.strengths or [],
+            "weaknesses": z.weaknesses or [],
+        }
+        for z in zones
+    ]
+
+    encounter_data = [
+        {
+            "encounter_type": e.encounter_type,
+            "task_description": e.task_description,
+            "outcome": e.outcome,
+            "expected_result": e.expected_result,
+            "lessons": e.lessons,
+            "tags": e.tags or [],
+            "zone_name": e.zone.name if e.zone else None,
+        }
+        for e in encounters
+    ]
+
+    try:
+        analysis = await analyze_frontier_patterns(
+            zones=zone_data,
+            encounters=encounter_data,
+        )
+    except AnalyzerError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+    logger.info("Analyzed frontier patterns for user %s (%d encounters, %d zones)",
+                current_user.email, len(encounters), len(zones))
+
+    return analysis
 
 
 # =============================================================================

@@ -1,1 +1,1 @@
-"""Week modules for AI Manager Skills."""
+"""Lesson modules for AI Manager Skills."""

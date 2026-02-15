@@ -1,4 +1,4 @@
-"""AI-powered template suggestions based on Week 1 patterns."""
+"""AI-powered template suggestions based on Lesson 1 patterns."""
 import json
 import logging
 from typing import Optional
@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 SUGGESTION_PROMPT = '''Analyze this user's conversation history patterns and suggest context templates.
 
-User's common context gaps (from Week 1 analysis):
+User's common context gaps (from Lesson 1 analysis):
 {gaps_summary}
 
 User's common pattern categories:
@@ -51,7 +51,7 @@ GENERATE_FROM_CONVERSATION_PROMPT = '''Analyze this conversation where the user 
 Conversation:
 {transcript}
 
-Analysis from Week 1:
+Analysis from Lesson 1:
 - Context added later: {context_added_later}
 - What would have helped: {what_would_have_helped}
 - Pattern category: {pattern}
@@ -78,7 +78,7 @@ async def generate_suggestions(
     model: Optional[str] = None
 ) -> list[TemplateSuggestion]:
     """
-    Generate template suggestions based on user's Week 1 patterns.
+    Generate template suggestions based on user's Lesson 1 patterns.
 
     Args:
         gaps_summary: Summary of common context gaps
@@ -160,7 +160,7 @@ async def generate_template_from_conversation(
 
     Args:
         transcript: The raw conversation transcript
-        analysis: The Week 1 analysis of the conversation
+        analysis: The Lesson 1 analysis of the conversation
         model: Optional model override
 
     Returns:

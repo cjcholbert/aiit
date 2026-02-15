@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
+import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
+import { LESSON_CRITERIA } from '../config/assessmentCriteria';
+import ConnectionCallout from '../components/ConnectionCallout';
+import LessonNav from '../components/LessonNav';
 
 // Pass indicator colors and labels
 const PASS_STYLES = {
@@ -31,6 +35,10 @@ export default function Lesson09() {
   const [selectedTask, setSelectedTask] = useState(null);
   const [passForm, setPassForm] = useState({ key_question_answer: '', feedback: '' });
   const [submittingPass, setSubmittingPass] = useState(false);
+
+  // AI feedback analysis state
+  const [feedbackAnalysis, setFeedbackAnalysis] = useState({});  // keyed by pass_number
+  const [analyzingPass, setAnalyzingPass] = useState(null);
 
   // Fetch data
   const fetchTasks = async () => {
@@ -141,6 +149,7 @@ export default function Lesson09() {
       const full = await api.get(`/lesson9/tasks/${id}`);
       setSelectedTask(full);
       setPassForm({ key_question_answer: '', feedback: '' });
+      setFeedbackAnalysis({});
     } catch (err) {
       setError(err.message);
     }
@@ -198,6 +207,31 @@ export default function Lesson09() {
     } catch (err) {
       setError('Could not load conversation: ' + err.message);
     }
+  };
+
+  const handleAnalyzeFeedback = async (passNumber) => {
+    if (!selectedTask) return;
+    setAnalyzingPass(passNumber);
+    try {
+      const result = await api.post(
+        `/lesson9/tasks/${selectedTask.id}/analyze-feedback?pass_number=${passNumber}`,
+        {}
+      );
+      setFeedbackAnalysis(prev => ({ ...prev, [passNumber]: result }));
+      setError(null);
+    } catch (err) {
+      setError(err.message || 'Feedback analysis failed');
+    } finally {
+      setAnalyzingPass(null);
+    }
+  };
+
+  const PATTERN_LABELS = {
+    no_specifics: { label: 'Lacks Specifics', color: 'var(--accent-red)' },
+    no_action: { label: 'No Clear Action', color: 'var(--accent-red)' },
+    no_reason: { label: 'Missing Reasoning', color: 'var(--accent-yellow)' },
+    subjective: { label: 'Purely Subjective', color: 'var(--accent-yellow)' },
+    scope_creep: { label: 'Scope Creep', color: 'var(--accent-purple)' },
   };
 
   // Render pass progress indicator
@@ -289,6 +323,7 @@ export default function Lesson09() {
           <strong>The Skill:</strong> Use the 70-85-95 framework to iterate with purpose. Each pass has a specific
           focus and key question, so you know exactly what to evaluate and when to move on.
         </p>
+        <SelfAssessmentChecklist lessonNumber={9} criteria={LESSON_CRITERIA[9]} />
       </header>
 
       {error && (
@@ -314,6 +349,11 @@ export default function Lesson09() {
       {/* Learn Tab */}
       {activeTab === 'learn' && (
         <div className="learn-section">
+          <ConnectionCallout
+            lessonNumber={2}
+            lessonTitle="Feedback Analyzer"
+            message="Lesson 2 taught you to give specific, actionable feedback. Now apply those principles to iterate on AI outputs through structured refinement passes."
+          />
           <h2>The 70-85-95 Framework</h2>
           <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>
             Stop iterating randomly. Use structured passes with specific focus areas and key questions to reach
@@ -552,6 +592,90 @@ export default function Lesson09() {
                             {pass.feedback}
                           </pre>
                         </div>
+
+                        {/* Check Feedback Quality button */}
+                        <div className="l9-feedback-actions">
+                          <button
+                            className="btn btn-secondary"
+                            onClick={() => handleAnalyzeFeedback(pass.pass_number)}
+                            disabled={analyzingPass === pass.pass_number}
+                          >
+                            {analyzingPass === pass.pass_number ? 'Checking...' : 'Check Feedback Quality'}
+                          </button>
+                        </div>
+
+                        {/* Feedback quality analysis results */}
+                        {feedbackAnalysis[pass.pass_number] && (
+                          <div className="l9-quality-results">
+                            <div className="l9-quality-header">
+                              <div className="l9-quality-score" data-quality={
+                                feedbackAnalysis[pass.pass_number].quality_score >= 8 ? 'high' :
+                                feedbackAnalysis[pass.pass_number].quality_score >= 5 ? 'medium' : 'low'
+                              }>
+                                {feedbackAnalysis[pass.pass_number].quality_score}/10
+                              </div>
+                              <span className="l9-quality-label">Feedback Quality</span>
+                            </div>
+
+                            {/* Detected patterns */}
+                            {feedbackAnalysis[pass.pass_number].patterns_detected?.length > 0 && (
+                              <div className="l9-patterns">
+                                <div className="l9-patterns-label">Vague Patterns Detected:</div>
+                                {feedbackAnalysis[pass.pass_number].patterns_detected.map((p, pi) => (
+                                  <div key={pi} className={`l9-pattern-item l9-severity-${p.severity}`}>
+                                    <div className="l9-pattern-header">
+                                      <span className="l9-pattern-name">{PATTERN_LABELS[p.pattern]?.label || p.pattern}</span>
+                                      <span className="l9-pattern-severity">{p.severity}</span>
+                                    </div>
+                                    {p.evidence && <div className="l9-pattern-evidence">"{p.evidence}"</div>}
+                                    {p.fix && <div className="l9-pattern-fix">{p.fix}</div>}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
+                            {feedbackAnalysis[pass.pass_number].patterns_detected?.length === 0 && (
+                              <div className="l9-no-patterns">No vague patterns detected — well-written feedback!</div>
+                            )}
+
+                            {/* Pass alignment */}
+                            {feedbackAnalysis[pass.pass_number].pass_alignment && (
+                              <div className="l9-alignment">
+                                <span className={`l9-alignment-badge ${feedbackAnalysis[pass.pass_number].pass_alignment.aligned ? 'aligned' : 'misaligned'}`}>
+                                  {feedbackAnalysis[pass.pass_number].pass_alignment.aligned ? 'Aligned with pass focus' : 'Misaligned with pass focus'}
+                                </span>
+                                <span className="l9-alignment-text">{feedbackAnalysis[pass.pass_number].pass_alignment.observation}</span>
+                              </div>
+                            )}
+
+                            {/* Strengths */}
+                            {feedbackAnalysis[pass.pass_number].strengths?.length > 0 && (
+                              <div className="l9-strengths">
+                                <strong>Strengths:</strong>
+                                <ul>
+                                  {feedbackAnalysis[pass.pass_number].strengths.map((s, si) => (
+                                    <li key={si}>{s}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+
+                            {/* Improved version */}
+                            {feedbackAnalysis[pass.pass_number].improved_version && feedbackAnalysis[pass.pass_number].patterns_detected?.length > 0 && (
+                              <div className="l9-improved">
+                                <div className="l9-improved-label">Improved Version:</div>
+                                <pre className="l9-improved-text">{feedbackAnalysis[pass.pass_number].improved_version}</pre>
+                              </div>
+                            )}
+
+                            {/* Coaching tip */}
+                            {feedbackAnalysis[pass.pass_number].coaching_tip && (
+                              <div className="l9-coaching-tip">
+                                {feedbackAnalysis[pass.pass_number].coaching_tip}
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -876,6 +1000,7 @@ export default function Lesson09() {
           )}
         </div>
       )}
+      <LessonNav currentLesson={9} />
     </div>
   );
 }

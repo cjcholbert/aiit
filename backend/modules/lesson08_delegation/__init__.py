@@ -1,4 +1,4 @@
-"""Week 6: Delegation Tracker module."""
+"""Lesson 8: Delegation Tracker module."""
 from .routes import router
 
 __all__ = ["router"]

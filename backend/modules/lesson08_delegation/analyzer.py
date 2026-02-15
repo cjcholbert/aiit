@@ -1,6 +1,6 @@
-"""Week 6: AI-powered delegation output analysis.
+"""Lesson 8: AI-powered delegation output analysis.
 
-Reuses Week 1 transcript normalization pattern to parse AI conversation output
+Reuses Lesson 1 transcript normalization pattern to parse AI conversation output
 and evaluates it against user-defined success criteria.
 """
 import json
@@ -30,7 +30,7 @@ def _raise_for_circuit_breaker(exc):
 
 
 # =============================================================================
-# Transcript Parsing (reuses Week 1 patterns)
+# Transcript Parsing (reuses Lesson 1 patterns)
 # =============================================================================
 
 EXTRACT_OUTPUT_PROMPT = '''Extract the AI's final output/response from this text.
@@ -58,7 +58,7 @@ async def parse_delegation_output(raw_text: str, model: str = None) -> str:
     """
     Parse and extract AI output from a pasted conversation or raw output.
 
-    Reuses Week 1's normalization pattern but focuses on extracting
+    Reuses Lesson 1's normalization pattern but focuses on extracting
     the AI's deliverable rather than the full conversation structure.
     """
     if not raw_text or not raw_text.strip():

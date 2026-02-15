@@ -1,4 +1,4 @@
-"""Week 2: Template Builder Pydantic schemas."""
+"""Lesson 3: Template Builder Pydantic schemas."""
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field
@@ -97,7 +97,7 @@ class TemplateTestFeedback(BaseModel):
 
 
 class TemplateSuggestion(BaseModel):
-    """AI-generated template suggestion based on Week 1 patterns."""
+    """AI-generated template suggestion based on Lesson 1 patterns."""
     name: str
     category: str
     content: str

@@ -1,4 +1,4 @@
-"""Week 4: Verification Tools - Pydantic schemas."""
+"""Lesson 6: Verification Tools - Pydantic schemas."""
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field
@@ -52,7 +52,7 @@ class ChecklistCreate(BaseModel):
     """Schema for creating a checklist."""
     name: str = Field(..., min_length=1, max_length=255)
     output_type: str = Field(..., min_length=1, max_length=100)
-    output_type_id: Optional[str] = None  # Link to Week 3 output type
+    output_type_id: Optional[str] = None  # Link to Lesson 5 output type
     description: str = ""
     items: list[ChecklistItemCreate] = []
     skip_criteria: Optional[SkipCriteria] = None

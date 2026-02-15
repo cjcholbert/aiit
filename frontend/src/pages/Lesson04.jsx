@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
+import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
+import { LESSON_CRITERIA } from '../config/assessmentCriteria';
+import LessonNav from '../components/LessonNav';
 
 // Priority colors
 const PRIORITY_COLORS = {
@@ -395,6 +398,7 @@ export default function Lesson04() {
           <strong>The Skill:</strong> Maintain living context documents that capture project state, decisions,
           issues, and lessons. Start each session with full context for immediate productivity.
         </p>
+        <SelfAssessmentChecklist lessonNumber={4} criteria={LESSON_CRITERIA[4]} />
       </header>
 
       {error && (
@@ -1021,6 +1025,7 @@ export default function Lesson04() {
           )}
         </div>
       )}
+      <LessonNav currentLesson={4} />
     </div>
   );
 }

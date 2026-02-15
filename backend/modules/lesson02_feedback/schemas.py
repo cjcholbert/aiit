@@ -1,4 +1,4 @@
-"""Week 8: Feedback Analyzer - Pydantic schemas."""
+"""Lesson 2: Feedback Analyzer - Pydantic schemas."""
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field

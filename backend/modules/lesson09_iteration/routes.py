@@ -2,12 +2,13 @@
 import logging
 from datetime import datetime
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from sqlalchemy.orm import attributes
 
 from backend.database import get_db
+from backend.rate_limit import limiter
 from backend.database.models import User, IterationTask
 from backend.auth.dependencies import get_current_user
 
@@ -256,6 +257,62 @@ async def record_pass(
     await db.refresh(task)
 
     return task_to_response(task)
+
+
+# =============================================================================
+# AI Feedback Analysis
+# =============================================================================
+
+@router.post("/tasks/{task_id}/analyze-feedback")
+@limiter.limit("3/minute")
+async def analyze_pass_feedback(
+    task_id: str,
+    request: Request,
+    pass_number: int = Query(..., ge=1, le=3, description="Which pass to analyze (1, 2, or 3)"),
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Analyze iteration feedback quality for a specific pass.
+
+    Uses L2's vague-feedback patterns to evaluate whether the feedback is
+    specific, actionable, reasoned, objective, and appropriately scoped.
+    """
+    from .analyzer import analyze_feedback_quality, AnalyzerError
+
+    task = await _get_user_task(task_id, current_user.id, db)
+
+    passes = task.passes or []
+    target_pass = None
+    for p in passes:
+        if p.get('pass_number') == pass_number:
+            target_pass = p
+            break
+
+    if not target_pass:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Pass {pass_number} not found. Record the pass first."
+        )
+
+    feedback_text = target_pass.get('feedback', '')
+    if not feedback_text.strip():
+        raise HTTPException(status_code=400, detail="No feedback text to analyze")
+
+    try:
+        analysis = await analyze_feedback_quality(
+            task_name=task.task_name,
+            target_outcome=task.target_outcome or "",
+            pass_label=target_pass.get('pass_label', ''),
+            pass_focus=target_pass.get('focus', ''),
+            feedback_text=feedback_text,
+            key_question_answer=target_pass.get('key_question_answer', ''),
+        )
+    except AnalyzerError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+    logger.info("Analyzed feedback for task %s pass %d, user %s", task_id, pass_number, current_user.email)
+
+    return analysis
 
 
 # =============================================================================

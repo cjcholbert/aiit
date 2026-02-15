@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
+import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
+import { LESSON_CRITERIA } from '../config/assessmentCriteria';
+import ConnectionCallout from '../components/ConnectionCallout';
+import LessonNav from '../components/LessonNav';
 
 // Category badge colors
 const CATEGORY_COLORS = {
@@ -10,7 +14,7 @@ const CATEGORY_COLORS = {
   general: { bg: 'var(--bg-tertiary)', border: 'var(--border-color)', text: 'var(--text-muted)', icon: '📋', label: 'General' },
 };
 
-// Trust level colors (from Module 3)
+// Trust level colors (from Lesson 5)
 const TRUST_COLORS = {
   high: { color: 'var(--accent-green)', icon: '✅', label: 'High Trust' },
   medium: { color: 'var(--accent-yellow)', icon: '⚠️', label: 'Medium Trust' },
@@ -343,7 +347,7 @@ export default function Lesson06() {
         <p className="page-description">
           <strong>The Problem:</strong> Without systematic verification, you either waste time over-checking
           outputs you could trust, or miss critical errors by under-checking outputs that needed scrutiny.
-          Module 3 helped you calibrate <em>when</em> to verify—this week you build <em>how</em> to verify efficiently.
+          Lesson 5 helped you calibrate <em>when</em> to verify—now you build <em>how</em> to verify efficiently.
         </p>
         <p className="page-description" style={{ marginTop: '8px' }}>
           <strong>The Skill:</strong> Create reusable verification checklists tied to output types, so checking
@@ -351,6 +355,12 @@ export default function Lesson06() {
           your process over time. Define clear "skip criteria" so you can confidently trust appropriate outputs
           without guilt or risk.
         </p>
+        <SelfAssessmentChecklist lessonNumber={6} criteria={LESSON_CRITERIA[6]} />
+        <ConnectionCallout
+          lessonNumber={5}
+          lessonTitle="Trust Matrix"
+          message="Lesson 5 helped you calibrate when to trust vs. verify AI outputs. Now build reusable verification checklists for the output types you flagged for scrutiny."
+        />
       </header>
 
       {error && (
@@ -535,7 +545,7 @@ export default function Lesson06() {
               <h3>No checklists yet</h3>
               <p>Create verification checklists to efficiently validate AI outputs.</p>
               <p style={{ color: 'var(--text-secondary)', marginTop: '8px' }}>
-                Based on your Module 3 Trust Matrix, build checklists with critical checks,
+                Based on your Lesson 5 Trust Matrix, build checklists with critical checks,
                 common failure points, and edge cases to consider.
               </p>
             </div>
@@ -842,6 +852,7 @@ export default function Lesson06() {
           )}
         </div>
       )}
+      <LessonNav currentLesson={6} />
     </div>
   );
 }

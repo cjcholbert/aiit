@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
+import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
+import { LESSON_CRITERIA } from '../config/assessmentCriteria';
+import LessonNav from '../components/LessonNav';
 
 // Category colors and info - using CSS custom properties for theme support
 const CATEGORIES = {
@@ -43,6 +46,10 @@ export default function Lesson07() {
   // View/edit decomposition state
   const [selectedDecomp, setSelectedDecomp] = useState(null);
   const [editingTask, setEditingTask] = useState(null);
+
+  // AI Analysis state
+  const [analysis, setAnalysis] = useState(null);
+  const [analyzing, setAnalyzing] = useState(false);
 
   // Fetch data
   const fetchDecompositions = async () => {
@@ -199,6 +206,21 @@ export default function Lesson07() {
     }
   };
 
+  const handleAnalyzeDecomposition = async () => {
+    if (!selectedDecomp) return;
+    setAnalyzing(true);
+    setAnalysis(null);
+    try {
+      const result = await api.post(`/lesson7/decompositions/${selectedDecomp.id}/analyze`, {});
+      setAnalysis(result);
+      setError(null);
+    } catch (err) {
+      setError(err.message || 'Analysis failed');
+    } finally {
+      setAnalyzing(false);
+    }
+  };
+
   const renderCategoryBadge = (category) => {
     const cat = CATEGORIES[category] || CATEGORIES.collaborative;
     return (
@@ -230,6 +252,7 @@ export default function Lesson07() {
           Collaborative (work together), or Human-Primary (you lead). Sequence tasks with dependencies so you know
           what to hand off, what to co-create, and where to insert decision gates.
         </p>
+        <SelfAssessmentChecklist lessonNumber={7} criteria={LESSON_CRITERIA[7]} />
       </header>
 
       {error && (
@@ -335,9 +358,18 @@ export default function Lesson07() {
                     {selectedDecomp.tasks.length} tasks
                   </div>
                 </div>
-                <button className="btn btn-secondary" onClick={() => setSelectedDecomp(null)}>
-                  Back to List
-                </button>
+                <div className="decomp-detail-actions">
+                  <button
+                    className="btn btn-primary"
+                    onClick={handleAnalyzeDecomposition}
+                    disabled={analyzing}
+                  >
+                    {analyzing ? 'Analyzing...' : 'Get AI Feedback'}
+                  </button>
+                  <button className="btn btn-secondary" onClick={() => { setSelectedDecomp(null); setAnalysis(null); }}>
+                    Back to List
+                  </button>
+                </div>
               </div>
 
               {/* Category summary */}
@@ -426,6 +458,157 @@ export default function Lesson07() {
                   </div>
                 ))}
               </div>
+
+              {/* AI Analysis Results */}
+              {analyzing && (
+                <div className="card l7-analysis-loading">
+                  <div className="spinner"></div>
+                  <span>Analyzing your categorizations with AI...</span>
+                </div>
+              )}
+
+              {analysis && !analyzing && (
+                <div className="l7-analysis-results">
+                  <h3 className="l7-analysis-heading">AI Categorization Feedback</h3>
+
+                  {/* Overall Assessment */}
+                  <div className="card l7-overall-card">
+                    <div className="l7-overall-header">
+                      <div className="l7-score-badge" data-quality={
+                        analysis.overall_assessment?.score >= 8 ? 'high' :
+                        analysis.overall_assessment?.score >= 5 ? 'medium' : 'low'
+                      }>
+                        {analysis.overall_assessment?.score}/10
+                      </div>
+                      <div className="l7-overall-summary">
+                        {analysis.overall_assessment?.summary}
+                      </div>
+                    </div>
+                    {analysis.overall_assessment?.strengths?.length > 0 && (
+                      <div className="l7-strengths">
+                        <strong>Strengths:</strong>
+                        <ul>
+                          {analysis.overall_assessment.strengths.map((s, i) => (
+                            <li key={i}>{s}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {analysis.overall_assessment?.category_balance && (
+                      <div className="l7-balance-note">
+                        {analysis.overall_assessment.category_balance.observation}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Per-task Reviews */}
+                  {analysis.task_reviews?.length > 0 && (
+                    <div className="l7-task-reviews">
+                      <h4>Task-by-Task Review</h4>
+                      {analysis.task_reviews.map((review, i) => (
+                        <div key={i} className={`card l7-task-review ${!review.is_correct ? 'l7-needs-change' : ''} ${review.is_borderline ? 'l7-borderline' : ''}`}>
+                          <div className="l7-review-header">
+                            <span className="l7-review-title">{review.task_title}</span>
+                            <span className={`l7-review-verdict ${review.is_correct ? 'correct' : 'incorrect'}`}>
+                              {review.is_correct ? 'Correct' : 'Reconsider'}
+                            </span>
+                          </div>
+                          {!review.is_correct && (
+                            <div className="l7-category-suggestion">
+                              <span className="l7-cat-from">{CATEGORIES[review.assigned_category]?.label || review.assigned_category}</span>
+                              <span className="l7-cat-arrow">&rarr;</span>
+                              <span className="l7-cat-to">{CATEGORIES[review.recommended_category]?.label || review.recommended_category}</span>
+                            </div>
+                          )}
+                          <p className="l7-review-reasoning">{review.reasoning}</p>
+                          {review.is_borderline && review.borderline_note && (
+                            <div className="l7-borderline-note">
+                              Borderline: {review.borderline_note}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Dependency & Decision Gate Analysis */}
+                  <div className="l7-analysis-grid">
+                    {analysis.dependency_analysis && (
+                      <div className="card l7-dep-card">
+                        <h4>Sequencing</h4>
+                        <div className="l7-seq-quality" data-quality={analysis.dependency_analysis.sequencing_quality}>
+                          {analysis.dependency_analysis.sequencing_quality}
+                        </div>
+                        {analysis.dependency_analysis.issues?.length > 0 && (
+                          <div className="l7-dep-issues">
+                            {analysis.dependency_analysis.issues.map((issue, i) => (
+                              <p key={i} className="l7-dep-issue">{issue}</p>
+                            ))}
+                          </div>
+                        )}
+                        {analysis.dependency_analysis.suggestions?.length > 0 && (
+                          <div className="l7-dep-suggestions">
+                            {analysis.dependency_analysis.suggestions.map((s, i) => (
+                              <p key={i} className="l7-dep-suggestion">{s}</p>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {analysis.decision_gates && (
+                      <div className="card l7-gates-card">
+                        <h4>Decision Gates</h4>
+                        <div className="l7-gates-counts">
+                          <span>Current: {analysis.decision_gates.current_count}</span>
+                          <span>Recommended: {analysis.decision_gates.recommended_count}</span>
+                        </div>
+                        {analysis.decision_gates.missing_gates?.length > 0 && (
+                          <div className="l7-missing-gates">
+                            <strong>Missing gates:</strong>
+                            <ul>
+                              {analysis.decision_gates.missing_gates.map((g, i) => (
+                                <li key={i}>{g}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                        {analysis.decision_gates.unnecessary_gates?.length > 0 && (
+                          <div className="l7-unnecessary-gates">
+                            <strong>Unnecessary gates:</strong>
+                            <ul>
+                              {analysis.decision_gates.unnecessary_gates.map((g, i) => (
+                                <li key={i}>{g}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Coaching */}
+                  {analysis.coaching && (
+                    <div className="card l7-coaching-card">
+                      <h4>Coaching</h4>
+                      <div className="l7-coaching-item">
+                        <strong>Key Insight:</strong>
+                        <p>{analysis.coaching.biggest_insight}</p>
+                      </div>
+                      {analysis.coaching.common_mistake && (
+                        <div className="l7-coaching-item">
+                          <strong>Pattern to Watch:</strong>
+                          <p>{analysis.coaching.common_mistake}</p>
+                        </div>
+                      )}
+                      <div className="l7-coaching-item l7-next-step">
+                        <strong>Next Step:</strong>
+                        <p>{analysis.coaching.next_step}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           ) : showCreateForm ? (
             // Create Form
@@ -644,6 +827,7 @@ export default function Lesson07() {
           )}
         </div>
       )}
+      <LessonNav currentLesson={7} />
     </div>
   );
 }

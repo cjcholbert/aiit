@@ -1,5 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { useApi } from '../hooks/useApi';
+import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
+import { LESSON_CRITERIA } from '../config/assessmentCriteria';
+import ConnectionCallout from '../components/ConnectionCallout';
+import LessonNav from '../components/LessonNav';
 
 const DEFAULT_CATEGORIES = [
   { value: 'general', label: 'General', color: 'var(--accent-purple)', icon: '📋' },
@@ -198,7 +202,7 @@ export default function Lesson03() {
   const [testResult, setTestResult] = useState(null);
   const [testLoading, setTestLoading] = useState(false);
 
-  // Module 1 suggestions state
+  // Lesson 1 suggestions state
   const [module1Insights, setModule1Insights] = useState(null);
   const [module1Patterns, setModule1Patterns] = useState(null);
   const [suggestionsLoading, setSuggestionsLoading] = useState(false);
@@ -252,8 +256,8 @@ export default function Lesson03() {
       setModule1Insights(insights);
       setModule1Patterns(patterns);
     } catch (err) {
-      // Module 1 data might not exist yet - that's ok
-      console.log('Module 1 data not available:', err.message);
+      // Lesson 1 data might not exist yet - that's ok
+      console.log('Lesson 1 data not available:', err.message);
     } finally {
       setSuggestionsLoading(false);
     }
@@ -264,7 +268,7 @@ export default function Lesson03() {
       setLoading(true);
       await Promise.all([fetchTemplates(), fetchStats()]);
       setLoading(false);
-      // Fetch Module 1 data since Build Templates is the default tab
+      // Fetch Lesson 1 data since Build Templates is the default tab
       fetchModule1Data();
     };
     loadData();
@@ -582,7 +586,7 @@ ${gapSections}
       await api.post('/lesson3/templates', {
         name: template.name,
         category: 'general',
-        description: `Generated from Module 1 insights`,
+        description: `Generated from Lesson 1 insights`,
         content: template.content,
         variables: [],
         tags: ['generated', 'from-build'],
@@ -746,19 +750,26 @@ ${gapSections}
         </p>
         <p className="page-description" style={{ marginTop: '8px' }}>
           <strong>The Skill:</strong> Build reusable templates that capture the context AI needs upfront. Turn your
-          Module 1 insights into structured prompts you can use consistently.
+          Lesson 1 insights into structured prompts you can use consistently.
         </p>
         <div style={{ marginTop: '16px', padding: '16px', background: 'var(--bg-tertiary)', borderRadius: '8px', fontSize: '14px', lineHeight: '1.6' }}>
           <p style={{ margin: '0 0 12px', color: 'var(--text-secondary)' }}>
             <strong>How it works:</strong>
           </p>
           <ol style={{ margin: '0', paddingLeft: '20px', color: 'var(--text-muted)' }}>
-            <li style={{ marginBottom: '6px' }}><strong>Build Templates</strong> (recommended) - Use the guided 3-step workflow to generate templates based on your Module 1 gaps and common task types</li>
+            <li style={{ marginBottom: '6px' }}><strong>Build Templates</strong> (recommended) - Use the guided 3-step workflow to generate templates based on your Lesson 1 gaps and common task types</li>
             <li style={{ marginBottom: '6px' }}><strong>Template Library</strong> - View, edit, and organize your saved templates. Use starter templates to get going quickly</li>
             <li style={{ marginBottom: '6px' }}><strong>Test & Refine</strong> - Try your templates with real prompts and rate the results to track what works</li>
           </ol>
         </div>
+        <SelfAssessmentChecklist lessonNumber={3} criteria={LESSON_CRITERIA[3]} />
       </div>
+
+      <ConnectionCallout
+        lessonNumber={1}
+        lessonTitle="Context Tracker"
+        message="Lesson 1 showed your context patterns and common gaps. Now turn those insights into reusable templates so you never start from scratch."
+      />
 
       {error && <div className="alert alert-error">{error}</div>}
 
@@ -1077,7 +1088,7 @@ ${gapSections}
                 <div>
                   <div style={{ fontWeight: '500', marginBottom: '4px' }}>New to template building?</div>
                   <p style={{ margin: '0 0 8px', fontSize: '13px', color: 'var(--text-secondary)' }}>
-                    The <strong>Build Templates</strong> tab provides a guided 3-step workflow that helps you create templates based on your Module 1 insights.
+                    The <strong>Build Templates</strong> tab provides a guided 3-step workflow that helps you create templates based on your Lesson 1 insights.
                     It's recommended for beginners.
                   </p>
                   <button className="btn btn-secondary" style={{ fontSize: '12px', padding: '4px 12px' }} onClick={() => setActiveTab('build')}>
@@ -1537,19 +1548,19 @@ ${gapSections}
         </div>
       )}
 
-      {/* Suggestions from Module 1 */}
+      {/* Suggestions from Lesson 1 */}
       {activeTab === 'suggestions' && (
         <div>
           {suggestionsLoading ? (
             <div className="loading">
               <div className="spinner"></div>
-              Loading Module 1 data...
+              Loading Lesson 1 data...
             </div>
           ) : !module1Insights || module1Insights.total_analyzed === 0 ? (
             <div className="card">
-              <h2 style={{ marginBottom: '16px' }}>No Module 1 Data Yet</h2>
+              <h2 style={{ marginBottom: '16px' }}>No Lesson 1 Data Yet</h2>
               <p style={{ color: 'var(--text-muted)', marginBottom: '16px' }}>
-                Analyze some conversations in Module 1 first. Once you have analyzed conversations,
+                Analyze some conversations in Lesson 1 first. Once you have analyzed conversations,
                 we can identify your context gaps and suggest templates to address them.
               </p>
               <a href="/lesson/1" className="btn btn-primary">Go to Lesson 1: Context Tracker</a>
@@ -1712,7 +1723,7 @@ ${gapSections}
 
               <div style={{ marginTop: '24px', textAlign: 'center' }}>
                 <button className="btn btn-secondary" onClick={fetchModule1Data}>
-                  Refresh Module 1 Data
+                  Refresh Lesson 1 Data
                 </button>
               </div>
             </div>
@@ -1728,7 +1739,7 @@ ${gapSections}
             <div style={{ marginBottom: '20px', padding: '16px', background: 'var(--bg-tertiary)', borderRadius: '8px', borderLeft: '4px solid var(--accent-blue)' }}>
               <h3 style={{ margin: '0 0 8px', color: 'var(--accent-blue)' }}>Recommended for Beginners</h3>
               <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '14px' }}>
-                This guided workflow helps you create effective context templates based on your Module 1 analysis.
+                This guided workflow helps you create effective context templates based on your Lesson 1 analysis.
                 Follow the 3 steps to generate templates tailored to your specific task types and context patterns.
               </p>
             </div>
@@ -1767,27 +1778,27 @@ ${gapSections}
                 >
                   {step}
                 </span>
-                {step === 1 && 'Module 1 Results'}
+                {step === 1 && 'Lesson 1 Results'}
                 {step === 2 && 'Task Types'}
                 {step === 3 && 'Generated Templates'}
               </div>
             ))}
           </div>
 
-          {/* Step 1: Module 1 Results */}
+          {/* Step 1: Lesson 1 Results */}
           {buildStep === 1 && (
             <div className="card">
-              <h2 style={{ marginBottom: '20px' }}>Select Your Module 1 Results</h2>
+              <h2 style={{ marginBottom: '20px' }}>Select Your Lesson 1 Results</h2>
 
               {suggestionsLoading ? (
                 <div className="loading" style={{ padding: '40px' }}>
                   <div className="spinner"></div>
-                  Loading Module 1 insights...
+                  Loading Lesson 1 insights...
                 </div>
               ) : !module1Insights || module1Insights.total_analyzed === 0 ? (
                 <div style={{ padding: '20px', background: 'var(--bg-tertiary)', borderRadius: '8px', marginBottom: '20px' }}>
                   <p style={{ color: 'var(--text-muted)', marginBottom: '12px' }}>
-                    No Module 1 data available yet. Analyze some conversations in Module 1 first, or enter your gaps and strengths manually below.
+                    No Lesson 1 data available yet. Analyze some conversations in Lesson 1 first, or enter your gaps and strengths manually below.
                   </p>
                   <a href="/lesson/1" className="btn btn-secondary">Go to Lesson 1</a>
                 </div>
@@ -1799,7 +1810,7 @@ ${gapSections}
                     Your 3 Context Gaps
                   </label>
                   <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '12px' }}>
-                    Select from your Module 1 analysis or type custom
+                    Select from your Lesson 1 analysis or type custom
                   </p>
                   {buildGaps.map((gap, i) => (
                     <div key={i} style={{ marginBottom: '8px' }}>
@@ -1846,7 +1857,7 @@ ${gapSections}
                     Your 3 Context Strengths
                   </label>
                   <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '12px' }}>
-                    Auto-filled from Module 1 or type custom
+                    Auto-filled from Lesson 1 or type custom
                   </p>
                   {buildStrengths.map((strength, i) => (
                     <div key={i} style={{ marginBottom: '8px' }}>
@@ -2167,6 +2178,7 @@ ${gapSections}
           )}
         </div>
       )}
+      <LessonNav currentLesson={3} />
     </div>
   );
 }

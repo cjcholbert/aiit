@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { useProgress } from '../hooks/useProgress';
 import { MODULES, APP_NAME } from '../config/modules';
 
 export default function Sidebar({ isMobileMenuOpen, setIsMobileMenuOpen }) {
     const { user, logout } = useAuth();
     const { theme, toggleTheme } = useTheme();
+    const { isLessonComplete } = useProgress();
     const location = useLocation();
 
     // All modules expanded by default
@@ -145,6 +147,9 @@ export default function Sidebar({ isMobileMenuOpen, setIsMobileMenuOpen }) {
                                                 >
                                                     <span className="lesson-number">{lesson.lesson}</span>
                                                     <span className="lesson-title">{lesson.title}</span>
+                                                    {isLessonComplete(lesson.lesson) && (
+                                                        <span className="sidebar-lesson-check" title="Complete">&#x2713;</span>
+                                                    )}
                                                 </NavLink>
                                             ) : (
                                                 <span className="lesson-link disabled">

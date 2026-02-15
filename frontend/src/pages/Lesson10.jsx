@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
+import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
+import { LESSON_CRITERIA } from '../config/assessmentCriteria';
+import LessonNav from '../components/LessonNav';
 
 // Frequency colors
 const FREQUENCY_COLORS = {
@@ -429,6 +432,7 @@ export default function Lesson10() {
           <strong>The Skill:</strong> Design AI-integrated workflows for recurring tasks. Create templates,
           track inputs, and measure time savings to build sustainable AI collaboration habits.
         </p>
+        <SelfAssessmentChecklist lessonNumber={10} criteria={LESSON_CRITERIA[10]} />
       </header>
 
       {error && (
@@ -1291,6 +1295,7 @@ export default function Lesson10() {
           )}
         </div>
       )}
+      <LessonNav currentLesson={10} />
     </div>
   );
 }

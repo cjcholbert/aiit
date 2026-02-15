@@ -1,4 +1,4 @@
-"""Pydantic schemas for Week 1: Context Pattern Tracker."""
+"""Pydantic schemas for Lesson 1: Context Pattern Tracker."""
 from datetime import datetime
 from typing import Optional, List
 from pydantic import BaseModel, Field

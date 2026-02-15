@@ -1,4 +1,4 @@
-"""Week 3: Calibration Analyzer - AI-powered insight generation."""
+"""Lesson 5: Calibration Analyzer - AI-powered insight generation."""
 import json
 import logging
 

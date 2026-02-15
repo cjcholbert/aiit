@@ -1,4 +1,4 @@
-"""Week 5: Task Decomposer - Pydantic schemas."""
+"""Lesson 7: Task Decomposer - Pydantic schemas."""
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field
