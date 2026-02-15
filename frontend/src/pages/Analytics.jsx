@@ -121,10 +121,41 @@ export default function Analytics() {
                                     {lesson.views}
                                 </div>
                             </div>
+                            <span className="bar-meta">
+                                {lesson.items_created > 0 && <span>{lesson.items_created} items</span>}
+                                {lesson.avg_rating != null && <span className={`badge badge-${getRatingColor(lesson.avg_rating)}`}>{lesson.avg_rating.toFixed(1)}</span>}
+                            </span>
                         </div>
                     ))}
                 </div>
             </div>
+
+            {/* Per-Lesson Detail */}
+            {lessonStats.length > 0 && (
+                <div className="card" style={{ marginBottom: '1.5rem' }}>
+                    <h2 style={{ marginBottom: '1rem' }}>Per-Lesson Detail</h2>
+                    <div className="analytics-lesson-detail">
+                        {lessonStats.map(lesson => (
+                            <div key={lesson.lesson} className="analytics-lesson-row">
+                                <span>Lesson {lesson.lesson}</span>
+                                <span style={{ color: 'var(--text-secondary)' }}>{lesson.title}</span>
+                                <div className="analytics-lesson-stat">
+                                    <strong>{lesson.items_created}</strong>
+                                    items
+                                </div>
+                                <div className="analytics-lesson-stat">
+                                    <strong>{lesson.views}</strong>
+                                    views
+                                </div>
+                                <div className="analytics-lesson-stat">
+                                    <strong>{lesson.avg_rating != null ? lesson.avg_rating.toFixed(1) : '-'}</strong>
+                                    rating
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             {/* Activity Summary */}
             {stats && (

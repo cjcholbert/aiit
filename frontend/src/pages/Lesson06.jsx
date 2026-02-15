@@ -4,6 +4,7 @@ import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
 import LessonNav from '../components/LessonNav';
+import StatsPanel from '../components/StatsPanel';
 
 // Category badge colors
 const CATEGORY_COLORS = {
@@ -365,9 +366,15 @@ export default function Lesson06() {
         </div>
       )}
 
+      <StatsPanel lessonId={6} stats={stats ? [
+          { label: 'Checklists', value: stats.total_checklists, color: 'var(--accent-blue)' },
+          { label: 'Sessions', value: stats.total_sessions, color: 'var(--accent-green)' },
+          { label: 'Avg Time', value: formatTime(Math.round(stats.avg_verification_time || 0)), color: 'var(--accent-yellow)' },
+      ] : []} />
+
       {/* Tabs */}
       <div className="tabs">
-        {['learn', 'checklists', 'practice', 'stats'].map((tab) => (
+        {['learn', 'checklists', 'practice'].map((tab) => (
           <button
             key={tab}
             className={`tab ${activeTab === tab ? 'active' : ''}`}
@@ -879,62 +886,6 @@ export default function Lesson06() {
         </div>
       )}
 
-      {/* Stats Tab */}
-      {activeTab === 'stats' && (
-        <div className="stats-section">
-          <h2>Verification Statistics</h2>
-
-          {stats ? (
-            <div>
-              <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '24px' }}>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-blue)' }}>{stats.total_checklists}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Total Checklists</div>
-                </div>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-green)' }}>{stats.total_sessions}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Practice Sessions</div>
-                </div>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-yellow)' }}>{formatTime(Math.round(stats.avg_verification_time))}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Avg Verification Time</div>
-                </div>
-              </div>
-
-              {stats.most_effective_items.length > 0 && (
-                <div className="card" style={{ padding: '20px', marginBottom: '16px' }}>
-                  <h3>Most Effective Checks</h3>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginBottom: '12px' }}>Items that catch issues most often</p>
-                  {stats.most_effective_items.map((item, idx) => (
-                    <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--border-color)' }}>
-                      <span>{item.text}</span>
-                      <span style={{ color: 'var(--accent-green)' }}>{item.effectiveness}% effective</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {stats.least_effective_items.length > 0 && (
-                <div className="card" style={{ padding: '20px' }}>
-                  <h3>Consider Removing</h3>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginBottom: '12px' }}>Items checked 3+ times but never caught an issue</p>
-                  {stats.least_effective_items.map((item, idx) => (
-                    <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--border-color)' }}>
-                      <span>{item.text}</span>
-                      <span style={{ color: 'var(--accent-red)' }}>0% effective ({item.times_checked} checks)</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="empty-state" style={{ textAlign: 'center', padding: '48px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
-              <h3>No statistics yet</h3>
-              <p>Complete some practice sessions to see verification statistics.</p>
-            </div>
-          )}
-        </div>
-      )}
       <LessonNav currentLesson={6} />
     </div>
   );

@@ -4,6 +4,7 @@ import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
 import LessonNav from '../components/LessonNav';
+import StatsPanel from '../components/StatsPanel';
 
 // Pass indicator colors and labels
 const PASS_STYLES = {
@@ -333,9 +334,16 @@ export default function Lesson09() {
         </div>
       )}
 
+      <StatsPanel lessonId={9} stats={stats ? [
+          { label: 'Total Tasks', value: stats.total_tasks, color: 'var(--accent-blue)' },
+          { label: 'Completed', value: stats.completed_tasks, color: 'var(--accent-green)' },
+          { label: 'In Progress', value: stats.in_progress_tasks, color: 'var(--accent-yellow)' },
+          { label: 'Passes', value: stats.total_passes_recorded, color: 'var(--accent-purple)' },
+      ] : []} />
+
       {/* Tabs */}
       <div className="tabs">
-        {['learn', 'practice', 'history', 'stats'].map((tab) => (
+        {['learn', 'practice', 'history'].map((tab) => (
           <button
             key={tab}
             className={`tab ${activeTab === tab ? 'active' : ''}`}
@@ -896,110 +904,6 @@ export default function Lesson09() {
         </div>
       )}
 
-      {/* Stats Tab */}
-      {activeTab === 'stats' && (
-        <div className="stats-section">
-          <h2>Iteration Statistics</h2>
-
-          {stats && stats.total_tasks > 0 ? (
-            <div>
-              {/* Summary cards */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '16px', marginBottom: '24px' }}>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-blue)' }}>{stats.total_tasks}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Total Tasks</div>
-                </div>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-green)' }}>{stats.completed_tasks}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Completed</div>
-                </div>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-yellow)' }}>{stats.in_progress_tasks}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>In Progress</div>
-                </div>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-purple)' }}>{stats.total_passes_recorded}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Passes Recorded</div>
-                </div>
-              </div>
-
-              {/* Completion rate */}
-              <div className="card" style={{ padding: '24px', marginBottom: '24px' }}>
-                <h3>Completion Rate</h3>
-                <div style={{ marginTop: '16px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                    <span>Tasks Completed</span>
-                    <span style={{ fontWeight: 'bold', color: 'var(--accent-green)' }}>{stats.completion_rate}%</span>
-                  </div>
-                  <div style={{ height: '12px', background: 'var(--border-color)', borderRadius: '6px', overflow: 'hidden' }}>
-                    <div
-                      style={{
-                        height: '100%',
-                        width: `${stats.completion_rate}%`,
-                        background: 'linear-gradient(90deg, var(--accent-green), var(--accent-green-hover))',
-                        borderRadius: '6px'
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Tasks by pass */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
-                <div className="card" style={{ padding: '24px' }}>
-                  <h3>Tasks by Current Pass</h3>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '16px' }}>
-                    In-progress tasks grouped by their current iteration stage
-                  </p>
-                  {Object.entries(stats.tasks_by_current_pass).map(([pass, count]) => {
-                    const style = PASS_STYLES[parseInt(pass)];
-                    return (
-                      <div key={pass} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '8px 0', borderBottom: '1px solid var(--border-color)' }}>
-                        <div style={{
-                          padding: '4px 12px',
-                          borderRadius: '12px',
-                          background: style.bg,
-                          color: style.color,
-                          fontWeight: 'bold',
-                          fontSize: '0.85rem',
-                          minWidth: '48px',
-                          textAlign: 'center',
-                        }}>
-                          {style.label}
-                        </div>
-                        <span style={{ flex: 1, color: 'var(--text-secondary)' }}>{style.icon} {style.name}</span>
-                        <span style={{ fontWeight: 'bold' }}>{count}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                <div className="card" style={{ padding: '24px' }}>
-                  <h3>Your Pattern</h3>
-                  <div style={{ marginTop: '12px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--border-color)' }}>
-                      <span style={{ color: 'var(--text-secondary)' }}>Avg Passes per Completed Task</span>
-                      <span style={{ fontWeight: 'bold' }}>{stats.avg_passes_per_completed_task}</span>
-                    </div>
-                  </div>
-                  <p style={{ marginTop: '16px', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-                    {stats.avg_passes_per_completed_task === 3
-                      ? "You're consistently completing all three passes - excellent structured iteration!"
-                      : stats.avg_passes_per_completed_task > 2.5
-                      ? "Most tasks go through all passes. Keep up the thorough iteration practice."
-                      : "Some tasks may be completing early. Consider whether all passes add value for each task."}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="empty-state" style={{ textAlign: 'center', padding: '48px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
-              <h3>No statistics yet</h3>
-              <p>Create and iterate on some tasks to see your patterns.</p>
-            </div>
-          )}
-        </div>
-      )}
       <LessonNav currentLesson={9} />
     </div>
   );

@@ -4,6 +4,7 @@ import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
 import LessonNav from '../components/LessonNav';
+import StatsPanel from '../components/StatsPanel';
 
 // Icon mappings for categories and reliability
 const CATEGORY_ICONS = {
@@ -80,9 +81,12 @@ export default function Lesson11() {
 
     useEffect(() => {
         fetchReferenceData();
+        fetchStats();
+    }, []);
+
+    useEffect(() => {
         if (activeTab === 'zones') fetchZones();
         if (activeTab === 'encounters') fetchEncounters();
-        if (activeTab === 'stats') fetchStats();
     }, [activeTab]);
 
     const fetchReferenceData = async () => {
@@ -292,11 +296,17 @@ export default function Lesson11() {
 
             {error && <div className="error-message">{error}</div>}
 
+            <StatsPanel lessonId={11} stats={stats ? [
+                { label: 'Zones', value: stats.total_zones, color: 'var(--accent-purple)' },
+                { label: 'Encounters', value: stats.total_encounters, color: 'var(--accent-green)' },
+                { label: 'This Week', value: stats.encounters_this_week, color: 'var(--accent-yellow)' },
+                { label: 'Avg Confidence', value: stats.avg_zone_confidence != null ? `${stats.avg_zone_confidence}%` : '-', color: 'var(--accent-purple)' },
+            ] : []} />
+
             <div className="tabs">
                 <button className={`tab ${activeTab === 'learn' ? 'active' : ''}`} onClick={() => setActiveTab('learn')}>Learn</button>
                 <button className={`tab ${activeTab === 'zones' ? 'active' : ''}`} onClick={() => setActiveTab('zones')}>Zones</button>
                 <button className={`tab ${activeTab === 'encounters' ? 'active' : ''}`} onClick={() => setActiveTab('encounters')}>Encounters</button>
-                <button className={`tab ${activeTab === 'stats' ? 'active' : ''}`} onClick={() => setActiveTab('stats')}>Stats</button>
             </div>
 
             {activeTab === 'learn' && (
@@ -717,229 +727,6 @@ export default function Lesson11() {
                 </div>
             )}
 
-            {activeTab === 'stats' && (
-                <div style={{ display: 'grid', gap: '1.5rem' }}>
-                    {stats ? (
-                        <>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
-                                <div className="card" style={{ textAlign: 'center' }}>
-                                    <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-purple)' }}>{stats.total_zones}</div>
-                                    <div style={{ color: 'var(--text-muted)' }}>Total Zones</div>
-                                </div>
-                                <div className="card" style={{ textAlign: 'center' }}>
-                                    <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-green)' }}>{stats.total_encounters}</div>
-                                    <div style={{ color: 'var(--text-muted)' }}>Total Encounters</div>
-                                </div>
-                                <div className="card" style={{ textAlign: 'center' }}>
-                                    <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-yellow)' }}>{stats.encounters_this_week}</div>
-                                    <div style={{ color: 'var(--text-muted)' }}>This Week</div>
-                                </div>
-                                <div className="card" style={{ textAlign: 'center' }}>
-                                    <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-purple)' }}>{stats.avg_zone_confidence}%</div>
-                                    <div style={{ color: 'var(--text-muted)' }}>Avg Confidence</div>
-                                </div>
-                            </div>
-
-                            <div className="card">
-                                <h2>Zones by Reliability</h2>
-                                <div style={{ display: 'flex', gap: '2rem', marginTop: '1rem' }}>
-                                    <div style={{ flex: 1, textAlign: 'center', padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
-                                        <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.zones_by_reliability.reliable || 0}</div>
-                                        <div style={{ color: 'var(--text-muted)' }}>Reliable</div>
-                                    </div>
-                                    <div style={{ flex: 1, textAlign: 'center', padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
-                                        <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.zones_by_reliability.mixed || 0}</div>
-                                        <div style={{ color: 'var(--text-muted)' }}>Mixed</div>
-                                    </div>
-                                    <div style={{ flex: 1, textAlign: 'center', padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
-                                        <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.zones_by_reliability.unreliable || 0}</div>
-                                        <div style={{ color: 'var(--text-muted)' }}>Unreliable</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="card">
-                                <h2>Encounters by Type</h2>
-                                <div style={{ display: 'flex', gap: '2rem', marginTop: '1rem' }}>
-                                    <div style={{ flex: 1, textAlign: 'center', padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
-                                        <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.encounters_by_type.success || 0}</div>
-                                        <div style={{ color: 'var(--text-muted)' }}>Successes</div>
-                                    </div>
-                                    <div style={{ flex: 1, textAlign: 'center', padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
-                                        <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.encounters_by_type.failure || 0}</div>
-                                        <div style={{ color: 'var(--text-muted)' }}>Failures</div>
-                                    </div>
-                                    <div style={{ flex: 1, textAlign: 'center', padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
-                                        <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.encounters_by_type.surprise || 0}</div>
-                                        <div style={{ color: 'var(--text-muted)' }}>Surprises</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {stats.recent_lessons.length > 0 && (
-                                <div className="card">
-                                    <h2>Recent Lessons Learned</h2>
-                                    <ul style={{ marginTop: '1rem' }}>
-                                        {stats.recent_lessons.map((lesson, i) => (
-                                            <li key={i} style={{ marginBottom: '0.5rem' }}>{lesson}</li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
-
-                            {stats.common_tags.length > 0 && (
-                                <div className="card">
-                                    <h2>Common Tags</h2>
-                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '1rem' }}>
-                                        {stats.common_tags.map((t, i) => (
-                                            <span key={i} className="badge">{t.tag} ({t.count})</span>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* AI Pattern Analysis */}
-                            <div className="card l11-analyze-section">
-                                <h2>AI Pattern Analysis</h2>
-                                <p style={{ color: 'var(--text-muted)', marginBottom: '1rem' }}>
-                                    Let AI find patterns in your encounter data — failure clusters, capability boundaries, and areas worth exploring.
-                                </p>
-                                <button
-                                    className="btn btn-primary"
-                                    onClick={handleAnalyzePatterns}
-                                    disabled={analyzingPatterns || stats.total_encounters < 3}
-                                >
-                                    {analyzingPatterns ? 'Analyzing Patterns...' : 'Analyze My Patterns'}
-                                </button>
-                                {stats.total_encounters < 3 && (
-                                    <p className="l11-min-notice">Log at least 3 encounters before analysis ({stats.total_encounters}/3).</p>
-                                )}
-                            </div>
-
-                            {analyzingPatterns && (
-                                <div className="card l11-loading">
-                                    <div className="spinner"></div>
-                                    <span>Analyzing your frontier data with AI...</span>
-                                </div>
-                            )}
-
-                            {patternAnalysis && !analyzingPatterns && (
-                                <div className="l11-analysis-results">
-                                    {/* Overall Insight */}
-                                    <div className="card l11-insight-card">
-                                        <h3>Overall Insight</h3>
-                                        <p className="l11-insight-summary">{patternAnalysis.overall_insight?.summary}</p>
-                                        <div className="l11-insight-grid">
-                                            <div className="l11-insight-item">
-                                                <strong>Strongest Area:</strong>
-                                                <span>{patternAnalysis.overall_insight?.strongest_area}</span>
-                                            </div>
-                                            <div className="l11-insight-item">
-                                                <strong>Weakest Area:</strong>
-                                                <span>{patternAnalysis.overall_insight?.weakest_area}</span>
-                                            </div>
-                                            <div className="l11-insight-item l11-highlight">
-                                                <strong>Most Interesting Finding:</strong>
-                                                <span>{patternAnalysis.overall_insight?.most_interesting_finding}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Pattern Clusters */}
-                                    {patternAnalysis.pattern_clusters?.length > 0 && (
-                                        <div className="card">
-                                            <h3>Pattern Clusters</h3>
-                                            {patternAnalysis.pattern_clusters.map((cluster, i) => (
-                                                <div key={i} className={`l11-cluster l11-cluster-${cluster.encounter_type}`}>
-                                                    <div className="l11-cluster-header">
-                                                        <span className="l11-cluster-name">{cluster.cluster_name}</span>
-                                                        <span className={`l11-cluster-type l11-type-${cluster.encounter_type}`}>
-                                                            {cluster.encounter_type}
-                                                        </span>
-                                                    </div>
-                                                    <p className="l11-cluster-insight">{cluster.insight}</p>
-                                                    {cluster.evidence?.length > 0 && (
-                                                        <ul className="l11-cluster-evidence">
-                                                            {cluster.evidence.map((ev, j) => (
-                                                                <li key={j}>{ev}</li>
-                                                            ))}
-                                                        </ul>
-                                                    )}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-
-                                    {/* Capability Boundaries */}
-                                    {patternAnalysis.capability_boundaries?.length > 0 && (
-                                        <div className="card">
-                                            <h3>Capability Boundaries</h3>
-                                            {patternAnalysis.capability_boundaries.map((b, i) => (
-                                                <div key={i} className="l11-boundary">
-                                                    <p className="l11-boundary-desc">{b.boundary}</p>
-                                                    <p className="l11-boundary-evidence">{b.supporting_evidence}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-
-                                    {/* Zone Accuracy */}
-                                    {patternAnalysis.zone_accuracy?.filter(z => z.needs_adjustment).length > 0 && (
-                                        <div className="card">
-                                            <h3>Zone Adjustments Suggested</h3>
-                                            {patternAnalysis.zone_accuracy.filter(z => z.needs_adjustment).map((z, i) => (
-                                                <div key={i} className="l11-zone-adjust">
-                                                    <div className="l11-zone-adjust-header">
-                                                        <span className="l11-zone-name">{z.zone_name}</span>
-                                                        <span className="l11-zone-change">
-                                                            {z.current_reliability} &rarr; {z.suggested_reliability}
-                                                        </span>
-                                                    </div>
-                                                    <p className="l11-zone-reason">{z.reasoning}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-
-                                    {/* Exploration Suggestions */}
-                                    {patternAnalysis.exploration_suggestions?.length > 0 && (
-                                        <div className="card">
-                                            <h3>Worth Exploring</h3>
-                                            {patternAnalysis.exploration_suggestions.map((s, i) => (
-                                                <div key={i} className="l11-explore-item">
-                                                    <strong>{s.area}</strong>
-                                                    <p>{s.why}</p>
-                                                    {s.test_idea && (
-                                                        <div className="l11-test-idea">
-                                                            Try: {s.test_idea}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-
-                                    {/* Blind Spots */}
-                                    {patternAnalysis.blind_spots?.length > 0 && (
-                                        <div className="card">
-                                            <h3>Blind Spots</h3>
-                                            <ul className="l11-blind-spots">
-                                                {patternAnalysis.blind_spots.map((b, i) => (
-                                                    <li key={i}>{b}</li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-                        </>
-                    ) : (
-                        <div className="card">
-                            <p style={{ color: 'var(--text-muted)' }}>Loading statistics...</p>
-                        </div>
-                    )}
-                </div>
-            )}
             <LessonNav currentLesson={11} />
         </div>
     );

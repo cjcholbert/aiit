@@ -3,6 +3,7 @@ import { useApi } from '../hooks/useApi';
 import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import LessonNav from '../components/LessonNav';
+import StatsPanel from '../components/StatsPanel';
 
 // Trust level colors and guidelines
 const TRUST_LEVELS = {
@@ -340,6 +341,13 @@ export default function Lesson05() {
 
       {error && <div className="alert alert-error">{error}</div>}
 
+      <StatsPanel lessonId={5} stats={stats ? [
+          { label: 'Predictions', value: stats.total_predictions, color: 'var(--accent-blue)' },
+          { label: 'Verified', value: stats.verified_predictions, color: 'var(--accent-green)' },
+          { label: 'AI Accuracy', value: stats.overall_accuracy != null ? `${stats.overall_accuracy}%` : '-', color: 'var(--accent-yellow)' },
+          { label: 'Calibration', value: stats.calibration_score ?? '-', color: 'var(--accent-purple)' },
+      ] : []} />
+
       <div className="tabs">
         <button
           className={`tab ${activeTab === 'learn' ? 'active' : ''}`}
@@ -364,12 +372,6 @@ export default function Lesson05() {
           onClick={() => setActiveTab('calibration')}
         >
           Calibration
-        </button>
-        <button
-          className={`tab ${activeTab === 'stats' ? 'active' : ''}`}
-          onClick={() => setActiveTab('stats')}
-        >
-          Stats
         </button>
       </div>
 
@@ -1347,139 +1349,6 @@ export default function Lesson05() {
         </div>
       )}
 
-      {/* Stats Tab */}
-      {activeTab === 'stats' && (
-        <div className="card">
-          <h2 style={{ margin: '0 0 20px' }}>Your Statistics</h2>
-
-          {!stats || stats.total_predictions === 0 ? (
-            <div style={{ textAlign: 'center', padding: '40px', color: 'var(--text-muted)' }}>
-              <p>No predictions logged yet. Start tracking your confidence in AI outputs to see your stats here.</p>
-            </div>
-          ) : (
-            <>
-              {/* Overview Cards */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '24px' }}>
-                <div style={{ background: 'var(--bg-tertiary)', borderRadius: '8px', padding: '16px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '32px', fontWeight: 'bold', color: 'var(--text-primary)' }}>{stats.total_predictions}</div>
-                  <div style={{ color: 'var(--text-muted)' }}>Total Predictions</div>
-                </div>
-                <div style={{ background: 'var(--bg-tertiary)', borderRadius: '8px', padding: '16px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '32px', fontWeight: 'bold', color: 'var(--text-primary)' }}>{stats.verified_predictions}</div>
-                  <div style={{ color: 'var(--text-muted)' }}>Verified</div>
-                </div>
-                <div style={{ background: 'var(--bg-tertiary)', borderRadius: '8px', padding: '16px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '32px', fontWeight: 'bold', color: TRUST_LEVELS.high.text }}>{stats.overall_accuracy.toFixed(0)}%</div>
-                  <div style={{ color: 'var(--text-muted)' }}>AI Accuracy</div>
-                </div>
-                <div style={{ background: 'var(--bg-tertiary)', borderRadius: '8px', padding: '16px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '32px', fontWeight: 'bold', color: 'var(--accent-blue)' }}>{stats.calibration_score.toFixed(0)}</div>
-                  <div style={{ color: 'var(--text-muted)' }}>Calibration Score</div>
-                </div>
-              </div>
-
-              {/* Confidence Analysis */}
-              <div style={{ marginBottom: '24px' }}>
-                <h3 style={{ marginBottom: '12px' }}>Confidence Analysis</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                  <div style={{ background: 'var(--success-bg)', borderRadius: '8px', padding: '16px' }}>
-                    <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--accent-green)' }}>{stats.avg_confidence_when_correct.toFixed(1)}</div>
-                    <div style={{ color: 'var(--text-muted)' }}>Avg Confidence When Correct</div>
-                  </div>
-                  <div style={{ background: 'var(--error-bg)', borderRadius: '8px', padding: '16px' }}>
-                    <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--accent-red)' }}>{stats.avg_confidence_when_wrong.toFixed(1)}</div>
-                    <div style={{ color: 'var(--text-muted)' }}>Avg Confidence When Wrong</div>
-                  </div>
-                </div>
-                {stats.avg_confidence_when_correct > 0 && stats.avg_confidence_when_wrong > 0 && (
-                  <div style={{ marginTop: '12px', padding: '12px', background: 'var(--bg-tertiary)', borderRadius: '8px', fontSize: '13px', color: 'var(--text-secondary)' }}>
-                    {stats.avg_confidence_when_correct - stats.avg_confidence_when_wrong > 2 ? (
-                      <>Good calibration: You're more confident when right than when wrong.</>
-                    ) : stats.avg_confidence_when_correct - stats.avg_confidence_when_wrong < 0 ? (
-                      <>Calibration issue: You're often more confident when wrong. Review your over-trust cases.</>
-                    ) : (
-                      <>Your confidence is similar whether right or wrong. Work on distinguishing high vs. low confidence situations.</>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              {/* Stats by Trust Level */}
-              {stats.by_trust_level && stats.by_trust_level.length > 0 && (
-                <div style={{ marginBottom: '24px' }}>
-                  <h3 style={{ marginBottom: '12px' }}>By Trust Level</h3>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
-                    {stats.by_trust_level.map((level) => (
-                      <div
-                        key={level.trust_level}
-                        style={{
-                          background: TRUST_LEVELS[level.trust_level].bg,
-                          border: `1px solid ${TRUST_LEVELS[level.trust_level].border}`,
-                          borderRadius: '8px',
-                          padding: '16px',
-                        }}
-                      >
-                        <div style={{ color: TRUST_LEVELS[level.trust_level].text, fontWeight: 'bold', textTransform: 'capitalize', marginBottom: '8px' }}>
-                          {level.trust_level} Trust
-                        </div>
-                        <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                          <div>Predictions: {level.total_predictions}</div>
-                          <div>Verified: {level.verified_predictions}</div>
-                          <div>Accuracy: {level.accuracy_rate.toFixed(0)}%</div>
-                          <div>Avg Confidence: {level.avg_confidence.toFixed(1)}</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Stats by Output Type */}
-              {stats.by_output_type && stats.by_output_type.length > 0 && (
-                <div>
-                  <h3 style={{ marginBottom: '12px' }}>By Output Type</h3>
-                  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                    <thead>
-                      <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
-                        <th style={{ textAlign: 'left', padding: '8px', color: 'var(--text-muted)' }}>Output Type</th>
-                        <th style={{ textAlign: 'center', padding: '8px', color: 'var(--text-muted)' }}>Trust Level</th>
-                        <th style={{ textAlign: 'center', padding: '8px', color: 'var(--text-muted)' }}>Predictions</th>
-                        <th style={{ textAlign: 'center', padding: '8px', color: 'var(--text-muted)' }}>Accuracy</th>
-                        <th style={{ textAlign: 'center', padding: '8px', color: 'var(--text-muted)' }}>Avg Confidence</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {stats.by_output_type.map((domain) => (
-                        <tr key={domain.output_type_id} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                          <td style={{ padding: '8px' }}>{domain.output_type_name}</td>
-                          <td style={{ textAlign: 'center', padding: '8px' }}>
-                            <span
-                              style={{
-                                display: 'inline-block',
-                                padding: '2px 8px',
-                                borderRadius: '10px',
-                                fontSize: '12px',
-                                background: TRUST_LEVELS[domain.trust_level].bg,
-                                color: TRUST_LEVELS[domain.trust_level].text,
-                                textTransform: 'capitalize',
-                              }}
-                            >
-                              {domain.trust_level}
-                            </span>
-                          </td>
-                          <td style={{ textAlign: 'center', padding: '8px' }}>{domain.total_predictions}</td>
-                          <td style={{ textAlign: 'center', padding: '8px' }}>{domain.accuracy_rate.toFixed(0)}%</td>
-                          <td style={{ textAlign: 'center', padding: '8px' }}>{domain.avg_confidence.toFixed(1)}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </>
-          )}
-        </div>
-      )}
       <LessonNav currentLesson={5} />
     </div>
   );

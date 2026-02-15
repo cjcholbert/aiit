@@ -1277,6 +1277,16 @@ tr:hover td {
   min-width: 30px;
 }
 
+.bar-meta {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  min-width: 100px;
+  justify-content: flex-end;
+}
+
 /* Feedback Widget Styles */
 .feedback-widget {
   position: fixed;
@@ -3841,6 +3851,140 @@ tr:hover td {
 .l11-blind-spots li {
   margin-bottom: var(--space-sm);
   font-size: 0.875rem;
+}
+
+/* =============================================================================
+   Stats Panel (collapsible progress header)
+   ============================================================================= */
+
+.stats-panel {
+  margin-bottom: var(--space-md);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  background: var(--bg-secondary);
+  overflow: hidden;
+}
+
+.stats-panel-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.stats-panel-toggle:hover {
+  color: var(--text-primary);
+}
+
+.stats-panel-chevron {
+  font-size: 0.65rem;
+  transition: transform var(--transition-fast);
+  transform: rotate(-90deg);
+}
+
+.stats-panel-chevron.expanded {
+  transform: rotate(0deg);
+}
+
+.stats-panel-content {
+  padding: 0 var(--space-md) var(--space-md);
+}
+
+.stats-panel-grid {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.stats-panel-card {
+  flex: 1;
+  min-width: 120px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-muted);
+}
+
+.stats-panel-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stats-panel-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.2;
+}
+
+/* =============================================================================
+   Dashboard Card Stats
+   ============================================================================= */
+
+.module-card-stats {
+  display: flex;
+  gap: var(--space-md);
+  margin-top: var(--space-sm);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.module-card-stats span::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-blue);
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+/* =============================================================================
+   Analytics Per-Lesson Detail
+   ============================================================================= */
+
+.analytics-lesson-detail {
+  display: grid;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+.analytics-lesson-row {
+  display: grid;
+  grid-template-columns: 120px 1fr repeat(3, 80px);
+  gap: var(--space-sm);
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+}
+
+.analytics-lesson-row span:first-child {
+  font-weight: 600;
+}
+
+.analytics-lesson-stat {
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.analytics-lesson-stat strong {
+  display: block;
+  color: var(--text-primary);
 }
 
 /* Reduced motion preference */

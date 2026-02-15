@@ -4,6 +4,7 @@ import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
 import LessonNav from '../components/LessonNav';
+import StatsPanel from '../components/StatsPanel';
 
 const DEFAULT_CATEGORIES = [
   { value: 'general', label: 'General', color: 'var(--accent-purple)', icon: '📋' },
@@ -757,6 +758,12 @@ ${gapSections}
 
       {error && <div className="alert alert-error">{error}</div>}
 
+      <StatsPanel lessonId={3} stats={stats ? [
+          { label: 'Templates', value: stats.total_templates, color: 'var(--accent-blue)' },
+          { label: 'Tests Run', value: stats.total_tests, color: 'var(--accent-green)' },
+          { label: 'Avg Rating', value: stats.avg_rating?.toFixed(1) ?? '-', color: 'var(--accent-yellow)' },
+      ] : []} />
+
       <div className="tabs">
         <button
           className={`tab ${activeTab === 'learn' ? 'active' : ''}`}
@@ -791,12 +798,6 @@ ${gapSections}
           }}
         >
           Suggestions
-        </button>
-        <button
-          className={`tab ${activeTab === 'stats' ? 'active' : ''}`}
-          onClick={() => setActiveTab('stats')}
-        >
-          Stats
         </button>
         {testingTemplate && (
           <button
@@ -1541,93 +1542,6 @@ ${gapSections}
               </div>
             </div>
           )}
-        </div>
-      )}
-
-      {/* Stats Dashboard */}
-      {activeTab === 'stats' && stats && (
-        <div>
-          <div className="stats-grid">
-            <div className="stat-card">
-              <div className="stat-value">{stats.total_templates}</div>
-              <div className="stat-label">Total Templates</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-value">{stats.total_tests}</div>
-              <div className="stat-label">Tests Run</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-value">{stats.avg_rating.toFixed(1)}</div>
-              <div className="stat-label">Avg Rating</div>
-            </div>
-          </div>
-
-          <div className="analysis-grid" style={{ marginTop: '24px' }}>
-            <div className="card">
-              <h3 style={{ marginBottom: '12px' }}>Templates by Category</h3>
-              {Object.keys(stats.count_by_category).length === 0 ? (
-                <p style={{ color: 'var(--text-muted)' }}>No templates yet.</p>
-              ) : (
-                <div>
-                  {Object.entries(stats.count_by_category)
-                    .sort((a, b) => b[1] - a[1])
-                    .map(([category, count]) => (
-                      <div
-                        key={category}
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          padding: '8px 0',
-                          borderBottom: '1px solid var(--border-color)',
-                        }}
-                      >
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <span
-                            style={{
-                              width: '12px',
-                              height: '12px',
-                              borderRadius: '2px',
-                              backgroundColor: getCategoryColor(category),
-                            }}
-                          />
-                          {category}
-                        </span>
-                        <span className="badge badge-blue">{count}</span>
-                      </div>
-                    ))}
-                </div>
-              )}
-            </div>
-
-            <div className="card">
-              <h3 style={{ marginBottom: '12px' }}>Most Used Templates</h3>
-              {stats.most_used.length === 0 ? (
-                <p style={{ color: 'var(--text-muted)' }}>No templates used yet.</p>
-              ) : (
-                stats.most_used.map((t) => (
-                  <div
-                    key={t.id}
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      padding: '8px 0',
-                      borderBottom: '1px solid var(--border-color)',
-                    }}
-                  >
-                    <span>{t.name}</span>
-                    <span className="badge badge-green">{t.usage_count}x</span>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {activeTab === 'stats' && !stats && (
-        <div className="loading">
-          <div className="spinner"></div>
-          Loading stats...
         </div>
       )}
 

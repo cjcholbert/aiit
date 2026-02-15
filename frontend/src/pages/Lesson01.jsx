@@ -3,6 +3,7 @@ import { useApi } from '../hooks/useApi';
 import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import LessonNav from '../components/LessonNav';
+import StatsPanel from '../components/StatsPanel';
 
 export default function Lesson01() {
     const [activeTab, setActiveTab] = useState('learn');
@@ -26,10 +27,13 @@ export default function Lesson01() {
     const api = useApi();
 
     useEffect(() => {
+        loadStats();
+        loadInsights();
+    }, []);
+
+    useEffect(() => {
         if (activeTab === 'history') {
             loadConversations();
-            loadStats();
-            loadInsights();
         }
     }, [activeTab]);
 
@@ -297,6 +301,13 @@ export default function Lesson01() {
                 </p>
                 <SelfAssessmentChecklist lessonNumber={1} criteria={LESSON_CRITERIA[1]} />
             </div>
+
+            <StatsPanel lessonId={1} stats={[
+                { label: 'Conversations', value: stats?.total_conversations ?? '-', color: 'var(--accent-blue)' },
+                { label: 'Avg Confidence', value: stats?.avg_confidence_score != null ? stats.avg_confidence_score.toFixed(1) : '-', color: 'var(--accent-green)' },
+                { label: 'Recurring Gaps', value: insights?.context_gaps?.length ?? '-', color: 'var(--accent-yellow)' },
+                { label: 'Context Strengths', value: insights?.context_strengths?.length ?? '-', color: 'var(--accent-purple)' },
+            ]} />
 
             <div className="tabs">
                 {['learn', 'analyze', 'history'].map((tab) => (
@@ -748,26 +759,6 @@ export default function Lesson01() {
 
             {activeTab === 'history' && !selectedConversation && (
                 <div>
-                    {/* Stats summary row */}
-                    <div className="stats-grid" style={{ marginBottom: '24px' }}>
-                        <div className="stat-card">
-                            <div className="stat-value">{stats?.total_conversations ?? '-'}</div>
-                            <div className="stat-label">Total Conversations</div>
-                        </div>
-                        <div className="stat-card">
-                            <div className="stat-value">{stats?.avg_confidence_score != null ? stats.avg_confidence_score.toFixed(1) : '-'}</div>
-                            <div className="stat-label">Avg Confidence</div>
-                        </div>
-                        <div className="stat-card">
-                            <div className="stat-value">{insights?.context_gaps?.length ?? '-'}</div>
-                            <div className="stat-label">Recurring Gaps</div>
-                        </div>
-                        <div className="stat-card">
-                            <div className="stat-value">{insights?.context_strengths?.length ?? '-'}</div>
-                            <div className="stat-label">Context Strengths</div>
-                        </div>
-                    </div>
-
                     {/* Conversation History table */}
                     <div className="card" style={{ marginBottom: '24px' }}>
                         <h2 style={{marginBottom: '16px'}}>Conversation History</h2>

@@ -3,6 +3,7 @@ import { useApi } from '../hooks/useApi';
 import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import LessonNav from '../components/LessonNav';
+import StatsPanel from '../components/StatsPanel';
 
 // Frequency colors
 const FREQUENCY_COLORS = {
@@ -353,7 +354,7 @@ export default function Lesson10() {
       await fetchReports();
       await fetchStats();
       setSelectedTemplate(null);
-      setActiveTab('stats');
+      setActiveTab('run');
     } catch (err) {
       setError(err.message);
     } finally {
@@ -442,9 +443,17 @@ export default function Lesson10() {
         </div>
       )}
 
+      <StatsPanel lessonId={10} stats={stats ? [
+          { label: 'Templates', value: stats.total_templates, color: 'var(--accent-blue)' },
+          { label: 'Reports', value: stats.total_reports, color: 'var(--accent-blue)' },
+          { label: 'Min Saved', value: stats.total_time_saved_minutes, color: 'var(--accent-green)' },
+          { label: 'Avg Quality', value: stats.avg_quality_score, color: 'var(--accent-purple)' },
+          { label: 'This Week', value: stats.reports_this_week, color: 'var(--accent-yellow)' },
+      ] : []} />
+
       {/* Tabs */}
       <div className="tabs">
-        {['learn', 'design', 'run', 'stats'].map((tab) => (
+        {['learn', 'design', 'run'].map((tab) => (
           <button
             key={tab}
             className={`tab ${activeTab === tab ? 'active' : ''}`}
@@ -1207,94 +1216,6 @@ export default function Lesson10() {
         </div>
       )}
 
-      {/* Stats Tab */}
-      {activeTab === 'stats' && (
-        <div className="stats-section">
-          <h2>Workflow Statistics</h2>
-
-          {stats && stats.total_reports > 0 ? (
-            <div>
-              {/* Summary cards */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '16px', marginBottom: '24px' }}>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-blue)' }}>{stats.total_templates}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Templates</div>
-                </div>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-blue)' }}>{stats.total_reports}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Reports</div>
-                </div>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-green)' }}>{stats.total_time_saved_minutes}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Minutes Saved</div>
-                </div>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-purple)' }}>{stats.avg_quality_score}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Avg Quality</div>
-                </div>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-yellow)' }}>{stats.reports_this_week}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>This Week</div>
-                </div>
-              </div>
-
-              {/* Most used template */}
-              {stats.most_used_template && (
-                <div className="card" style={{ padding: '24px', marginBottom: '24px' }}>
-                  <h3 style={{ marginTop: 0 }}>Most Used Template</h3>
-                  <div style={{ fontSize: '1.5rem', color: 'var(--accent-blue)' }}>{stats.most_used_template}</div>
-                </div>
-              )}
-
-              {/* Reports by template */}
-              {stats.reports_by_template && stats.reports_by_template.length > 0 && (
-                <div className="card" style={{ padding: '24px', marginBottom: '24px' }}>
-                  <h3 style={{ marginTop: 0 }}>Reports by Template</h3>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    {stats.reports_by_template.map((item, idx) => (
-                      <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                        <div style={{ flex: 1 }}>{item.template_name}</div>
-                        <div style={{ width: '200px', height: '8px', background: 'var(--border-color)', borderRadius: '4px', overflow: 'hidden' }}>
-                          <div style={{
-                            height: '100%',
-                            width: `${(item.count / stats.total_reports) * 100}%`,
-                            background: 'var(--accent-blue)',
-                            borderRadius: '4px'
-                          }} />
-                        </div>
-                        <div style={{ fontWeight: 'bold', minWidth: '40px', textAlign: 'right' }}>{item.count}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Time saved by frequency */}
-              {stats.time_saved_by_frequency && (
-                <div className="card" style={{ padding: '24px' }}>
-                  <h3 style={{ marginTop: 0 }}>Time Saved by Frequency</h3>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
-                    {Object.entries(stats.time_saved_by_frequency).map(([freq, minutes]) => {
-                      const style = FREQUENCY_COLORS[freq] || FREQUENCY_COLORS.weekly;
-                      return (
-                        <div key={freq} style={{ padding: '16px', background: style.bg, borderRadius: '8px', textAlign: 'center' }}>
-                          <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: style.color }}>{minutes}</div>
-                          <div style={{ color: style.color, textTransform: 'capitalize' }}>{freq} mins</div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="card" style={{ padding: '48px', textAlign: 'center' }}>
-              <h3>No statistics yet</h3>
-              <p style={{ color: 'var(--text-secondary)' }}>Run some workflows to start tracking your time savings.</p>
-            </div>
-          )}
-        </div>
-      )}
       <LessonNav currentLesson={10} />
     </div>
   );

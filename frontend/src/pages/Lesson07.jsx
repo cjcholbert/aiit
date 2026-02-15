@@ -3,6 +3,7 @@ import { useApi } from '../hooks/useApi';
 import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import LessonNav from '../components/LessonNav';
+import StatsPanel from '../components/StatsPanel';
 
 // Category colors and info - using CSS custom properties for theme support
 const CATEGORIES = {
@@ -262,9 +263,16 @@ export default function Lesson07() {
         </div>
       )}
 
+      <StatsPanel lessonId={7} stats={stats ? [
+          { label: 'Decomposed', value: stats.total_decompositions, color: 'var(--accent-blue)' },
+          { label: 'Total Tasks', value: stats.total_tasks, color: 'var(--accent-green)' },
+          { label: 'Avg Tasks/Project', value: stats.avg_tasks_per_decomposition, color: 'var(--accent-yellow)' },
+          { label: 'Decision Gates', value: stats.decision_gates_count, color: 'var(--accent-red)' },
+      ] : []} />
+
       {/* Tabs */}
       <div className="tabs">
-        {['learn', 'decompose', 'history'].map((tab) => (
+        {['learn', 'decompose'].map((tab) => (
           <button
             key={tab}
             className={`tab ${activeTab === tab ? 'active' : ''}`}
@@ -754,79 +762,6 @@ export default function Lesson07() {
         </div>
       )}
 
-      {/* History Tab */}
-      {activeTab === 'history' && (
-        <div className="history-section">
-          <h2>Decomposition Patterns</h2>
-
-          {stats && stats.total_decompositions > 0 ? (
-            <div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '24px' }}>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-blue)' }}>{stats.total_decompositions}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Projects Decomposed</div>
-                </div>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-green)' }}>{stats.total_tasks}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Total Tasks</div>
-                </div>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-yellow)' }}>{stats.avg_tasks_per_decomposition}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Avg Tasks/Project</div>
-                </div>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-red)' }}>{stats.decision_gates_count}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Decision Gates</div>
-                </div>
-              </div>
-
-              <div className="card" style={{ padding: '24px', marginBottom: '16px' }}>
-                <h3>Category Distribution</h3>
-                <div style={{ display: 'flex', gap: '24px', marginTop: '16px' }}>
-                  {Object.entries(stats.category_distribution || {}).map(([cat, count]) => {
-                    const catInfo = CATEGORIES[cat];
-                    const pct = stats.category_percentages?.[cat] || 0;
-                    return (
-                      <div key={cat} style={{ flex: 1 }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                          <span style={{ color: catInfo?.color }}>{catInfo?.label}</span>
-                          <span style={{ color: 'var(--text-primary)' }}>{count} ({pct}%)</span>
-                        </div>
-                        <div style={{ height: '8px', background: 'var(--bg-tertiary)', borderRadius: '4px', overflow: 'hidden' }}>
-                          <div style={{ height: '100%', width: `${pct}%`, background: catInfo?.color, borderRadius: '4px' }} />
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="card" style={{ padding: '24px' }}>
-                <h3 style={{ color: 'var(--text-primary)' }}>Your Pattern</h3>
-                <p style={{ marginTop: '12px', color: 'var(--text-primary)' }}>
-                  Your most common category is{' '}
-                  <strong style={{ color: CATEGORIES[stats.most_common_category]?.color }}>
-                    {CATEGORIES[stats.most_common_category]?.label}
-                  </strong>.
-                </p>
-                <p style={{ color: 'var(--text-secondary)', marginTop: '8px' }}>
-                  {stats.most_common_category === 'ai_optimal' &&
-                    "You're good at identifying delegatable tasks. Make sure you're not missing opportunities for collaboration on complex work."}
-                  {stats.most_common_category === 'collaborative' &&
-                    "You prefer working together with AI. Consider if some tasks could be fully delegated to free up your time."}
-                  {stats.most_common_category === 'human_primary' &&
-                    "You tend to keep tasks for yourself. Check if some could benefit from AI assistance in a collaborative model."}
-                </p>
-              </div>
-            </div>
-          ) : (
-            <div className="empty-state" style={{ textAlign: 'center', padding: '48px', background: 'var(--bg-secondary)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-              <h3 style={{ color: 'var(--text-primary)' }}>No patterns yet</h3>
-              <p style={{ color: 'var(--text-secondary)' }}>Decompose some projects to see your categorization patterns.</p>
-            </div>
-          )}
-        </div>
-      )}
       <LessonNav currentLesson={7} />
     </div>
   );

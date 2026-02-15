@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { MODULES, CONCEPTS, APP_NAME } from '../config/modules';
 import { useTheme } from '../contexts/ThemeContext';
 import { useProgress } from '../hooks/useProgress';
+import { useApi } from '../hooks/useApi';
 
 const BANNER_DISMISSED_KEY = 'ams_welcome_dismissed';
 const LAST_LESSON_KEY = 'ams_last_lesson';
@@ -27,6 +28,16 @@ export default function Dashboard() {
     const { theme } = useTheme();
     const { isLessonComplete, completionPercentage, progress } = useProgress();
     const [dismissed, setDismissed] = useState(isBannerDismissed);
+    const api = useApi();
+    const [lessonStats, setLessonStats] = useState({});
+
+    useEffect(() => {
+        api.get('/analytics/lessons').then(data => {
+            const map = {};
+            data.forEach(l => { map[l.lesson] = l; });
+            setLessonStats(map);
+        }).catch(() => {});
+    }, []);
 
     const isNewUser = progress && progress.completed_count === 0;
     const showWelcome = isNewUser && !dismissed;
@@ -139,6 +150,16 @@ export default function Dashboard() {
                                     </div>
                                     <h3 className="module-card-title">{lesson.title}</h3>
                                     <p className="module-card-description">{lesson.description}</p>
+                                    {lessonStats[lesson.lesson] && (lessonStats[lesson.lesson].items_created > 0 || lessonStats[lesson.lesson].views > 0) && (
+                                        <div className="module-card-stats">
+                                            {lessonStats[lesson.lesson].items_created > 0 && (
+                                                <span>{lessonStats[lesson.lesson].items_created} items</span>
+                                            )}
+                                            {lessonStats[lesson.lesson].views > 0 && (
+                                                <span>{lessonStats[lesson.lesson].views} views</span>
+                                            )}
+                                        </div>
+                                    )}
                                     {concept && (
                                         <div style={{
                                             marginTop: '12px',

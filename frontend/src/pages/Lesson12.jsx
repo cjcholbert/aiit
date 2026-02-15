@@ -4,6 +4,7 @@ import { useAuth } from '../auth/AuthContext';
 import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import LessonNav from '../components/LessonNav';
+import StatsPanel from '../components/StatsPanel';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -51,8 +52,11 @@ export default function Lesson12() {
 
     useEffect(() => {
         fetchSections();
+        fetchStats();
+    }, []);
+
+    useEffect(() => {
         if (activeTab === 'card') fetchPrimaryCard();
-        if (activeTab === 'progress') fetchStats();
         if (activeTab === 'challenge') fetchScenarios();
     }, [activeTab]);
 
@@ -261,11 +265,17 @@ export default function Lesson12() {
 
             {error && <div className="error-message">{error}</div>}
 
+            <StatsPanel lessonId={12} stats={stats ? [
+                { label: 'Complete', value: `${stats.completion_percentage}%`, color: 'var(--accent-purple)' },
+                { label: 'Active Lessons', value: `${stats.weeks_with_data}/12`, color: 'var(--accent-green)' },
+                { label: 'Items Created', value: stats.total_items_created, color: 'var(--accent-yellow)' },
+                { label: 'Most Active', value: stats.most_active_week || 'N/A', color: 'var(--accent-purple)' },
+            ] : []} />
+
             <div className="tabs">
                 <button className={`tab ${activeTab === 'learn' ? 'active' : ''}`} onClick={() => setActiveTab('learn')}>Learn</button>
                 <button className={`tab ${activeTab === 'card' ? 'active' : ''}`} onClick={() => setActiveTab('card')}>My Card</button>
                 <button className={`tab ${activeTab === 'challenge' ? 'active' : ''}`} onClick={() => setActiveTab('challenge')}>Challenge</button>
-                <button className={`tab ${activeTab === 'progress' ? 'active' : ''}`} onClick={() => setActiveTab('progress')}>Progress</button>
             </div>
 
             {activeTab === 'learn' && (
@@ -627,97 +637,6 @@ export default function Lesson12() {
                 </div>
             )}
 
-            {activeTab === 'progress' && (
-                <div style={{ display: 'grid', gap: '1.5rem' }}>
-                    {stats ? (
-                        <>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
-                                <div className="card" style={{ textAlign: 'center' }}>
-                                    <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-purple)' }}>{stats.completion_percentage}%</div>
-                                    <div style={{ color: 'var(--text-muted)' }}>Curriculum Complete</div>
-                                </div>
-                                <div className="card" style={{ textAlign: 'center' }}>
-                                    <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-green)' }}>{stats.weeks_with_data}/12</div>
-                                    <div style={{ color: 'var(--text-muted)' }}>Lessons with Activity</div>
-                                </div>
-                                <div className="card" style={{ textAlign: 'center' }}>
-                                    <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-yellow)' }}>{stats.total_items_created}</div>
-                                    <div style={{ color: 'var(--text-muted)' }}>Items Created</div>
-                                </div>
-                                <div className="card" style={{ textAlign: 'center' }}>
-                                    <div style={{ fontSize: '1rem', fontWeight: 'bold', color: 'var(--accent-purple)' }}>{stats.most_active_week || 'N/A'}</div>
-                                    <div style={{ color: 'var(--text-muted)' }}>Most Active Lesson</div>
-                                </div>
-                            </div>
-
-                            <div className="card">
-                                <h2>Lesson-by-Lesson Progress</h2>
-                                <div style={{ marginTop: '1rem' }}>
-                                    {stats.curriculum_progress.map((week) => (
-                                        <div key={week.week} style={{
-                                            display: 'grid',
-                                            gridTemplateColumns: '80px 1fr 100px 80px',
-                                            gap: '1rem',
-                                            alignItems: 'center',
-                                            padding: '0.75rem',
-                                            borderBottom: '1px solid var(--border-color)'
-                                        }}>
-                                            <span style={{ fontWeight: 'bold' }}>Lesson {week.week}</span>
-                                            <span>{week.name}</span>
-                                            <span style={{ color: 'var(--text-muted)' }}>{week.items_created} items</span>
-                                            <span className={`badge ${getStatusBadge(week.status)}`}>
-                                                {week.status === 'not_started' ? 'Not started' : week.status === 'in_progress' ? 'In progress' : 'Completed'}
-                                            </span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <div className="card">
-                                <h2>Completion Progress</h2>
-                                <div style={{ marginTop: '1rem' }}>
-                                    <div style={{ height: '24px', background: 'var(--border-color)', borderRadius: '12px', overflow: 'hidden' }}>
-                                        <div style={{
-                                            height: '100%',
-                                            width: `${stats.completion_percentage}%`,
-                                            background: 'linear-gradient(90deg, var(--accent-blue), var(--accent-purple))',
-                                            borderRadius: '12px',
-                                            transition: 'width 0.5s ease'
-                                        }} />
-                                    </div>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-                                        <span>0%</span>
-                                        <span>{stats.completion_percentage}% Complete</span>
-                                        <span>100%</span>
-                                    </div>
-                                </div>
-
-                                {stats.completion_percentage < 100 && (
-                                    <div style={{ marginTop: '1.5rem', padding: '1rem', background: 'var(--bg-tertiary)', borderRadius: '8px' }}>
-                                        <strong>Next Steps</strong>
-                                        <p style={{ margin: '0.5rem 0 0 0', color: 'var(--accent-blue)' }}>
-                                            Complete more lessons to unlock a richer reference card. Each lesson adds new insights!
-                                        </p>
-                                    </div>
-                                )}
-
-                                {stats.completion_percentage === 100 && (
-                                    <div style={{ marginTop: '1.5rem', padding: '1rem', background: 'var(--success-bg)', borderRadius: '8px' }}>
-                                        <strong>Congratulations!</strong>
-                                        <p style={{ margin: '0.5rem 0 0 0', color: 'var(--accent-green)' }}>
-                                            You've completed the entire 12-lesson curriculum. Your reference card now reflects your full AI collaboration journey!
-                                        </p>
-                                    </div>
-                                )}
-                            </div>
-                        </>
-                    ) : (
-                        <div className="card">
-                            <p style={{ color: 'var(--text-muted)' }}>Loading progress...</p>
-                        </div>
-                    )}
-                </div>
-            )}
             <LessonNav currentLesson={12} />
         </div>
     );

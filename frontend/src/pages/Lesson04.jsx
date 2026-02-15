@@ -3,6 +3,7 @@ import { useApi } from '../hooks/useApi';
 import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import LessonNav from '../components/LessonNav';
+import StatsPanel from '../components/StatsPanel';
 
 // Priority colors
 const PRIORITY_COLORS = {
@@ -425,9 +426,17 @@ export default function Lesson04() {
         </div>
       )}
 
+      <StatsPanel lessonId={4} stats={stats ? [
+          { label: 'Documents', value: stats.total_docs, color: 'var(--accent-blue)' },
+          { label: 'Sessions', value: stats.total_sessions, color: 'var(--accent-green)' },
+          { label: 'This Week', value: stats.sessions_this_week, color: 'var(--accent-yellow)' },
+          { label: 'Avg Quality', value: stats.avg_context_quality, color: 'var(--accent-purple)' },
+          { label: 'Avg Continuity', value: stats.avg_continuity_rating, color: 'var(--accent-blue)' },
+      ] : []} />
+
       {/* Tabs */}
       <div className="tabs">
-        {['learn', 'docs', 'sessions', 'stats'].map((tab) => (
+        {['learn', 'docs', 'sessions'].map((tab) => (
           <button
             key={tab}
             className={`tab ${activeTab === tab ? 'active' : ''}`}
@@ -944,87 +953,6 @@ export default function Lesson04() {
         </div>
       )}
 
-      {/* Stats Tab */}
-      {activeTab === 'stats' && (
-        <div className="stats-section">
-          <h2>Context Docs Statistics</h2>
-
-          {stats && stats.total_docs > 0 ? (
-            <div>
-              {/* Summary cards */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '16px', marginBottom: '24px' }}>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-blue)' }}>{stats.total_docs}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Documents</div>
-                </div>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-blue)' }}>{stats.total_sessions}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Sessions</div>
-                </div>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-yellow)' }}>{stats.sessions_this_week}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>This Week</div>
-                </div>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-purple)' }}>{stats.avg_context_quality}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Avg Quality</div>
-                </div>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-green)' }}>{stats.avg_continuity_rating}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Avg Continuity</div>
-                </div>
-              </div>
-
-              {/* Knowledge metrics */}
-              <div className="card" style={{ padding: '24px', marginBottom: '24px' }}>
-                <h3 style={{ marginTop: 0 }}>Knowledge Captured</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
-                  <div style={{ textAlign: 'center', padding: '16px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
-                    <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--accent-purple)' }}>{stats.total_decisions}</div>
-                    <div style={{ color: 'var(--text-secondary)' }}>Decisions</div>
-                  </div>
-                  <div style={{ textAlign: 'center', padding: '16px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
-                    <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--accent-green)' }}>{stats.total_lessons}</div>
-                    <div style={{ color: 'var(--text-secondary)' }}>Lessons</div>
-                  </div>
-                  <div style={{ textAlign: 'center', padding: '16px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
-                    <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--accent-red)' }}>{stats.open_issues}</div>
-                    <div style={{ color: 'var(--text-secondary)' }}>Open Issues</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Activity by document */}
-              {stats.docs_by_activity && stats.docs_by_activity.length > 0 && (
-                <div className="card" style={{ padding: '24px' }}>
-                  <h3 style={{ marginTop: 0 }}>Project Activity</h3>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    {stats.docs_by_activity.map((item, idx) => (
-                      <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                        <div style={{ flex: 1 }}>{item.project_name}</div>
-                        <div style={{ width: '150px', height: '8px', background: 'var(--border-color)', borderRadius: '4px', overflow: 'hidden' }}>
-                          <div style={{
-                            height: '100%',
-                            width: `${Math.min((item.session_count / Math.max(...stats.docs_by_activity.map(d => d.session_count))) * 100, 100)}%`,
-                            background: 'var(--accent-blue)',
-                            borderRadius: '4px'
-                          }} />
-                        </div>
-                        <div style={{ minWidth: '80px', textAlign: 'right' }}>{item.session_count} sessions</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="card" style={{ padding: '48px', textAlign: 'center' }}>
-              <h3>No statistics yet</h3>
-              <p style={{ color: 'var(--text-secondary)' }}>Create context documents and start sessions to track your progress.</p>
-            </div>
-          )}
-        </div>
-      )}
       <LessonNav currentLesson={4} />
     </div>
   );

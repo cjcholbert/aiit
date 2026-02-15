@@ -4,6 +4,7 @@ import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
 import LessonNav from '../components/LessonNav';
+import StatsPanel from '../components/StatsPanel';
 
 // Quality level styles
 const QUALITY_STYLES = {
@@ -331,6 +332,13 @@ export default function Lesson02() {
         </div>
       )}
 
+      <StatsPanel lessonId={2} stats={[
+          { label: 'Total Entries', value: stats?.total_entries ?? '-', color: 'var(--accent-blue)' },
+          { label: 'Avg Score', value: stats?.avg_quality_score ?? '-', color: 'var(--accent-yellow)' },
+          { label: 'Examples Saved', value: stats?.examples_saved ?? '-', color: 'var(--accent-green)' },
+          { label: 'Rewrites Done', value: stats?.rewrites_completed ?? '-', color: 'var(--accent-purple)' },
+      ]} />
+
       {/* Tabs */}
       <div className="tabs">
         {['learn', 'analyze', 'history'].map((tab) => (
@@ -639,26 +647,6 @@ export default function Lesson02() {
       {/* History Tab — two-column layout: entry list (left) + stats (right) */}
       {activeTab === 'history' && (
         <div>
-          {/* Stats summary row */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '24px' }}>
-            <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-              <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-blue)' }}>{stats?.total_entries ?? '-'}</div>
-              <div style={{ color: 'var(--text-secondary)' }}>Total Entries</div>
-            </div>
-            <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-              <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-yellow)' }}>{stats?.avg_quality_score ?? '-'}</div>
-              <div style={{ color: 'var(--text-secondary)' }}>Avg Score</div>
-            </div>
-            <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-              <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-green)' }}>{stats?.examples_saved ?? '-'}</div>
-              <div style={{ color: 'var(--text-secondary)' }}>Examples Saved</div>
-            </div>
-            <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-              <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-purple)' }}>{stats?.rewrites_completed ?? '-'}</div>
-              <div style={{ color: 'var(--text-secondary)' }}>Rewrites Done</div>
-            </div>
-          </div>
-
           {/* Two-column grid */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
             {/* Left column: Feedback History */}

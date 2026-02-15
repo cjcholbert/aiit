@@ -4,6 +4,7 @@ import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
 import LessonNav from '../components/LessonNav';
+import StatsPanel from '../components/StatsPanel';
 
 // Task status colors
 const STATUS_COLORS = {
@@ -452,9 +453,16 @@ export default function Lesson08() {
         </div>
       )}
 
+      <StatsPanel lessonId={8} stats={stats ? [
+          { label: 'Delegations', value: stats.total_delegations, color: 'var(--accent-blue)' },
+          { label: 'Total Tasks', value: stats.total_tasks, color: 'var(--accent-blue)' },
+          { label: 'Completed', value: stats.tasks_completed, color: 'var(--accent-green)' },
+          { label: 'Pending', value: stats.tasks_pending, color: 'var(--accent-yellow)' },
+      ] : []} />
+
       {/* Tabs */}
       <div className="tabs">
-        {['learn', 'delegate', 'history'].map((tab) => (
+        {['learn', 'delegate'].map((tab) => (
           <button
             key={tab}
             className={`tab ${activeTab === tab ? 'active' : ''}`}
@@ -903,87 +911,6 @@ export default function Lesson08() {
         </div>
       )}
 
-      {/* History Tab */}
-      {activeTab === 'history' && (
-        <div className="history-section">
-          <h2>Delegation Statistics</h2>
-
-          {stats && stats.total_delegations > 0 ? (
-            <div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginBottom: '24px' }}>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-blue)' }}>{stats.total_delegations}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Delegations</div>
-                </div>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-blue)' }}>{stats.total_tasks}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Total Tasks</div>
-                </div>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-green)' }}>{stats.tasks_completed}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Completed</div>
-                </div>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-yellow)' }}>{stats.tasks_pending}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Pending</div>
-                </div>
-              </div>
-
-              <div className="card" style={{ padding: '24px', marginBottom: '16px' }}>
-                <h3>Completion Rate</h3>
-                <div style={{ marginTop: '16px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                    <span>Tasks Completed</span>
-                    <span style={{ fontWeight: 'bold', color: 'var(--accent-green)' }}>{stats.completion_rate}%</span>
-                  </div>
-                  <div style={{ height: '12px', background: 'var(--border-color)', borderRadius: '6px', overflow: 'hidden' }}>
-                    <div
-                      style={{
-                        height: '100%',
-                        width: `${stats.completion_rate}%`,
-                        background: 'linear-gradient(90deg, var(--accent-green), var(--accent-green-hover))',
-                        borderRadius: '6px'
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
-                <div className="card" style={{ padding: '24px' }}>
-                  <h3>Averages</h3>
-                  <div style={{ marginTop: '12px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--border-color)' }}>
-                      <span style={{ color: 'var(--text-secondary)' }}>Tasks per Delegation</span>
-                      <span style={{ fontWeight: 'bold' }}>{stats.avg_tasks_per_delegation}</span>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0' }}>
-                      <span style={{ color: 'var(--text-secondary)' }}>With Templates</span>
-                      <span style={{ fontWeight: 'bold' }}>{stats.delegations_with_templates}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="card" style={{ padding: '24px' }}>
-                  <h3>Your Pattern</h3>
-                  <p style={{ marginTop: '12px', color: 'var(--text-secondary)' }}>
-                    {stats.delegations_with_templates === stats.total_delegations
-                      ? "You're using templates for all delegations. This ensures consistent, structured handoffs."
-                      : stats.delegations_with_templates > stats.total_delegations / 2
-                      ? "You use templates for most delegations. Consider templating the rest for better consistency."
-                      : "Consider creating templates for your delegations. Structured prompts lead to better AI outputs."}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="empty-state" style={{ textAlign: 'center', padding: '48px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
-              <h3>No statistics yet</h3>
-              <p>Create and complete some delegations to see your patterns.</p>
-            </div>
-          )}
-        </div>
-      )}
       <LessonNav currentLesson={8} />
     </div>
   );
