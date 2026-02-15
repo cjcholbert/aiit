@@ -328,7 +328,7 @@ export default function Lesson02() {
 
       {/* Tabs */}
       <div className="tabs">
-        {['learn', 'analyze', 'history', 'stats'].map((tab) => (
+        {['learn', 'analyze', 'history'].map((tab) => (
           <button
             key={tab}
             className={`tab ${activeTab === tab ? 'active' : ''}`}
@@ -626,192 +626,196 @@ export default function Lesson02() {
         </div>
       )}
 
-      {/* History Tab */}
+      {/* History Tab — two-column layout: entry list (left) + stats (right) */}
       {activeTab === 'history' && (
-        <div className="history-section">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-            <h2>Feedback History</h2>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              {entries.length === 0 && (
-                <button className="btn btn-secondary" onClick={handleSeedExamples}>
-                  Load Examples
-                </button>
-              )}
-              {entries.length > 0 && (
-                <button className="btn btn-danger" onClick={handleClearAll}>
-                  Clear All
-                </button>
-              )}
+        <div>
+          {/* Stats summary row */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '24px' }}>
+            <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
+              <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-blue)' }}>{stats?.total_entries ?? '-'}</div>
+              <div style={{ color: 'var(--text-secondary)' }}>Total Entries</div>
+            </div>
+            <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
+              <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-yellow)' }}>{stats?.avg_quality_score ?? '-'}</div>
+              <div style={{ color: 'var(--text-secondary)' }}>Avg Score</div>
+            </div>
+            <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
+              <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-green)' }}>{stats?.examples_saved ?? '-'}</div>
+              <div style={{ color: 'var(--text-secondary)' }}>Examples Saved</div>
+            </div>
+            <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
+              <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-purple)' }}>{stats?.rewrites_completed ?? '-'}</div>
+              <div style={{ color: 'var(--text-secondary)' }}>Rewrites Done</div>
             </div>
           </div>
 
-          {entries.length === 0 ? (
-            <div className="empty-state" style={{ textAlign: 'center', padding: '48px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
-              <h3>No feedback entries yet</h3>
-              <p>Analyze some feedback to start tracking your patterns.</p>
-            </div>
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {entries.map((entry) => {
-                const style = QUALITY_STYLES[entry.quality_level] || QUALITY_STYLES.vague;
-                return (
-                  <div
-                    key={entry.id}
-                    className="card"
-                    style={{
-                      padding: '16px',
-                      cursor: 'pointer',
-                      borderLeft: `4px solid ${style.color}`,
-                      background: entry.is_example ? 'var(--success-bg)' : 'var(--bg-secondary)'
-                    }}
-                    onClick={() => { handleSelectEntry(entry.id); setActiveTab('analyze'); }}
-                  >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                          {renderQualityBadge(entry.quality_level, entry.quality_score)}
-                          {entry.is_example && (
-                            <span style={{ background: 'var(--accent-green)', color: 'var(--text-primary)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.7rem' }}>
-                              EXAMPLE
-                            </span>
-                          )}
-                          {entry.has_rewrite && (
-                            <span style={{ background: 'var(--accent-blue)', color: 'var(--text-primary)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.7rem' }}>
-                              REWRITTEN
-                            </span>
-                          )}
-                          {entry.category && (
-                            <span style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>{entry.category}</span>
-                          )}
-                        </div>
-                        <p style={{ margin: 0, color: 'var(--text-muted)' }}>{entry.original_feedback}</p>
-                      </div>
-                      <button
-                        className="btn btn-danger"
-                        style={{ padding: '4px 8px', marginLeft: '12px' }}
-                        onClick={(e) => { e.stopPropagation(); handleDeleteEntry(entry.id); }}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Stats Tab */}
-      {activeTab === 'stats' && (
-        <div className="stats-section">
-          <h2>Feedback Quality Statistics</h2>
-
-          {stats && stats.total_entries > 0 ? (
+          {/* Two-column grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+            {/* Left column: Feedback History */}
             <div>
-              {/* Summary cards */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '16px', marginBottom: '24px' }}>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-blue)' }}>{stats.total_entries}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Total Entries</div>
-                </div>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-yellow)' }}>{stats.avg_quality_score}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Avg Score</div>
-                </div>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-green)' }}>{stats.examples_saved}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Examples Saved</div>
-                </div>
-                <div className="card" style={{ padding: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-purple)' }}>{stats.rewrites_completed}</div>
-                  <div style={{ color: 'var(--text-secondary)' }}>Rewrites Done</div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                <h2 style={{ margin: 0 }}>Feedback History</h2>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  {entries.length === 0 && (
+                    <button className="btn btn-secondary" onClick={handleSeedExamples}>
+                      Load Examples
+                    </button>
+                  )}
+                  {entries.length > 0 && (
+                    <button className="btn btn-danger" onClick={handleClearAll}>
+                      Clear All
+                    </button>
+                  )}
                 </div>
               </div>
 
-              {/* Quality distribution */}
-              <div className="card" style={{ padding: '24px', marginBottom: '24px' }}>
-                <h3>Quality Distribution</h3>
-                <div style={{ display: 'flex', gap: '16px', marginTop: '16px' }}>
-                  {Object.entries(stats.entries_by_level).map(([level, count]) => {
-                    const style = QUALITY_STYLES[level] || QUALITY_STYLES.vague;
-                    const percentage = Math.round((count / stats.total_entries) * 100);
+              {entries.length === 0 ? (
+                <div className="empty-state" style={{ textAlign: 'center', padding: '48px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
+                  <h3>No feedback entries yet</h3>
+                  <p>Analyze some feedback to start tracking your patterns.</p>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  {entries.map((entry) => {
+                    const style = QUALITY_STYLES[entry.quality_level] || QUALITY_STYLES.vague;
                     return (
-                      <div key={level} style={{ flex: 1 }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                          <span style={{ color: style.color }}>{style.icon} {style.label}</span>
-                          <span style={{ fontWeight: 'bold' }}>{count} ({percentage}%)</span>
-                        </div>
-                        <div style={{ height: '8px', background: 'var(--border-color)', borderRadius: '4px', overflow: 'hidden' }}>
-                          <div style={{
-                            height: '100%',
-                            width: `${percentage}%`,
-                            background: style.color,
-                            borderRadius: '4px'
-                          }} />
+                      <div
+                        key={entry.id}
+                        className="card"
+                        style={{
+                          padding: '16px',
+                          cursor: 'pointer',
+                          borderLeft: `4px solid ${style.color}`,
+                          background: entry.is_example ? 'var(--success-bg)' : 'var(--bg-secondary)'
+                        }}
+                        onClick={() => { handleSelectEntry(entry.id); setActiveTab('analyze'); }}
+                      >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                          <div style={{ flex: 1 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px', flexWrap: 'wrap' }}>
+                              {renderQualityBadge(entry.quality_level, entry.quality_score)}
+                              {entry.is_example && (
+                                <span style={{ background: 'var(--accent-green)', color: 'var(--text-primary)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.7rem' }}>
+                                  EXAMPLE
+                                </span>
+                              )}
+                              {entry.has_rewrite && (
+                                <span style={{ background: 'var(--accent-blue)', color: 'var(--text-primary)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.7rem' }}>
+                                  REWRITTEN
+                                </span>
+                              )}
+                              {entry.category && (
+                                <span style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>{entry.category}</span>
+                              )}
+                            </div>
+                            <p style={{ margin: 0, color: 'var(--text-muted)' }}>{entry.original_feedback}</p>
+                          </div>
+                          <button
+                            className="btn btn-danger"
+                            style={{ padding: '4px 8px', marginLeft: '12px' }}
+                            onClick={(e) => { e.stopPropagation(); handleDeleteEntry(entry.id); }}
+                          >
+                            Delete
+                          </button>
                         </div>
                       </div>
                     );
                   })}
                 </div>
-              </div>
+              )}
+            </div>
 
-              {/* Common issues */}
-              {stats.common_issues && stats.common_issues.length > 0 && (
-                <div className="card" style={{ padding: '24px', marginBottom: '24px' }}>
-                  <h3>Your Common Issues</h3>
-                  <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
-                    These are the vague patterns you fall into most often.
-                  </p>
-                  {stats.common_issues.map((issue, idx) => (
-                    <div key={idx} style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      padding: '12px',
-                      background: 'var(--bg-tertiary)',
-                      borderRadius: '6px',
-                      marginBottom: '8px'
-                    }}>
-                      <div>
-                        <strong style={{ color: 'var(--accent-red)' }}>{issue.name}</strong>
-                        <span style={{ color: 'var(--text-secondary)', marginLeft: '8px' }}>
-                          {patterns?.[issue.pattern]?.description}
-                        </span>
-                      </div>
-                      <span style={{ fontWeight: 'bold', color: 'var(--accent-red)' }}>{issue.count}x</span>
+            {/* Right column: Stats */}
+            <div>
+              <h2 style={{ margin: '0 0 16px' }}>Quality Statistics</h2>
+
+              {stats && stats.total_entries > 0 ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  {/* Quality distribution */}
+                  <div className="card" style={{ padding: '24px' }}>
+                    <h3 style={{ marginTop: 0 }}>Quality Distribution</h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '16px' }}>
+                      {Object.entries(stats.entries_by_level).map(([level, count]) => {
+                        const style = QUALITY_STYLES[level] || QUALITY_STYLES.vague;
+                        const percentage = Math.round((count / stats.total_entries) * 100);
+                        return (
+                          <div key={level}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                              <span style={{ color: style.color }}>{style.icon} {style.label}</span>
+                              <span style={{ fontWeight: 'bold' }}>{count} ({percentage}%)</span>
+                            </div>
+                            <div style={{ height: '8px', background: 'var(--border-color)', borderRadius: '4px', overflow: 'hidden' }}>
+                              <div style={{
+                                height: '100%',
+                                width: `${percentage}%`,
+                                background: style.color,
+                                borderRadius: '4px'
+                              }} />
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
-                  ))}
+                  </div>
+
+                  {/* Common issues */}
+                  {stats.common_issues && stats.common_issues.length > 0 && (
+                    <div className="card" style={{ padding: '24px' }}>
+                      <h3 style={{ marginTop: 0 }}>Your Common Issues</h3>
+                      <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+                        These are the vague patterns you fall into most often.
+                      </p>
+                      {stats.common_issues.map((issue, idx) => (
+                        <div key={idx} style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          padding: '12px',
+                          background: 'var(--bg-tertiary)',
+                          borderRadius: '6px',
+                          marginBottom: '8px'
+                        }}>
+                          <div>
+                            <strong style={{ color: 'var(--accent-red)' }}>{issue.name}</strong>
+                            <span style={{ color: 'var(--text-secondary)', marginLeft: '8px' }}>
+                              {patterns?.[issue.pattern]?.description}
+                            </span>
+                          </div>
+                          <span style={{ fontWeight: 'bold', color: 'var(--accent-red)' }}>{issue.count}x</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Improvement rate */}
+                  <div className="card" style={{ padding: '24px' }}>
+                    <h3 style={{ marginTop: 0 }}>Improvement Rate</h3>
+                    <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+                      Percentage of vague feedback that you've rewritten to be more specific.
+                    </p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                      <div style={{ flex: 1, height: '12px', background: 'var(--border-color)', borderRadius: '6px', overflow: 'hidden' }}>
+                        <div style={{
+                          height: '100%',
+                          width: `${stats.improvement_rate}%`,
+                          background: 'linear-gradient(90deg, var(--accent-green), var(--accent-green-hover))',
+                          borderRadius: '6px'
+                        }} />
+                      </div>
+                      <span style={{ fontWeight: 'bold', color: 'var(--accent-green)', minWidth: '60px' }}>
+                        {stats.improvement_rate}%
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="empty-state" style={{ textAlign: 'center', padding: '48px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
+                  <h3>No statistics yet</h3>
+                  <p>Analyze some feedback to see your patterns.</p>
                 </div>
               )}
-
-              {/* Improvement rate */}
-              <div className="card" style={{ padding: '24px' }}>
-                <h3>Improvement Rate</h3>
-                <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
-                  Percentage of vague feedback that you've rewritten to be more specific.
-                </p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                  <div style={{ flex: 1, height: '12px', background: 'var(--border-color)', borderRadius: '6px', overflow: 'hidden' }}>
-                    <div style={{
-                      height: '100%',
-                      width: `${stats.improvement_rate}%`,
-                      background: 'linear-gradient(90deg, var(--accent-green), var(--accent-green-hover))',
-                      borderRadius: '6px'
-                    }} />
-                  </div>
-                  <span style={{ fontWeight: 'bold', color: 'var(--accent-green)', minWidth: '60px' }}>
-                    {stats.improvement_rate}%
-                  </span>
-                </div>
-              </div>
             </div>
-          ) : (
-            <div className="empty-state" style={{ textAlign: 'center', padding: '48px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
-              <h3>No statistics yet</h3>
-              <p>Analyze some feedback to see your patterns.</p>
-            </div>
-          )}
+          </div>
         </div>
       )}
     </div>

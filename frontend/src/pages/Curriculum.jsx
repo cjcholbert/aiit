@@ -8,9 +8,7 @@ const LESSON_CONTENT = {
         skill: 'Identify your personal context gaps by analyzing past conversations. Discover what information you consistently forget to provide so you can fix it upfront.',
         tabs: [
             { name: 'Analyze', description: 'Analyze transcripts for context gaps and prompting patterns' },
-            { name: 'History', description: 'View past analyses and revisit findings' },
-            { name: 'Stats', description: 'See context gap statistics across your conversations' },
-            { name: 'Insights', description: 'AI-generated insights about your context habits' },
+            { name: 'History', description: 'View past analyses, patterns, insights, and audit summaries' },
         ],
     },
     2: {
@@ -18,9 +16,8 @@ const LESSON_CONTENT = {
         skill: 'Write feedback that identifies specific locations, states clear actions, and explains reasoning. Learn to spot vague patterns in your own feedback and rewrite them.',
         tabs: [
             { name: 'Learn', description: 'Learn feedback principles and best practices' },
-            { name: 'Analyze', description: 'Analyze feedback quality with scoring' },
-            { name: 'Library', description: 'Saved analyses for reference' },
-            { name: 'Import', description: 'Import conversations from Lesson 1' },
+            { name: 'Analyze', description: 'Analyze feedback quality with scoring and import conversations' },
+            { name: 'History', description: 'View past analyses and quality statistics side by side' },
         ],
     },
     3: {

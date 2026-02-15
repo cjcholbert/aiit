@@ -171,17 +171,12 @@ class FeedbackStats(BaseModel):
 # =============================================================================
 
 EXAMPLE_FEEDBACK = [
+    # --- IT / Code ---
     {
         "original_feedback": "This code doesn't work right.",
         "context": "Reviewing a Python function",
         "category": "code",
         "expected_issues": ["no_specifics", "no_action"]
-    },
-    {
-        "original_feedback": "Make the writing better and more engaging.",
-        "context": "Reviewing blog post draft",
-        "category": "writing",
-        "expected_issues": ["no_specifics", "no_action", "subjective"]
     },
     {
         "original_feedback": "The error handling in the process_order function on line 156 catches all exceptions with a bare except clause. Change it to catch specific exceptions (ValueError, KeyError) and log the actual error message, because bare excepts hide bugs and make debugging harder.",
@@ -190,10 +185,17 @@ EXAMPLE_FEEDBACK = [
         "expected_issues": []  # This is good feedback
     },
     {
-        "original_feedback": "I don't like how this looks.",
-        "context": "UI design review",
-        "category": "design",
-        "expected_issues": ["no_specifics", "subjective", "no_action"]
+        "original_feedback": "Fix the bugs and also add user authentication while you're at it.",
+        "context": "Feature development",
+        "category": "code",
+        "expected_issues": ["no_specifics", "scope_creep"]
+    },
+    # --- Writing ---
+    {
+        "original_feedback": "Make the writing better and more engaging.",
+        "context": "Reviewing blog post draft",
+        "category": "writing",
+        "expected_issues": ["no_specifics", "no_action", "subjective"]
     },
     {
         "original_feedback": "The introduction should be shorter - under 50 words - and start with a question to hook the reader, similar to how the Economist opens their articles.",
@@ -201,10 +203,82 @@ EXAMPLE_FEEDBACK = [
         "category": "writing",
         "expected_issues": []  # This is good feedback
     },
+    # --- Design ---
     {
-        "original_feedback": "Fix the bugs and also add user authentication while you're at it.",
-        "context": "Feature development",
-        "category": "code",
-        "expected_issues": ["no_specifics", "scope_creep"]
-    }
+        "original_feedback": "I don't like how this looks.",
+        "context": "UI design review",
+        "category": "design",
+        "expected_issues": ["no_specifics", "subjective", "no_action"]
+    },
+    # --- Marketing / Sales ---
+    {
+        "original_feedback": "This campaign isn't really hitting the mark.",
+        "context": "Reviewing Q2 email drip campaign",
+        "category": "analysis",
+        "expected_issues": ["no_specifics", "no_action", "subjective"]
+    },
+    {
+        "original_feedback": "The subject line 'Big Savings Inside' has a 12% open rate, which is below our 18% benchmark. Rewrite it to include the specific discount percentage and a deadline, like our Black Friday subject line that hit 27% opens.",
+        "context": "Email marketing optimization",
+        "category": "writing",
+        "expected_issues": []  # This is good feedback
+    },
+    {
+        "original_feedback": "The sales proposal needs more punch. Also, can you redo the pricing section and add a competitive comparison while you're at it?",
+        "context": "Sales proposal review",
+        "category": "writing",
+        "expected_issues": ["no_specifics", "subjective", "scope_creep"]
+    },
+    # --- HR / Operations ---
+    {
+        "original_feedback": "The onboarding document needs to be better.",
+        "context": "New hire onboarding checklist review",
+        "category": "documentation",
+        "expected_issues": ["no_specifics", "no_action", "subjective"]
+    },
+    {
+        "original_feedback": "The job posting for Senior Accountant lists 'excellent communication skills' as requirement #2 but doesn't specify what that means in practice. Replace it with 'Ability to explain monthly variance reports to non-finance department heads in plain language,' because that's the actual skill we need.",
+        "context": "Job description review",
+        "category": "writing",
+        "expected_issues": []  # This is good feedback
+    },
+    # --- Finance / Accounting ---
+    {
+        "original_feedback": "These numbers don't look right to me.",
+        "context": "Reviewing monthly expense report",
+        "category": "analysis",
+        "expected_issues": ["no_specifics", "no_action", "no_reason"]
+    },
+    {
+        "original_feedback": "The Q3 budget forecast shows travel expenses at $42K, but we've already committed $38K through September conference registrations. Increase the travel line to $55K and add a footnote listing the three confirmed conferences, because the CFO will ask where the overage is coming from.",
+        "context": "Quarterly budget review",
+        "category": "analysis",
+        "expected_issues": []  # This is good feedback
+    },
+    # --- Education / Training ---
+    {
+        "original_feedback": "This training module is confusing.",
+        "context": "Reviewing new employee safety training",
+        "category": "documentation",
+        "expected_issues": ["no_specifics", "no_action"]
+    },
+    {
+        "original_feedback": "The quiz at the end of Module 3 has 15 questions but only covers the first two sections. Add 5 questions covering the 'Emergency Procedures' section, specifically the evacuation routes and assembly points, because that's the content most employees failed on in last quarter's assessment.",
+        "context": "Training course design review",
+        "category": "documentation",
+        "expected_issues": []  # This is good feedback
+    },
+    # --- Admin / Managerial ---
+    {
+        "original_feedback": "Can you just make the meeting notes cleaner?",
+        "context": "Reviewing AI-drafted meeting summary",
+        "category": "documentation",
+        "expected_issues": ["no_specifics", "no_action"]
+    },
+    {
+        "original_feedback": "The weekly status report lists 'Project Alpha: on track' but doesn't mention the vendor delay we discussed Monday. Add a risk flag under Project Alpha stating 'Hardware delivery delayed 2 weeks; go-live date at risk if not resolved by March 15' so leadership can escalate with procurement.",
+        "context": "Team status report review",
+        "category": "documentation",
+        "expected_issues": []  # This is good feedback
+    },
 ]

@@ -159,6 +159,7 @@ class CalibrationInsightResponse(BaseModel):
 # =============================================================================
 
 DEFAULT_OUTPUT_TYPES = [
+    # --- IT / Technical ---
     {
         "name": "Code Syntax & Patterns",
         "category": "Code",
@@ -222,5 +223,114 @@ DEFAULT_OUTPUT_TYPES = [
         "reasoning": "Good starting points but may miss environment-specific factors.",
         "verification_approach": "Test suggestions methodically, check logs for specifics",
         "examples": ["Error diagnosis", "Performance issues", "Configuration problems"]
-    }
+    },
+    # --- Marketing / Sales ---
+    {
+        "name": "Marketing Copy & Email Drafts",
+        "category": "Marketing",
+        "trust_level": "high",
+        "reasoning": "AI produces strong first drafts of marketing copy. Tone and structure are generally good, though brand voice may need tuning.",
+        "verification_approach": "Check brand voice consistency, verify claims and statistics, confirm CTA aligns with campaign goals",
+        "examples": ["Email campaign drafts", "Social media posts", "Ad copy variations", "Landing page text"]
+    },
+    {
+        "name": "Market Research Summaries",
+        "category": "Marketing",
+        "trust_level": "medium",
+        "reasoning": "AI can synthesize provided data well but may hallucinate statistics or cite outdated market figures.",
+        "verification_approach": "Cross-check all cited numbers against source data, verify competitor claims are current",
+        "examples": ["Competitor analysis briefs", "Industry trend summaries", "Customer persona drafts"]
+    },
+    {
+        "name": "Sales Proposals & Pricing",
+        "category": "Sales",
+        "trust_level": "low",
+        "reasoning": "Proposals require knowledge of specific deal context, client relationships, and current pricing rules that AI cannot have.",
+        "verification_approach": "Verify all pricing against current rate cards, check client-specific terms, review with account manager",
+        "examples": ["Client proposals", "RFP responses", "Custom pricing calculations", "Contract terms"]
+    },
+    # --- HR / Operations ---
+    {
+        "name": "Job Descriptions & Postings",
+        "category": "HR",
+        "trust_level": "high",
+        "reasoning": "Well-established format with clear patterns. AI produces good structure and language, but role-specific requirements need verification.",
+        "verification_approach": "Confirm requirements match actual role needs, check for unintentional bias in language, verify salary ranges are current",
+        "examples": ["Job postings", "Role descriptions", "Candidate scorecards"]
+    },
+    {
+        "name": "HR Policy Drafts",
+        "category": "HR",
+        "trust_level": "low",
+        "reasoning": "Policies have legal implications and must reflect current employment law for your jurisdiction. AI may produce plausible-sounding language that is legally inaccurate.",
+        "verification_approach": "Legal review required, check against current employment law, verify alignment with existing policies",
+        "examples": ["PTO policies", "Remote work guidelines", "Code of conduct updates", "Disciplinary procedures"]
+    },
+    {
+        "name": "Process Documentation & SOPs",
+        "category": "Operations",
+        "trust_level": "high",
+        "reasoning": "AI excels at structuring step-by-step procedures from rough notes. Output format is reliable, but specific steps need subject-matter verification.",
+        "verification_approach": "Walk through each step with the process owner, verify tool names and access paths are correct",
+        "examples": ["Standard operating procedures", "Onboarding checklists", "Vendor setup workflows"]
+    },
+    # --- Finance / Accounting ---
+    {
+        "name": "Financial Report Narratives",
+        "category": "Finance",
+        "trust_level": "medium",
+        "reasoning": "AI can draft clear narratives around financial data you provide, but may misinterpret variances or draw incorrect causal conclusions.",
+        "verification_approach": "Verify all numbers match source reports, check that variance explanations are factually correct, confirm with finance team",
+        "examples": ["Monthly variance commentary", "Budget vs. actual narratives", "Board report summaries"]
+    },
+    {
+        "name": "Financial Projections & Forecasts",
+        "category": "Finance",
+        "trust_level": "low",
+        "reasoning": "Projections require assumptions about future business conditions AI cannot know. Calculation methodology may look correct but use wrong inputs.",
+        "verification_approach": "Validate all formulas independently, verify assumptions against management guidance, stress-test scenarios",
+        "examples": ["Revenue forecasts", "Cash flow projections", "Headcount planning models", "Break-even analyses"]
+    },
+    # --- Education / Training ---
+    {
+        "name": "Training Materials & Curricula",
+        "category": "Education",
+        "trust_level": "high",
+        "reasoning": "AI produces well-structured learning content with clear progression. Instructional design patterns are well-represented in training data.",
+        "verification_approach": "Subject-matter expert review for accuracy, test learning objectives alignment, pilot with sample audience",
+        "examples": ["Lesson plans", "Training slide outlines", "Workshop agendas", "Assessment questions"]
+    },
+    {
+        "name": "Student & Employee Assessments",
+        "category": "Education",
+        "trust_level": "medium",
+        "reasoning": "AI can generate assessment structures but may create questions that are ambiguous, too easy, or misaligned with learning objectives.",
+        "verification_approach": "Review each question against specific learning objective, test for clarity with a colleague, check difficulty distribution",
+        "examples": ["Quiz questions", "Skill assessments", "Certification exam drafts", "Performance review criteria"]
+    },
+    # --- Admin / Managerial ---
+    {
+        "name": "Meeting Summaries & Action Items",
+        "category": "Admin",
+        "trust_level": "high",
+        "reasoning": "AI is strong at extracting structure from meeting transcripts. Action items and decisions are usually captured accurately from good transcripts.",
+        "verification_approach": "Confirm each action item has correct owner and deadline, verify decisions match what was actually agreed",
+        "examples": ["Meeting minutes", "Action item lists", "Decision logs", "Follow-up email drafts"]
+    },
+    {
+        "name": "Strategic Recommendations",
+        "category": "Management",
+        "trust_level": "low",
+        "reasoning": "AI lacks knowledge of internal politics, resource constraints, team dynamics, and unspoken organizational priorities that shape real strategy.",
+        "verification_approach": "Evaluate each recommendation against actual constraints, discuss with stakeholders, assess political feasibility",
+        "examples": ["Org restructuring plans", "Vendor selection recommendations", "Resource allocation proposals", "Change management strategies"]
+    },
+    {
+        "name": "Status Reports & Stakeholder Updates",
+        "category": "Admin",
+        "trust_level": "high",
+        "reasoning": "AI excels at structuring status information into clear, consistent formats. Works best when given raw updates to organize.",
+        "verification_approach": "Verify project statuses match actual state, confirm risk flags are included, check audience-appropriate tone",
+        "examples": ["Weekly status reports", "Executive dashboards", "Client update emails", "Project milestone summaries"]
+    },
 ]

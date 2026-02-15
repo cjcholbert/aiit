@@ -25,9 +25,7 @@ export default function Lesson01() {
     useEffect(() => {
         if (activeTab === 'history') {
             loadConversations();
-        } else if (activeTab === 'stats') {
             loadStats();
-        } else if (activeTab === 'insights') {
             loadInsights();
         }
     }, [activeTab]);
@@ -309,18 +307,6 @@ export default function Lesson01() {
                 >
                     History
                 </button>
-                <button
-                    className={`tab ${activeTab === 'stats' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('stats')}
-                >
-                    Patterns
-                </button>
-                <button
-                    className={`tab ${activeTab === 'insights' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('insights')}
-                >
-                    Insights
-                </button>
             </div>
 
             {error && <div className="alert alert-error">{error}</div>}
@@ -577,45 +563,198 @@ export default function Lesson01() {
             )}
 
             {activeTab === 'history' && !selectedConversation && (
-                <div className="card">
-                    <h2 style={{marginBottom: '16px'}}>Conversation History</h2>
-                    {conversations.length === 0 ? (
-                        <p style={{color: 'var(--text-muted)'}}>No conversations yet. Analyze a transcript to get started.</p>
-                    ) : (
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Topic</th>
-                                    <th>Date</th>
-                                    <th>Pattern</th>
-                                    <th>Confidence</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {conversations.map(conv => (
-                                    <tr key={conv.id} onClick={() => loadConversation(conv.id)} style={{cursor: 'pointer'}}>
-                                        <td>{conv.topic}</td>
-                                        <td>{formatDate(conv.created_at)}</td>
-                                        <td>{conv.pattern_category}</td>
-                                        <td><span className={`score ${getScoreClass(conv.confidence_score)}`}>{conv.confidence_score}</span></td>
-                                        <td>
-                                            <button className="btn btn-danger" onClick={(e) => deleteConversation(conv.id, e)}>
-                                                Delete
-                                            </button>
-                                        </td>
+                <div>
+                    {/* Stats summary row */}
+                    <div className="stats-grid" style={{ marginBottom: '24px' }}>
+                        <div className="stat-card">
+                            <div className="stat-value">{stats?.total_conversations ?? '-'}</div>
+                            <div className="stat-label">Total Conversations</div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="stat-value">{stats?.avg_confidence_score != null ? stats.avg_confidence_score.toFixed(1) : '-'}</div>
+                            <div className="stat-label">Avg Confidence</div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="stat-value">{insights?.context_gaps?.length ?? '-'}</div>
+                            <div className="stat-label">Recurring Gaps</div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="stat-value">{insights?.context_strengths?.length ?? '-'}</div>
+                            <div className="stat-label">Context Strengths</div>
+                        </div>
+                    </div>
+
+                    {/* Conversation History table */}
+                    <div className="card" style={{ marginBottom: '24px' }}>
+                        <h2 style={{marginBottom: '16px'}}>Conversation History</h2>
+                        {conversations.length === 0 ? (
+                            <p style={{color: 'var(--text-muted)'}}>No conversations yet. Analyze a transcript to get started.</p>
+                        ) : (
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Topic</th>
+                                        <th>Date</th>
+                                        <th>Pattern</th>
+                                        <th>Confidence</th>
+                                        <th></th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    )}
+                                </thead>
+                                <tbody>
+                                    {conversations.map(conv => (
+                                        <tr key={conv.id} onClick={() => loadConversation(conv.id)} style={{cursor: 'pointer'}}>
+                                            <td>{conv.topic}</td>
+                                            <td>{formatDate(conv.created_at)}</td>
+                                            <td>{conv.pattern_category}</td>
+                                            <td><span className={`score ${getScoreClass(conv.confidence_score)}`}>{conv.confidence_score}</span></td>
+                                            <td>
+                                                <button className="btn btn-danger" onClick={(e) => deleteConversation(conv.id, e)}>
+                                                    Delete
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        )}
+                    </div>
+
+                    {/* Two-column grid: Patterns (left) + Insights (right) */}
+                    <div className="analysis-grid" style={{ marginBottom: '24px' }}>
+                        <div>
+                            <div className="card" style={{ marginBottom: '16px' }}>
+                                <h3 style={{marginBottom: '12px'}}>Patterns by Category</h3>
+                                {!stats || Object.keys(stats.count_by_category).length === 0 ? (
+                                    <p style={{color: 'var(--text-muted)'}}>No patterns recorded yet.</p>
+                                ) : (
+                                    <div>
+                                        {Object.entries(stats.count_by_category)
+                                            .sort((a, b) => b[1] - a[1])
+                                            .map(([category, count]) => (
+                                                <div key={category} style={{display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--border-color)'}}>
+                                                    <span>{category}</span>
+                                                    <span className="badge badge-blue">{count}</span>
+                                                </div>
+                                            ))}
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="card">
+                                <h3 style={{marginBottom: '12px'}}>Common Habits to Build</h3>
+                                {!stats || stats.common_habits.length === 0 ? (
+                                    <p style={{color: 'var(--text-muted)'}}>No habits recorded yet.</p>
+                                ) : (
+                                    stats.common_habits.map((item, i) => (
+                                        <div key={i} style={{display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--border-color)'}}>
+                                            <span>{item.habit}</span>
+                                            <span className="badge badge-green">{item.count}x</span>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </div>
+
+                        <div>
+                            <div className="card" style={{ marginBottom: '16px' }}>
+                                <h3 style={{ color: 'var(--accent-red)', marginBottom: '12px' }}>Context Gaps</h3>
+                                <p style={{ color: 'var(--text-muted)', marginBottom: '16px', fontSize: '13px' }}>
+                                    Things you frequently forget to mention upfront.
+                                </p>
+                                {!insights || insights.context_gaps?.length === 0 ? (
+                                    <p style={{ color: 'var(--text-muted)' }}>No recurring gaps identified yet.</p>
+                                ) : (
+                                    insights.context_gaps?.map((item, i) => (
+                                        <div
+                                            key={i}
+                                            style={{
+                                                padding: '12px',
+                                                background: 'var(--bg-tertiary)',
+                                                borderRadius: '6px',
+                                                marginBottom: '8px',
+                                                borderLeft: '3px solid var(--accent-red)',
+                                            }}
+                                        >
+                                            <div style={{ fontWeight: '500', marginBottom: '4px' }}>{item.gap}</div>
+                                            <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                                                {item.count}x ({item.percentage}%)
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+
+                            <div className="card">
+                                <h3 style={{ color: 'var(--accent-green)', marginBottom: '12px' }}>Context Strengths</h3>
+                                <p style={{ color: 'var(--text-muted)', marginBottom: '16px', fontSize: '13px' }}>
+                                    Things you consistently provide well.
+                                </p>
+                                {!insights || insights.context_strengths?.length === 0 ? (
+                                    <p style={{ color: 'var(--text-muted)' }}>No recurring strengths identified yet.</p>
+                                ) : (
+                                    insights.context_strengths?.map((item, i) => (
+                                        <div
+                                            key={i}
+                                            style={{
+                                                padding: '12px',
+                                                background: 'var(--bg-tertiary)',
+                                                borderRadius: '6px',
+                                                marginBottom: '8px',
+                                                borderLeft: '3px solid var(--accent-green)',
+                                            }}
+                                        >
+                                            <div style={{ fontWeight: '500', marginBottom: '4px' }}>{item.strength}</div>
+                                            <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                                                {item.count}x ({item.percentage}%)
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Audit Summary table */}
+                    <div className="card">
+                        <h3 style={{ marginBottom: '16px' }}>Recent Audit Summary</h3>
+                        {!insights || insights.audit_summary?.length === 0 ? (
+                            <p style={{ color: 'var(--text-muted)' }}>No conversations analyzed yet.</p>
+                        ) : (
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Topic</th>
+                                        <th>Pattern</th>
+                                        <th>Gap Found</th>
+                                        <th>Strength Found</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {insights.audit_summary?.map((entry) => (
+                                        <tr key={entry.id}>
+                                            <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                                {entry.topic}
+                                            </td>
+                                            <td>{entry.pattern}</td>
+                                            <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'var(--accent-red)' }}>
+                                                {entry.gap || '-'}
+                                            </td>
+                                            <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'var(--accent-green)' }}>
+                                                {entry.strength || '-'}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        )}
+                    </div>
                 </div>
             )}
 
             {activeTab === 'history' && selectedConversation && (
                 <div>
                     <button className="btn btn-secondary" onClick={() => setSelectedConversation(null)} style={{marginBottom: '16px'}}>
-                        Back to List
+                        Back to History
                     </button>
                     <div className="badge badge-purple" style={{marginBottom: '20px', fontSize: '14px', padding: '8px 16px'}}>
                         {selectedConversation.analysis.topic}
@@ -709,171 +848,6 @@ export default function Lesson01() {
                 </div>
             )}
 
-            {activeTab === 'stats' && stats && (
-                <div>
-                    <div className="stats-grid">
-                        <div className="stat-card">
-                            <div className="stat-value">{stats.total_conversations}</div>
-                            <div className="stat-label">Total Conversations</div>
-                        </div>
-                        <div className="stat-card">
-                            <div className="stat-value">{stats.avg_confidence_score.toFixed(1)}</div>
-                            <div className="stat-label">Avg Confidence</div>
-                        </div>
-                    </div>
-
-                    <div className="card" style={{marginBottom: '24px'}}>
-                        <h3 style={{marginBottom: '12px'}}>Patterns by Category</h3>
-                        {Object.keys(stats.count_by_category).length === 0 ? (
-                            <p style={{color: 'var(--text-muted)'}}>No patterns recorded yet.</p>
-                        ) : (
-                            <div>
-                                {Object.entries(stats.count_by_category)
-                                    .sort((a, b) => b[1] - a[1])
-                                    .map(([category, count]) => (
-                                        <div key={category} style={{display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--border-color)'}}>
-                                            <span>{category}</span>
-                                            <span className="badge badge-blue">{count}</span>
-                                        </div>
-                                    ))}
-                            </div>
-                        )}
-                    </div>
-
-                    <div className="card">
-                        <h3 style={{marginBottom: '12px'}}>Common Habits to Build</h3>
-                        {stats.common_habits.length === 0 ? (
-                            <p style={{color: 'var(--text-muted)'}}>No habits recorded yet.</p>
-                        ) : (
-                            stats.common_habits.map((item, i) => (
-                                <div key={i} style={{display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--border-color)'}}>
-                                    <span>{item.habit}</span>
-                                    <span className="badge badge-green">{item.count}x</span>
-                                </div>
-                            ))
-                        )}
-                    </div>
-                </div>
-            )}
-
-            {activeTab === 'stats' && !stats && (
-                <div className="loading"><div className="spinner"></div>Loading stats...</div>
-            )}
-
-            {activeTab === 'insights' && insights && (
-                <div>
-                    <div className="stats-grid" style={{ marginBottom: '24px' }}>
-                        <div className="stat-card">
-                            <div className="stat-value">{insights.total_analyzed}</div>
-                            <div className="stat-label">Conversations Analyzed</div>
-                        </div>
-                        <div className="stat-card">
-                            <div className="stat-value">{insights.context_gaps?.length || 0}</div>
-                            <div className="stat-label">Recurring Gaps Found</div>
-                        </div>
-                        <div className="stat-card">
-                            <div className="stat-value">{insights.context_strengths?.length || 0}</div>
-                            <div className="stat-label">Context Strengths</div>
-                        </div>
-                    </div>
-
-                    <div className="analysis-grid">
-                        <div className="card">
-                            <h3 style={{ color: 'var(--accent-red)', marginBottom: '12px' }}>Context Gaps</h3>
-                            <p style={{ color: 'var(--text-muted)', marginBottom: '16px', fontSize: '13px' }}>
-                                Things you frequently forget to mention upfront. Use these to build templates in Module 2.
-                            </p>
-                            {insights.context_gaps?.length === 0 ? (
-                                <p style={{ color: 'var(--text-muted)' }}>No recurring gaps identified yet.</p>
-                            ) : (
-                                insights.context_gaps?.map((item, i) => (
-                                    <div
-                                        key={i}
-                                        style={{
-                                            padding: '12px',
-                                            background: 'var(--bg-tertiary)',
-                                            borderRadius: '6px',
-                                            marginBottom: '8px',
-                                            borderLeft: '3px solid var(--accent-red)',
-                                        }}
-                                    >
-                                        <div style={{ fontWeight: '500', marginBottom: '4px' }}>{item.gap}</div>
-                                        <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                                            {item.count}x ({item.percentage}%)
-                                        </div>
-                                    </div>
-                                ))
-                            )}
-                        </div>
-
-                        <div className="card">
-                            <h3 style={{ color: 'var(--accent-green)', marginBottom: '12px' }}>Context Strengths</h3>
-                            <p style={{ color: 'var(--text-muted)', marginBottom: '16px', fontSize: '13px' }}>
-                                Things you consistently provide well. Include these in your templates.
-                            </p>
-                            {insights.context_strengths?.length === 0 ? (
-                                <p style={{ color: 'var(--text-muted)' }}>No recurring strengths identified yet.</p>
-                            ) : (
-                                insights.context_strengths?.map((item, i) => (
-                                    <div
-                                        key={i}
-                                        style={{
-                                            padding: '12px',
-                                            background: 'var(--bg-tertiary)',
-                                            borderRadius: '6px',
-                                            marginBottom: '8px',
-                                            borderLeft: '3px solid var(--accent-green)',
-                                        }}
-                                    >
-                                        <div style={{ fontWeight: '500', marginBottom: '4px' }}>{item.strength}</div>
-                                        <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                                            {item.count}x ({item.percentage}%)
-                                        </div>
-                                    </div>
-                                ))
-                            )}
-                        </div>
-                    </div>
-
-                    <div className="card" style={{ marginTop: '24px' }}>
-                        <h3 style={{ marginBottom: '16px' }}>Recent Audit Summary</h3>
-                        {insights.audit_summary?.length === 0 ? (
-                            <p style={{ color: 'var(--text-muted)' }}>No conversations analyzed yet.</p>
-                        ) : (
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Topic</th>
-                                        <th>Pattern</th>
-                                        <th>Gap Found</th>
-                                        <th>Strength Found</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {insights.audit_summary?.map((entry) => (
-                                        <tr key={entry.id}>
-                                            <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                                {entry.topic}
-                                            </td>
-                                            <td>{entry.pattern}</td>
-                                            <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'var(--accent-red)' }}>
-                                                {entry.gap || '-'}
-                                            </td>
-                                            <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'var(--accent-green)' }}>
-                                                {entry.strength || '-'}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        )}
-                    </div>
-                </div>
-            )}
-
-            {activeTab === 'insights' && !insights && (
-                <div className="loading"><div className="spinner"></div>Loading insights...</div>
-            )}
         </div>
     );
 }
