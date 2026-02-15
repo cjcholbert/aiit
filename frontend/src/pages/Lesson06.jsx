@@ -23,7 +23,7 @@ const TRUST_COLORS = {
 
 export default function Lesson06() {
   const api = useApi();
-  const [activeTab, setActiveTab] = useState('checklists');
+  const [activeTab, setActiveTab] = useState('learn');
   const [checklists, setChecklists] = useState([]);
   const [outputTypes, setOutputTypes] = useState([]);
   const [stats, setStats] = useState(null);
@@ -356,11 +356,6 @@ export default function Lesson06() {
           without guilt or risk.
         </p>
         <SelfAssessmentChecklist lessonNumber={6} criteria={LESSON_CRITERIA[6]} />
-        <ConnectionCallout
-          lessonNumber={5}
-          lessonTitle="Trust Matrix"
-          message="Lesson 5 helped you calibrate when to trust vs. verify AI outputs. Now build reusable verification checklists for the output types you flagged for scrutiny."
-        />
       </header>
 
       {error && (
@@ -372,7 +367,7 @@ export default function Lesson06() {
 
       {/* Tabs */}
       <div className="tabs">
-        {['checklists', 'practice', 'stats'].map((tab) => (
+        {['learn', 'checklists', 'practice', 'stats'].map((tab) => (
           <button
             key={tab}
             className={`tab ${activeTab === tab ? 'active' : ''}`}
@@ -382,6 +377,94 @@ export default function Lesson06() {
           </button>
         ))}
       </div>
+
+      {/* Learn Tab */}
+      {activeTab === 'learn' && (
+        <div className="learn-section">
+          <ConnectionCallout
+            lessonNumber={5}
+            lessonTitle="Trust Matrix"
+            message="Lesson 5 helped you calibrate when to trust vs. verify AI outputs. Now build reusable verification checklists for the output types you flagged for scrutiny."
+          />
+
+          <div className="learn-intro">
+            <h2>Why Systematic Verification Matters</h2>
+            <p>
+              Knowing <em>when</em> to verify (Lesson 5) is only half the skill. The other half is knowing <em>how</em> to
+              verify efficiently. Without a systematic approach, verification becomes either a time-consuming slog or a
+              haphazard spot-check that misses real problems.
+            </p>
+          </div>
+
+          <div className="learn-key-insight">
+            <strong>Key Insight:</strong> A good verification checklist turns a vague feeling of "I should check this"
+            into a repeatable 2-minute routine. The best checklists are specific to the output type — checking AI-generated
+            code requires different items than checking an AI-written email.
+          </div>
+
+          <h3>What Makes a Good Verification Checklist</h3>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+            Effective checklists share these qualities:
+          </p>
+
+          <div className="learn-patterns-grid">
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-green)' }}>Specific Items</h4>
+              <p>Each item checks one concrete thing. "Verify all dates use MM/DD/YYYY format" is actionable. "Check formatting" is too vague to be useful.</p>
+            </div>
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-blue)' }}>Prioritized by Risk</h4>
+              <p>Critical items go first — factual accuracy, security concerns, compliance requirements. Cosmetic issues come last so you never skip what matters most.</p>
+            </div>
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-yellow)' }}>Tied to Output Type</h4>
+              <p>A checklist for AI-generated code differs from one for AI-written reports. Your Trust Matrix output types map directly to the checklists you need.</p>
+            </div>
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-purple)' }}>Evolving Over Time</h4>
+              <p>Track which checklist items actually catch issues. Items that never flag problems can be removed. New failure patterns become new items.</p>
+            </div>
+          </div>
+
+          <div className="learn-comparison">
+            <h3>Ad-Hoc vs. Systematic Verification</h3>
+            <div className="learn-comparison-grid">
+              <div>
+                <h4 style={{ color: 'var(--accent-red)', marginBottom: '12px' }}>Ad-Hoc (Unreliable)</h4>
+                <div style={{ background: 'var(--error-bg)', padding: '16px', borderRadius: '8px', marginBottom: '12px' }}>
+                  <p style={{ margin: 0, fontStyle: 'italic' }}>"Looks good to me" — skimming output without checking specifics.</p>
+                </div>
+                <div style={{ background: 'var(--error-bg)', padding: '16px', borderRadius: '8px', marginBottom: '12px' }}>
+                  <p style={{ margin: 0, fontStyle: 'italic' }}>Checking different things each time depending on mood or time pressure.</p>
+                </div>
+                <div style={{ background: 'var(--error-bg)', padding: '16px', borderRadius: '8px' }}>
+                  <p style={{ margin: 0, fontStyle: 'italic' }}>Spending 20 minutes re-reading when a focused 3-minute check would suffice.</p>
+                </div>
+              </div>
+              <div>
+                <h4 style={{ color: 'var(--accent-green)', marginBottom: '12px' }}>Systematic (Reliable)</h4>
+                <div style={{ background: 'var(--success-bg)', padding: '16px', borderRadius: '8px', marginBottom: '12px' }}>
+                  <p style={{ margin: 0 }}>Run a 5-item checklist specific to this output type — takes 2 minutes, catches 90% of issues.</p>
+                </div>
+                <div style={{ background: 'var(--success-bg)', padding: '16px', borderRadius: '8px', marginBottom: '12px' }}>
+                  <p style={{ margin: 0 }}>Same items checked every time, so nothing critical slips through under time pressure.</p>
+                </div>
+                <div style={{ background: 'var(--success-bg)', padding: '16px', borderRadius: '8px' }}>
+                  <p style={{ margin: 0 }}>Track which items catch problems — refine your checklist monthly based on real data.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="learn-next-step">
+            <h3>Ready to Build Your Checklists?</h3>
+            <p>Create verification checklists tied to the output types from your Trust Matrix. Then use timed practice sessions to build the habit.</p>
+            <button className="btn btn-primary" onClick={() => setActiveTab('checklists')}>
+              Go to Checklists
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Checklists Tab */}
       {activeTab === 'checklists' && (

@@ -55,7 +55,7 @@ const OUTPUT_TYPE_PROMPTS = [
 
 export default function Lesson05() {
   const api = useApi();
-  const [activeTab, setActiveTab] = useState('matrix');
+  const [activeTab, setActiveTab] = useState('learn');
   const [outputTypes, setOutputTypes] = useState([]);
   const [predictions, setPredictions] = useState([]);
   const [stats, setStats] = useState(null);
@@ -331,7 +331,7 @@ export default function Lesson05() {
         </p>
         <div style={{ marginTop: '16px', padding: '16px', background: 'var(--bg-tertiary)', borderRadius: '8px', fontSize: '14px', lineHeight: '1.6' }}>
           <p style={{ margin: '0 0 12px', color: 'var(--text-secondary)' }}>
-            <strong>This module's goal:</strong> Create a trust matrix specific to YOUR work, track 10+ predictions, and identify where your calibration needs adjustment.
+            <strong>This lesson's goal:</strong> Create a trust matrix specific to YOUR work, track 10+ predictions, and identify where your calibration needs adjustment.
           </p>
         </div>
 
@@ -341,6 +341,12 @@ export default function Lesson05() {
       {error && <div className="alert alert-error">{error}</div>}
 
       <div className="tabs">
+        <button
+          className={`tab ${activeTab === 'learn' ? 'active' : ''}`}
+          onClick={() => setActiveTab('learn')}
+        >
+          Learn
+        </button>
         <button
           className={`tab ${activeTab === 'matrix' ? 'active' : ''}`}
           onClick={() => setActiveTab('matrix')}
@@ -366,6 +372,88 @@ export default function Lesson05() {
           Stats
         </button>
       </div>
+
+      {/* Learn Tab */}
+      {activeTab === 'learn' && (
+        <div className="learn-section">
+          <div className="learn-intro">
+            <h2>Why Trust Calibration Matters</h2>
+            <p>
+              Most people fall into one of two traps when working with AI: they either accept everything at face value
+              (over-trusting) or they double-check every single detail (over-verifying). Both waste your time and energy.
+              The key skill is knowing <em>when</em> to trust and <em>when</em> to verify.
+            </p>
+          </div>
+
+          <div className="learn-key-insight">
+            <strong>Key Insight:</strong> AI reliability varies dramatically by output type. The same AI that
+            writes excellent summaries might produce unreliable legal citations. Calibrating your trust
+            per output type — not per tool — is what separates effective AI collaborators from everyone else.
+          </div>
+
+          <h3>The Trust Calibration Cycle</h3>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+            This lesson uses a prediction-verification cycle to build your calibration skill:
+          </p>
+
+          <div className="learn-patterns-grid">
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-blue)' }}>1. Categorize Output Types</h4>
+              <p>Identify the types of AI output you use regularly — code, emails, summaries, analysis, recommendations — and assign each an initial trust level based on your experience.</p>
+            </div>
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-green)' }}>2. Predict Before You Verify</h4>
+              <p>Before checking AI output, record your confidence level (1-10). This forces you to make your intuition explicit rather than relying on vague feelings about quality.</p>
+            </div>
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-yellow)' }}>3. Verify and Record</h4>
+              <p>Check the output and record whether it was correct. Over time, you'll see patterns: where you over-trust (confident but wrong) and where you over-verify (skeptical but right).</p>
+            </div>
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-purple)' }}>4. Calibrate Your Judgment</h4>
+              <p>After 10+ predictions, the AI analyzes your calibration patterns and shows you exactly where your trust instincts need adjustment — saving you time and catching more errors.</p>
+            </div>
+          </div>
+
+          <div className="learn-comparison">
+            <h3>Over-Trust vs. Over-Verify</h3>
+            <div className="learn-comparison-grid">
+              <div>
+                <h4 style={{ color: 'var(--accent-red)', marginBottom: '12px' }}>Over-Trust (Risky)</h4>
+                <div style={{ background: 'var(--error-bg)', padding: '16px', borderRadius: '8px', marginBottom: '12px' }}>
+                  <p style={{ margin: 0, fontStyle: 'italic' }}>"AI-generated code always works — I just copy and paste it."</p>
+                </div>
+                <div style={{ background: 'var(--error-bg)', padding: '16px', borderRadius: '8px', marginBottom: '12px' }}>
+                  <p style={{ margin: 0, fontStyle: 'italic' }}>"The summary looks professional, so the facts must be right."</p>
+                </div>
+                <div style={{ background: 'var(--error-bg)', padding: '16px', borderRadius: '8px' }}>
+                  <p style={{ margin: 0, fontStyle: 'italic' }}>"AI said the deadline is March 15, no need to double-check."</p>
+                </div>
+              </div>
+              <div>
+                <h4 style={{ color: 'var(--accent-green)', marginBottom: '12px' }}>Calibrated Trust (Efficient)</h4>
+                <div style={{ background: 'var(--success-bg)', padding: '16px', borderRadius: '8px', marginBottom: '12px' }}>
+                  <p style={{ margin: 0 }}>"AI code logic is usually sound, but I always test edge cases and error handling before deploying."</p>
+                </div>
+                <div style={{ background: 'var(--success-bg)', padding: '16px', borderRadius: '8px', marginBottom: '12px' }}>
+                  <p style={{ margin: 0 }}>"AI summaries capture the structure well, but I spot-check any specific numbers, dates, or proper nouns."</p>
+                </div>
+                <div style={{ background: 'var(--success-bg)', padding: '16px', borderRadius: '8px' }}>
+                  <p style={{ margin: 0 }}>"For factual claims, I verify against the source. For formatting and structure, I trust AI's output."</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="learn-next-step">
+            <h3>Ready to Build Your Trust Matrix?</h3>
+            <p>Start by identifying the AI output types you use most often, then track your predictions to discover your calibration patterns.</p>
+            <button className="btn btn-primary" onClick={() => setActiveTab('matrix')}>
+              Go to Build Matrix
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Build Matrix Tab */}
       {activeTab === 'matrix' && (
