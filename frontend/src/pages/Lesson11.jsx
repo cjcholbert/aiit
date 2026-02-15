@@ -288,9 +288,6 @@ export default function Lesson11() {
         <div>
             <div className="page-header">
                 <h1 className="page-title">Frontier Mapper</h1>
-                <p className="page-description">
-                    Map AI reliability zones and log frontier encounters to build your personal AI capability map.
-                </p>
             </div>
 
             <div className="lesson-progress-row">
@@ -313,6 +310,10 @@ export default function Lesson11() {
 
             {activeTab === 'learn' && (
                 <div className="learn-section">
+                    <div className="learn-problem-skill">
+                        <p>Map AI reliability zones and log frontier encounters to build your personal AI capability map.</p>
+                    </div>
+
                     <ConnectionCallout
                         lessonNumber={5}
                         lessonTitle="Trust Matrix"

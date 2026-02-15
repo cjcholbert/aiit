@@ -425,15 +425,6 @@ export default function Lesson10() {
     <div className="page-container">
       <header className="page-header">
         <h1>Status Reporter</h1>
-        <p className="page-description">
-          <strong>The Problem:</strong> Recurring tasks like status reports, meeting summaries, and client updates
-          eat up valuable time when done manually each time. Without a systematic approach, you're reinventing
-          the wheel with every iteration.
-        </p>
-        <p className="page-description" style={{ marginTop: '8px' }}>
-          <strong>The Skill:</strong> Design AI-integrated workflows for recurring tasks. Create templates,
-          track inputs, and measure time savings to build sustainable AI collaboration habits.
-        </p>
       </header>
 
       <div className="lesson-progress-row">
@@ -470,6 +461,11 @@ export default function Lesson10() {
       {/* Learn Tab */}
       {activeTab === 'learn' && (
         <div className="learn-section">
+          <div className="learn-problem-skill">
+            <p><strong>The Problem:</strong> Recurring tasks like status reports, meeting summaries, and client updates eat up valuable time when done manually each time. Without a systematic approach, you're reinventing the wheel with every iteration.</p>
+            <p><strong>The Skill:</strong> Design AI-integrated workflows for recurring tasks. Create templates, track inputs, and measure time savings to build sustainable AI collaboration habits.</p>
+          </div>
+
           <ConnectionCallout
             lessonNumber={4}
             lessonTitle="Context Docs"

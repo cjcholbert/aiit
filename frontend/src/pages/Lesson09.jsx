@@ -316,14 +316,6 @@ export default function Lesson09() {
     <div className="page-container">
       <header className="page-header">
         <h1>Iteration Passes</h1>
-        <p className="page-description">
-          <strong>The Problem:</strong> Random iteration ("make it better") wastes cycles and leads to scope creep.
-          Without structure, you'll keep tweaking without knowing when "done" is reached.
-        </p>
-        <p className="page-description" style={{ marginTop: '8px' }}>
-          <strong>The Skill:</strong> Use the 70-85-95 framework to iterate with purpose. Each pass has a specific
-          focus and key question, so you know exactly what to evaluate and when to move on.
-        </p>
       </header>
 
       <div className="lesson-progress-row">
@@ -359,6 +351,11 @@ export default function Lesson09() {
       {/* Learn Tab */}
       {activeTab === 'learn' && (
         <div className="learn-section">
+          <div className="learn-problem-skill">
+            <p><strong>The Problem:</strong> Random iteration ("make it better") wastes cycles and leads to scope creep. Without structure, you'll keep tweaking without knowing when "done" is reached.</p>
+            <p><strong>The Skill:</strong> Use the 70-85-95 framework to iterate with purpose. Each pass has a specific focus and key question, so you know exactly what to evaluate and when to move on.</p>
+          </div>
+
           <ConnectionCallout
             lessonNumber={2}
             lessonTitle="Feedback Analyzer"

@@ -258,9 +258,6 @@ export default function Lesson12() {
         <div>
             <div className="page-header">
                 <h1 className="page-title">Reference Card</h1>
-                <p className="page-description">
-                    Generate your personal AI collaboration quick reference card from your learnings across all lessons.
-                </p>
             </div>
 
             <div className="lesson-progress-row">
@@ -283,6 +280,10 @@ export default function Lesson12() {
 
             {activeTab === 'learn' && (
                 <div className="learn-section">
+                    <div className="learn-problem-skill">
+                        <p>Generate your personal AI collaboration quick reference card from your learnings across all lessons.</p>
+                    </div>
+
                     <ConnectionCallout
                         lessonNumber={1}
                         lessonTitle="Context Tracker"

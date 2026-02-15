@@ -323,20 +323,6 @@ export default function Lesson05() {
     <div>
       <div className="page-header">
         <h1 className="page-title">Trust Matrix</h1>
-        <p className="page-description">
-          <strong>The Problem:</strong> You either over-verify everything (wasting time) or blindly trust AI output
-          (introducing errors). Without calibrated judgment, you can't efficiently allocate your review effort.
-        </p>
-        <p className="page-description" style={{ marginTop: '8px' }}>
-          <strong>The Skill:</strong> Build a personal trust matrix by tracking predictions about AI accuracy.
-          Learn which output types you can trust and which require careful verification.
-        </p>
-        <div style={{ marginTop: '16px', padding: '16px', background: 'var(--bg-tertiary)', borderRadius: '8px', fontSize: '14px', lineHeight: '1.6' }}>
-          <p style={{ margin: '0 0 12px', color: 'var(--text-secondary)' }}>
-            <strong>This lesson's goal:</strong> Create a trust matrix specific to YOUR work, track 10+ predictions, and identify where your calibration needs adjustment.
-          </p>
-        </div>
-
       </div>
 
       <div className="lesson-progress-row">
@@ -381,6 +367,11 @@ export default function Lesson05() {
       {/* Learn Tab */}
       {activeTab === 'learn' && (
         <div className="learn-section">
+          <div className="learn-problem-skill">
+            <p><strong>The Problem:</strong> You either over-verify everything (wasting time) or blindly trust AI output (introducing errors). Without calibrated judgment, you can't efficiently allocate your review effort.</p>
+            <p><strong>The Skill:</strong> Build a personal trust matrix by tracking predictions about AI accuracy. Learn which output types you can trust and which require careful verification.</p>
+          </div>
+
           <ConnectionCallout
             lessonNumber={2}
             lessonTitle="Feedback Analyzer"

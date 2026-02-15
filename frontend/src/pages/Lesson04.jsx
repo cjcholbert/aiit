@@ -392,16 +392,6 @@ export default function Lesson04() {
     <div className="page-container">
       <header className="page-header">
         <h1>Context Docs</h1>
-        <p className="page-description">
-          <strong>The Problem:</strong> You've been working with AI on a project for weeks, but every new
-          conversation starts blank. You re-explain the same background, the AI suggests approaches you
-          already rejected, and you lose 10 minutes before real work begins.
-        </p>
-        <p className="page-description" style={{ marginTop: '8px' }}>
-          <strong>The Skill:</strong> Keep a living document for each project that captures what's done,
-          what's decided, and what's next. Paste it at the start of any AI session so the conversation
-          picks up where you left off — no re-explaining needed.
-        </p>
       </header>
 
       <div className="lesson-progress-row">
@@ -455,6 +445,11 @@ export default function Lesson04() {
       {/* Learn Tab */}
       {activeTab === 'learn' && (
         <div className="learn-section">
+          <div className="learn-problem-skill">
+            <p><strong>The Problem:</strong> You've been working with AI on a project for weeks, but every new conversation starts blank. You re-explain the same background, the AI suggests approaches you already rejected, and you lose 10 minutes before real work begins.</p>
+            <p><strong>The Skill:</strong> Keep a living document for each project that captures what's done, what's decided, and what's next. Paste it at the start of any AI session so the conversation picks up where you left off -- no re-explaining needed.</p>
+          </div>
+
           <ConnectionCallout
             lessonNumber={3}
             lessonTitle="Template Builder"

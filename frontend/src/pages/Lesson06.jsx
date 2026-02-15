@@ -345,17 +345,6 @@ export default function Lesson06() {
     <div className="page-container">
       <header className="page-header">
         <h1>Verification Tools</h1>
-        <p className="page-description">
-          <strong>The Problem:</strong> Without systematic verification, you either waste time over-checking
-          outputs you could trust, or miss critical errors by under-checking outputs that needed scrutiny.
-          Lesson 5 helped you calibrate <em>when</em> to verify—now you build <em>how</em> to verify efficiently.
-        </p>
-        <p className="page-description" style={{ marginTop: '8px' }}>
-          <strong>The Skill:</strong> Create reusable verification checklists tied to output types, so checking
-          becomes quick and consistent rather than ad-hoc. Track which checks actually catch issues to refine
-          your process over time. Define clear "skip criteria" so you can confidently trust appropriate outputs
-          without guilt or risk.
-        </p>
       </header>
 
       <div className="lesson-progress-row">
@@ -390,6 +379,11 @@ export default function Lesson06() {
       {/* Learn Tab */}
       {activeTab === 'learn' && (
         <div className="learn-section">
+          <div className="learn-problem-skill">
+            <p><strong>The Problem:</strong> Without systematic verification, you either waste time over-checking outputs you could trust, or miss critical errors by under-checking outputs that needed scrutiny. Lesson 5 helped you calibrate <em>when</em> to verify -- now you build <em>how</em> to verify efficiently.</p>
+            <p><strong>The Skill:</strong> Create reusable verification checklists tied to output types, so checking becomes quick and consistent rather than ad-hoc. Track which checks actually catch issues to refine your process over time. Define clear "skip criteria" so you can confidently trust appropriate outputs without guilt or risk.</p>
+          </div>
+
           <ConnectionCallout
             lessonNumber={5}
             lessonTitle="Trust Matrix"

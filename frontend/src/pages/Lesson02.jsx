@@ -314,14 +314,6 @@ export default function Lesson02() {
     <div className="page-container">
       <header className="page-header">
         <h1>Feedback Analyzer</h1>
-        <p className="page-description">
-          <strong>The Problem:</strong> Vague feedback like "make it better" or "this isn't right" wastes iteration
-          cycles and frustrates both you and the AI. Without specific, actionable feedback, you'll keep going in circles.
-        </p>
-        <p className="page-description" style={{ marginTop: '8px' }}>
-          <strong>The Skill:</strong> Write feedback that identifies specific locations, states clear actions,
-          and explains reasoning. Learn to spot vague patterns in your own feedback and rewrite them.
-        </p>
       </header>
 
       <div className="lesson-progress-row">
@@ -357,6 +349,11 @@ export default function Lesson02() {
       {/* Learn Tab */}
       {activeTab === 'learn' && (
         <div className="learn-section">
+          <div className="learn-problem-skill">
+            <p><strong>The Problem:</strong> Vague feedback like "make it better" or "this isn't right" wastes iteration cycles and frustrates both you and the AI. Without specific, actionable feedback, you'll keep going in circles.</p>
+            <p><strong>The Skill:</strong> Write feedback that identifies specific locations, states clear actions, and explains reasoning. Learn to spot vague patterns in your own feedback and rewrite them.</p>
+          </div>
+
           <ConnectionCallout
             lessonNumber={1}
             lessonTitle="Context Tracker"

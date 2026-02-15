@@ -433,16 +433,6 @@ export default function Lesson08() {
     <div className="page-container">
       <header className="page-header">
         <h1>Delegation Tracker</h1>
-        <p className="page-description">
-          <strong>The Problem:</strong> Knowing what to delegate is only half the battle. Without structured
-          delegation practices, you'll give vague instructions and get disappointing results, or spend more time
-          explaining than doing the work yourself.
-        </p>
-        <p className="page-description" style={{ marginTop: '8px' }}>
-          <strong>The Skill:</strong> Create delegation templates with clear context, objectives, scope, deliverables,
-          and success criteria. Then execute decomposed tasks in sequence, tracking what you delegated, what you received,
-          and what decisions you made at each gate.
-        </p>
       </header>
 
       <div className="lesson-progress-row">
@@ -478,6 +468,11 @@ export default function Lesson08() {
       {/* Learn Tab */}
       {activeTab === 'learn' && (
         <div className="learn-section">
+          <div className="learn-problem-skill">
+            <p><strong>The Problem:</strong> Knowing what to delegate is only half the battle. Without structured delegation practices, you'll give vague instructions and get disappointing results, or spend more time explaining than doing the work yourself.</p>
+            <p><strong>The Skill:</strong> Create delegation templates with clear context, objectives, scope, deliverables, and success criteria. Then execute decomposed tasks in sequence, tracking what you delegated, what you received, and what decisions you made at each gate.</p>
+          </div>
+
           <ConnectionCallout
             lessonNumber={7}
             lessonTitle="Task Decomposer"

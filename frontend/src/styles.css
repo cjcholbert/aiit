@@ -2257,6 +2257,29 @@ tr:hover td {
   animation: fadeIn 0.2s ease;
 }
 
+.learn-problem-skill {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-md);
+  padding: var(--space-md) var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.learn-problem-skill p {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.learn-problem-skill p + p {
+  margin-top: var(--space-sm);
+}
+
+.learn-problem-skill strong {
+  color: var(--text-primary);
+}
+
 .learn-intro {
   margin-bottom: var(--space-xl);
 }

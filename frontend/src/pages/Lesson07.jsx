@@ -244,16 +244,6 @@ export default function Lesson07() {
     <div className="page-container">
       <header className="page-header">
         <h1>Task Decomposer</h1>
-        <p className="page-description">
-          <strong>The Problem:</strong> Without decomposition skills, you either delegate tasks that need your judgment
-          (getting poor results) or do everything yourself (wasting AI's potential). Learning to categorize tasks
-          lets you optimize the human-AI division of labor.
-        </p>
-        <p className="page-description" style={{ marginTop: '8px' }}>
-          <strong>The Skill:</strong> Break projects into subtasks and categorize each as AI-Optimal (delegate freely),
-          Collaborative (work together), or Human-Primary (you lead). Sequence tasks with dependencies so you know
-          what to hand off, what to co-create, and where to insert decision gates.
-        </p>
       </header>
 
       <div className="lesson-progress-row">
@@ -289,6 +279,11 @@ export default function Lesson07() {
       {/* Learn Tab */}
       {activeTab === 'learn' && (
         <div className="learn-section">
+          <div className="learn-problem-skill">
+            <p><strong>The Problem:</strong> Without decomposition skills, you either delegate tasks that need your judgment (getting poor results) or do everything yourself (wasting AI's potential). Learning to categorize tasks lets you optimize the human-AI division of labor.</p>
+            <p><strong>The Skill:</strong> Break projects into subtasks and categorize each as AI-Optimal (delegate freely), Collaborative (work together), or Human-Primary (you lead). Sequence tasks with dependencies so you know what to hand off, what to co-create, and where to insert decision gates.</p>
+          </div>
+
           <ConnectionCallout
             lessonNumber={1}
             lessonTitle="Context Tracker"

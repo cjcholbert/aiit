@@ -292,14 +292,6 @@ export default function Lesson01() {
         <div>
             <div className="page-header">
                 <h1 className="page-title">Context Pattern Tracker</h1>
-                <p className="page-description">
-                    <strong>The Problem:</strong> AI conversations fail when critical context is missing. You waste time
-                    on back-and-forth clarifications or get unusable outputs because you forgot to mention key constraints.
-                </p>
-                <p className="page-description" style={{ marginTop: '8px' }}>
-                    <strong>The Skill:</strong> Identify your personal context gaps by analyzing past conversations.
-                    Discover what information you consistently forget to provide so you can fix it upfront.
-                </p>
             </div>
 
             <div className="lesson-progress-row">
@@ -333,7 +325,12 @@ export default function Lesson01() {
             {/* Learn Tab */}
             {activeTab === 'learn' && (
                 <div className="learn-section">
-                    <div className="learn-intro">
+                    <div className="learn-problem-skill">
+                    <p><strong>The Problem:</strong> AI conversations fail when critical context is missing. You waste time on back-and-forth clarifications or get unusable outputs because you forgot to mention key constraints.</p>
+                    <p><strong>The Skill:</strong> Identify your personal context gaps by analyzing past conversations. Discover what information you consistently forget to provide so you can fix it upfront.</p>
+                </div>
+
+                <div className="learn-intro">
                         <h2>The Foundation: Knowing What Context Your AI Needs</h2>
                         <p>
                             You ask AI to help draft a client proposal. It comes back with something generic and off-target.
