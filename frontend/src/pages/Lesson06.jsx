@@ -425,12 +425,14 @@ export default function Lesson06() {
               <p>Create a reusable checklist for each output type that needs review. Each checklist
               has specific items to check, organized by priority — critical items first, cosmetic
               items last. You can import output types directly from your Lesson 5 Trust Matrix.</p>
+              <button className="learn-tab-link" onClick={() => setActiveTab('checklists')}>Go to Checklists →</button>
             </div>
             <div className="learn-pattern-card">
               <h4 style={{ color: 'var(--accent-green)' }}>Practice Tab — Run Timed Verification Sessions</h4>
               <p>Use your checklists in timed practice sessions. Track which items actually catch
               issues and which never flag anything. Over time, your checklists get leaner and
               more effective.</p>
+              <button className="learn-tab-link" onClick={() => setActiveTab('practice')}>Go to Practice →</button>
             </div>
           </div>
 

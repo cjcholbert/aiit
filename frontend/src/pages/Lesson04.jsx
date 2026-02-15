@@ -486,11 +486,13 @@ export default function Lesson04() {
               <h4 style={{ color: 'var(--accent-blue)' }}>Docs Tab — Build Your Context Documents</h4>
               <p>Create a context doc for a real project. Fill in the five sections (state, decisions,
               issues, lessons, goals) and generate a ready-to-paste prompt for your next AI session.</p>
+              <button className="learn-tab-link" onClick={() => setActiveTab('docs')}>Go to Docs →</button>
             </div>
             <div className="learn-pattern-card">
               <h4 style={{ color: 'var(--accent-green)' }}>Sessions Tab — Track Your AI Work Sessions</h4>
               <p>Log when you start and end AI sessions on a project. Over time, you'll see how
               context quality improves and how much less re-explaining you need.</p>
+              <button className="learn-tab-link" onClick={() => setActiveTab('sessions')}>Go to Sessions →</button>
             </div>
           </div>
 

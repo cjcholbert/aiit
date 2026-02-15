@@ -858,21 +858,25 @@ ${gapSections}
               <h4 style={{ color: 'var(--accent-green)' }}>Build Templates (Guided)</h4>
               <p>Use the 3-step workflow to generate templates based on your Lesson 1 context gaps and common
               task types. Best for getting started quickly.</p>
+              <button className="learn-tab-link" onClick={() => setActiveTab('build')}>Go to Build →</button>
             </div>
             <div className="learn-pattern-card">
               <h4 style={{ color: 'var(--accent-blue)' }}>Template Library</h4>
               <p>View, edit, and organize your saved templates. Start with the built-in starters and
               customize them for your specific work patterns.</p>
+              <button className="learn-tab-link" onClick={() => setActiveTab('templates')}>Go to Library →</button>
             </div>
             <div className="learn-pattern-card">
               <h4 style={{ color: 'var(--accent-yellow)' }}>Suggestions</h4>
               <p>Get AI-powered template suggestions based on context gaps identified in Lesson 1. Turns
               your diagnosed problems into preventive solutions.</p>
+              <button className="learn-tab-link" onClick={() => setActiveTab('suggestions')}>Go to Suggestions →</button>
             </div>
             <div className="learn-pattern-card">
               <h4 style={{ color: 'var(--accent-purple)' }}>Test & Refine</h4>
               <p>Try your templates with real prompts. Rate the results to track which templates produce
               the best output and which need adjustments.</p>
+              <button className="learn-tab-link" onClick={() => setActiveTab('test')}>Go to Test →</button>
             </div>
           </div>
 

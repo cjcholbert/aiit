@@ -2280,6 +2280,24 @@ tr:hover td {
   color: var(--text-primary);
 }
 
+.learn-tab-link {
+  display: inline-block;
+  margin-top: var(--space-sm);
+  padding: 4px 0;
+  background: none;
+  border: none;
+  color: var(--accent-blue);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.learn-tab-link:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
 .learn-intro {
   margin-bottom: var(--space-xl);
 }

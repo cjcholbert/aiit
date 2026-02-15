@@ -512,6 +512,7 @@ export default function Lesson08() {
               <p>Build a delegation with a template (context, objectives, scope, deliverables, success
               criteria), add your task sequence, then execute each task through the Delegate-Receive-Review-Decide
               workflow. You can import tasks directly from Lesson 7.</p>
+              <button className="learn-tab-link" onClick={() => setActiveTab('delegate')}>Go to Delegate →</button>
             </div>
           </div>
 

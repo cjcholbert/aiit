@@ -392,11 +392,13 @@ export default function Lesson02() {
               <p>Paste feedback you've given (or are about to give) to an AI. The tool scores it for
               specificity, identifies vague patterns, and shows you exactly how to rewrite it. You
               can save entries to track improvement over time.</p>
+              <button className="learn-tab-link" onClick={() => setActiveTab('analyze')}>Go to Analyze →</button>
             </div>
             <div className="learn-pattern-card">
               <h4 style={{ color: 'var(--accent-green)' }}>History Tab — Track Your Patterns</h4>
               <p>See all your analyzed feedback entries, quality scores, and most common vague patterns.
               Practice rewriting your weakest entries and save your best rewrites as reference examples.</p>
+              <button className="learn-tab-link" onClick={() => setActiveTab('history')}>Go to History →</button>
             </div>
           </div>
 

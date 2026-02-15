@@ -326,6 +326,7 @@ export default function Lesson07() {
               <p>Pick a project you are working on (or about to start). Break it into individual tasks,
               categorize each one as AI-Optimal, Collaborative, or Human-Primary, and sequence them
               with dependencies. Then get AI feedback on your categorizations.</p>
+              <button className="learn-tab-link" onClick={() => setActiveTab('decompose')}>Go to Decompose →</button>
             </div>
           </div>
 

@@ -412,18 +412,21 @@ export default function Lesson05() {
               <p>List the kinds of AI output you use in your work — email drafts, data analysis,
               client proposals, meeting summaries — and assign each an initial trust level (high,
               medium, or low) based on your gut feeling. This is your starting hypothesis.</p>
+              <button className="learn-tab-link" onClick={() => setActiveTab('matrix')}>Go to Build Matrix →</button>
             </div>
             <div className="learn-pattern-card">
               <h4 style={{ color: 'var(--accent-green)' }}>Track Predictions Tab — Test Your Instincts</h4>
               <p>Before you verify any AI output, rate your confidence (1-10) that it's correct.
               Then check it and record what you find. Over time, this reveals where your gut is
               right and where it misleads you.</p>
+              <button className="learn-tab-link" onClick={() => setActiveTab('predictions')}>Go to Predictions →</button>
             </div>
             <div className="learn-pattern-card">
               <h4 style={{ color: 'var(--accent-purple)' }}>Calibration Tab — See Your Patterns</h4>
               <p>After 10+ predictions, the app analyzes where you over-trusted (were confident
               but wrong) and where you over-verified (were skeptical but right). This is your
               personal calibration report.</p>
+              <button className="learn-tab-link" onClick={() => setActiveTab('calibration')}>Go to Calibration →</button>
             </div>
           </div>
 
