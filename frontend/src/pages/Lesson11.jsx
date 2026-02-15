@@ -291,17 +291,19 @@ export default function Lesson11() {
                 <p className="page-description">
                     Map AI reliability zones and log frontier encounters to build your personal AI capability map.
                 </p>
+            </div>
+
+            <div className="lesson-progress-row">
                 <SelfAssessmentChecklist lessonNumber={11} criteria={LESSON_CRITERIA[11]} />
+                <StatsPanel stats={stats ? [
+                    { label: 'Zones', value: stats.total_zones, color: 'var(--accent-purple)' },
+                    { label: 'Encounters', value: stats.total_encounters, color: 'var(--accent-green)' },
+                    { label: 'This Week', value: stats.encounters_this_week, color: 'var(--accent-yellow)' },
+                    { label: 'Avg Confidence', value: stats.avg_zone_confidence != null ? `${stats.avg_zone_confidence}%` : '-', color: 'var(--accent-purple)' },
+                ] : []} />
             </div>
 
             {error && <div className="error-message">{error}</div>}
-
-            <StatsPanel lessonId={11} stats={stats ? [
-                { label: 'Zones', value: stats.total_zones, color: 'var(--accent-purple)' },
-                { label: 'Encounters', value: stats.total_encounters, color: 'var(--accent-green)' },
-                { label: 'This Week', value: stats.encounters_this_week, color: 'var(--accent-yellow)' },
-                { label: 'Avg Confidence', value: stats.avg_zone_confidence != null ? `${stats.avg_zone_confidence}%` : '-', color: 'var(--accent-purple)' },
-            ] : []} />
 
             <div className="tabs">
                 <button className={`tab ${activeTab === 'learn' ? 'active' : ''}`} onClick={() => setActiveTab('learn')}>Learn</button>

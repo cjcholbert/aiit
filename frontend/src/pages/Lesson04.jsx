@@ -399,8 +399,18 @@ export default function Lesson04() {
           <strong>The Skill:</strong> Maintain living context documents that capture project state, decisions,
           issues, and lessons. Start each session with full context for immediate productivity.
         </p>
-        <SelfAssessmentChecklist lessonNumber={4} criteria={LESSON_CRITERIA[4]} />
       </header>
+
+      <div className="lesson-progress-row">
+        <SelfAssessmentChecklist lessonNumber={4} criteria={LESSON_CRITERIA[4]} />
+        <StatsPanel stats={stats ? [
+            { label: 'Documents', value: stats.total_docs, color: 'var(--accent-blue)' },
+            { label: 'Sessions', value: stats.total_sessions, color: 'var(--accent-green)' },
+            { label: 'This Week', value: stats.sessions_this_week, color: 'var(--accent-yellow)' },
+            { label: 'Avg Quality', value: stats.avg_context_quality, color: 'var(--accent-purple)' },
+            { label: 'Avg Continuity', value: stats.avg_continuity_rating, color: 'var(--accent-blue)' },
+        ] : []} />
+      </div>
 
       {error && (
         <div className="error-banner" style={{ background: 'var(--error-bg)', padding: '12px', marginBottom: '16px', borderRadius: '8px', color: 'var(--accent-red)' }}>
@@ -425,14 +435,6 @@ export default function Lesson04() {
           </div>
         </div>
       )}
-
-      <StatsPanel lessonId={4} stats={stats ? [
-          { label: 'Documents', value: stats.total_docs, color: 'var(--accent-blue)' },
-          { label: 'Sessions', value: stats.total_sessions, color: 'var(--accent-green)' },
-          { label: 'This Week', value: stats.sessions_this_week, color: 'var(--accent-yellow)' },
-          { label: 'Avg Quality', value: stats.avg_context_quality, color: 'var(--accent-purple)' },
-          { label: 'Avg Continuity', value: stats.avg_continuity_rating, color: 'var(--accent-blue)' },
-      ] : []} />
 
       {/* Tabs */}
       <div className="tabs">

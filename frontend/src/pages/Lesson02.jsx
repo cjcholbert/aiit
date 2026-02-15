@@ -322,8 +322,17 @@ export default function Lesson02() {
           <strong>The Skill:</strong> Write feedback that identifies specific locations, states clear actions,
           and explains reasoning. Learn to spot vague patterns in your own feedback and rewrite them.
         </p>
-        <SelfAssessmentChecklist lessonNumber={2} criteria={LESSON_CRITERIA[2]} />
       </header>
+
+      <div className="lesson-progress-row">
+        <SelfAssessmentChecklist lessonNumber={2} criteria={LESSON_CRITERIA[2]} />
+        <StatsPanel stats={[
+            { label: 'Total Entries', value: stats?.total_entries ?? '-', color: 'var(--accent-blue)' },
+            { label: 'Avg Score', value: stats?.avg_quality_score ?? '-', color: 'var(--accent-yellow)' },
+            { label: 'Examples Saved', value: stats?.examples_saved ?? '-', color: 'var(--accent-green)' },
+            { label: 'Rewrites Done', value: stats?.rewrites_completed ?? '-', color: 'var(--accent-purple)' },
+        ]} />
+      </div>
 
       {error && (
         <div className="error-banner" style={{ background: 'var(--error-bg)', padding: '12px', marginBottom: '16px', borderRadius: '8px', color: 'var(--accent-red)' }}>
@@ -331,13 +340,6 @@ export default function Lesson02() {
           <button onClick={() => setError(null)} style={{ marginLeft: '12px', cursor: 'pointer' }}>Dismiss</button>
         </div>
       )}
-
-      <StatsPanel lessonId={2} stats={[
-          { label: 'Total Entries', value: stats?.total_entries ?? '-', color: 'var(--accent-blue)' },
-          { label: 'Avg Score', value: stats?.avg_quality_score ?? '-', color: 'var(--accent-yellow)' },
-          { label: 'Examples Saved', value: stats?.examples_saved ?? '-', color: 'var(--accent-green)' },
-          { label: 'Rewrites Done', value: stats?.rewrites_completed ?? '-', color: 'var(--accent-purple)' },
-      ]} />
 
       {/* Tabs */}
       <div className="tabs">

@@ -299,15 +299,17 @@ export default function Lesson01() {
                     <strong>The Skill:</strong> Identify your personal context gaps by analyzing past conversations.
                     Discover what information you consistently forget to provide so you can fix it upfront.
                 </p>
-                <SelfAssessmentChecklist lessonNumber={1} criteria={LESSON_CRITERIA[1]} />
             </div>
 
-            <StatsPanel lessonId={1} stats={[
-                { label: 'Conversations', value: stats?.total_conversations ?? '-', color: 'var(--accent-blue)' },
-                { label: 'Avg Confidence', value: stats?.avg_confidence_score != null ? stats.avg_confidence_score.toFixed(1) : '-', color: 'var(--accent-green)' },
-                { label: 'Recurring Gaps', value: insights?.context_gaps?.length ?? '-', color: 'var(--accent-yellow)' },
-                { label: 'Context Strengths', value: insights?.context_strengths?.length ?? '-', color: 'var(--accent-purple)' },
-            ]} />
+            <div className="lesson-progress-row">
+                <SelfAssessmentChecklist lessonNumber={1} criteria={LESSON_CRITERIA[1]} />
+                <StatsPanel stats={[
+                    { label: 'Conversations', value: stats?.total_conversations ?? '-', color: 'var(--accent-blue)' },
+                    { label: 'Avg Confidence', value: stats?.avg_confidence_score != null ? stats.avg_confidence_score.toFixed(1) : '-', color: 'var(--accent-green)' },
+                    { label: 'Recurring Gaps', value: insights?.context_gaps?.length ?? '-', color: 'var(--accent-yellow)' },
+                    { label: 'Context Strengths', value: insights?.context_strengths?.length ?? '-', color: 'var(--accent-purple)' },
+                ]} />
+            </div>
 
             <div className="tabs">
                 {['learn', 'analyze', 'history'].map((tab) => (

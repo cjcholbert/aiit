@@ -260,17 +260,19 @@ export default function Lesson12() {
                 <p className="page-description">
                     Generate your personal AI collaboration quick reference card from your learnings across all lessons.
                 </p>
+            </div>
+
+            <div className="lesson-progress-row">
                 <SelfAssessmentChecklist lessonNumber={12} criteria={LESSON_CRITERIA[12]} />
+                <StatsPanel stats={stats ? [
+                    { label: 'Complete', value: `${stats.completion_percentage}%`, color: 'var(--accent-purple)' },
+                    { label: 'Active Lessons', value: `${stats.weeks_with_data}/12`, color: 'var(--accent-green)' },
+                    { label: 'Items Created', value: stats.total_items_created, color: 'var(--accent-yellow)' },
+                    { label: 'Most Active', value: stats.most_active_week || 'N/A', color: 'var(--accent-purple)' },
+                ] : []} />
             </div>
 
             {error && <div className="error-message">{error}</div>}
-
-            <StatsPanel lessonId={12} stats={stats ? [
-                { label: 'Complete', value: `${stats.completion_percentage}%`, color: 'var(--accent-purple)' },
-                { label: 'Active Lessons', value: `${stats.weeks_with_data}/12`, color: 'var(--accent-green)' },
-                { label: 'Items Created', value: stats.total_items_created, color: 'var(--accent-yellow)' },
-                { label: 'Most Active', value: stats.most_active_week || 'N/A', color: 'var(--accent-purple)' },
-            ] : []} />
 
             <div className="tabs">
                 <button className={`tab ${activeTab === 'learn' ? 'active' : ''}`} onClick={() => setActiveTab('learn')}>Learn</button>

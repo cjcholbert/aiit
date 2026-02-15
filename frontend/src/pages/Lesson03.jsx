@@ -753,16 +753,18 @@ ${gapSections}
           <strong>The Skill:</strong> Build reusable templates that capture the context AI needs upfront. Turn your
           Lesson 1 insights into structured prompts you can use consistently.
         </p>
+      </div>
+
+      <div className="lesson-progress-row">
         <SelfAssessmentChecklist lessonNumber={3} criteria={LESSON_CRITERIA[3]} />
+        <StatsPanel stats={stats ? [
+            { label: 'Templates', value: stats.total_templates, color: 'var(--accent-blue)' },
+            { label: 'Tests Run', value: stats.total_tests, color: 'var(--accent-green)' },
+            { label: 'Avg Rating', value: stats.avg_rating?.toFixed(1) ?? '-', color: 'var(--accent-yellow)' },
+        ] : []} />
       </div>
 
       {error && <div className="alert alert-error">{error}</div>}
-
-      <StatsPanel lessonId={3} stats={stats ? [
-          { label: 'Templates', value: stats.total_templates, color: 'var(--accent-blue)' },
-          { label: 'Tests Run', value: stats.total_tests, color: 'var(--accent-green)' },
-          { label: 'Avg Rating', value: stats.avg_rating?.toFixed(1) ?? '-', color: 'var(--accent-yellow)' },
-      ] : []} />
 
       <div className="tabs">
         <button

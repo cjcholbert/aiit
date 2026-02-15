@@ -356,8 +356,16 @@ export default function Lesson06() {
           your process over time. Define clear "skip criteria" so you can confidently trust appropriate outputs
           without guilt or risk.
         </p>
-        <SelfAssessmentChecklist lessonNumber={6} criteria={LESSON_CRITERIA[6]} />
       </header>
+
+      <div className="lesson-progress-row">
+        <SelfAssessmentChecklist lessonNumber={6} criteria={LESSON_CRITERIA[6]} />
+        <StatsPanel stats={stats ? [
+            { label: 'Checklists', value: stats.total_checklists, color: 'var(--accent-blue)' },
+            { label: 'Sessions', value: stats.total_sessions, color: 'var(--accent-green)' },
+            { label: 'Avg Time', value: formatTime(Math.round(stats.avg_verification_time || 0)), color: 'var(--accent-yellow)' },
+        ] : []} />
+      </div>
 
       {error && (
         <div className="error-banner" style={{ background: 'var(--error-bg)', padding: '12px', marginBottom: '16px', borderRadius: '8px', color: 'var(--accent-red)' }}>
@@ -365,12 +373,6 @@ export default function Lesson06() {
           <button onClick={() => setError(null)} style={{ marginLeft: '12px', cursor: 'pointer' }}>Dismiss</button>
         </div>
       )}
-
-      <StatsPanel lessonId={6} stats={stats ? [
-          { label: 'Checklists', value: stats.total_checklists, color: 'var(--accent-blue)' },
-          { label: 'Sessions', value: stats.total_sessions, color: 'var(--accent-green)' },
-          { label: 'Avg Time', value: formatTime(Math.round(stats.avg_verification_time || 0)), color: 'var(--accent-yellow)' },
-      ] : []} />
 
       {/* Tabs */}
       <div className="tabs">

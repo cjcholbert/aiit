@@ -253,8 +253,17 @@ export default function Lesson07() {
           Collaborative (work together), or Human-Primary (you lead). Sequence tasks with dependencies so you know
           what to hand off, what to co-create, and where to insert decision gates.
         </p>
-        <SelfAssessmentChecklist lessonNumber={7} criteria={LESSON_CRITERIA[7]} />
       </header>
+
+      <div className="lesson-progress-row">
+        <SelfAssessmentChecklist lessonNumber={7} criteria={LESSON_CRITERIA[7]} />
+        <StatsPanel stats={stats ? [
+            { label: 'Decomposed', value: stats.total_decompositions, color: 'var(--accent-blue)' },
+            { label: 'Total Tasks', value: stats.total_tasks, color: 'var(--accent-green)' },
+            { label: 'Avg Tasks/Project', value: stats.avg_tasks_per_decomposition, color: 'var(--accent-yellow)' },
+            { label: 'Decision Gates', value: stats.decision_gates_count, color: 'var(--accent-red)' },
+        ] : []} />
+      </div>
 
       {error && (
         <div className="error-banner" style={{ background: 'var(--error-bg)', padding: '12px', marginBottom: '16px', borderRadius: '8px', color: 'var(--accent-red)' }}>
@@ -262,13 +271,6 @@ export default function Lesson07() {
           <button onClick={() => setError(null)} style={{ marginLeft: '12px', cursor: 'pointer' }}>Dismiss</button>
         </div>
       )}
-
-      <StatsPanel lessonId={7} stats={stats ? [
-          { label: 'Decomposed', value: stats.total_decompositions, color: 'var(--accent-blue)' },
-          { label: 'Total Tasks', value: stats.total_tasks, color: 'var(--accent-green)' },
-          { label: 'Avg Tasks/Project', value: stats.avg_tasks_per_decomposition, color: 'var(--accent-yellow)' },
-          { label: 'Decision Gates', value: stats.decision_gates_count, color: 'var(--accent-red)' },
-      ] : []} />
 
       {/* Tabs */}
       <div className="tabs">

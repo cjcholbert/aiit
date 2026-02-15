@@ -336,17 +336,19 @@ export default function Lesson05() {
           </p>
         </div>
 
+      </div>
+
+      <div className="lesson-progress-row">
         <SelfAssessmentChecklist lessonNumber={5} criteria={LESSON_CRITERIA[5]} />
+        <StatsPanel stats={stats ? [
+            { label: 'Predictions', value: stats.total_predictions, color: 'var(--accent-blue)' },
+            { label: 'Verified', value: stats.verified_predictions, color: 'var(--accent-green)' },
+            { label: 'AI Accuracy', value: stats.overall_accuracy != null ? `${stats.overall_accuracy}%` : '-', color: 'var(--accent-yellow)' },
+            { label: 'Calibration', value: stats.calibration_score ?? '-', color: 'var(--accent-purple)' },
+        ] : []} />
       </div>
 
       {error && <div className="alert alert-error">{error}</div>}
-
-      <StatsPanel lessonId={5} stats={stats ? [
-          { label: 'Predictions', value: stats.total_predictions, color: 'var(--accent-blue)' },
-          { label: 'Verified', value: stats.verified_predictions, color: 'var(--accent-green)' },
-          { label: 'AI Accuracy', value: stats.overall_accuracy != null ? `${stats.overall_accuracy}%` : '-', color: 'var(--accent-yellow)' },
-          { label: 'Calibration', value: stats.calibration_score ?? '-', color: 'var(--accent-purple)' },
-      ] : []} />
 
       <div className="tabs">
         <button

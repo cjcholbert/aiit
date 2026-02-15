@@ -3854,48 +3854,49 @@ tr:hover td {
 }
 
 /* =============================================================================
-   Stats Panel (collapsible progress header)
+   Lesson Progress Row (checklist + stats side by side)
+   ============================================================================= */
+
+.lesson-progress-row {
+  display: flex;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.lesson-progress-row > .self-assessment-checklist {
+  flex: 1;
+  margin-top: 0;
+}
+
+.lesson-progress-row > .stats-panel {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .lesson-progress-row {
+    flex-direction: column;
+  }
+}
+
+/* =============================================================================
+   Stats Panel
    ============================================================================= */
 
 .stats-panel {
   margin-bottom: var(--space-md);
+  padding: var(--space-md);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   background: var(--bg-secondary);
-  overflow: hidden;
 }
 
-.stats-panel-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: var(--space-sm) var(--space-md);
-  background: none;
-  border: none;
-  color: var(--text-secondary);
-  font-size: 0.85rem;
+.stats-panel-heading {
+  margin: 0 0 var(--space-md) 0;
+  font-size: 14px;
   font-weight: 600;
-  cursor: pointer;
-  transition: color var(--transition-fast);
-}
-
-.stats-panel-toggle:hover {
   color: var(--text-primary);
-}
-
-.stats-panel-chevron {
-  font-size: 0.65rem;
-  transition: transform var(--transition-fast);
-  transform: rotate(-90deg);
-}
-
-.stats-panel-chevron.expanded {
-  transform: rotate(0deg);
-}
-
-.stats-panel-content {
-  padding: 0 var(--space-md) var(--space-md);
 }
 
 .stats-panel-grid {
@@ -3906,14 +3907,16 @@ tr:hover td {
 
 .stats-panel-card {
   flex: 1;
-  min-width: 120px;
+  min-width: 100px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: var(--space-sm);
+  gap: 4px;
   padding: var(--space-sm) var(--space-md);
   background: var(--bg-tertiary);
   border-radius: var(--radius-md);
   border: 1px solid var(--border-muted);
+  text-align: center;
 }
 
 .stats-panel-value {
@@ -3923,7 +3926,7 @@ tr:hover td {
 }
 
 .stats-panel-label {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
   line-height: 1.2;
 }

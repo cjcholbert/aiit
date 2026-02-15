@@ -433,8 +433,18 @@ export default function Lesson10() {
           <strong>The Skill:</strong> Design AI-integrated workflows for recurring tasks. Create templates,
           track inputs, and measure time savings to build sustainable AI collaboration habits.
         </p>
-        <SelfAssessmentChecklist lessonNumber={10} criteria={LESSON_CRITERIA[10]} />
       </header>
+
+      <div className="lesson-progress-row">
+        <SelfAssessmentChecklist lessonNumber={10} criteria={LESSON_CRITERIA[10]} />
+        <StatsPanel stats={stats ? [
+            { label: 'Templates', value: stats.total_templates, color: 'var(--accent-blue)' },
+            { label: 'Reports', value: stats.total_reports, color: 'var(--accent-blue)' },
+            { label: 'Min Saved', value: stats.total_time_saved_minutes, color: 'var(--accent-green)' },
+            { label: 'Avg Quality', value: stats.avg_quality_score, color: 'var(--accent-purple)' },
+            { label: 'This Week', value: stats.reports_this_week, color: 'var(--accent-yellow)' },
+        ] : []} />
+      </div>
 
       {error && (
         <div className="error-banner" style={{ background: 'var(--error-bg)', padding: '12px', marginBottom: '16px', borderRadius: '8px', color: 'var(--accent-red)' }}>
@@ -442,14 +452,6 @@ export default function Lesson10() {
           <button onClick={() => setError(null)} style={{ marginLeft: '12px', cursor: 'pointer' }}>Dismiss</button>
         </div>
       )}
-
-      <StatsPanel lessonId={10} stats={stats ? [
-          { label: 'Templates', value: stats.total_templates, color: 'var(--accent-blue)' },
-          { label: 'Reports', value: stats.total_reports, color: 'var(--accent-blue)' },
-          { label: 'Min Saved', value: stats.total_time_saved_minutes, color: 'var(--accent-green)' },
-          { label: 'Avg Quality', value: stats.avg_quality_score, color: 'var(--accent-purple)' },
-          { label: 'This Week', value: stats.reports_this_week, color: 'var(--accent-yellow)' },
-      ] : []} />
 
       {/* Tabs */}
       <div className="tabs">

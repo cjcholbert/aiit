@@ -324,8 +324,17 @@ export default function Lesson09() {
           <strong>The Skill:</strong> Use the 70-85-95 framework to iterate with purpose. Each pass has a specific
           focus and key question, so you know exactly what to evaluate and when to move on.
         </p>
-        <SelfAssessmentChecklist lessonNumber={9} criteria={LESSON_CRITERIA[9]} />
       </header>
+
+      <div className="lesson-progress-row">
+        <SelfAssessmentChecklist lessonNumber={9} criteria={LESSON_CRITERIA[9]} />
+        <StatsPanel stats={stats ? [
+            { label: 'Total Tasks', value: stats.total_tasks, color: 'var(--accent-blue)' },
+            { label: 'Completed', value: stats.completed_tasks, color: 'var(--accent-green)' },
+            { label: 'In Progress', value: stats.in_progress_tasks, color: 'var(--accent-yellow)' },
+            { label: 'Passes', value: stats.total_passes_recorded, color: 'var(--accent-purple)' },
+        ] : []} />
+      </div>
 
       {error && (
         <div className="error-banner" style={{ background: 'var(--error-bg)', padding: '12px', marginBottom: '16px', borderRadius: '8px', color: 'var(--accent-red)' }}>
@@ -333,13 +342,6 @@ export default function Lesson09() {
           <button onClick={() => setError(null)} style={{ marginLeft: '12px', cursor: 'pointer' }}>Dismiss</button>
         </div>
       )}
-
-      <StatsPanel lessonId={9} stats={stats ? [
-          { label: 'Total Tasks', value: stats.total_tasks, color: 'var(--accent-blue)' },
-          { label: 'Completed', value: stats.completed_tasks, color: 'var(--accent-green)' },
-          { label: 'In Progress', value: stats.in_progress_tasks, color: 'var(--accent-yellow)' },
-          { label: 'Passes', value: stats.total_passes_recorded, color: 'var(--accent-purple)' },
-      ] : []} />
 
       {/* Tabs */}
       <div className="tabs">

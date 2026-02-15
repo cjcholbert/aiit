@@ -443,8 +443,17 @@ export default function Lesson08() {
           and success criteria. Then execute decomposed tasks in sequence, tracking what you delegated, what you received,
           and what decisions you made at each gate.
         </p>
-        <SelfAssessmentChecklist lessonNumber={8} criteria={LESSON_CRITERIA[8]} />
       </header>
+
+      <div className="lesson-progress-row">
+        <SelfAssessmentChecklist lessonNumber={8} criteria={LESSON_CRITERIA[8]} />
+        <StatsPanel stats={stats ? [
+            { label: 'Delegations', value: stats.total_delegations, color: 'var(--accent-blue)' },
+            { label: 'Total Tasks', value: stats.total_tasks, color: 'var(--accent-blue)' },
+            { label: 'Completed', value: stats.tasks_completed, color: 'var(--accent-green)' },
+            { label: 'Pending', value: stats.tasks_pending, color: 'var(--accent-yellow)' },
+        ] : []} />
+      </div>
 
       {error && (
         <div className="error-banner" style={{ background: 'var(--error-bg)', padding: '12px', marginBottom: '16px', borderRadius: '8px', color: 'var(--accent-red)' }}>
@@ -452,13 +461,6 @@ export default function Lesson08() {
           <button onClick={() => setError(null)} style={{ marginLeft: '12px', cursor: 'pointer' }}>Dismiss</button>
         </div>
       )}
-
-      <StatsPanel lessonId={8} stats={stats ? [
-          { label: 'Delegations', value: stats.total_delegations, color: 'var(--accent-blue)' },
-          { label: 'Total Tasks', value: stats.total_tasks, color: 'var(--accent-blue)' },
-          { label: 'Completed', value: stats.tasks_completed, color: 'var(--accent-green)' },
-          { label: 'Pending', value: stats.tasks_pending, color: 'var(--accent-yellow)' },
-      ] : []} />
 
       {/* Tabs */}
       <div className="tabs">
