@@ -13,8 +13,8 @@ const DEFAULT_CATEGORIES = [
 ];
 
 const CUSTOM_CATEGORY_COLORS = ['var(--accent-blue)', 'var(--accent-red)', 'var(--accent-yellow)', 'var(--accent-blue)', 'var(--accent-green)'];
-const STORAGE_KEY = 'week3_custom_categories';
-const TASKS_STORAGE_KEY = 'week3_build_tasks';
+const STORAGE_KEY = 'lesson3_custom_categories';
+const TASKS_STORAGE_KEY = 'lesson3_build_tasks';
 
 const DEFAULT_TASK_TYPES = [
   { name: 'Code Development', context: 'Language, framework, existing codebase context, coding standards, error handling expectations' },
@@ -174,7 +174,7 @@ function saveBuildTasks(tasks) {
 
 export default function Lesson03() {
   const api = useApi();
-  const [activeTab, setActiveTab] = useState('build'); // Default to Build Templates for beginners
+  const [activeTab, setActiveTab] = useState('learn');
   const [templates, setTemplates] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -752,28 +752,18 @@ ${gapSections}
           <strong>The Skill:</strong> Build reusable templates that capture the context AI needs upfront. Turn your
           Lesson 1 insights into structured prompts you can use consistently.
         </p>
-        <div style={{ marginTop: '16px', padding: '16px', background: 'var(--bg-tertiary)', borderRadius: '8px', fontSize: '14px', lineHeight: '1.6' }}>
-          <p style={{ margin: '0 0 12px', color: 'var(--text-secondary)' }}>
-            <strong>How it works:</strong>
-          </p>
-          <ol style={{ margin: '0', paddingLeft: '20px', color: 'var(--text-muted)' }}>
-            <li style={{ marginBottom: '6px' }}><strong>Build Templates</strong> (recommended) - Use the guided 3-step workflow to generate templates based on your Lesson 1 gaps and common task types</li>
-            <li style={{ marginBottom: '6px' }}><strong>Template Library</strong> - View, edit, and organize your saved templates. Use starter templates to get going quickly</li>
-            <li style={{ marginBottom: '6px' }}><strong>Test & Refine</strong> - Try your templates with real prompts and rate the results to track what works</li>
-          </ol>
-        </div>
         <SelfAssessmentChecklist lessonNumber={3} criteria={LESSON_CRITERIA[3]} />
       </div>
-
-      <ConnectionCallout
-        lessonNumber={1}
-        lessonTitle="Context Tracker"
-        message="Lesson 1 showed your context patterns and common gaps. Now turn those insights into reusable templates so you never start from scratch."
-      />
 
       {error && <div className="alert alert-error">{error}</div>}
 
       <div className="tabs">
+        <button
+          className={`tab ${activeTab === 'learn' ? 'active' : ''}`}
+          onClick={() => setActiveTab('learn')}
+        >
+          Learn
+        </button>
         <button
           className={`tab ${activeTab === 'build' ? 'active' : ''}`}
           onClick={() => {
@@ -825,6 +815,99 @@ ${gapSections}
           </button>
         )}
       </div>
+
+      {/* Learn Tab */}
+      {activeTab === 'learn' && (
+        <div className="learn-section">
+          <ConnectionCallout
+            lessonNumber={1}
+            lessonTitle="Context Tracker"
+            message="Lesson 1 showed your context patterns and common gaps. Now turn those insights into reusable templates so you never start from scratch."
+          />
+
+          <div className="learn-intro">
+            <h2>Why Templates Transform Your AI Workflow</h2>
+            <p>
+              Every time you start a new AI conversation from scratch, you're gambling on whether you'll remember all
+              the context it needs. Templates solve this by capturing your best prompting patterns so you can reuse
+              them consistently — turning a 5-minute setup into a 30-second fill-in-the-blanks.
+            </p>
+          </div>
+
+          <div className="learn-key-insight">
+            <strong>Key Insight:</strong> The best templates aren't rigid scripts — they're structured frameworks with
+            variables (like <code>{'{{project_context}}'}</code> or <code>{'{{audience}}'}</code>) that you fill in
+            for each use. This gives you consistency <em>and</em> flexibility.
+          </div>
+
+          <h3>How This Lesson Works</h3>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+            Three paths to building your template library:
+          </p>
+
+          <div className="learn-patterns-grid">
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-green)' }}>Build Templates (Guided)</h4>
+              <p>Use the 3-step workflow to generate templates based on your Lesson 1 context gaps and common task types. Best for beginners.</p>
+            </div>
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-blue)' }}>Template Library</h4>
+              <p>View, edit, and organize your saved templates. Start with the built-in starter templates and customize them for your work.</p>
+            </div>
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-yellow)' }}>Suggestions</h4>
+              <p>Get AI-powered template suggestions based on context gaps identified in Lesson 1. Turns your diagnosed problems into preventive solutions.</p>
+            </div>
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-purple)' }}>Test & Refine</h4>
+              <p>Try your templates with real prompts sent to Claude. Rate the results to track which templates produce the best output.</p>
+            </div>
+          </div>
+
+          <div className="learn-comparison">
+            <h3>Without Templates vs. With Templates</h3>
+            <div className="learn-comparison-grid">
+              <div>
+                <h4 style={{ color: 'var(--accent-red)', marginBottom: '12px' }}>Starting From Scratch (Slow)</h4>
+                <div style={{ background: 'var(--error-bg)', padding: '16px', borderRadius: '8px', marginBottom: '12px' }}>
+                  <p style={{ margin: 0, fontStyle: 'italic' }}>"Write me a code review." — Missing language, project context, review focus areas.</p>
+                </div>
+                <div style={{ background: 'var(--error-bg)', padding: '16px', borderRadius: '8px', marginBottom: '12px' }}>
+                  <p style={{ margin: 0, fontStyle: 'italic' }}>"Help me debug this." — Missing environment, error messages, what you already tried.</p>
+                </div>
+                <div style={{ background: 'var(--error-bg)', padding: '16px', borderRadius: '8px' }}>
+                  <p style={{ margin: 0, fontStyle: 'italic' }}>"Draft an email to my client." — Missing tone, relationship context, key points, sensitivities.</p>
+                </div>
+              </div>
+              <div>
+                <h4 style={{ color: 'var(--accent-green)', marginBottom: '12px' }}>Using Templates (Consistent)</h4>
+                <div style={{ background: 'var(--success-bg)', padding: '16px', borderRadius: '8px', marginBottom: '12px' }}>
+                  <p style={{ margin: 0 }}>Code Review template auto-prompts for language, project context, code purpose, and review criteria. Fill in 4 fields, get thorough review.</p>
+                </div>
+                <div style={{ background: 'var(--success-bg)', padding: '16px', borderRadius: '8px', marginBottom: '12px' }}>
+                  <p style={{ margin: 0 }}>Debug Helper template captures environment, expected vs. actual behavior, error messages, and attempted solutions — every time.</p>
+                </div>
+                <div style={{ background: 'var(--success-bg)', padding: '16px', borderRadius: '8px' }}>
+                  <p style={{ margin: 0 }}>Email Drafter template includes recipient context, tone, key points, and sensitivities — no more forgetting crucial details.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="learn-next-step">
+            <h3>Ready to Build Your First Template?</h3>
+            <p>Start with the guided Build workflow if you're new, or jump straight to the Template Library to customize starter templates.</p>
+            <button className="btn btn-primary" onClick={() => {
+              setActiveTab('build');
+              if (!module1Insights && !module1Patterns) {
+                fetchModule1Data();
+              }
+            }}>
+              Go to Build Templates
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Templates List */}
       {activeTab === 'templates' && (
