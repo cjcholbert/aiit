@@ -312,53 +312,219 @@ export default function Lesson11() {
             </div>
 
             {activeTab === 'learn' && (
-                <div className="card">
+                <div className="learn-section">
                     <ConnectionCallout
                         lessonNumber={5}
                         lessonTitle="Trust Matrix"
-                        message="Lesson 5 tracked where AI succeeds and fails across your tasks. Now map those patterns into reliability zones to build your personal AI capability map."
+                        message="Lesson 5 helped you predict AI reliability for individual tasks. Frontier Mapper zooms out: instead of one-off predictions, you are building a map of broader patterns — entire categories where AI is safe, risky, or unreliable for your specific work."
                     />
-                    <h2>Understanding Frontier Mapping</h2>
-                    <p>Frontier mapping helps you build a mental model of where AI excels and where it struggles in your specific work context.</p>
 
-                    <h3 style={{ marginTop: '1.5rem' }}>Reliability Zones</h3>
-                    <div style={{ display: 'grid', gap: '1rem', marginTop: '1rem' }}>
-                        <div style={{ padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
-                            <strong>Reliable Zone</strong>
-                            <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-                                AI consistently performs well. Quick verification is sufficient. Examples: boilerplate code, email drafting, documentation formatting.
-                            </p>
+                    <div className="learn-intro">
+                        <h2>Why You Need a Personal AI Capability Map</h2>
+                        <p>
+                            Your colleague asks AI to summarize last quarter's sales data, and it does a
+                            great job. So she asks it to interpret the legal implications of a new vendor
+                            contract — and it confidently produces advice that is completely wrong. She had
+                            no way to know the difference in advance, because she was treating AI as equally
+                            good at everything.
+                        </p>
+                        <p>
+                            AI does not come with a reliability label. It sounds equally confident whether it
+                            is drafting a perfectly good email or fabricating a statistic. The only way to know
+                            where the boundaries are is to map them yourself, based on your own experience in
+                            your own work.
+                        </p>
+                    </div>
+
+                    <div className="learn-key-insight">
+                        <strong>Key Insight:</strong> AI reliability is not random — it follows patterns.
+                        Certain categories of tasks are consistently safe, others are consistently risky.
+                        By logging your encounters and sorting them into zones, you build a personal map
+                        that tells you when to trust, when to verify, and when to skip AI entirely.
+                    </div>
+
+                    <h3>How This Lesson Works</h3>
+                    <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+                        Two practice areas to build your personal AI capability map:
+                    </p>
+
+                    <div className="learn-patterns-grid">
+                        <div className="learn-pattern-card">
+                            <h4 style={{ color: 'var(--accent-blue)' }}>Zones Tab — Map Your Reliability Zones</h4>
+                            <p>Create zones for the types of work you do with AI. Rate each one as Safe,
+                            Caution, or Frontier. Over time, your map becomes a quick-reference guide for
+                            how much verification any task needs.</p>
                         </div>
-                        <div style={{ padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
-                            <strong>Mixed Zone</strong>
-                            <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-                                AI performance varies. Careful verification needed. Examples: code logic, data analysis, technical explanations.
-                            </p>
-                        </div>
-                        <div style={{ padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
-                            <strong>Unreliable Zone</strong>
-                            <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-                                AI often struggles. High verification or human expertise required. Examples: legal interpretation, financial advice, current events.
-                            </p>
+                        <div className="learn-pattern-card">
+                            <h4 style={{ color: 'var(--accent-green)' }}>Encounters Tab — Log What Actually Happened</h4>
+                            <p>Each time you use AI for something notable — a success, a failure, or a
+                            surprise — log it. These real-world data points are what make your zones accurate
+                            instead of just guesswork.</p>
                         </div>
                     </div>
 
-                    <h3 style={{ marginTop: '1.5rem' }}>Logging Encounters</h3>
-                    <p>Track your interactions to refine your map over time:</p>
-                    <ul>
-                        <li><strong>Successes:</strong> AI delivered as expected or better</li>
-                        <li><strong>Failures:</strong> AI produced unusable output</li>
-                        <li><strong>Surprises:</strong> Unexpected results (positive or negative)</li>
-                    </ul>
+                    <div className="learn-comparison">
+                        <h3>Guessing vs. Mapping AI Reliability</h3>
+                        <div className="learn-comparison-grid">
+                            <div className="learn-comparison-col">
+                                <h4 className="poor">Treating All AI Tasks the Same</h4>
+                                <div className="learn-comparison-item poor">
+                                    <div className="learn-comparison-scenario">Event Planning</div>
+                                    <p>"AI wrote great catering options for our conference, so I also asked it
+                                    to confirm the venue's fire code capacity. It gave me a number that sounded
+                                    right, so I used it in the safety plan."</p>
+                                </div>
+                                <div className="learn-comparison-item poor">
+                                    <p>The fire code number was fabricated. The fire marshal flagged it during
+                                    inspection, delaying the event by a week. AI is great at creative suggestions
+                                    but unreliable for regulatory specifics.</p>
+                                </div>
+                            </div>
+                            <div className="learn-comparison-col">
+                                <h4 className="good">Using Your Reliability Map</h4>
+                                <div className="learn-comparison-item good">
+                                    <div className="learn-comparison-scenario">Same Event — With Frontier Awareness</div>
+                                    <p>You check your map: "creative brainstorming" is in the Safe zone, but
+                                    "regulatory and compliance facts" is in the Frontier zone. You use AI for
+                                    the catering menu and call the venue directly for fire code capacity.</p>
+                                </div>
+                                <div className="learn-comparison-item good">
+                                    <p>You get the best of both worlds: AI handles what it is good at, and you
+                                    verify the things it struggles with. No surprises at inspection time.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                    <h3 style={{ marginTop: '1.5rem' }}>Building Your Map</h3>
-                    <ol>
-                        <li>Start with domains you work in frequently</li>
-                        <li>Categorize based on actual experience, not assumptions</li>
-                        <li>Log encounters to validate and refine zones</li>
-                        <li>Adjust confidence levels as you gather more data</li>
-                        <li>Note specific strengths and weaknesses within each zone</li>
-                    </ol>
+                    <h3>The Three Reliability Zones</h3>
+                    <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+                        Every type of AI task falls into one of three zones. The boundaries are personal —
+                        they depend on your field, your tools, and your experience.
+                    </p>
+
+                    <div className="learn-patterns-grid">
+                        <div className="learn-pattern-card">
+                            <h4 style={{ color: 'var(--accent-green)' }}>Safe Zone — Trust with Quick Checks</h4>
+                            <p>AI consistently delivers usable results. A quick skim is enough before using
+                            the output. You have run enough tasks in this zone to feel confident.</p>
+                            <div className="learn-pattern-label better">Examples</div>
+                            <div className="learn-example-good">
+                                <strong>Drafting routine emails</strong> — professional tone, correct structure<br/>
+                                <strong>Summarizing meeting notes</strong> — captures key points accurately<br/>
+                                <strong>Reformatting data</strong> — converting CSV to a table, reorganizing lists
+                            </div>
+                        </div>
+                        <div className="learn-pattern-card">
+                            <h4 style={{ color: 'var(--accent-yellow)' }}>Caution Zone — Verify Before Using</h4>
+                            <p>AI sometimes gets it right, sometimes misses. You need to check specific
+                            details, not just skim. Performance depends on how well you set up the prompt.</p>
+                            <div className="learn-pattern-label better">Examples</div>
+                            <div className="learn-example-good">
+                                <strong>Market research summaries</strong> — good structure, but statistics may be outdated<br/>
+                                <strong>Client proposal drafts</strong> — solid framework, but needs fact-checking<br/>
+                                <strong>Budget calculations</strong> — logic is usually right, numbers need verification
+                            </div>
+                        </div>
+                        <div className="learn-pattern-card">
+                            <h4 style={{ color: 'var(--accent-red)' }}>Frontier Zone — High Risk, Verify Everything</h4>
+                            <p>AI frequently produces confident-sounding but wrong output. Using it here
+                            without heavy verification is dangerous. Sometimes it is faster to skip AI
+                            entirely.</p>
+                            <div className="learn-pattern-label better">Examples</div>
+                            <div className="learn-example-good">
+                                <strong>Legal contract interpretation</strong> — confidently wrong about clause meanings<br/>
+                                <strong>Industry-specific regulations</strong> — fabricates compliance requirements<br/>
+                                <strong>Local or niche knowledge</strong> — makes up names, dates, or policies for your area
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>What to Log as an Encounter</h3>
+                    <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+                        You do not need to log every single AI interaction. Focus on encounters that teach
+                        you something about where a boundary is:
+                    </p>
+
+                    <div className="learn-patterns-grid">
+                        <div className="learn-pattern-card">
+                            <h4 style={{ color: 'var(--accent-green)' }}>Successes Worth Logging</h4>
+                            <p>When AI handles something you were not sure it could do, that is worth
+                            recording. It expands your map of safe territory.</p>
+                            <div className="learn-example-good">
+                                "Asked AI to draft a complex project timeline with dependencies — expected
+                                to need heavy editing, but it was 90% usable. Moving 'project planning' closer
+                                to Safe zone."
+                            </div>
+                        </div>
+                        <div className="learn-pattern-card">
+                            <h4 style={{ color: 'var(--accent-red)' }}>Failures Worth Logging</h4>
+                            <p>When AI confidently gets something wrong, that is the most valuable data
+                            point. It marks the boundary where you need to stop trusting.</p>
+                            <div className="learn-example-good">
+                                "Asked AI for the correct filing deadline for Q4 sales tax in our state.
+                                It gave January 31 with full confidence — actual deadline is January 20.
+                                Tax deadlines are firmly in the Frontier zone."
+                            </div>
+                        </div>
+                        <div className="learn-pattern-card">
+                            <h4 style={{ color: 'var(--accent-yellow)' }}>Surprises Worth Logging</h4>
+                            <p>When the result is not what you expected — good or bad — that tells you
+                            your mental map needs updating.</p>
+                            <div className="learn-example-good">
+                                "Asked AI to analyze customer feedback themes from 200 survey responses.
+                                Expected generic categories, but it identified a specific product complaint
+                                pattern I had missed. 'Qualitative analysis' may be safer than I thought."
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>Common Mistakes</h3>
+                    <div className="learn-patterns-grid" style={{ marginBottom: '24px' }}>
+                        <div className="learn-pattern-card">
+                            <div className="learn-pattern-label avoid">Mistake</div>
+                            <p>Mapping zones based on what you have heard about AI rather than your own
+                            experience. "Someone said AI is bad at math" is not the same as testing it
+                            on your specific types of calculations.</p>
+                            <div className="learn-pattern-label better">Instead</div>
+                            <div className="learn-example-good">
+                                Start every zone at "Unknown" and move it based on actual encounters. Your
+                                experience with your prompts, your data, and your tools is what matters.
+                            </div>
+                        </div>
+                        <div className="learn-pattern-card">
+                            <div className="learn-pattern-label avoid">Mistake</div>
+                            <p>Never updating your map. AI tools change, your skills improve, and what was
+                            Frontier six months ago might be Caution now. A stale map gives false confidence
+                            or unnecessary caution.</p>
+                            <div className="learn-pattern-label better">Instead</div>
+                            <div className="learn-example-good">
+                                Review your zones monthly. If you have not logged any encounters for a zone
+                                in the past month, lower your confidence level — you do not have recent data
+                                to back it up.
+                            </div>
+                        </div>
+                        <div className="learn-pattern-card">
+                            <div className="learn-pattern-label avoid">Mistake</div>
+                            <p>Making zones too broad. "Writing" as a single zone hides the fact that AI is
+                            great at routine emails but terrible at technical white papers for your industry.</p>
+                            <div className="learn-pattern-label better">Instead</div>
+                            <div className="learn-example-good">
+                                Split broad categories into specific ones: "Internal emails," "Client-facing
+                                proposals," "Technical documentation," "Marketing copy." Each may have a
+                                different reliability level.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="learn-next-step">
+                        <h3>Ready to Start Mapping?</h3>
+                        <p>Begin with three zones for your most common AI tasks — one you trust, one you are
+                        unsure about, and one where AI has let you down. Then log your next few encounters
+                        to see if your ratings hold up.</p>
+                        <button className="btn btn-primary" onClick={() => setActiveTab('zones')}>
+                            Go to Zones
+                        </button>
+                    </div>
                 </div>
             )}
 

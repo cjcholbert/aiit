@@ -360,81 +360,182 @@ export default function Lesson02() {
           <ConnectionCallout
             lessonNumber={1}
             lessonTitle="Context Tracker"
-            message="In Lesson 1, you identified context gaps in your AI conversations. Now learn to give specific, actionable feedback about those gaps instead of vague directions."
+            message="Lesson 1 helped you discover what context you forget to provide. This lesson tackles the next bottleneck: how you respond when AI output isn't right. Vague feedback wastes iterations; specific feedback fixes things fast."
           />
-          <h2>Vague vs. Specific Feedback</h2>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>
-            Learn to recognize these common patterns of vague feedback and how to fix them.
-          </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px', marginBottom: '32px' }}>
-            {patterns && Object.entries(patterns).map(([key, pattern]) => (
-              <div key={key} className="card" style={{ padding: '20px' }}>
-                <h3 style={{ margin: '0 0 8px', color: 'var(--accent-red)' }}>{pattern.name}</h3>
-                <p style={{ color: 'var(--text-secondary)', marginBottom: '12px' }}>{pattern.description}</p>
-
-                <div style={{ marginBottom: '12px' }}>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '4px' }}>EXAMPLES (Avoid)</div>
-                  {pattern.examples.map((ex, idx) => (
-                    <div key={idx} style={{
-                      background: 'var(--error-bg)',
-                      padding: '8px 12px',
-                      borderRadius: '4px',
-                      marginBottom: '4px',
-                      color: 'var(--accent-red)',
-                      fontSize: '0.9rem',
-                      fontStyle: 'italic'
-                    }}>
-                      "{ex}"
-                    </div>
-                  ))}
-                </div>
-
-                <div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '4px' }}>HOW TO FIX</div>
-                  <div style={{
-                    background: 'var(--success-bg)',
-                    padding: '12px',
-                    borderRadius: '4px',
-                    color: 'var(--accent-green)',
-                    fontSize: '0.9rem'
-                  }}>
-                    {pattern.fix}
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className="learn-intro">
+            <h2>Why Your Feedback Is the Bottleneck</h2>
+            <p>
+              You ask AI to draft talking points for a client meeting. The result is too formal and misses
+              two key topics. So you type: "This isn't quite right. Make it better." The AI makes changes, but
+              they're random — it shortened the intro when you wanted it to add the missing topics and loosen
+              the tone. Another round wasted.
+            </p>
+            <p>
+              The problem isn't that you gave feedback — it's that the feedback didn't tell AI <em>where</em> the
+              problem was, <em>what</em> to change, or <em>why</em>. This lesson trains you to spot vague patterns
+              in your own feedback and rewrite them into instructions the AI can act on in one pass.
+            </p>
           </div>
 
-          {/* Good vs Bad Examples */}
-          <div style={{ padding: '24px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
-            <h3>Side-by-Side Comparison</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '16px' }}>
-              <div>
-                <h4 style={{ color: 'var(--accent-red)', marginBottom: '12px' }}>Vague (Avoid)</h4>
-                <div style={{ background: 'var(--error-bg)', padding: '16px', borderRadius: '8px', marginBottom: '12px' }}>
-                  <p style={{ margin: 0, fontStyle: 'italic' }}>"This code doesn't work right."</p>
+          <div className="learn-key-insight">
+            <strong>Key Insight:</strong> Good feedback has three parts: <strong>location</strong> (where is
+            the problem), <strong>action</strong> (what specifically to change), and <strong>reasoning</strong> (why
+            this change matters). Missing any one of these forces AI to guess — and guessing wastes iterations.
+          </div>
+
+          <h3>How This Lesson Works</h3>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+            Two practice areas to sharpen your feedback skills:
+          </p>
+
+          <div className="learn-patterns-grid">
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-blue)' }}>Analyze Tab — Score Your Feedback</h4>
+              <p>Paste feedback you've given (or are about to give) to an AI. The tool scores it for
+              specificity, identifies vague patterns, and shows you exactly how to rewrite it. You
+              can save entries to track improvement over time.</p>
+            </div>
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-green)' }}>History Tab — Track Your Patterns</h4>
+              <p>See all your analyzed feedback entries, quality scores, and most common vague patterns.
+              Practice rewriting your weakest entries and save your best rewrites as reference examples.</p>
+            </div>
+          </div>
+
+          <div className="learn-comparison">
+            <h3>Vague Feedback vs. Specific Feedback</h3>
+            <div className="learn-comparison-grid">
+              <div className="learn-comparison-col">
+                <h4 className="poor">Vague (AI Has to Guess)</h4>
+                <div className="learn-comparison-item poor">
+                  <div className="learn-comparison-scenario">Marketing Copy Review</div>
+                  <p>"This isn't right. Make it better."</p>
                 </div>
-                <div style={{ background: 'var(--error-bg)', padding: '16px', borderRadius: '8px', marginBottom: '12px' }}>
-                  <p style={{ margin: 0, fontStyle: 'italic' }}>"Make the writing better."</p>
+                <div className="learn-comparison-item poor">
+                  <div className="learn-comparison-scenario">Presentation Slides</div>
+                  <p>"The slides need work. They don't feel professional."</p>
                 </div>
-                <div style={{ background: 'var(--error-bg)', padding: '16px', borderRadius: '8px' }}>
-                  <p style={{ margin: 0, fontStyle: 'italic' }}>"I don't like how this looks."</p>
+                <div className="learn-comparison-item poor">
+                  <div className="learn-comparison-scenario">Hiring Process</div>
+                  <p>"The job posting isn't attracting the right candidates."</p>
                 </div>
               </div>
-              <div>
-                <h4 style={{ color: 'var(--accent-green)', marginBottom: '12px' }}>Specific (Use)</h4>
-                <div style={{ background: 'var(--success-bg)', padding: '16px', borderRadius: '8px', marginBottom: '12px' }}>
-                  <p style={{ margin: 0 }}>"The validate_email function on line 42 returns True for inputs without an @ symbol. Add a check for @ and return False if missing."</p>
+              <div className="learn-comparison-col">
+                <h4 className="good">Specific (AI Can Act Immediately)</h4>
+                <div className="learn-comparison-item good">
+                  <div className="learn-comparison-scenario">Marketing Copy Review</div>
+                  <p>"The headline is too generic — replace 'Solutions for Your Business' with something
+                  that names our target audience (HR directors at mid-size companies). Also, the CTA in the
+                  last paragraph says 'learn more' — change it to 'Book a 15-minute demo' with a specific link."</p>
                 </div>
-                <div style={{ background: 'var(--success-bg)', padding: '16px', borderRadius: '8px', marginBottom: '12px' }}>
-                  <p style={{ margin: 0 }}>"The introduction is 150 words. Shorten it to under 50 words and start with a question to hook the reader."</p>
+                <div className="learn-comparison-item good">
+                  <div className="learn-comparison-scenario">Presentation Slides</div>
+                  <p>"Slides 3-5 have too much text — limit each to 3 bullet points max, with no bullet
+                  longer than 12 words. Move the detailed data to speaker notes. Slide 7 needs a chart
+                  instead of a table to make the year-over-year trend visible at a glance."</p>
                 </div>
-                <div style={{ background: 'var(--success-bg)', padding: '16px', borderRadius: '8px' }}>
-                  <p style={{ margin: 0 }}>"The submit button blends into the background. Change it to a contrasting color (#0078d4) and increase padding to 12px 24px."</p>
+                <div className="learn-comparison-item good">
+                  <div className="learn-comparison-scenario">Hiring Process</div>
+                  <p>"The job posting lists 12 requirements — pare it down to 5 must-haves and move the rest
+                  to a 'nice to have' section. Add the salary range ($65-80K) since postings with ranges get
+                  3x more applications. Change 'rockstar developer' to specific skills like 'experience with
+                  React and REST APIs'."</p>
                 </div>
               </div>
             </div>
+          </div>
+
+          <h3>The Five Patterns of Vague Feedback</h3>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+            These are the patterns the Analyze tab identifies. Once you learn to spot them, you'll catch
+            yourself before hitting send.
+          </p>
+
+          <div className="learn-patterns-grid">
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-red)' }}>Judgment Without Direction</h4>
+              <p>You state an opinion but don't say what to change. The AI knows you're unhappy but
+              not what would make you happy.</p>
+              <div className="learn-example-bad">"I don't like this tone."</div>
+              <div className="learn-example-good">"The tone is too casual for our board audience.
+              Replace contractions with formal phrasing and remove the jokes in paragraphs 2 and 4."</div>
+            </div>
+
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-red)' }}>Vague Qualifiers</h4>
+              <p>Words like "better," "more," "different," or "improved" without specifying a direction
+              or measurable target.</p>
+              <div className="learn-example-bad">"Make it more engaging."</div>
+              <div className="learn-example-good">"Start each section with a question that speaks to a
+              common frustration our customers have. Replace the bulleted features list with a before/after
+              comparison."</div>
+            </div>
+
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-red)' }}>Missing Location</h4>
+              <p>You describe a problem but don't point to where it occurs. The AI has to scan
+              everything trying to find it.</p>
+              <div className="learn-example-bad">"There's an error in the numbers."</div>
+              <div className="learn-example-good">"The revenue figure in the Q3 column of the summary
+              table shows $1.2M, but our actual Q3 revenue was $1.4M. Update it and recalculate the
+              year-to-date total in the last row."</div>
+            </div>
+
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-red)' }}>Contradictory Instructions</h4>
+              <p>You ask for two things that conflict without acknowledging the tension, leaving AI
+              to pick one and get it wrong.</p>
+              <div className="learn-example-bad">"Make it shorter but include more detail."</div>
+              <div className="learn-example-good">"Keep the executive summary under 200 words — just
+              the key findings. Move the methodology details and supporting data into an appendix
+              section at the end."</div>
+            </div>
+
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-red)' }}>Absent Reasoning</h4>
+              <p>You say what to change but not why. Without understanding the goal, AI may make
+              the change in a way that creates new problems.</p>
+              <div className="learn-example-bad">"Remove the third paragraph."</div>
+              <div className="learn-example-good">"Remove the third paragraph — it covers pricing, and
+              we don't want to mention pricing until the follow-up meeting. Replace it with a sentence
+              about next steps."</div>
+            </div>
+          </div>
+
+          <h3>Common Mistakes</h3>
+          <div className="learn-patterns-grid" style={{ marginBottom: '24px' }}>
+            <div className="learn-pattern-card">
+              <div className="learn-pattern-label avoid">Mistake</div>
+              <p>Stacking multiple pieces of vague feedback in one message, hoping AI will figure out
+              which matters most. "Fix the formatting, improve the flow, and make it shorter."</p>
+              <div className="learn-pattern-label better">Instead</div>
+              <div className="learn-example-good">
+                Give one specific instruction at a time, or number them in priority order: "1. Reduce to
+                under 300 words by cutting the background section. 2. Move the recommendation to the first
+                paragraph. 3. Bold the three action items."
+              </div>
+            </div>
+            <div className="learn-pattern-card">
+              <div className="learn-pattern-label avoid">Mistake</div>
+              <p>Starting fresh instead of iterating. When the output is 70% right, some people throw
+              it away and re-prompt from scratch rather than giving targeted fixes.</p>
+              <div className="learn-pattern-label better">Instead</div>
+              <div className="learn-example-good">
+                Name what's working and what's not: "The structure and key points are good. Change the
+                opening paragraph to lead with the cost savings data instead of the project background, and
+                cut the last two bullets — they're nice-to-haves, not essentials."
+              </div>
+            </div>
+          </div>
+
+          <div className="learn-next-step">
+            <h3>Ready to Sharpen Your Feedback?</h3>
+            <p>Paste a piece of real feedback you've given to an AI — or are about to give. The analyzer
+            will score it, identify vague patterns, and show you how to rewrite it for faster results.</p>
+            <button className="btn btn-primary" onClick={() => setActiveTab('analyze')}>
+              Go to Analyze
+            </button>
           </div>
         </div>
       )}

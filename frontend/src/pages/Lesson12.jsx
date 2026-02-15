@@ -3,6 +3,7 @@ import { useApi } from '../hooks/useApi';
 import { useAuth } from '../auth/AuthContext';
 import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
+import ConnectionCallout from '../components/ConnectionCallout';
 import LessonNav from '../components/LessonNav';
 import StatsPanel from '../components/StatsPanel';
 
@@ -281,31 +282,180 @@ export default function Lesson12() {
             </div>
 
             {activeTab === 'learn' && (
-                <div className="card">
-                    <h2>Your Personal AI Reference Card</h2>
-                    <p>The reference card is the culmination of your 12-lesson curriculum, capturing your personalized AI collaboration practices.</p>
+                <div className="learn-section">
+                    <ConnectionCallout
+                        lessonNumber={1}
+                        lessonTitle="Context Tracker"
+                        message="You started Lesson 1 by discovering which context patterns actually help AI do better work. Now in Lesson 12, you are pulling together everything you have learned across all six skill areas into one personal reference you can use every day. This is the bookend: from first discovery to consolidated practice."
+                    />
 
-                    <h3 style={{ marginTop: '1.5rem' }}>What's Included</h3>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', marginTop: '1rem' }}>
-                        {Object.entries(sections).map(([key, section]) => (
-                            <div key={key} style={{ padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
-                                <strong>{section.name}</strong>
-                                <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.9rem', color: 'var(--text-muted)' }}>{section.description}</p>
-                                <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Source: {section.source}</p>
-                            </div>
-                        ))}
+                    <div className="learn-intro">
+                        <h2>Why a Personal Reference Card Matters</h2>
+                        <p>
+                            You have spent eleven lessons building real skills: assembling context, judging
+                            quality, breaking down tasks, refining outputs, designing workflows, and mapping
+                            AI boundaries. That is a lot of ground. The problem is that knowledge spread
+                            across a dozen places is knowledge you will not use when it counts.
+                        </p>
+                        <p>
+                            When you are in the middle of a busy workday and need to decide whether to trust
+                            an AI draft, or how to set up a prompt for a new project, you are not going to
+                            flip through old lessons. You need a single page — your page — with the specific
+                            rules, shortcuts, and reminders that match how you actually work.
+                        </p>
                     </div>
 
-                    <h3 style={{ marginTop: '1.5rem' }}>How to Use Your Card</h3>
-                    <ol>
-                        <li><strong>Generate from data:</strong> Click "Generate from My Data" to pull insights from all your previous lessons</li>
-                        <li><strong>Add personal rules:</strong> Document your own AI collaboration principles</li>
-                        <li><strong>Save quick prompts:</strong> Store frequently-used prompt patterns</li>
-                        <li><strong>Export and print:</strong> Download as Markdown or HTML for easy reference</li>
-                    </ol>
+                    <div className="learn-key-insight">
+                        <strong>Key Insight:</strong> Your reference card is personal, not generic advice.
+                        It pulls from your own templates, your own trust ratings, your own frontier map,
+                        and your own workflow patterns. Two people who complete this course will end up with
+                        very different cards — and that is exactly the point.
+                    </div>
 
-                    <h3 style={{ marginTop: '1.5rem' }}>Keep It Updated</h3>
-                    <p>Your reference card should evolve as you gain more experience. Regenerate periodically to capture new insights from your ongoing work.</p>
+                    <h3>How This Lesson Works</h3>
+                    <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+                        Two practice areas to consolidate your AI collaboration skills:
+                    </p>
+
+                    <div className="learn-patterns-grid">
+                        <div className="learn-pattern-card">
+                            <h4 style={{ color: 'var(--accent-blue)' }}>My Card Tab — Build Your Quick Reference</h4>
+                            <p>Generate your reference card from the data you have created across all
+                            lessons. It pulls in your top templates, trust zones, frontier map, feedback
+                            principles, and workflow highlights. Then add your own personal rules and
+                            quick prompts, and export the finished card to keep at your desk.</p>
+                        </div>
+                        <div className="learn-pattern-card">
+                            <h4 style={{ color: 'var(--accent-green)' }}>Challenge Tab — Test All Six Skills at Once</h4>
+                            <p>Pick a realistic workplace scenario and describe how you would apply each
+                            of the six AI collaboration concepts. This is the integration test: can you
+                            use context assembly, quality judgment, task decomposition, iterative
+                            refinement, workflow integration, and frontier recognition together?</p>
+                        </div>
+                    </div>
+
+                    <div className="learn-comparison">
+                        <h3>Without a Reference vs. With One</h3>
+                        <div className="learn-comparison-grid">
+                            <div className="learn-comparison-col">
+                                <h4 className="poor">Relying on Memory Alone</h4>
+                                <div className="learn-comparison-item poor">
+                                    <div className="learn-comparison-scenario">New Project Kickoff</div>
+                                    <p>"I know I learned something about setting up context for AI, but I
+                                    can't remember the details. Let me just paste in the project brief and
+                                    see what happens. I'll figure out the rest as I go."</p>
+                                </div>
+                                <div className="learn-comparison-item poor">
+                                    <p>Spends 20 minutes going back and forth with AI because the initial
+                                    prompt was missing key context. Forgets to check the output against
+                                    her trust zones. Ends up redoing work she could have gotten right
+                                    the first time.</p>
+                                </div>
+                            </div>
+                            <div className="learn-comparison-col">
+                                <h4 className="good">Glancing at Your Reference Card</h4>
+                                <div className="learn-comparison-item good">
+                                    <div className="learn-comparison-scenario">Same Kickoff — With a Reference Card</div>
+                                    <p>Quick glance at the card: context checklist says include audience,
+                                    constraints, and examples. Trust zones say "project planning" is Caution
+                                    — verify timelines. Quick prompt template for project briefs is already
+                                    saved.</p>
+                                </div>
+                                <div className="learn-comparison-item good">
+                                    <p>Gets a solid first draft in one pass because the prompt was set up
+                                    right. Knows exactly which parts to double-check. Total time: 10
+                                    minutes instead of 30.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>What Your Reference Card Covers</h3>
+                    <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+                        Your card draws from all six skill areas you have practiced throughout this course:
+                    </p>
+
+                    <div className="learn-patterns-grid">
+                        <div className="learn-pattern-card">
+                            <h4 style={{ color: 'var(--accent-blue)' }}>Context Assembly (Lessons 1, 3, 4)</h4>
+                            <p>Your best context patterns, top templates, and checklist of what to include
+                            before sending any prompt. The habits that make your first attempt count.</p>
+                        </div>
+                        <div className="learn-pattern-card">
+                            <h4 style={{ color: 'var(--accent-purple)' }}>Quality Judgment (Lessons 5, 6)</h4>
+                            <p>Your trust zones showing where AI is reliable versus risky for your work,
+                            plus the verification steps you have found most useful.</p>
+                        </div>
+                        <div className="learn-pattern-card">
+                            <h4 style={{ color: 'var(--accent-green)' }}>Task Decomposition (Lessons 7, 8)</h4>
+                            <p>How you break complex work into AI-friendly chunks, and your delegation
+                            patterns for deciding what goes to AI versus what stays with you.</p>
+                        </div>
+                        <div className="learn-pattern-card">
+                            <h4 style={{ color: 'var(--accent-yellow)' }}>Iterative Refinement (Lessons 2, 9)</h4>
+                            <p>Your feedback principles for moving AI drafts from "rough" to "ready," and
+                            how many passes different task types usually need.</p>
+                        </div>
+                        <div className="learn-pattern-card">
+                            <h4 style={{ color: 'var(--accent-blue)' }}>Workflow Integration (Lessons 10, 12)</h4>
+                            <p>Your repeatable workflow templates, time-saving highlights, and the
+                            quick prompts you reach for most often.</p>
+                        </div>
+                        <div className="learn-pattern-card">
+                            <h4 style={{ color: 'var(--accent-red)' }}>Frontier Recognition (Lesson 11)</h4>
+                            <p>Your personal map of where AI works well, where it needs heavy checking,
+                            and where you have learned to skip it entirely.</p>
+                        </div>
+                    </div>
+
+                    <h3>Common Mistakes</h3>
+                    <div className="learn-patterns-grid" style={{ marginBottom: '24px' }}>
+                        <div className="learn-pattern-card">
+                            <div className="learn-pattern-label avoid">Mistake</div>
+                            <p>Treating the reference card as a trophy instead of a tool. Generating it once,
+                            exporting a nice PDF, and never looking at it again. The card only helps if
+                            you actually use it during your workday.</p>
+                            <div className="learn-pattern-label better">Instead</div>
+                            <div className="learn-example-good">
+                                Keep your card open (printed or on a second monitor) for the first two weeks.
+                                Before any AI task, glance at the relevant section. After two weeks, the habits
+                                stick and you will need it less.
+                            </div>
+                        </div>
+                        <div className="learn-pattern-card">
+                            <div className="learn-pattern-label avoid">Mistake</div>
+                            <p>Trying to include everything. A reference card that runs to three pages is just
+                            another document you will not read. The point is quick lookups, not comprehensive
+                            documentation.</p>
+                            <div className="learn-pattern-label better">Instead</div>
+                            <div className="learn-example-good">
+                                Stick to your top rules, your most-used templates, and your biggest trust
+                                boundaries. If a section has more than five items, trim it to the ones you
+                                reach for most.
+                            </div>
+                        </div>
+                        <div className="learn-pattern-card">
+                            <div className="learn-pattern-label avoid">Mistake</div>
+                            <p>Never regenerating the card. Your skills evolve, your tools change, and your
+                            trust zones shift as you gain experience. A card from three months ago does not
+                            reflect what you know today.</p>
+                            <div className="learn-pattern-label better">Instead</div>
+                            <div className="learn-example-good">
+                                Regenerate your card once a month. It takes 30 seconds and pulls in everything
+                                new you have logged across other lessons. Your card should grow with you.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="learn-next-step">
+                        <h3>Ready to Build Your Reference Card?</h3>
+                        <p>Head to the My Card tab to generate your personal reference from everything you
+                        have built across all twelve lessons. Add your own rules, save your go-to prompts,
+                        and export a card you can actually use at work.</p>
+                        <button className="btn btn-primary" onClick={() => setActiveTab('card')}>
+                            Go to My Card
+                        </button>
+                    </div>
                 </div>
             )}
 

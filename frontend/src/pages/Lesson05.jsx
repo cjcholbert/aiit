@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
 import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
+import ConnectionCallout from '../components/ConnectionCallout';
 import LessonNav from '../components/LessonNav';
 import StatsPanel from '../components/StatsPanel';
 
@@ -380,78 +381,179 @@ export default function Lesson05() {
       {/* Learn Tab */}
       {activeTab === 'learn' && (
         <div className="learn-section">
+          <ConnectionCallout
+            lessonNumber={2}
+            lessonTitle="Feedback Analyzer"
+            message="Lesson 2 taught you to give better feedback when AI output misses the mark. This lesson helps you predict which outputs will need that feedback in the first place — so you spend your review effort where it matters most."
+          />
+
           <div className="learn-intro">
-            <h2>Why Trust Calibration Matters</h2>
+            <h2>You Probably Trust AI in the Wrong Places</h2>
             <p>
-              Most people fall into one of two traps when working with AI: they either accept everything at face value
-              (over-trusting) or they double-check every single detail (over-verifying). Both waste your time and energy.
-              The key skill is knowing <em>when</em> to trust and <em>when</em> to verify.
+              Imagine you ask AI to help with two tasks: summarizing yesterday's team meeting notes
+              and calculating commission payouts for your sales team. The summary comes back looking
+              polished and thorough. The commission numbers look equally clean and professional.
+              You use both without a second thought.
+            </p>
+            <p>
+              A week later, your manager points out the summary included a decision that was actually
+              tabled for next month. And payroll flags two commission errors that cost the company
+              $1,200. The summary mistake was embarrassing. The math mistake was expensive. Both
+              were preventable — if you'd known which output type needed scrutiny and which didn't.
             </p>
           </div>
 
           <div className="learn-key-insight">
-            <strong>Key Insight:</strong> AI reliability varies dramatically by output type. The same AI that
-            writes excellent summaries might produce unreliable legal citations. Calibrating your trust
-            per output type — not per tool — is what separates effective AI collaborators from everyone else.
+            <strong>Key Insight:</strong> AI reliability varies dramatically by task type, not by tool.
+            The same AI that writes excellent meeting agendas might produce unreliable financial
+            calculations. Building a personal "trust map" based on your own experience — not
+            assumptions — is what separates efficient AI users from everyone else.
           </div>
 
-          <h3>The Trust Calibration Cycle</h3>
+          <h3>How This Lesson Works</h3>
           <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
-            This lesson uses a prediction-verification cycle to build your calibration skill:
+            Three practice areas that build your trust calibration skill:
           </p>
 
           <div className="learn-patterns-grid">
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-blue)' }}>1. Categorize Output Types</h4>
-              <p>Identify the types of AI output you use regularly — code, emails, summaries, analysis, recommendations — and assign each an initial trust level based on your experience.</p>
+              <h4 style={{ color: 'var(--accent-blue)' }}>Build Matrix Tab — Map Your Output Types</h4>
+              <p>List the kinds of AI output you use in your work — email drafts, data analysis,
+              client proposals, meeting summaries — and assign each an initial trust level (high,
+              medium, or low) based on your gut feeling. This is your starting hypothesis.</p>
             </div>
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-green)' }}>2. Predict Before You Verify</h4>
-              <p>Before checking AI output, record your confidence level (1-10). This forces you to make your intuition explicit rather than relying on vague feelings about quality.</p>
+              <h4 style={{ color: 'var(--accent-green)' }}>Track Predictions Tab — Test Your Instincts</h4>
+              <p>Before you verify any AI output, rate your confidence (1-10) that it's correct.
+              Then check it and record what you find. Over time, this reveals where your gut is
+              right and where it misleads you.</p>
             </div>
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-yellow)' }}>3. Verify and Record</h4>
-              <p>Check the output and record whether it was correct. Over time, you'll see patterns: where you over-trust (confident but wrong) and where you over-verify (skeptical but right).</p>
-            </div>
-            <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-purple)' }}>4. Calibrate Your Judgment</h4>
-              <p>After 10+ predictions, the AI analyzes your calibration patterns and shows you exactly where your trust instincts need adjustment — saving you time and catching more errors.</p>
+              <h4 style={{ color: 'var(--accent-purple)' }}>Calibration Tab — See Your Patterns</h4>
+              <p>After 10+ predictions, the app analyzes where you over-trusted (were confident
+              but wrong) and where you over-verified (were skeptical but right). This is your
+              personal calibration report.</p>
             </div>
           </div>
 
           <div className="learn-comparison">
-            <h3>Over-Trust vs. Over-Verify</h3>
+            <h3>Uncalibrated vs. Calibrated Trust</h3>
             <div className="learn-comparison-grid">
-              <div>
-                <h4 style={{ color: 'var(--accent-red)', marginBottom: '12px' }}>Over-Trust (Risky)</h4>
-                <div style={{ background: 'var(--error-bg)', padding: '16px', borderRadius: '8px', marginBottom: '12px' }}>
-                  <p style={{ margin: 0, fontStyle: 'italic' }}>"AI-generated code always works — I just copy and paste it."</p>
+              <div className="learn-comparison-col">
+                <h4 className="poor">Treating All AI Output the Same</h4>
+                <div className="learn-comparison-item poor">
+                  <div className="learn-comparison-scenario">Event Planning</div>
+                  <p>You ask AI to draft a vendor outreach email and also to calculate the catering
+                  budget based on 150 attendees. Both outputs look professional. You send the email
+                  and submit the budget without checking either one.</p>
                 </div>
-                <div style={{ background: 'var(--error-bg)', padding: '16px', borderRadius: '8px', marginBottom: '12px' }}>
-                  <p style={{ margin: 0, fontStyle: 'italic' }}>"The summary looks professional, so the facts must be right."</p>
-                </div>
-                <div style={{ background: 'var(--error-bg)', padding: '16px', borderRadius: '8px' }}>
-                  <p style={{ margin: 0, fontStyle: 'italic' }}>"AI said the deadline is March 15, no need to double-check."</p>
+                <div className="learn-comparison-item poor">
+                  <p>The email was fine — tone, structure, all good. But the budget double-counted
+                  the beverage line item, putting you $3,000 over. You only discover it when the
+                  finance team questions the invoice.</p>
                 </div>
               </div>
-              <div>
-                <h4 style={{ color: 'var(--accent-green)', marginBottom: '12px' }}>Calibrated Trust (Efficient)</h4>
-                <div style={{ background: 'var(--success-bg)', padding: '16px', borderRadius: '8px', marginBottom: '12px' }}>
-                  <p style={{ margin: 0 }}>"AI code logic is usually sound, but I always test edge cases and error handling before deploying."</p>
+              <div className="learn-comparison-col">
+                <h4 className="good">Allocating Review by Trust Level</h4>
+                <div className="learn-comparison-item good">
+                  <div className="learn-comparison-scenario">Same Tasks — With a Trust Matrix</div>
+                  <p>Your trust matrix shows email drafts at "high trust" (AI is consistently good at
+                  tone and structure) but budget calculations at "low trust" (AI frequently makes
+                  arithmetic and logic errors with numbers). So you skim the email in 30 seconds
+                  but spend 5 minutes verifying every line of the budget.</p>
                 </div>
-                <div style={{ background: 'var(--success-bg)', padding: '16px', borderRadius: '8px', marginBottom: '12px' }}>
-                  <p style={{ margin: 0 }}>"AI summaries capture the structure well, but I spot-check any specific numbers, dates, or proper nouns."</p>
+                <div className="learn-comparison-item good">
+                  <p>You catch the beverage double-count before it leaves your desk. Total review
+                  time: 6 minutes, focused where it mattered.</p>
                 </div>
-                <div style={{ background: 'var(--success-bg)', padding: '16px', borderRadius: '8px' }}>
-                  <p style={{ margin: 0 }}>"For factual claims, I verify against the source. For formatting and structure, I trust AI's output."</p>
-                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3>What Trust Levels Actually Mean</h3>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+            Trust levels aren't about whether AI is "good" or "bad." They're about how much review
+            effort a particular output type needs from you, based on real experience.
+          </p>
+
+          <div className="learn-patterns-grid">
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-green)' }}>High Trust — Quick Scan</h4>
+              <p>Output types where AI is consistently reliable for your use case. You still glance
+              at the result, but you're not expecting problems.</p>
+              <div className="learn-pattern-label better">Examples</div>
+              <div className="learn-example-good">
+                Grammar and spelling corrections. Meeting agenda formatting. Rephrasing text
+                for a different tone. Generating standard email templates.
+              </div>
+            </div>
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-yellow)' }}>Medium Trust — Targeted Check</h4>
+              <p>Output types where AI is usually right but makes predictable mistakes. You know
+              which parts to double-check.</p>
+              <div className="learn-pattern-label better">Examples</div>
+              <div className="learn-example-good">
+                Meeting summaries (check specific names and dates). Job descriptions (check legal
+                compliance language). Client-facing emails (check tone matches relationship).
+                Research summaries (verify key claims).
+              </div>
+            </div>
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-red)' }}>Low Trust — Full Review</h4>
+              <p>Output types where AI frequently gets things wrong or where mistakes are costly.
+              Treat AI output as a rough draft that needs serious editing.</p>
+              <div className="learn-pattern-label better">Examples</div>
+              <div className="learn-example-good">
+                Financial calculations and projections. Legal or compliance language. Anything
+                referencing your company's specific policies. Recommendations about people
+                (hiring, performance, promotions).
+              </div>
+            </div>
+          </div>
+
+          <h3>Common Mistakes</h3>
+          <div className="learn-patterns-grid" style={{ marginBottom: '24px' }}>
+            <div className="learn-pattern-card">
+              <div className="learn-pattern-label avoid">Mistake</div>
+              <p>Assigning trust levels based on how the output <em>looks</em> rather than whether
+              it's actually correct. AI is very good at producing confident, professional-looking
+              text — even when the content is wrong.</p>
+              <div className="learn-pattern-label better">Instead</div>
+              <div className="learn-example-good">
+                Base trust levels on verified outcomes. A polished budget spreadsheet with wrong
+                numbers is still wrong. Track what you actually find when you check, not how you
+                feel when you read it.
+              </div>
+            </div>
+            <div className="learn-pattern-card">
+              <div className="learn-pattern-label avoid">Mistake</div>
+              <p>Setting trust levels once and never updating them. Your first guesses about what
+              AI gets right and wrong are often inaccurate.</p>
+              <div className="learn-pattern-label better">Instead</div>
+              <div className="learn-example-good">
+                Use the prediction tracking to test your assumptions. After 10+ verifications per
+                output type, you'll have real data. Adjust your trust levels based on what you find,
+                not what you assumed.
+              </div>
+            </div>
+            <div className="learn-pattern-card">
+              <div className="learn-pattern-label avoid">Mistake</div>
+              <p>Applying one trust level to all AI output from the same conversation. "It got the
+              first three things right, so the rest is probably fine too."</p>
+              <div className="learn-pattern-label better">Instead</div>
+              <div className="learn-example-good">
+                Evaluate each output type independently. AI might write a perfect project timeline
+                in the same conversation where it miscalculates your resource costs. The task type
+                matters more than the session.
               </div>
             </div>
           </div>
 
           <div className="learn-next-step">
             <h3>Ready to Build Your Trust Matrix?</h3>
-            <p>Start by identifying the AI output types you use most often, then track your predictions to discover your calibration patterns.</p>
+            <p>Start by listing the types of AI output you use most in your work. Assign your
+            best-guess trust levels, then use predictions to find out where your instincts
+            are right and where they need adjusting.</p>
             <button className="btn btn-primary" onClick={() => setActiveTab('matrix')}>
               Go to Build Matrix
             </button>

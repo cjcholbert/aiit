@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
 import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
+import ConnectionCallout from '../components/ConnectionCallout';
 import LessonNav from '../components/LessonNav';
 import StatsPanel from '../components/StatsPanel';
 
@@ -288,69 +289,193 @@ export default function Lesson07() {
       {/* Learn Tab */}
       {activeTab === 'learn' && (
         <div className="learn-section">
-          <h2>The Three Categories</h2>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>
-            Every task falls into one of three categories based on who should lead. Learn to recognize each type.
-          </p>
+          <ConnectionCallout
+            lessonNumber={1}
+            lessonTitle="Context Tracker"
+            message="Lesson 1 helped you provide clear context to AI. Good decomposition depends on that same skill — the better you understand a project's details, the better you can break it into the right pieces."
+          />
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
-            {Object.entries(categories || CATEGORIES).map(([key, cat]) => (
-              <div
-                key={key}
-                className={`card ${CATEGORIES[key]?.bgClass || ''}`}
-                style={{ padding: '24px' }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                  <span style={{ fontSize: '2rem' }}>{CATEGORIES[key]?.icon}</span>
-                  <h3 style={{ margin: 0, color: CATEGORIES[key]?.color }}>{cat.label || key}</h3>
-                </div>
-                <p style={{ marginBottom: '16px', color: 'var(--text-primary)' }}>{cat.description}</p>
-
-                <div style={{ marginBottom: '12px' }}>
-                  <strong style={{ color: 'var(--text-secondary)' }}>Examples:</strong>
-                  <ul style={{ margin: '8px 0', paddingLeft: '20px', color: 'var(--text-primary)' }}>
-                    {(cat.examples || []).slice(0, 4).map((ex, i) => (
-                      <li key={i} style={{ marginBottom: '4px' }}>{ex}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div>
-                  <strong style={{ color: 'var(--text-secondary)' }}>Signals:</strong>
-                  <ul style={{ margin: '8px 0', paddingLeft: '20px', color: 'var(--text-primary)' }}>
-                    {(cat.signals || []).slice(0, 3).map((sig, i) => (
-                      <li key={i} style={{ marginBottom: '4px', fontSize: '0.875rem' }}>{sig}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            ))}
+          <div className="learn-intro">
+            <h2>Why "Just Ask AI to Do It" Fails on Real Projects</h2>
+            <p>
+              Your manager asks you to plan the company's annual client appreciation event. You open your
+              AI tool and type: "Plan a client appreciation event for 200 people." The AI gives you a
+              generic checklist — venue, catering, invitations — but nothing accounts for your budget
+              constraints, your CEO's preference for intimate settings, or the fact that 40% of your clients
+              are remote and need a virtual option.
+            </p>
+            <p>
+              The problem is not the AI. The problem is that "plan an event" is actually 15-20 different
+              tasks, and each one needs a different approach. Some tasks (drafting invitation copy, comparing
+              venue pricing) are perfect for AI. Others (choosing which clients to invite, deciding the event
+              theme) require your judgment. And a few (getting budget sign-off, booking the CEO's calendar)
+              only you can do.
+            </p>
           </div>
 
-          <div style={{ marginTop: '32px', padding: '20px', background: 'var(--bg-secondary)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-            <h3>Quick Reference</h3>
-            <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '12px' }}>
-              <thead>
-                <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
-                  <th style={{ textAlign: 'left', padding: '8px', color: 'var(--text-primary)' }}>Ask yourself...</th>
-                  <th style={{ textAlign: 'left', padding: '8px', color: 'var(--text-primary)' }}>If YES, likely...</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
-                  <td style={{ padding: '8px', color: 'var(--text-primary)' }}>Is the input/output well-defined and pattern-based?</td>
-                  <td style={{ padding: '8px', color: 'var(--accent-green)' }}>AI-Optimal</td>
-                </tr>
-                <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
-                  <td style={{ padding: '8px', color: 'var(--text-primary)' }}>Does it need my expertise + AI capability?</td>
-                  <td style={{ padding: '8px', color: 'var(--accent-yellow)' }}>Collaborative</td>
-                </tr>
-                <tr>
-                  <td style={{ padding: '8px', color: 'var(--text-primary)' }}>Does it require my authority or confidential access?</td>
-                  <td style={{ padding: '8px', color: 'var(--accent-red)' }}>Human-Primary</td>
-                </tr>
-              </tbody>
-            </table>
+          <div className="learn-key-insight">
+            <strong>Key Insight:</strong> Every project is a mix of tasks that AI should lead, tasks you
+            should lead, and tasks you should tackle together. The skill is sorting them correctly
+            <em> before</em> you start — not discovering mid-project that you delegated something that needed
+            your judgment.
+          </div>
+
+          <h3>How This Lesson Works</h3>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+            One practice area to build your decomposition muscle:
+          </p>
+
+          <div className="learn-patterns-grid">
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-blue)' }}>Decompose Tab — Break Down a Real Project</h4>
+              <p>Pick a project you are working on (or about to start). Break it into individual tasks,
+              categorize each one as AI-Optimal, Collaborative, or Human-Primary, and sequence them
+              with dependencies. Then get AI feedback on your categorizations.</p>
+            </div>
+          </div>
+
+          <div className="learn-comparison">
+            <h3>Dumping vs. Decomposing</h3>
+            <div className="learn-comparison-grid">
+              <div className="learn-comparison-col">
+                <h4 className="poor">Dumping the Whole Project on AI</h4>
+                <div className="learn-comparison-item poor">
+                  <div className="learn-comparison-scenario">Quarterly Business Review Prep</div>
+                  <p>"Help me prepare our Q1 business review presentation for the leadership team."</p>
+                </div>
+                <div className="learn-comparison-item poor">
+                  <p>AI produces a generic slide outline. You spend hours reworking it because it
+                  missed your company's format, included wrong metrics, and suggested a narrative
+                  that contradicts what your VP wants to emphasize.</p>
+                </div>
+              </div>
+              <div className="learn-comparison-col">
+                <h4 className="good">Decomposing, Then Delegating Strategically</h4>
+                <div className="learn-comparison-item good">
+                  <div className="learn-comparison-scenario">Same QBR — Decomposed First</div>
+                  <p>You break the QBR into tasks: pull revenue data (AI-Optimal), draft executive
+                  summary (Collaborative), decide which initiatives to highlight (Human-Primary),
+                  format slides to company template (AI-Optimal), rehearse talking points (Human-Primary).</p>
+                </div>
+                <div className="learn-comparison-item good">
+                  <p>Each task gets the right approach. AI handles the data-heavy and formatting work.
+                  You lead the strategic decisions. The result is done faster and fits what leadership
+                  actually wants.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3>The Three Categories</h3>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+            Every subtask falls into one of three categories. The key is knowing which signals to look for.
+          </p>
+
+          <div className="learn-patterns-grid">
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-green)' }}>AI-Optimal — Delegate Freely</h4>
+              <p>The input and output are well-defined, the task is pattern-based, and there is low risk if
+              the result needs a small correction.</p>
+              <div className="learn-pattern-label better">Examples</div>
+              <div className="learn-example-good">
+                <strong>Event planning:</strong> Researching venue options within budget and location constraints<br/>
+                <strong>Marketing:</strong> Drafting 10 subject line variations for an email campaign<br/>
+                <strong>Finance:</strong> Summarizing expense reports into a formatted table<br/>
+                <strong>HR:</strong> Rewriting a job posting for a different platform's format
+              </div>
+            </div>
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-yellow)' }}>Collaborative — Work Together</h4>
+              <p>The task benefits from AI's speed or breadth, but requires your domain knowledge,
+              judgment, or context to get right.</p>
+              <div className="learn-pattern-label better">Examples</div>
+              <div className="learn-example-good">
+                <strong>Event planning:</strong> Designing the run-of-show (you know the audience; AI structures the timeline)<br/>
+                <strong>Marketing:</strong> Writing a case study (you provide client details; AI shapes the narrative)<br/>
+                <strong>Finance:</strong> Analyzing budget variances (AI spots patterns; you explain why they happened)<br/>
+                <strong>HR:</strong> Drafting performance review talking points (you assess performance; AI helps with phrasing)
+              </div>
+            </div>
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-red)' }}>Human-Primary — You Lead</h4>
+              <p>The task requires your authority, access to confidential information, relationships,
+              or judgment calls that cannot be delegated.</p>
+              <div className="learn-pattern-label better">Examples</div>
+              <div className="learn-example-good">
+                <strong>Event planning:</strong> Getting budget approval from the CFO<br/>
+                <strong>Marketing:</strong> Deciding which client testimonials to feature (involves relationship sensitivity)<br/>
+                <strong>Finance:</strong> Presenting the quarterly results to the board<br/>
+                <strong>HR:</strong> Having a difficult conversation with an underperforming employee
+              </div>
+            </div>
+          </div>
+
+          <h3>Decision Gates: Knowing When to Pause</h3>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+            Not every task flows automatically into the next. A decision gate is a point where you need to
+            review results and make a choice before continuing.
+          </p>
+
+          <div className="learn-patterns-grid">
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-blue)' }}>When to Insert a Decision Gate</h4>
+              <p>Add a gate any time the next task depends on a judgment call, not just the previous task's output.</p>
+              <div className="learn-pattern-label better">Example</div>
+              <div className="learn-example-good">
+                <strong>Project:</strong> Client proposal<br/>
+                <strong>Task 3:</strong> AI drafts three pricing options (AI-Optimal)<br/>
+                <strong>DECISION GATE:</strong> You choose which pricing option to present to the client<br/>
+                <strong>Task 4:</strong> AI writes the full proposal around the selected option (Collaborative)
+              </div>
+              <p style={{ marginTop: '12px', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
+                Without this gate, AI would pick a pricing option for you — a decision that affects the
+                entire client relationship.
+              </p>
+            </div>
+          </div>
+
+          <h3>Common Mistakes</h3>
+          <div className="learn-patterns-grid" style={{ marginBottom: '24px' }}>
+            <div className="learn-pattern-card">
+              <div className="learn-pattern-label avoid">Mistake</div>
+              <p>Making tasks too large. "Create the marketing strategy" is not a single task — it contains
+              research, analysis, creative work, and decision-making all bundled together.</p>
+              <div className="learn-pattern-label better">Instead</div>
+              <div className="learn-example-good">
+                Break it down until each task has one clear deliverable. "Research competitor pricing in
+                our market segment" is a task. "Create the marketing strategy" is a project.
+              </div>
+            </div>
+            <div className="learn-pattern-card">
+              <div className="learn-pattern-label avoid">Mistake</div>
+              <p>Marking everything as "Collaborative" to avoid thinking about categorization. This defeats
+              the purpose — you end up micromanaging tasks AI could handle alone and under-investing in
+              tasks that need your full attention.</p>
+              <div className="learn-pattern-label better">Instead</div>
+              <div className="learn-example-good">
+                Be honest about each task. Ask: "If AI did this completely wrong, how bad would it be?"
+                Low stakes with clear criteria = AI-Optimal. High stakes or subjective judgment = Human-Primary.
+              </div>
+            </div>
+            <div className="learn-pattern-card">
+              <div className="learn-pattern-label avoid">Mistake</div>
+              <p>Forgetting to sequence tasks with dependencies. You ask AI to draft a project timeline
+              before you have decided which team members are available — then the timeline is useless.</p>
+              <div className="learn-pattern-label better">Instead</div>
+              <div className="learn-example-good">
+                Map dependencies before you start. If Task B needs the output of Task A, put A first
+                and insert a decision gate if A's output requires your review before B can begin.
+              </div>
+            </div>
+          </div>
+
+          <div className="learn-next-step">
+            <h3>Ready to Decompose Your First Project?</h3>
+            <p>Pick a real project you are working on — an event, a report, a client deliverable, anything
+            with multiple steps. Break it into tasks and categorize each one.</p>
+            <button className="btn btn-primary" onClick={() => setActiveTab('decompose')}>
+              Go to Decompose
+            </button>
           </div>
         </div>
       )}

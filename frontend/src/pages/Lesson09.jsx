@@ -362,97 +362,215 @@ export default function Lesson09() {
           <ConnectionCallout
             lessonNumber={2}
             lessonTitle="Feedback Analyzer"
-            message="Lesson 2 taught you to give specific, actionable feedback. Now apply those principles to iterate on AI outputs through structured refinement passes."
+            message="Lesson 2 taught you to give specific, actionable feedback instead of vague requests. Now you'll apply that skill systematically — using structured passes so each round of feedback has a clear purpose and you know exactly when you're done."
           />
-          <h2>The 70-85-95 Framework</h2>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>
-            Stop iterating randomly. Use structured passes with specific focus areas and key questions to reach
-            production-ready output efficiently.
+
+          <div className="learn-intro">
+            <h2>Why "Make It Better" Never Works</h2>
+            <p>
+              Your manager asks you to use AI to draft a quarterly business review for the leadership
+              team. The first version comes back and it's... okay. The structure is off, some numbers
+              feel wrong, and the tone is too casual for the audience. So you tell the AI "make it
+              better." It changes a few things. You say "more professional." It adjusts the tone but
+              now the key recommendations are buried. Three more rounds of back-and-forth later, you've
+              spent 45 minutes and the output is different — but not necessarily better.
+            </p>
+            <p>
+              The problem isn't the AI. It's that "make it better" gives no direction. Each round of
+              feedback tries to fix everything at once, so nothing gets fixed well. You end up chasing
+              your tail, fixing the tone while breaking the structure, then fixing the structure while
+              losing the tone.
+            </p>
+          </div>
+
+          <div className="learn-key-insight">
+            <strong>Key Insight:</strong> Effective iteration is not about more rounds — it's about
+            focused rounds. The 70-85-95 framework gives each pass a single job. Pass 1 locks down
+            structure. Pass 2 nails accuracy. Pass 3 polishes for the audience. Three deliberate
+            passes beat ten random ones every time.
+          </div>
+
+          <h3>How This Lesson Works</h3>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+            Three areas that build your structured iteration skill:
           </p>
 
-          {/* The Three Passes */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', marginBottom: '32px' }}>
-            {passInfo && Object.entries(passInfo).map(([num, info]) => {
-              const style = PASS_STYLES[parseInt(num)];
-              return (
-                <div
-                  key={num}
-                  className="card"
-                  style={{
-                    padding: '24px',
-                    background: style.bg,
-                    borderTop: `4px solid ${style.color}`,
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                    <div style={{
-                      width: '48px',
-                      height: '48px',
-                      borderRadius: '50%',
-                      background: 'var(--bg-secondary)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontWeight: 'bold',
-                      fontSize: '1.1rem',
-                      color: style.color,
-                    }}>
-                      {info.label}
-                    </div>
-                    <div>
-                      <h3 style={{ margin: 0, color: style.color }}>{style.icon} {info.name}</h3>
-                      <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Pass {num}</div>
-                    </div>
-                  </div>
-                  <div style={{ marginBottom: '16px' }}>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '4px' }}>FOCUS</div>
-                    <div style={{ color: 'var(--text-muted)' }}>{info.focus}</div>
-                  </div>
-                  <div style={{ marginBottom: '16px' }}>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '4px' }}>KEY QUESTION</div>
-                    <div style={{ color: style.color, fontStyle: 'italic', fontSize: '1.1rem' }}>
-                      "{info.key_question}"
-                    </div>
-                  </div>
-                  <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-                    {info.description}
-                  </div>
+          <div className="learn-patterns-grid">
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-blue)' }}>Practice Tab — Run Your Passes</h4>
+              <p>Create a real task (or import one from Context Tracker), then work through each
+              pass. For every pass you answer its key question and record the specific feedback
+              you gave the AI. This builds the muscle of focusing on one thing at a time.</p>
+            </div>
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-green)' }}>Feedback Quality Check — Sharpen Your Requests</h4>
+              <p>After recording a pass, use the "Check Feedback Quality" button to get an analysis
+              of your iteration feedback. It flags vague language, scope creep, and misalignment
+              with the pass focus — so your feedback improves with every task.</p>
+            </div>
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-purple)' }}>History Tab — See Your Progress</h4>
+              <p>Review completed tasks to see how your iteration approach evolves. Over time you'll
+              notice your Pass 1 feedback getting sharper and your total passes-to-done shrinking.
+              That's the skill developing.</p>
+            </div>
+          </div>
+
+          <div className="learn-comparison">
+            <h3>Random Tweaking vs. Structured Passes</h3>
+            <div className="learn-comparison-grid">
+              <div className="learn-comparison-col">
+                <h4 className="poor">Random Tweaking — No Focus Per Round</h4>
+                <div className="learn-comparison-item poor">
+                  <div className="learn-comparison-scenario">Drafting a Quarterly Business Review</div>
+                  <p>Round 1: "Make it more professional and fix the numbers and add a recommendation
+                  section." Round 2: "The tone is better but now the executive summary is too long
+                  and the chart descriptions are wrong." Round 3: "Can you shorten it but also add
+                  more detail on Q3?" Round 4: "This is going in circles..."</p>
                 </div>
-              );
-            })}
-          </div>
-
-          {/* How It Works */}
-          <div style={{ padding: '24px', background: 'var(--bg-secondary)', borderRadius: '8px', marginBottom: '24px' }}>
-            <h3>How It Works</h3>
-            <ol style={{ margin: '16px 0 0', paddingLeft: '20px', color: 'var(--text-secondary)', lineHeight: '2' }}>
-              <li><strong>Create a task</strong> with a clear target outcome (what "done" looks like)</li>
-              <li><strong>Pass 1 (70%):</strong> Get the structure right. Ask yourself: "Right problem, right way?"</li>
-              <li><strong>Pass 2 (85%):</strong> Make it robust. Ask: "What will break in practice?"</li>
-              <li><strong>Pass 3 (95%):</strong> Polish for production. Ask: "Will this work for its audience?"</li>
-              <li><strong>Each pass:</strong> Answer the key question, record your iteration feedback, then advance</li>
-            </ol>
-          </div>
-
-          {/* Transition Templates */}
-          {transitionTemplates && (
-            <div>
-              <h3>Transition Prompts</h3>
-              <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
-                Use these templates when moving between passes to guide the AI's focus.
-              </p>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '16px' }}>
-                {Object.entries(transitionTemplates).map(([key, template]) => (
-                  <div key={key} className="card" style={{ padding: '20px' }}>
-                    <h4 style={{ margin: '0 0 12px', color: 'var(--accent-blue)' }}>{template.name}</h4>
-                    <pre style={{ margin: 0, whiteSpace: 'pre-wrap', fontSize: '0.8rem', color: 'var(--text-secondary)', background: 'var(--bg-secondary)', padding: '12px', borderRadius: '6px' }}>
-                      {template.template}
-                    </pre>
-                  </div>
-                ))}
+                <div className="learn-comparison-item poor">
+                  <p>Four rounds, 40+ minutes, and the output still has structural problems because
+                  you never isolated what to fix first. Each round introduced new issues while
+                  partially fixing old ones.</p>
+                </div>
+              </div>
+              <div className="learn-comparison-col">
+                <h4 className="good">Structured Passes — One Focus Per Round</h4>
+                <div className="learn-comparison-item good">
+                  <div className="learn-comparison-scenario">Same Task — With 70-85-95</div>
+                  <p>Pass 1 (Structure): "The QBR needs four sections: executive summary, key metrics,
+                  department highlights, and recommendations. Move recommendations to the top — leadership
+                  reads that first." Pass 2 (Accuracy): "The Q3 revenue figure should be $2.4M not $2.1M,
+                  and the customer churn section understates the trend — it's been declining for three
+                  quarters." Pass 3 (Polish): "This goes to the C-suite — make the executive summary
+                  scannable in under 60 seconds and cut the jargon in the recommendations."</p>
+                </div>
+                <div className="learn-comparison-item good">
+                  <p>Three passes, 20 minutes, and the output is actually ready. Each pass solved one
+                  category of problems completely before moving on.</p>
+                </div>
               </div>
             </div>
-          )}
+          </div>
+
+          <h3>The Three Passes — In Detail</h3>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+            Each pass targets a different layer of quality. Doing them in order prevents the
+            "fix one thing, break another" cycle.
+          </p>
+
+          <div className="learn-patterns-grid">
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--text-secondary)' }}>Pass 1: Structure and Completeness (70%)</h4>
+              <p>
+                <strong>Key question: "Is the foundation right?"</strong><br />
+                Don't worry about word choice or polish yet. Focus entirely on whether the output
+                addresses the right problem in the right structure. Are the sections in the right
+                order? Is anything important missing? Is anything included that shouldn't be?
+              </p>
+              <div className="learn-pattern-label better">Example Feedback</div>
+              <div className="learn-example-good">
+                "This event proposal needs three sections I don't see: a budget breakdown, a timeline
+                with milestones, and a risk mitigation plan. Also, move the venue options before
+                the catering section — venue choice drives all the other decisions."
+              </div>
+              <div className="learn-pattern-label avoid">Not This</div>
+              <div className="learn-example-bad">
+                "This isn't quite right, can you improve it and make it more complete?"
+              </div>
+            </div>
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-blue)' }}>Pass 2: Accuracy and Tone (85%)</h4>
+              <p>
+                <strong>Key question: "Are the details correct?"</strong><br />
+                Now that the structure is solid, check the content inside it. Are the facts right?
+                Do the numbers add up? Is the tone appropriate for the audience? This is where you
+                catch the errors that would undermine credibility.
+              </p>
+              <div className="learn-pattern-label better">Example Feedback</div>
+              <div className="learn-example-good">
+                "Two corrections: the project kickoff date should be March 15, not March 1 — we
+                need two weeks for vendor contracts. Also, the tone in the client-facing sections
+                is too informal. Replace 'we'll figure it out' language with specific commitments
+                like 'we will deliver by [date].'"
+              </div>
+              <div className="learn-pattern-label avoid">Not This</div>
+              <div className="learn-example-bad">
+                "Some of the details seem off and the tone isn't right for this audience."
+              </div>
+            </div>
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-green)' }}>Pass 3: Polish and Edge Cases (95%)</h4>
+              <p>
+                <strong>Key question: "Is it ready for its audience?"</strong><br />
+                Structure is locked. Facts are verified. Now make it audience-ready. Would a
+                busy executive scan this in two minutes? Will an HR director find the compliance
+                language they expect? Does it handle the edge case your pickiest stakeholder
+                will ask about?
+              </p>
+              <div className="learn-pattern-label better">Example Feedback</div>
+              <div className="learn-example-good">
+                "The finance team will want to know what happens if the vendor cancels within 30
+                days of the event — add a contingency line to the budget. Also, bold the three
+                key recommendations so they're visible in a quick scan. The rest is ready to send."
+              </div>
+              <div className="learn-pattern-label avoid">Not This</div>
+              <div className="learn-example-bad">
+                "Can you just clean it up and make sure it's good to go?"
+              </div>
+            </div>
+          </div>
+
+          <h3>Common Mistakes</h3>
+          <div className="learn-patterns-grid" style={{ marginBottom: '24px' }}>
+            <div className="learn-pattern-card">
+              <div className="learn-pattern-label avoid">Mistake</div>
+              <p>Jumping to polish before the structure is right. You spend 10 minutes perfecting
+              the wording of a project update only to realize the entire section order needs to
+              change — and your careful edits get lost in the restructure.</p>
+              <div className="learn-pattern-label better">Instead</div>
+              <div className="learn-example-good">
+                Always run Pass 1 first. Lock down what sections exist and in what order before
+                you care about how anything reads. It feels wasteful to ignore tone on the first
+                round, but it saves significant rework.
+              </div>
+            </div>
+            <div className="learn-pattern-card">
+              <div className="learn-pattern-label avoid">Mistake</div>
+              <p>Combining multiple pass concerns into one round of feedback. "Fix the structure,
+              update the numbers, and make it sound more professional" seems efficient but gives
+              the AI too many competing priorities. It will partially address each one and fully
+              address none.</p>
+              <div className="learn-pattern-label better">Instead</div>
+              <div className="learn-example-good">
+                One pass, one focus. If you find yourself writing feedback that covers structure
+                AND tone AND edge cases, split it into separate passes. Three focused rounds
+                produce better results than one overloaded round.
+              </div>
+            </div>
+            <div className="learn-pattern-card">
+              <div className="learn-pattern-label avoid">Mistake</div>
+              <p>Iterating past "good enough." After three passes your output is at 95%, but you
+              keep going — tweaking word choices, rearranging sentences, chasing perfection. The
+              fourth and fifth passes add minimal value while eating up your time.</p>
+              <div className="learn-pattern-label better">Instead</div>
+              <div className="learn-example-good">
+                The framework stops at 95% on purpose. That last 5% almost always requires human
+                judgment that's faster to apply yourself than to explain to AI. After Pass 3, make
+                any final tweaks manually and ship it.
+              </div>
+            </div>
+          </div>
+
+          <div className="learn-next-step">
+            <h3>Ready to Iterate with Purpose?</h3>
+            <p>Pick a real task you're working on — a report, a proposal, a client email, a project
+            plan — and run it through all three passes. You'll feel the difference between "make it
+            better" and knowing exactly what to fix at each stage.</p>
+            <button className="btn btn-primary" onClick={() => setActiveTab('practice')}>
+              Go to Practice
+            </button>
+          </div>
         </div>
       )}
 

@@ -4,6 +4,7 @@ import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import LessonNav from '../components/LessonNav';
 import StatsPanel from '../components/StatsPanel';
+import ConnectionCallout from '../components/ConnectionCallout';
 
 export default function Lesson01() {
     const [activeTab, setActiveTab] = useState('learn');
@@ -332,172 +333,194 @@ export default function Lesson01() {
             {/* Learn Tab */}
             {activeTab === 'learn' && (
                 <div className="learn-section">
-                    <h2>What Is Context in AI Interactions?</h2>
                     <div className="learn-intro">
+                        <h2>The Foundation: Knowing What Context Your AI Needs</h2>
                         <p>
-                            Every time you talk to an AI, it starts with a blank slate. Unlike a coworker who
-                            knows your project history, your preferences, and your constraints, AI has zero
-                            implicit knowledge about your situation. <strong>Context</strong> is the background
-                            information you provide that bridges this gap.
+                            You ask AI to help draft a client proposal. It comes back with something generic and off-target.
+                            You try again, adding that it's for a healthcare client. Better, but the tone is wrong. You
+                            clarify the tone. Now it's too long. Three rounds in, you've spent more time correcting
+                            than writing it yourself.
                         </p>
                         <p>
-                            Context includes things like: what you're working on, who the audience is, what
-                            constraints exist, what you've already tried, and what format you need. Without
-                            these details, AI falls back on generic, one-size-fits-all responses.
+                            The issue wasn't the AI — it was missing context. You knew the client, the industry, the
+                            budget constraints, and the preferred format. The AI knew none of it. This lesson helps you
+                            find your personal blind spots: the context you consistently forget to provide, so you can
+                            fix it before it costs you time.
                         </p>
                     </div>
 
                     <div className="learn-key-insight">
-                        <p>
-                            <strong>Key insight:</strong> The quality of AI output is directly proportional to the
-                            quality of context you provide. Generic input produces generic output. Specific context
-                            produces specific, useful results.
-                        </p>
+                        <strong>Key Insight:</strong> Everyone has context patterns — types of information they
+                        reliably provide and types they consistently forget. By analyzing your past AI conversations,
+                        you can identify your specific gaps and turn them into habits. This is the foundation
+                        every other lesson builds on.
                     </div>
 
-                    <h2>Common Context Gaps</h2>
-                    <p className="page-description">
-                        These are the patterns the Analyze tab identifies in your conversations. Learn to
-                        spot them before they cost you iteration cycles.
+                    <h3>How This Lesson Works</h3>
+                    <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+                        Two practice areas to discover and track your context patterns:
                     </p>
 
                     <div className="learn-patterns-grid">
                         <div className="learn-pattern-card">
-                            <h3>Missing Constraints</h3>
-                            <p>
-                                You describe what you want but leave out the boundaries: budget, timeline,
-                                technical stack, word count, audience level, or platform requirements.
-                            </p>
-                            <div className="learn-pattern-label avoid">Example (Avoid)</div>
+                            <h4 style={{ color: 'var(--accent-blue)' }}>Analyze Tab — Find Your Gaps</h4>
+                            <p>Paste a real AI conversation (or upload a JSON export). The tool analyzes what context
+                            you provided, what was missing, and what the AI had to guess. You'll get a specific coaching
+                            suggestion and an improved version of your opening prompt.</p>
+                        </div>
+                        <div className="learn-pattern-card">
+                            <h4 style={{ color: 'var(--accent-green)' }}>History Tab — Track Your Patterns</h4>
+                            <p>See all your analyzed conversations in one place. Over time, recurring gaps and
+                            strengths emerge — showing you exactly which context habits to build and which
+                            ones you've already mastered.</p>
+                        </div>
+                    </div>
+
+                    <div className="learn-comparison">
+                        <h3>Without Context vs. With Context</h3>
+                        <div className="learn-comparison-grid">
+                            <div className="learn-comparison-col">
+                                <h4 className="poor">Missing Context (Generic Output)</h4>
+                                <div className="learn-comparison-item poor">
+                                    <div className="learn-comparison-scenario">Event Planning</div>
+                                    <p>"Help me plan a team offsite."</p>
+                                </div>
+                                <div className="learn-comparison-item poor">
+                                    <div className="learn-comparison-scenario">Client Email</div>
+                                    <p>"Write an email to my client about the project delay."</p>
+                                </div>
+                                <div className="learn-comparison-item poor">
+                                    <div className="learn-comparison-scenario">Budget Review</div>
+                                    <p>"Look at this spreadsheet and give me insights."</p>
+                                </div>
+                            </div>
+                            <div className="learn-comparison-col">
+                                <h4 className="good">Rich Context (Targeted Output)</h4>
+                                <div className="learn-comparison-item good">
+                                    <div className="learn-comparison-scenario">Event Planning</div>
+                                    <p>"Help me plan a 2-day team offsite for 25 people in the Denver area. Budget is
+                                    $8K. The goal is team bonding after a reorg — not strategy sessions. Half the team
+                                    is remote and hasn't met in person."</p>
+                                </div>
+                                <div className="learn-comparison-item good">
+                                    <div className="learn-comparison-scenario">Client Email</div>
+                                    <p>"Write an email to our client (VP of Marketing at Greenfield Inc.) explaining
+                                    that the campaign launch is delayed 2 weeks because of vendor artwork issues. We've
+                                    already sourced a backup vendor. Tone: professional, reassuring. Keep it under 150 words."</p>
+                                </div>
+                                <div className="learn-comparison-item good">
+                                    <div className="learn-comparison-scenario">Budget Review</div>
+                                    <p>"Analyze our Q4 department spending (attached CSV). I need to find: which cost
+                                    centers exceeded budget by more than 10%, whether the new contractor line items are
+                                    trending up, and a summary I can present to our CFO in 3 bullet points."</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>The Four Most Common Context Gaps</h3>
+                    <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+                        These are the patterns the Analyze tab looks for in your conversations. Learn to recognize
+                        them so you can catch them before they waste your time.
+                    </p>
+
+                    <div className="learn-patterns-grid">
+                        <div className="learn-pattern-card">
+                            <h4 style={{ color: 'var(--accent-red)' }}>Missing Constraints</h4>
+                            <p>You describe what you want but leave out the boundaries: budget, timeline,
+                            word count, audience level, or format requirements.</p>
                             <div className="learn-example-bad">
                                 "Write me a marketing email."
                             </div>
-                            <div className="learn-pattern-label better">Better</div>
                             <div className="learn-example-good">
-                                "Write a marketing email for our B2B SaaS product targeting IT managers. Keep it
-                                under 200 words. Tone should be professional but not stiff."
+                                "Write a 150-word marketing email for our spring wellness program, targeting
+                                employees in the 25-40 age range. Tone: upbeat but not cheesy. Include a
+                                registration link and a deadline."
                             </div>
                         </div>
 
                         <div className="learn-pattern-card">
-                            <h3>Assumed Knowledge</h3>
-                            <p>
-                                You reference project details, acronyms, or prior decisions without explaining
-                                them, assuming the AI knows what you know.
-                            </p>
-                            <div className="learn-pattern-label avoid">Example (Avoid)</div>
+                            <h4 style={{ color: 'var(--accent-red)' }}>Assumed Knowledge</h4>
+                            <p>You reference project details, acronyms, or past decisions without explaining
+                            them — assuming the AI shares your memory.</p>
                             <div className="learn-example-bad">
                                 "Update the TPS reports to match the new format from last week's meeting."
                             </div>
-                            <div className="learn-pattern-label better">Better</div>
                             <div className="learn-example-good">
-                                "Our weekly status reports need to change from paragraph format to bullet points
+                                "Our weekly status reports need to switch from paragraph format to bullet points
                                 with three sections: Completed, In Progress, and Blocked. Each bullet should be
                                 one sentence max."
                             </div>
                         </div>
 
                         <div className="learn-pattern-card">
-                            <h3>Vague Goals</h3>
-                            <p>
-                                Your request lacks a clear success criteria. The AI can't tell what "good" looks
-                                like because you haven't defined it.
-                            </p>
-                            <div className="learn-pattern-label avoid">Example (Avoid)</div>
+                            <h4 style={{ color: 'var(--accent-red)' }}>Vague Goals</h4>
+                            <p>Your request has no clear success criteria. The AI can't tell what "good"
+                            looks like because you haven't defined it.</p>
                             <div className="learn-example-bad">
                                 "Help me improve this document."
                             </div>
-                            <div className="learn-pattern-label better">Better</div>
                             <div className="learn-example-good">
-                                "This project proposal needs to convince our VP to approve $50K in budget. Strengthen
-                                the ROI section with specific numbers and add a risk mitigation plan."
+                                "This proposal needs to convince our director to approve a $15K training budget.
+                                Strengthen the ROI section with specific time-savings estimates and add a comparison
+                                to the cost of not training."
                             </div>
                         </div>
 
                         <div className="learn-pattern-card">
-                            <h3>Missing Role / Audience</h3>
-                            <p>
-                                You don't specify who will read or use the output, so the AI picks a generic
-                                tone and complexity level.
-                            </p>
-                            <div className="learn-pattern-label avoid">Example (Avoid)</div>
+                            <h4 style={{ color: 'var(--accent-red)' }}>Missing Audience</h4>
+                            <p>You don't specify who will read or use the output, so the AI picks a generic
+                            tone and complexity level that may be wrong for your situation.</p>
                             <div className="learn-example-bad">
-                                "Explain how our API authentication works."
+                                "Explain how our onboarding process works."
                             </div>
-                            <div className="learn-pattern-label better">Better</div>
                             <div className="learn-example-good">
-                                "Explain our OAuth2 API authentication flow for a junior developer who just joined
-                                the team. They know HTTP basics but haven't worked with tokens before. Include a
-                                step-by-step example."
+                                "Explain our 90-day onboarding process for a new HR coordinator who'll be running
+                                it. They know HR basics but haven't seen our specific workflow. Include the timeline
+                                and who to contact at each stage."
                             </div>
                         </div>
                     </div>
 
-                    {/* Before/After Comparisons */}
-                    <div className="learn-comparison">
-                        <h3>Before & After: Context in Action</h3>
-                        <div className="learn-comparison-grid">
-                            <div className="learn-comparison-col">
-                                <h4 className="poor">Without Context (Generic Output)</h4>
-
-                                <div className="learn-comparison-scenario">Scenario 1: Code Review</div>
-                                <div className="learn-comparison-item poor">
-                                    <p>"Review this code and tell me if it's good."</p>
-                                </div>
-
-                                <div className="learn-comparison-scenario">Scenario 2: Email Drafting</div>
-                                <div className="learn-comparison-item poor">
-                                    <p>"Write an email to my client about the project delay."</p>
-                                </div>
-
-                                <div className="learn-comparison-scenario">Scenario 3: Data Analysis</div>
-                                <div className="learn-comparison-item poor">
-                                    <p>"Look at this spreadsheet and give me insights."</p>
-                                </div>
+                    <h3>Common Mistakes</h3>
+                    <div className="learn-patterns-grid" style={{ marginBottom: '24px' }}>
+                        <div className="learn-pattern-card">
+                            <div className="learn-pattern-label avoid">Mistake</div>
+                            <p>Dumping every piece of information you have into the prompt. More context is not always
+                            better — irrelevant details bury the important ones.</p>
+                            <div className="learn-pattern-label better">Instead</div>
+                            <div className="learn-example-good">
+                                Match context depth to task complexity. A quick question needs 1-2 sentences of
+                                background. A multi-step project needs a full briefing. Ask yourself: "Would a
+                                smart colleague need this detail to help me?"
                             </div>
-
-                            <div className="learn-comparison-col">
-                                <h4 className="good">With Context (Targeted Output)</h4>
-
-                                <div className="learn-comparison-scenario">Scenario 1: Code Review</div>
-                                <div className="learn-comparison-item good">
-                                    <p>
-                                        "Review this Python function for SQL injection vulnerabilities. It handles
-                                        user-submitted search queries in a Flask app connected to PostgreSQL. We use
-                                        SQLAlchemy but this function uses raw SQL."
-                                    </p>
-                                </div>
-
-                                <div className="learn-comparison-scenario">Scenario 2: Email Drafting</div>
-                                <div className="learn-comparison-item good">
-                                    <p>
-                                        "Write an email to our client (the CFO of Acme Corp) explaining that the
-                                        dashboard project is delayed 2 weeks because of an API vendor outage. We've
-                                        already found a workaround. Tone: professional, reassuring, and brief. Include
-                                        a revised timeline."
-                                    </p>
-                                </div>
-
-                                <div className="learn-comparison-scenario">Scenario 3: Data Analysis</div>
-                                <div className="learn-comparison-item good">
-                                    <p>
-                                        "Analyze Q4 sales data (attached CSV) for our SaaS product. I need to know:
-                                        which region grew fastest, whether the enterprise tier is cannibalizing
-                                        mid-market, and if our December promotion actually lifted revenue or just
-                                        pulled forward January deals."
-                                    </p>
-                                </div>
+                        </div>
+                        <div className="learn-pattern-card">
+                            <div className="learn-pattern-label avoid">Mistake</div>
+                            <p>Analyzing only conversations that went badly. You learn just as much from
+                            conversations that went well — those reveal context you already provide reliably.</p>
+                            <div className="learn-pattern-label better">Instead</div>
+                            <div className="learn-example-good">
+                                Analyze a mix of good and bad conversations. Your strengths are habits worth
+                                keeping. Your gaps are habits worth building.
+                            </div>
+                        </div>
+                        <div className="learn-pattern-card">
+                            <div className="learn-pattern-label avoid">Mistake</div>
+                            <p>Treating the analysis as a one-time exercise. Context habits change as your
+                            work changes — new projects bring new gaps.</p>
+                            <div className="learn-pattern-label better">Instead</div>
+                            <div className="learn-example-good">
+                                Analyze 2-3 conversations per week for the first month. After that, check in
+                                whenever you start a new type of work or notice AI outputs declining in quality.
                             </div>
                         </div>
                     </div>
 
-                    {/* CTA to Analyze tab */}
                     <div className="learn-next-step">
                         <h3>Ready to Find Your Context Gaps?</h3>
-                        <p>
-                            Paste a real AI conversation into the Analyze tab. The tool will identify which context
-                            was missing and suggest specific improvements for next time.
-                        </p>
+                        <p>Paste a real AI conversation into the Analyze tab. The tool will identify what context
+                        was missing, what worked well, and give you a specific coaching suggestion for next time.</p>
                         <button
                             className="btn btn-primary"
                             onClick={() => { setActiveTab('analyze'); setAnalysis(null); }}

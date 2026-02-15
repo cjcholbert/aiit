@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
 import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
+import ConnectionCallout from '../components/ConnectionCallout';
 import LessonNav from '../components/LessonNav';
 import StatsPanel from '../components/StatsPanel';
 
@@ -392,12 +393,14 @@ export default function Lesson04() {
       <header className="page-header">
         <h1>Context Docs</h1>
         <p className="page-description">
-          <strong>The Problem:</strong> Every new AI session starts from scratch. You waste time re-explaining
-          project context, and the AI makes the same mistakes you've already corrected in previous sessions.
+          <strong>The Problem:</strong> You've been working with AI on a project for weeks, but every new
+          conversation starts blank. You re-explain the same background, the AI suggests approaches you
+          already rejected, and you lose 10 minutes before real work begins.
         </p>
         <p className="page-description" style={{ marginTop: '8px' }}>
-          <strong>The Skill:</strong> Maintain living context documents that capture project state, decisions,
-          issues, and lessons. Start each session with full context for immediate productivity.
+          <strong>The Skill:</strong> Keep a living document for each project that captures what's done,
+          what's decided, and what's next. Paste it at the start of any AI session so the conversation
+          picks up where you left off — no re-explaining needed.
         </p>
       </header>
 
@@ -452,102 +455,199 @@ export default function Lesson04() {
       {/* Learn Tab */}
       {activeTab === 'learn' && (
         <div className="learn-section">
-          <h2>Context Persistence</h2>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>
-            Maintain continuity across AI sessions by documenting project context systematically.
+          <ConnectionCallout
+            lessonNumber={3}
+            lessonTitle="Template Builder"
+            message="Lesson 3 helped you build reusable prompt templates. Context Docs solve a different problem: keeping AI informed about ongoing projects across multiple sessions, so it never loses track of where you are."
+          />
+
+          <div className="learn-intro">
+            <h2>Why Every Ongoing Project Needs a Context Doc</h2>
+            <p>
+              Think about a project you've discussed with AI more than once — a report series, a client
+              engagement, a home renovation, a product launch. Each new session, you probably spend the
+              first few exchanges re-explaining background the AI should already "know." Worse, it may
+              suggest things you already tried and rejected.
+            </p>
+            <p>
+              A context document is a single, living summary you paste at the start of any AI session.
+              It takes 2 minutes to maintain and saves 10+ minutes of re-explaining every time.
+            </p>
+          </div>
+
+          <div className="learn-key-insight">
+            <strong>Key Insight:</strong> Context docs aren't notes for you — they're briefing documents
+            for AI. Write them the way you'd brief a new colleague joining your project mid-stream:
+            what's done, what's decided, what went wrong, and what's next.
+          </div>
+
+          <h3>How This Lesson Works</h3>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+            Two practice areas to build the context persistence habit:
           </p>
 
-          {/* What to Include */}
-          <div className="card" style={{ padding: '24px', marginBottom: '24px' }}>
-            <h3 style={{ marginTop: 0 }}>What to Include in a Context Document</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginTop: '16px' }}>
-              <div style={{ padding: '16px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
-                <h4 style={{ color: 'var(--accent-blue)', marginTop: 0 }}>Current State</h4>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', margin: 0 }}>
-                  What's complete, in progress, and blocked. Gives AI immediate situational awareness.
-                </p>
-              </div>
-              <div style={{ padding: '16px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
-                <h4 style={{ color: 'var(--accent-purple)', marginTop: 0 }}>Key Decisions</h4>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', margin: 0 }}>
-                  Important decisions made with reasoning. Prevents AI from suggesting already-rejected approaches.
-                </p>
-              </div>
-              <div style={{ padding: '16px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
-                <h4 style={{ color: 'var(--accent-red)', marginTop: 0 }}>Known Issues</h4>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', margin: 0 }}>
-                  Issues encountered with workarounds. Saves time debugging known problems.
-                </p>
-              </div>
-              <div style={{ padding: '16px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
-                <h4 style={{ color: 'var(--accent-green)', marginTop: 0 }}>Lessons Learned</h4>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', margin: 0 }}>
-                  Insights from previous sessions. Helps AI avoid past mistakes.
-                </p>
-              </div>
-              <div style={{ padding: '16px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
-                <h4 style={{ color: 'var(--accent-yellow)', marginTop: 0 }}>Next Goals</h4>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', margin: 0 }}>
-                  Specific tasks for upcoming sessions. Provides clear direction.
-                </p>
-              </div>
+          <div className="learn-patterns-grid">
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-blue)' }}>Docs Tab — Build Your Context Documents</h4>
+              <p>Create a context doc for a real project. Fill in the five sections (state, decisions,
+              issues, lessons, goals) and generate a ready-to-paste prompt for your next AI session.</p>
+            </div>
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-green)' }}>Sessions Tab — Track Your AI Work Sessions</h4>
+              <p>Log when you start and end AI sessions on a project. Over time, you'll see how
+              context quality improves and how much less re-explaining you need.</p>
             </div>
           </div>
 
-          {/* Workflow */}
-          <div className="card" style={{ padding: '24px', marginBottom: '24px' }}>
-            <h3 style={{ marginTop: 0 }}>The Session Workflow</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '16px' }}>
-              <div style={{ display: 'flex', gap: '16px', alignItems: 'center', padding: '12px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
-                <span style={{ background: 'var(--accent-blue)', padding: '8px 14px', borderRadius: '50%', fontWeight: 'bold' }}>1</span>
-                <div>
-                  <strong>Start Session</strong>
-                  <p style={{ margin: '4px 0 0', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-                    Generate context prompt and share with AI at session start
-                  </p>
+          <div className="learn-comparison">
+            <h3>Without a Context Doc vs. With One</h3>
+            <div className="learn-comparison-grid">
+              <div className="learn-comparison-col">
+                <h4 className="poor">Starting Every Session Cold</h4>
+                <div className="learn-comparison-item poor">
+                  <div className="learn-comparison-scenario">Marketing Campaign — Week 3</div>
+                  <p>"I'm working on a social media campaign for our spring product launch. We've been going back
+                  and forth on the messaging for a few weeks now..."</p>
+                </div>
+                <div className="learn-comparison-item poor">
+                  <p>AI suggests Instagram Reels — but you already tried that and the client rejected it in week 1.
+                  You spend 5 minutes re-explaining constraints before getting useful help.</p>
                 </div>
               </div>
-              <div style={{ display: 'flex', gap: '16px', alignItems: 'center', padding: '12px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
-                <span style={{ background: 'var(--accent-blue)', padding: '8px 14px', borderRadius: '50%', fontWeight: 'bold' }}>2</span>
-                <div>
-                  <strong>Work on Project</strong>
-                  <p style={{ margin: '4px 0 0', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-                    AI has full context from the start - no re-explaining needed
-                  </p>
+              <div className="learn-comparison-col">
+                <h4 className="good">Picking Up Where You Left Off</h4>
+                <div className="learn-comparison-item good">
+                  <div className="learn-comparison-scenario">Same Campaign — With Context Doc</div>
+                  <p>You paste your context doc. AI immediately knows: LinkedIn and email are the approved
+                  channels, the client vetoed video content, the launch date is April 15, and this week's goal is
+                  writing the 3-email drip sequence.</p>
                 </div>
-              </div>
-              <div style={{ display: 'flex', gap: '16px', alignItems: 'center', padding: '12px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
-                <span style={{ background: 'var(--accent-blue)', padding: '8px 14px', borderRadius: '50%', fontWeight: 'bold' }}>3</span>
-                <div>
-                  <strong>End Session</strong>
-                  <p style={{ margin: '4px 0 0', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-                    Update context doc with accomplishments, new decisions, issues found
-                  </p>
-                </div>
-              </div>
-              <div style={{ display: 'flex', gap: '16px', alignItems: 'center', padding: '12px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
-                <span style={{ background: 'var(--accent-blue)', padding: '8px 14px', borderRadius: '50%', fontWeight: 'bold' }}>4</span>
-                <div>
-                  <strong>Rate Quality</strong>
-                  <p style={{ margin: '4px 0 0', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-                    Assess how helpful the context was - refine document format over time
-                  </p>
+                <div className="learn-comparison-item good">
+                  <p>First response is directly useful. No rehashing, no rejected suggestions.
+                  The session starts at full speed.</p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Benefits */}
-          <div className="card" style={{ padding: '24px' }}>
-            <h3 style={{ marginTop: 0 }}>Benefits of Context Persistence</h3>
-            <ul style={{ color: 'var(--text-secondary)', lineHeight: '2' }}>
-              <li>First response quality improves dramatically</li>
-              <li>No need to re-explain project background each session</li>
-              <li>AI avoids suggesting previously rejected approaches</li>
-              <li>Issues aren't rediscovered - workarounds are documented</li>
-              <li>Sessions feel continuous rather than disconnected</li>
-              <li>Knowledge compounds across sessions</li>
-            </ul>
+          <h3>The Five Sections (and What to Put In Each)</h3>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+            Each section answers a specific question the AI would otherwise have to ask — or guess wrong about.
+          </p>
+
+          <div className="learn-patterns-grid">
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-blue)' }}>1. Current State</h4>
+              <p>What's done, what's in progress, what's stuck. Think of it as a three-column status board.</p>
+              <div className="learn-pattern-label better">Example</div>
+              <div className="learn-example-good">
+                <strong>Complete:</strong> Budget approved, venue booked<br/>
+                <strong>In Progress:</strong> Speaker outreach (3 confirmed, 2 pending)<br/>
+                <strong>Blocked:</strong> Catering — waiting on dietary restriction survey results
+              </div>
+            </div>
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-purple)' }}>2. Key Decisions</h4>
+              <p>Choices you've already made and <em>why</em>. This prevents AI from re-litigating settled questions.</p>
+              <div className="learn-pattern-label better">Example</div>
+              <div className="learn-example-good">
+                <strong>Decision:</strong> Use Mailchimp instead of custom email system<br/>
+                <strong>Reasoning:</strong> Team already knows Mailchimp; custom system would delay launch by 3 weeks
+              </div>
+            </div>
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-red)' }}>3. Known Issues</h4>
+              <p>Problems you've hit plus any workarounds. Stops AI from leading you back into the same traps.</p>
+              <div className="learn-pattern-label better">Example</div>
+              <div className="learn-example-good">
+                <strong>Issue:</strong> PDF export cuts off tables wider than 8 columns<br/>
+                <strong>Workaround:</strong> Split wide tables into two exports and combine manually<br/>
+                <strong>Status:</strong> Open — vendor says fix coming in March
+              </div>
+            </div>
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-green)' }}>4. Lessons Learned</h4>
+              <p>Insights from previous sessions so the AI doesn't repeat your past mistakes.</p>
+              <div className="learn-pattern-label better">Example</div>
+              <div className="learn-example-good">
+                <strong>Lesson:</strong> Client prefers bullet points over paragraphs in status updates<br/>
+                <strong>Context:</strong> Discovered when first narrative-format report was sent back for revision
+              </div>
+            </div>
+            <div className="learn-pattern-card">
+              <h4 style={{ color: 'var(--accent-yellow)' }}>5. Next Goals</h4>
+              <p>What you want to accomplish in the next session — specific and prioritized.</p>
+              <div className="learn-pattern-label better">Example</div>
+              <div className="learn-example-good">
+                <strong>High:</strong> Draft Q1 financial summary for board meeting<br/>
+                <strong>Medium:</strong> Outline talking points for investor call<br/>
+                <strong>Low:</strong> Brainstorm ideas for team offsite agenda
+              </div>
+            </div>
+          </div>
+
+          <div className="learn-comparison">
+            <h3>The 2-Minute Update Habit</h3>
+            <div style={{ padding: '0 4px' }}>
+              <p style={{ color: 'var(--text-secondary)', lineHeight: '1.7' }}>
+                The biggest risk with context docs is letting them go stale. After each AI session, spend
+                2 minutes updating your doc:
+              </p>
+              <ol style={{ color: 'var(--text-secondary)', lineHeight: '2' }}>
+                <li><strong>Move completed items</strong> from "In Progress" to "Complete"</li>
+                <li><strong>Add any decisions</strong> you made during the session (with reasoning)</li>
+                <li><strong>Log any new issues</strong> or mark resolved ones</li>
+                <li><strong>Update next goals</strong> based on what you learned</li>
+              </ol>
+              <p style={{ color: 'var(--text-secondary)', lineHeight: '1.7' }}>
+                If you skip updates, the doc becomes unreliable and you'll stop using it. Consistency
+                matters more than completeness — a rough update after every session beats a perfect
+                update once a month.
+              </p>
+            </div>
+          </div>
+
+          <h3>Common Mistakes</h3>
+          <div className="learn-patterns-grid" style={{ marginBottom: '24px' }}>
+            <div className="learn-pattern-card">
+              <div className="learn-pattern-label avoid">Mistake</div>
+              <p>Writing the doc for yourself instead of for AI. Your shorthand ("fix the thing Bob mentioned")
+              makes no sense without shared context.</p>
+              <div className="learn-pattern-label better">Instead</div>
+              <div className="learn-example-good">
+                Write as if briefing someone who knows nothing about your project. Full names, specific details,
+                explicit constraints.
+              </div>
+            </div>
+            <div className="learn-pattern-card">
+              <div className="learn-pattern-label avoid">Mistake</div>
+              <p>Including every detail from every session. The doc becomes so long that AI can't find
+              what matters.</p>
+              <div className="learn-pattern-label better">Instead</div>
+              <div className="learn-example-good">
+                Keep it to one page. Archive old decisions and resolved issues. The doc should reflect
+                <em> current</em> project state, not full history.
+              </div>
+            </div>
+            <div className="learn-pattern-card">
+              <div className="learn-pattern-label avoid">Mistake</div>
+              <p>Recording decisions without reasoning. "Use Mailchimp" doesn't prevent AI from suggesting
+              alternatives — it needs to know <em>why</em> you chose it.</p>
+              <div className="learn-pattern-label better">Instead</div>
+              <div className="learn-example-good">
+                Always pair decisions with reasoning: "Use Mailchimp — team knows it, custom system
+                would delay launch 3 weeks."
+              </div>
+            </div>
+          </div>
+
+          <div className="learn-next-step">
+            <h3>Ready to Create Your First Context Doc?</h3>
+            <p>Pick a real project you're actively using AI for. Start with Current State and Next Goals —
+            you can fill in the other sections as things come up.</p>
+            <button className="btn btn-primary" onClick={() => setActiveTab('docs')}>
+              Go to Docs
+            </button>
           </div>
         </div>
       )}
