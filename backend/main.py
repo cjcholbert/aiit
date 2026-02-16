@@ -10,7 +10,7 @@ from slowapi.errors import RateLimitExceeded
 from backend.rate_limit import limiter
 
 from backend.database import init_db, close_db
-from backend.middleware import RequestIDMiddleware
+from backend.middleware import RequestIDMiddleware, SecurityHeadersMiddleware
 from backend.auth import auth_router
 from backend.modules.lesson01_context import router as lesson01_router
 from backend.modules.lesson02_feedback import router as lesson02_router
@@ -60,6 +60,9 @@ app = FastAPI(
 # Rate limiting
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+# Security headers middleware
+app.add_middleware(SecurityHeadersMiddleware)
 
 # Request tracing middleware
 app.add_middleware(RequestIDMiddleware)
