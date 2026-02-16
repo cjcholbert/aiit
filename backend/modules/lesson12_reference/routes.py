@@ -11,9 +11,10 @@ from backend.rate_limit import limiter
 
 from backend.database import get_db
 from backend.database.models import (
-    User, ReferenceCard, Template, OutputType, Checklist,
-    Decomposition, Delegation, IterationTask, FeedbackEntry,
-    WorkflowTemplate, ContextDoc, FrontierZone, FrontierEncounter
+    User, ReferenceCard, Conversation, Template, OutputType, Prediction,
+    Checklist, Decomposition, Delegation, IterationTask, FeedbackEntry,
+    WorkflowTemplate, StatusReport, ContextDoc, ContextSession,
+    FrontierZone, FrontierEncounter
 )
 from backend.auth import get_current_user
 
@@ -528,63 +529,28 @@ def _count_sections(card: ReferenceCard) -> int:
     return count
 
 
+_MODEL_MAP = {
+    "conversations": Conversation,
+    "templates": Template,
+    "output_types": OutputType,
+    "predictions": Prediction,
+    "checklists": Checklist,
+    "decompositions": Decomposition,
+    "delegations": Delegation,
+    "iteration_tasks": IterationTask,
+    "feedback_entries": FeedbackEntry,
+    "workflow_templates": WorkflowTemplate,
+    "status_reports": StatusReport,
+    "context_docs": ContextDoc,
+    "context_sessions": ContextSession,
+    "frontier_zones": FrontierZone,
+    "frontier_encounters": FrontierEncounter
+}
+
+
 async def _count_items(db: AsyncSession, table: str, user_id: str) -> int:
     """Count items in a table for a user."""
-    table_map = {
-        "conversations": "conversations",
-        "templates": "templates",
-        "output_types": "output_types",
-        "predictions": "predictions",
-        "checklists": "checklists",
-        "decompositions": "decompositions",
-        "delegations": "delegations",
-        "iteration_tasks": "iteration_tasks",
-        "feedback_entries": "feedback_entries",
-        "workflow_templates": "workflow_templates",
-        "status_reports": "status_reports",
-        "context_docs": "context_docs",
-        "context_sessions": "context_sessions",
-        "frontier_zones": "frontier_zones",
-        "frontier_encounters": "frontier_encounters"
-    }
-
-    if table not in table_map:
-        return 0
-
-    result = await db.execute(
-        select(func.count()).select_from(
-            select(1).where(
-                func.text(f"{table}.user_id = '{user_id}'")
-            ).select_from(func.text(table_map[table]))
-        )
-    )
-    # Simpler approach - just query the model directly
-    from backend.database.models import (
-        Conversation, Template, OutputType, Prediction, Checklist,
-        Decomposition, Delegation, IterationTask, FeedbackEntry,
-        WorkflowTemplate, StatusReport, ContextDoc, ContextSession,
-        FrontierZone, FrontierEncounter
-    )
-
-    model_map = {
-        "conversations": Conversation,
-        "templates": Template,
-        "output_types": OutputType,
-        "predictions": Prediction,
-        "checklists": Checklist,
-        "decompositions": Decomposition,
-        "delegations": Delegation,
-        "iteration_tasks": IterationTask,
-        "feedback_entries": FeedbackEntry,
-        "workflow_templates": WorkflowTemplate,
-        "status_reports": StatusReport,
-        "context_docs": ContextDoc,
-        "context_sessions": ContextSession,
-        "frontier_zones": FrontierZone,
-        "frontier_encounters": FrontierEncounter
-    }
-
-    model = model_map.get(table)
+    model = _MODEL_MAP.get(table)
     if not model:
         return 0
 
