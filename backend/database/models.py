@@ -41,6 +41,7 @@ class User(Base):
     predictions = relationship("Prediction", back_populates="user", cascade="all, delete-orphan")
     calibration_insights = relationship("CalibrationInsight", back_populates="user", cascade="all, delete-orphan")
     checklists = relationship("Checklist", back_populates="user", cascade="all, delete-orphan")
+    verification_sessions = relationship("VerificationSession", back_populates="user", cascade="all, delete-orphan")
     decompositions = relationship("Decomposition", back_populates="user", cascade="all, delete-orphan")
     delegations = relationship("Delegation", back_populates="user", cascade="all, delete-orphan")
     iterations = relationship("Iteration", back_populates="user", cascade="all, delete-orphan")
@@ -224,6 +225,29 @@ class Checklist(Base):
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
 
     user = relationship("User", back_populates="checklists")
+    verification_sessions = relationship("VerificationSession", back_populates="checklist", cascade="all, delete-orphan")
+
+
+class VerificationSession(Base):
+    """Lesson 4: Verification session tracking."""
+    __tablename__ = "verification_sessions"
+
+    id = Column(UUID(as_uuid=False), primary_key=True, default=generate_uuid)
+    user_id = Column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    checklist_id = Column(UUID(as_uuid=False), ForeignKey("checklists.id", ondelete="CASCADE"), nullable=False, index=True)
+    checklist_name = Column(String(255), nullable=False)
+    output_description = Column(Text, nullable=False)
+    is_low_stakes = Column(Boolean, default=False)
+    is_prototyping = Column(Boolean, default=False)
+    time_seconds = Column(Integer, nullable=True)
+    overall_passed = Column(Boolean, nullable=True)
+    issues_found = Column(Text, nullable=True)
+    completed = Column(Boolean, default=False)
+    created_at = Column(DateTime, server_default=func.now())
+    completed_at = Column(DateTime, nullable=True)
+
+    user = relationship("User", back_populates="verification_sessions")
+    checklist = relationship("Checklist", back_populates="verification_sessions")
 
 
 # =============================================================================

@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 
 from backend.database import get_db
-from backend.database.models import User, Checklist
+from backend.database.models import User, Checklist, VerificationSession
 from backend.auth.dependencies import get_current_user
 
 from .schemas import (
@@ -284,11 +284,8 @@ async def remove_skip_criteria(
 
 
 # =============================================================================
-# Verification Sessions (Simplified - stored in memory/JSON for now)
+# Verification Sessions (persisted in DB)
 # =============================================================================
-
-# In-memory session storage (for simplicity - would use DB in production)
-_verification_sessions: dict = {}
 
 
 @router.post("/sessions", response_model=VerificationSessionResponse, status_code=201)
@@ -301,28 +298,21 @@ async def start_verification_session(
     # Verify checklist exists
     checklist = await _get_user_checklist(session.checklist_id, current_user.id, db)
 
-    session_id = str(uuid.uuid4())
-    session_data = {
-        "id": session_id,
-        "user_id": current_user.id,
-        "checklist_id": session.checklist_id,
-        "checklist_name": checklist.name,
-        "output_description": session.output_description,
-        "is_low_stakes": session.is_low_stakes,
-        "is_prototyping": session.is_prototyping,
-        "time_seconds": None,
-        "overall_passed": None,
-        "issues_found": None,
-        "completed": False,
-        "created_at": datetime.utcnow(),
-        "completed_at": None
-    }
+    db_session = VerificationSession(
+        user_id=current_user.id,
+        checklist_id=session.checklist_id,
+        checklist_name=checklist.name,
+        output_description=session.output_description,
+        is_low_stakes=session.is_low_stakes,
+        is_prototyping=session.is_prototyping,
+    )
+    db.add(db_session)
+    await db.commit()
+    await db.refresh(db_session)
 
-    _verification_sessions[session_id] = session_data
+    logger.info("Started verification session %s", db_session.id)
 
-    logger.info(f"Started verification session {session_id}")
-
-    return VerificationSessionResponse(**session_data)
+    return _session_to_response(db_session)
 
 
 @router.put("/sessions/{session_id}/complete", response_model=VerificationSessionResponse)
@@ -333,26 +323,29 @@ async def complete_verification_session(
     db: AsyncSession = Depends(get_db)
 ):
     """Complete a verification session with results."""
-    if session_id not in _verification_sessions:
+    result = await db.execute(
+        select(VerificationSession).where(
+            VerificationSession.id == session_id,
+            VerificationSession.user_id == current_user.id
+        )
+    )
+    db_session = result.scalar_one_or_none()
+
+    if not db_session:
         raise HTTPException(status_code=404, detail="Session not found")
 
-    session_data = _verification_sessions[session_id]
-
-    if session_data["user_id"] != current_user.id:
-        raise HTTPException(status_code=404, detail="Session not found")
-
-    if session_data["completed"]:
+    if db_session.completed:
         raise HTTPException(status_code=400, detail="Session already completed")
 
     # Update session
-    session_data["time_seconds"] = completion.time_seconds
-    session_data["overall_passed"] = completion.overall_passed
-    session_data["issues_found"] = completion.issues_found
-    session_data["completed"] = True
-    session_data["completed_at"] = datetime.utcnow()
+    db_session.time_seconds = completion.time_seconds
+    db_session.overall_passed = completion.overall_passed
+    db_session.issues_found = completion.issues_found
+    db_session.completed = True
+    db_session.completed_at = datetime.utcnow()
 
     # Update checklist item stats
-    checklist = await _get_user_checklist(session_data["checklist_id"], current_user.id, db)
+    checklist = await _get_user_checklist(db_session.checklist_id, current_user.id, db)
     items = checklist.items or []
 
     for item_result in completion.item_results:
@@ -366,31 +359,34 @@ async def complete_verification_session(
 
     checklist.items = items
     await db.commit()
+    await db.refresh(db_session)
 
-    logger.info(f"Completed verification session {session_id}")
+    logger.info("Completed verification session %s", session_id)
 
-    return VerificationSessionResponse(**session_data)
+    return _session_to_response(db_session)
 
 
 @router.get("/sessions", response_model=list[VerificationSessionResponse])
 async def list_sessions(
     current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
     checklist_id: Optional[str] = None,
     limit: int = Query(20, ge=1, le=100)
 ):
     """List verification sessions for the current user."""
-    user_sessions = [
-        s for s in _verification_sessions.values()
-        if s["user_id"] == current_user.id
-    ]
+    query = select(VerificationSession).where(
+        VerificationSession.user_id == current_user.id
+    )
 
     if checklist_id:
-        user_sessions = [s for s in user_sessions if s["checklist_id"] == checklist_id]
+        query = query.where(VerificationSession.checklist_id == checklist_id)
 
-    # Sort by created_at descending
-    user_sessions.sort(key=lambda x: x["created_at"], reverse=True)
+    query = query.order_by(VerificationSession.created_at.desc()).limit(limit)
 
-    return [VerificationSessionResponse(**s) for s in user_sessions[:limit]]
+    result = await db.execute(query)
+    sessions = result.scalars().all()
+
+    return [_session_to_response(s) for s in sessions]
 
 
 # =============================================================================
@@ -409,20 +405,23 @@ async def get_verification_stats(
     )
     checklists = result.scalars().all()
 
-    # Get sessions
-    user_sessions = [
-        s for s in _verification_sessions.values()
-        if s["user_id"] == current_user.id and s["completed"]
-    ]
+    # Get completed sessions from DB
+    session_result = await db.execute(
+        select(VerificationSession).where(
+            VerificationSession.user_id == current_user.id,
+            VerificationSession.completed == True
+        )
+    )
+    completed_sessions = session_result.scalars().all()
 
     # Calculate stats
-    total_time = sum(s["time_seconds"] or 0 for s in user_sessions)
-    avg_time = total_time / len(user_sessions) if user_sessions else 0
+    total_time = sum(s.time_seconds or 0 for s in completed_sessions)
+    avg_time = total_time / len(completed_sessions) if completed_sessions else 0
 
     # Most used checklists
     checklist_usage = {}
-    for s in user_sessions:
-        cid = s["checklist_id"]
+    for s in completed_sessions:
+        cid = s.checklist_id
         checklist_usage[cid] = checklist_usage.get(cid, 0) + 1
 
     most_used = [
@@ -453,7 +452,7 @@ async def get_verification_stats(
 
     return VerificationStats(
         total_checklists=len(checklists),
-        total_sessions=len(user_sessions),
+        total_sessions=len(completed_sessions),
         avg_verification_time=round(avg_time, 1),
         most_used_checklists=most_used,
         most_effective_items=most_effective,
@@ -470,16 +469,19 @@ async def get_checklist_stats(
     """Get statistics for a specific checklist."""
     checklist = await _get_user_checklist(checklist_id, current_user.id, db)
 
-    # Get sessions for this checklist
-    sessions = [
-        s for s in _verification_sessions.values()
-        if s["checklist_id"] == checklist_id and s["user_id"] == current_user.id
-    ]
+    # Get all sessions for this checklist from DB
+    session_result = await db.execute(
+        select(VerificationSession).where(
+            VerificationSession.checklist_id == checklist_id,
+            VerificationSession.user_id == current_user.id
+        )
+    )
+    sessions = session_result.scalars().all()
 
-    completed = [s for s in sessions if s["completed"]]
-    passed = [s for s in completed if s["overall_passed"]]
+    completed = [s for s in sessions if s.completed]
+    passed = [s for s in completed if s.overall_passed]
 
-    total_time = sum(s["time_seconds"] or 0 for s in completed)
+    total_time = sum(s.time_seconds or 0 for s in completed)
     avg_time = total_time / len(completed) if completed else 0
     pass_rate = len(passed) / len(completed) * 100 if completed else 0
 
@@ -509,6 +511,24 @@ async def get_checklist_stats(
 # =============================================================================
 # Helpers
 # =============================================================================
+
+def _session_to_response(session: VerificationSession) -> VerificationSessionResponse:
+    """Convert a VerificationSession model to response schema."""
+    return VerificationSessionResponse(
+        id=session.id,
+        checklist_id=session.checklist_id,
+        checklist_name=session.checklist_name,
+        output_description=session.output_description,
+        time_seconds=session.time_seconds,
+        overall_passed=session.overall_passed,
+        issues_found=session.issues_found,
+        is_low_stakes=session.is_low_stakes,
+        is_prototyping=session.is_prototyping,
+        completed=session.completed,
+        created_at=session.created_at,
+        completed_at=session.completed_at
+    )
+
 
 async def _get_user_checklist(checklist_id: str, user_id: str, db: AsyncSession) -> Checklist:
     """Get a checklist by ID, verifying ownership."""
