@@ -67,7 +67,9 @@ app.add_middleware(RequestIDMiddleware)
 # CORS middleware
 cors_origins = [
     origin.strip()
-    for origin in os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
+    for origin in os.getenv(
+        "CORS_ORIGINS", "http://localhost:3000,http://localhost:5173"
+    ).split(",")
     if origin.strip()
 ]
 app.add_middleware(
