@@ -23,6 +23,9 @@ from .analyzer import analyze_transcript, normalize_transcript, check_api_connec
 
 logger = logging.getLogger(__name__)
 
+MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
+ALLOWED_EXTENSIONS = {".json", ".txt"}
+
 router = APIRouter(prefix="/lesson1", tags=["Lesson 1: Context Tracker"])
 
 
@@ -87,7 +90,7 @@ async def analyze_conversation(
     await db.commit()
     await db.refresh(conversation)
 
-    logger.info(f"Analyzed and saved conversation {conversation.id} for user {current_user.email}")
+    logger.info("Analyzed and saved conversation %s for user %s", conversation.id, current_user.email)
 
     return ConversationResponse(
         id=conversation.id,
@@ -99,7 +102,9 @@ async def analyze_conversation(
 
 
 @router.post("/upload", response_model=ConversationResponse)
+@limiter.limit("5/minute")
 async def upload_conversation(
+    request: Request,
     file: UploadFile = File(...),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
@@ -107,12 +112,18 @@ async def upload_conversation(
     """
     Upload a JSON file containing a conversation for analysis.
     """
+    # Validate file extension
+    if not any(file.filename.lower().endswith(ext) for ext in ALLOWED_EXTENSIONS):
+        raise HTTPException(status_code=400, detail="Only .json and .txt files allowed")
+
     connected, message, _ = await check_api_connection()
     if not connected:
         raise HTTPException(status_code=503, detail=message)
 
     try:
         content = await file.read()
+        if len(content) > MAX_FILE_SIZE:
+            raise HTTPException(status_code=413, detail="File too large. Maximum size is 5MB")
         data = json.loads(content.decode('utf-8'))
     except json.JSONDecodeError as e:
         raise HTTPException(status_code=400, detail=f"Invalid JSON: {str(e)}")
@@ -287,7 +298,7 @@ async def update_conversation(
     await db.commit()
     await db.refresh(conversation)
 
-    logger.info(f"Updated conversation {conversation_id}")
+    logger.info("Updated conversation %s", conversation_id)
 
     return ConversationResponse(
         id=conversation.id,
@@ -319,7 +330,7 @@ async def delete_conversation(
     await db.delete(conversation)
     await db.commit()
 
-    logger.info(f"Deleted conversation {conversation_id}")
+    logger.info("Deleted conversation %s", conversation_id)
 
     return {"deleted": True, "id": conversation_id}
 

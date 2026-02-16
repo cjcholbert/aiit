@@ -171,7 +171,7 @@ async def create_doc(
     await db.commit()
     await db.refresh(db_doc)
 
-    logger.info(f"Created context doc '{request.project_name}' for user {current_user.email}")
+    logger.info("Created context doc '%s' for user %s", request.project_name, current_user.email)
 
     return doc_to_response(db_doc)
 
@@ -279,7 +279,7 @@ async def update_doc(
     await db.commit()
     await db.refresh(doc)
 
-    logger.info(f"Updated context doc {doc_id} to version {doc.version}")
+    logger.info("Updated context doc %s to version %s", doc_id, doc.version)
 
     # Get session count for response
     count_result = await db.execute(
@@ -302,7 +302,7 @@ async def delete_doc(
     await db.delete(doc)
     await db.commit()
 
-    logger.info(f"Deleted context doc {doc_id}")
+    logger.info("Deleted context doc %s", doc_id)
     return {"deleted": True, "id": doc_id}
 
 
@@ -349,7 +349,7 @@ async def start_session(
     await db.commit()
     await db.refresh(db_session)
 
-    logger.info(f"Started session on '{doc.project_name}' for user {current_user.email}")
+    logger.info("Started session on '%s' for user %s", doc.project_name, current_user.email)
 
     return session_to_response(db_session, doc.project_name)
 
@@ -462,7 +462,7 @@ async def update_session(
     await db.commit()
     await db.refresh(session)
 
-    logger.info(f"Updated session {session_id}")
+    logger.info("Updated session %s", session_id)
 
     # Get project name
     doc_result = await db.execute(
@@ -489,7 +489,7 @@ async def end_session(
     await db.commit()
     await db.refresh(session)
 
-    logger.info(f"Ended session {session_id}")
+    logger.info("Ended session %s", session_id)
 
     # Get project name
     doc_result = await db.execute(
@@ -512,7 +512,7 @@ async def delete_session(
     await db.delete(session)
     await db.commit()
 
-    logger.info(f"Deleted session {session_id}")
+    logger.info("Deleted session %s", session_id)
     return {"deleted": True, "id": session_id}
 
 
@@ -707,5 +707,5 @@ async def seed_examples(
 
     await db.commit()
 
-    logger.info(f"Seeded {len(created)} example context docs for user {current_user.email}")
+    logger.info("Seeded %s example context docs for user %s", len(created), current_user.email)
     return {"created": len(created), "docs": created}

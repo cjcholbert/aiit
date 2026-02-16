@@ -52,7 +52,7 @@ async def create_template(
     await db.commit()
     await db.refresh(db_template)
 
-    logger.info(f"Created template '{template.name}' for user {current_user.email}")
+    logger.info("Created template '%s' for user %s", template.name, current_user.email)
 
     return _template_to_response(db_template)
 
@@ -141,7 +141,7 @@ async def update_template(
     await db.commit()
     await db.refresh(template)
 
-    logger.info(f"Updated template {template_id}")
+    logger.info("Updated template %s", template_id)
     return _template_to_response(template)
 
 
@@ -156,7 +156,7 @@ async def delete_template(
     await db.delete(template)
     await db.commit()
 
-    logger.info(f"Deleted template {template_id}")
+    logger.info("Deleted template %s", template_id)
     return {"deleted": True, "id": template_id}
 
 
@@ -182,7 +182,7 @@ async def duplicate_template(
     await db.commit()
     await db.refresh(new_template)
 
-    logger.info(f"Duplicated template {template_id} -> {new_template.id}")
+    logger.info("Duplicated template %s -> %s", template_id, new_template.id)
     return _template_to_response(new_template)
 
 
@@ -191,7 +191,9 @@ async def duplicate_template(
 # =============================================================================
 
 @router.post("/templates/test", response_model=TemplateTestResponse)
+@limiter.limit("3/minute")
 async def test_template(
+    request: Request,
     test: TemplateTestCreate,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
@@ -237,7 +239,7 @@ async def test_template(
     await db.commit()
     await db.refresh(db_test)
 
-    logger.info(f"Tested template {template.id}")
+    logger.info("Tested template %s", template.id)
 
     return TemplateTestResponse(
         id=db_test.id,
@@ -295,7 +297,7 @@ async def submit_test_feedback(
     test.notes = feedback.notes
     await db.commit()
 
-    logger.info(f"Submitted feedback for test {test_id}: rating={feedback.rating}")
+    logger.info("Submitted feedback for test %s: rating=%s", test_id, feedback.rating)
     return {"success": True, "test_id": test_id}
 
 

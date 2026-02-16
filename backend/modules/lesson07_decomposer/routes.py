@@ -143,7 +143,7 @@ async def create_decomposition(
     await db.commit()
     await db.refresh(db_decomp)
 
-    logger.info(f"Created decomposition '{decomp.project_name}' for user {current_user.email}")
+    logger.info("Created decomposition '%s' for user %s", decomp.project_name, current_user.email)
 
     return decomposition_to_response(db_decomp)
 
@@ -199,7 +199,7 @@ async def seed_example_decompositions(
 
     await db.commit()
 
-    logger.info(f"Seeded {len(created)} example decompositions for user {current_user.email}")
+    logger.info("Seeded %s example decompositions for user %s", len(created), current_user.email)
     return {"created": len(created), "decompositions": created}
 
 
@@ -233,7 +233,7 @@ async def update_decomposition(
     await db.commit()
     await db.refresh(decomp)
 
-    logger.info(f"Updated decomposition {decomposition_id}")
+    logger.info("Updated decomposition %s", decomposition_id)
 
     return decomposition_to_response(decomp)
 
@@ -249,7 +249,7 @@ async def delete_decomposition(
     await db.delete(decomp)
     await db.commit()
 
-    logger.info(f"Deleted decomposition {decomposition_id}")
+    logger.info("Deleted decomposition %s", decomposition_id)
     return {"deleted": True, "id": decomposition_id}
 
 
@@ -267,7 +267,7 @@ async def add_task(
     """Add a task to a decomposition."""
     decomp = await _get_user_decomposition(decomposition_id, current_user.id, db)
 
-    tasks = decomp.tasks or []
+    tasks = list(decomp.tasks or [])
     new_task = task.model_dump()
     new_task['id'] = generate_task_id()
     new_task['order'] = len(tasks)

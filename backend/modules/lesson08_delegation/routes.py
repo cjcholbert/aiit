@@ -140,7 +140,7 @@ async def create_delegation(
     await db.commit()
     await db.refresh(db_deleg)
 
-    logger.info(f"Created delegation '{deleg.name}' for user {current_user.email}")
+    logger.info("Created delegation '%s' for user %s", deleg.name, current_user.email)
 
     return delegation_to_response(db_deleg)
 
@@ -195,7 +195,7 @@ async def seed_example_delegations(
 
     await db.commit()
 
-    logger.info(f"Seeded {len(created)} example delegations for user {current_user.email}")
+    logger.info("Seeded %s example delegations for user %s", len(created), current_user.email)
     return {"created": len(created), "delegations": created}
 
 
@@ -232,7 +232,7 @@ async def update_delegation(
     await db.commit()
     await db.refresh(deleg)
 
-    logger.info(f"Updated delegation {delegation_id}")
+    logger.info("Updated delegation %s", delegation_id)
 
     return delegation_to_response(deleg)
 
@@ -248,7 +248,7 @@ async def delete_delegation(
     await db.delete(deleg)
     await db.commit()
 
-    logger.info(f"Deleted delegation {delegation_id}")
+    logger.info("Deleted delegation %s", delegation_id)
     return {"deleted": True, "id": delegation_id}
 
 
@@ -401,19 +401,19 @@ async def analyze_task_output(
         # Also flag as modified to be extra sure
         attributes.flag_modified(deleg, 'task_sequence')
 
-        logger.info(f"Saving ai_review to task {task_id}, overall_pass={review.overall_pass}")
+        logger.info("Saving ai_review to task %s, overall_pass=%s", task_id, review.overall_pass)
         await db.commit()
         await db.refresh(deleg)
-        logger.info(f"Committed changes for task {task_id}")
+        logger.info("Committed changes for task %s", task_id)
 
-        logger.info(f"Analyzed task {task_id} in delegation {delegation_id}: overall_pass={review.overall_pass}")
+        logger.info("Analyzed task %s in delegation %s: overall_pass=%s", task_id, delegation_id, review.overall_pass)
 
         return review
 
     except AnalyzerError as e:
         raise HTTPException(status_code=422, detail=str(e))
     except (ValueError, json.JSONDecodeError, ConnectionError) as e:
-        logger.error(f"Analysis failed: {e}")
+        logger.error("Analysis failed: %s", e)
         raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
 
 

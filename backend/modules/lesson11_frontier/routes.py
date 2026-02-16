@@ -84,7 +84,7 @@ async def create_zone(
     await db.commit()
     await db.refresh(db_zone)
 
-    logger.info(f"Created frontier zone '{zone.name}' for user {current_user.email}")
+    logger.info("Created frontier zone '%s' for user %s", zone.name, current_user.email)
 
     return ZoneResponse(
         id=db_zone.id,
@@ -125,7 +125,7 @@ async def list_zones(
     result = await db.execute(query)
     zones = result.scalars().all()
 
-    logger.info(f"Listed {len(zones)} frontier zones for user {current_user.email}")
+    logger.info("Listed %s frontier zones for user %s", len(zones), current_user.email)
 
     return [
         ZoneSummary(
@@ -221,7 +221,7 @@ async def update_zone(
     await db.commit()
     await db.refresh(zone)
 
-    logger.info(f"Updated frontier zone {zone_id}")
+    logger.info("Updated frontier zone %s", zone_id)
 
     return ZoneResponse(
         id=zone.id,
@@ -261,7 +261,7 @@ async def delete_zone(
     await db.delete(zone)
     await db.commit()
 
-    logger.info(f"Deleted frontier zone {zone_id}")
+    logger.info("Deleted frontier zone %s", zone_id)
 
     return {"message": "Zone deleted successfully"}
 
@@ -290,7 +290,7 @@ async def seed_example_zones(
 
     await db.commit()
 
-    logger.info(f"Seeded {len(zones_created)} example zones for user {current_user.email}")
+    logger.info("Seeded %s example zones for user %s", len(zones_created), current_user.email)
 
     return {"message": f"Created {len(zones_created)} example zones", "zones": zones_created}
 
@@ -333,7 +333,7 @@ async def create_encounter(
     await db.commit()
     await db.refresh(db_encounter)
 
-    logger.info(f"Created {encounter.encounter_type} encounter for user {current_user.email}")
+    logger.info("Created %s encounter for user %s", encounter.encounter_type, current_user.email)
 
     return EncounterResponse(
         id=db_encounter.id,
@@ -485,7 +485,7 @@ async def delete_encounter(
     await db.delete(encounter)
     await db.commit()
 
-    logger.info(f"Deleted encounter {encounter_id}")
+    logger.info("Deleted encounter %s", encounter_id)
 
     return {"message": "Encounter deleted successfully"}
 

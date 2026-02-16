@@ -61,7 +61,7 @@ async def analyze_calibration(user_id: str, db: AsyncSession) -> list[Calibratio
     predictions = result.scalars().all()
 
     if len(predictions) < 10:
-        logger.warning(f"Not enough predictions for analysis: {len(predictions)}")
+        logger.warning("Not enough predictions for analysis: %s", len(predictions))
         return []
 
     # Fetch output types

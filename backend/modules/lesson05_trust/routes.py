@@ -49,7 +49,7 @@ async def create_output_type(
     await db.commit()
     await db.refresh(db_output_type)
 
-    logger.info(f"Created output type '{output_type.name}' for user {current_user.email}")
+    logger.info("Created output type '%s' for user %s", output_type.name, current_user.email)
 
     return _output_type_to_response(db_output_type, 0, 0.0)
 
@@ -141,7 +141,7 @@ async def seed_default_output_types(
 
     await db.commit()
 
-    logger.info(f"Seeded {len(created)} default output types for user {current_user.email}")
+    logger.info("Seeded %s default output types for user %s", len(created), current_user.email)
     return {"created": len(created), "output_types": created}
 
 
@@ -183,7 +183,7 @@ async def update_output_type(
     await db.commit()
     await db.refresh(output_type)
 
-    logger.info(f"Updated output type {output_type_id}")
+    logger.info("Updated output type %s", output_type_id)
 
     pred_count, accuracy = await _get_output_type_stats(output_type_id, db)
     return _output_type_to_response(output_type, pred_count, accuracy)
@@ -200,7 +200,7 @@ async def delete_output_type(
     await db.delete(output_type)
     await db.commit()
 
-    logger.info(f"Deleted output type {output_type_id}")
+    logger.info("Deleted output type %s", output_type_id)
     return {"deleted": True, "id": output_type_id}
 
 
@@ -232,7 +232,7 @@ async def create_prediction(
     await db.commit()
     await db.refresh(db_prediction)
 
-    logger.info(f"Created prediction for user {current_user.email}, confidence={prediction.confidence_rating}")
+    logger.info("Created prediction for user %s, confidence=%s", current_user.email, prediction.confidence_rating)
 
     return _prediction_to_response(db_prediction, output_type_name)
 
@@ -314,7 +314,7 @@ async def verify_prediction(
     await db.commit()
     await db.refresh(prediction)
 
-    logger.info(f"Verified prediction {prediction_id}: correct={verification.was_correct}")
+    logger.info("Verified prediction %s: correct=%s", prediction_id, verification.was_correct)
 
     output_type_name = None
     if prediction.output_type_id:
@@ -337,7 +337,7 @@ async def delete_prediction(
     await db.delete(prediction)
     await db.commit()
 
-    logger.info(f"Deleted prediction {prediction_id}")
+    logger.info("Deleted prediction %s", prediction_id)
     return {"deleted": True, "id": prediction_id}
 
 

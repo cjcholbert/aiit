@@ -276,7 +276,7 @@ async def create_feedback_entry(
     await db.commit()
     await db.refresh(db_entry)
 
-    logger.info(f"Created feedback entry with score {analysis.quality_score} for user {current_user.email}")
+    logger.info("Created feedback entry with score %s for user %s", analysis.quality_score, current_user.email)
 
     return entry_to_response(db_entry)
 
@@ -337,7 +337,7 @@ async def update_entry(
     await db.commit()
     await db.refresh(entry)
 
-    logger.info(f"Updated feedback entry {entry_id}")
+    logger.info("Updated feedback entry %s", entry_id)
 
     return entry_to_response(entry)
 
@@ -353,7 +353,7 @@ async def delete_entry(
     await db.delete(entry)
     await db.commit()
 
-    logger.info(f"Deleted feedback entry {entry_id}")
+    logger.info("Deleted feedback entry %s", entry_id)
     return {"deleted": True, "id": entry_id}
 
 
@@ -478,7 +478,7 @@ async def seed_examples(
 
     await db.commit()
 
-    logger.info(f"Seeded {len(created)} example entries for user {current_user.email}")
+    logger.info("Seeded %s example entries for user %s", len(created), current_user.email)
     return {"created": len(created), "entries": created}
 
 

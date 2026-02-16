@@ -290,7 +290,7 @@ async def review_against_criteria(
         review_data = json.loads(content)
 
     except json.JSONDecodeError as e:
-        logger.error(f"Failed to parse review JSON: {content[:500]}")
+        logger.error("Failed to parse review JSON: %s", content[:500])
         raise AnalyzerError(f"Failed to parse review response: {str(e)}")
 
     # Build DelegationReview object
@@ -315,7 +315,7 @@ async def review_against_criteria(
         return review
 
     except Exception as e:
-        logger.error(f"Failed to create DelegationReview: {e}")
+        logger.error("Failed to create DelegationReview: %s", e)
         raise AnalyzerError(f"Review response missing required fields: {str(e)}")
 
 

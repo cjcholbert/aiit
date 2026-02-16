@@ -219,7 +219,7 @@ async def create_template(
     await db.commit()
     await db.refresh(db_template)
 
-    logger.info(f"Created workflow template '{request.name}' for user {current_user.email}")
+    logger.info("Created workflow template '%s' for user %s", request.name, current_user.email)
 
     return template_to_response(db_template)
 
@@ -334,7 +334,7 @@ async def update_template(
     await db.commit()
     await db.refresh(template)
 
-    logger.info(f"Updated workflow template {template_id}")
+    logger.info("Updated workflow template %s", template_id)
 
     # Get report count for response
     count_result = await db.execute(
@@ -357,7 +357,7 @@ async def delete_template(
     await db.delete(template)
     await db.commit()
 
-    logger.info(f"Deleted workflow template {template_id}")
+    logger.info("Deleted workflow template %s", template_id)
     return {"deleted": True, "id": template_id}
 
 
@@ -397,7 +397,7 @@ async def create_report(
     await db.commit()
     await db.refresh(db_report)
 
-    logger.info(f"Created status report '{request.title}' for user {current_user.email}")
+    logger.info("Created status report '%s' for user %s", request.title, current_user.email)
 
     return report_to_response(db_report, template_name, estimated_time)
 
@@ -496,7 +496,7 @@ async def update_report(
     await db.commit()
     await db.refresh(report)
 
-    logger.info(f"Updated status report {report_id}")
+    logger.info("Updated status report %s", report_id)
 
     template_name = None
     estimated_time = None
@@ -525,7 +525,7 @@ async def delete_report(
     await db.delete(report)
     await db.commit()
 
-    logger.info(f"Deleted status report {report_id}")
+    logger.info("Deleted status report %s", report_id)
     return {"deleted": True, "id": report_id}
 
 
@@ -671,5 +671,5 @@ async def seed_examples(
 
     await db.commit()
 
-    logger.info(f"Seeded {len(created)} example templates for user {current_user.email}")
+    logger.info("Seeded %s example templates for user %s", len(created), current_user.email)
     return {"created": len(created), "templates": created}

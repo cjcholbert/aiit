@@ -117,7 +117,7 @@ async def create_task(
     await db.commit()
     await db.refresh(db_task)
 
-    logger.info(f"Created iteration task '{task.task_name}' for user {current_user.email}")
+    logger.info("Created iteration task '%s' for user %s", task.task_name, current_user.email)
 
     return task_to_response(db_task)
 
@@ -176,7 +176,7 @@ async def update_task(
     await db.commit()
     await db.refresh(task)
 
-    logger.info(f"Updated iteration task {task_id}")
+    logger.info("Updated iteration task %s", task_id)
 
     return task_to_response(task)
 
@@ -192,7 +192,7 @@ async def delete_task(
     await db.delete(task)
     await db.commit()
 
-    logger.info(f"Deleted iteration task {task_id}")
+    logger.info("Deleted iteration task %s", task_id)
     return {"deleted": True, "id": task_id}
 
 
@@ -245,10 +245,10 @@ async def record_pass(
     # Advance to next pass or mark complete
     if task.current_pass >= 3:
         task.is_complete = True
-        logger.info(f"Task {task_id} completed all 3 passes")
+        logger.info("Task %s completed all 3 passes", task_id)
     else:
         task.current_pass += 1
-        logger.info(f"Task {task_id} advanced to pass {task.current_pass}")
+        logger.info("Task %s advanced to pass %s", task_id, task.current_pass)
 
     # Flag the JSON field as modified
     attributes.flag_modified(task, 'passes')
@@ -399,7 +399,7 @@ async def seed_example_tasks(
 
     await db.commit()
 
-    logger.info(f"Seeded {len(created)} example tasks for user {current_user.email}")
+    logger.info("Seeded %s example tasks for user %s", len(created), current_user.email)
     return {"created": len(created), "tasks": created}
 
 

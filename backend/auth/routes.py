@@ -14,7 +14,8 @@ from .jwt import (
     create_access_token, create_refresh_token, decode_token
 )
 from .schemas import (
-    UserCreate, UserLogin, TokenResponse, RefreshRequest, UserResponse
+    UserCreate, UserLogin, TokenResponse, RefreshRequest, UserResponse,
+    PasswordChangeRequest
 )
 from .dependencies import get_current_user
 
@@ -54,7 +55,7 @@ async def register(
     await db.commit()
     await db.refresh(user)
 
-    logger.info(f"New user registered: {user.email}")
+    logger.info("New user registered: %s", user.email)
 
     # Generate tokens
     access_token = create_access_token(user.id)
@@ -103,7 +104,7 @@ async def login(
             detail="Account is disabled"
         )
 
-    logger.info(f"User logged in: {user.email}")
+    logger.info("User logged in: %s", user.email)
 
     # Generate tokens
     access_token = create_access_token(user.id)
@@ -209,6 +210,28 @@ async def get_current_user_profile(
     return current_user
 
 
+@router.post("/change-password")
+@limiter.limit("3/minute")
+async def change_password(
+    request: Request,
+    body: PasswordChangeRequest,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Change the current user's password."""
+    if not verify_password(body.current_password, current_user.password_hash):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Current password is incorrect"
+        )
+
+    current_user.password_hash = get_password_hash(body.new_password)
+    await db.commit()
+
+    logger.info("Password changed for user: %s", current_user.email)
+    return {"message": "Password changed successfully"}
+
+
 @router.post("/logout")
 async def logout(
     current_user: User = Depends(get_current_user),
@@ -231,6 +254,6 @@ async def logout(
 
     await db.commit()
 
-    logger.info(f"User logged out: {current_user.email}")
+    logger.info("User logged out: %s", current_user.email)
 
     return {"message": "Successfully logged out"}

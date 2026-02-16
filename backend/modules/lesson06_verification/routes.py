@@ -130,7 +130,7 @@ async def create_checklist(
     await db.commit()
     await db.refresh(db_checklist)
 
-    logger.info(f"Created checklist '{checklist.name}' for user {current_user.email}")
+    logger.info("Created checklist '%s' for user %s", checklist.name, current_user.email)
 
     return checklist_to_response(db_checklist)
 
@@ -187,7 +187,7 @@ async def seed_default_checklists(
 
     await db.commit()
 
-    logger.info(f"Seeded {len(created)} default checklists for user {current_user.email}")
+    logger.info("Seeded %s default checklists for user %s", len(created), current_user.email)
     return {"created": len(created), "checklists": created}
 
 
@@ -224,7 +224,7 @@ async def update_checklist(
     await db.commit()
     await db.refresh(checklist)
 
-    logger.info(f"Updated checklist {checklist_id}")
+    logger.info("Updated checklist %s", checklist_id)
 
     return checklist_to_response(checklist)
 
@@ -240,7 +240,7 @@ async def delete_checklist(
     await db.delete(checklist)
     await db.commit()
 
-    logger.info(f"Deleted checklist {checklist_id}")
+    logger.info("Deleted checklist %s", checklist_id)
     return {"deleted": True, "id": checklist_id}
 
 
@@ -262,7 +262,7 @@ async def update_skip_criteria(
     await db.commit()
     await db.refresh(checklist)
 
-    logger.info(f"Updated skip criteria for checklist {checklist_id}")
+    logger.info("Updated skip criteria for checklist %s", checklist_id)
 
     return checklist_to_response(checklist)
 
@@ -279,7 +279,7 @@ async def remove_skip_criteria(
 
     await db.commit()
 
-    logger.info(f"Removed skip criteria from checklist {checklist_id}")
+    logger.info("Removed skip criteria from checklist %s", checklist_id)
     return {"removed": True, "checklist_id": checklist_id}
 
 
