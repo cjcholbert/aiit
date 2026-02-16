@@ -4,13 +4,14 @@ import re
 from collections import Counter
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 
 from backend.database import get_db
 from backend.database.models import User, FeedbackEntry
 from backend.auth.dependencies import get_current_user
+from backend.rate_limit import limiter
 
 from .schemas import (
     AnalyzeFeedbackRequest, FeedbackEntryCreate, FeedbackEntryUpdate,
@@ -234,8 +235,10 @@ async def get_categories():
 # =============================================================================
 
 @router.post("/analyze", response_model=FeedbackAnalysis)
+@limiter.limit("10/minute")
 async def analyze_feedback(
-    request: AnalyzeFeedbackRequest,
+    request: Request,
+    body: AnalyzeFeedbackRequest,
     current_user: User = Depends(get_current_user)
 ):
     """
@@ -243,7 +246,7 @@ async def analyze_feedback(
 
     Use this endpoint to get a quick analysis before deciding to save.
     """
-    analysis = analyze_feedback_quality(request.feedback, request.context)
+    analysis = analyze_feedback_quality(body.feedback, body.context)
     return analysis
 
 
