@@ -80,8 +80,8 @@ class PassFeedback(BaseModel):
 
 class PassRecordRequest(BaseModel):
     """Request body for recording a pass."""
-    key_question_answer: str = Field(..., min_length=1)
-    feedback: str = Field(..., min_length=1)
+    key_question_answer: str = Field(..., min_length=1, max_length=5000)
+    feedback: str = Field(..., min_length=1, max_length=10000)
 
 
 # =============================================================================
@@ -91,15 +91,15 @@ class PassRecordRequest(BaseModel):
 class IterationTaskCreate(BaseModel):
     """Schema for creating an iteration task."""
     task_name: str = Field(..., min_length=1, max_length=255)
-    target_outcome: str = ""  # What "done" looks like
-    notes: str = ""
+    target_outcome: str = Field("", max_length=5000)
+    notes: str = Field("", max_length=5000)
 
 
 class IterationTaskUpdate(BaseModel):
     """Schema for updating an iteration task."""
     task_name: Optional[str] = Field(None, min_length=1, max_length=255)
-    target_outcome: Optional[str] = None
-    notes: Optional[str] = None
+    target_outcome: Optional[str] = Field(None, max_length=5000)
+    notes: Optional[str] = Field(None, max_length=5000)
 
 
 class IterationTaskSummary(BaseModel):

@@ -188,29 +188,29 @@ class CurrentState(BaseModel):
 
 class KeyDecision(BaseModel):
     """A key decision with reasoning."""
-    decision: str
-    reasoning: str
-    date: Optional[str] = None
+    decision: str = Field(max_length=1000)
+    reasoning: str = Field(max_length=5000)
+    date: Optional[str] = Field(None, max_length=50)
 
 
 class KnownIssue(BaseModel):
     """A known issue with workaround."""
-    issue: str
-    workaround: str = ""
-    status: str = "open"  # open, resolved, wont_fix
+    issue: str = Field(max_length=1000)
+    workaround: str = Field("", max_length=5000)
+    status: str = Field("open", max_length=20)  # open, resolved, wont_fix
 
 
 class LessonLearned(BaseModel):
     """A lesson learned during the project."""
-    lesson: str
-    context: str = ""
-    date: Optional[str] = None
+    lesson: str = Field(max_length=1000)
+    context: str = Field("", max_length=5000)
+    date: Optional[str] = Field(None, max_length=50)
 
 
 class NextGoal(BaseModel):
     """A goal for upcoming sessions."""
-    goal: str
-    priority: str = "medium"  # high, medium, low
+    goal: str = Field(max_length=1000)
+    priority: str = Field("medium", max_length=20)  # high, medium, low
 
 
 # =============================================================================
@@ -220,25 +220,25 @@ class NextGoal(BaseModel):
 class ContextDocCreate(BaseModel):
     """Schema for creating a context document."""
     project_name: str = Field(..., min_length=1, max_length=255)
-    description: Optional[str] = None
+    description: Optional[str] = Field(None, max_length=5000)
     current_state: Optional[CurrentState] = None
     key_decisions: list[KeyDecision] = []
     known_issues: list[KnownIssue] = []
     lessons_learned: list[LessonLearned] = []
     next_goals: list[NextGoal] = []
-    content: Optional[str] = None
+    content: Optional[str] = Field(None, max_length=10000)
 
 
 class ContextDocUpdate(BaseModel):
     """Schema for updating a context document."""
     project_name: Optional[str] = Field(None, min_length=1, max_length=255)
-    description: Optional[str] = None
+    description: Optional[str] = Field(None, max_length=5000)
     current_state: Optional[CurrentState] = None
     key_decisions: Optional[list[KeyDecision]] = None
     known_issues: Optional[list[KnownIssue]] = None
     lessons_learned: Optional[list[LessonLearned]] = None
     next_goals: Optional[list[NextGoal]] = None
-    content: Optional[str] = None
+    content: Optional[str] = Field(None, max_length=10000)
     is_active: Optional[bool] = None
 
 
@@ -287,7 +287,7 @@ class SessionCreate(BaseModel):
     """Schema for starting a new session."""
     context_doc_id: str
     goals: list[str] = []
-    notes: Optional[str] = None
+    notes: Optional[str] = Field(None, max_length=10000)
 
 
 class SessionUpdate(BaseModel):
@@ -296,7 +296,7 @@ class SessionUpdate(BaseModel):
     accomplishments: Optional[list[str]] = None
     decisions_made: Optional[list[KeyDecision]] = None
     issues_encountered: Optional[list[KnownIssue]] = None
-    notes: Optional[str] = None
+    notes: Optional[str] = Field(None, max_length=10000)
     context_quality_rating: Optional[int] = Field(None, ge=1, le=10)
     continuity_rating: Optional[int] = Field(None, ge=1, le=10)
     ended_at: Optional[datetime] = None
@@ -364,4 +364,4 @@ class GeneratePromptRequest(BaseModel):
     include_decisions: bool = True
     include_issues: bool = True
     include_lessons: bool = True
-    custom_additions: Optional[str] = None
+    custom_additions: Optional[str] = Field(None, max_length=10000)

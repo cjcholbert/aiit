@@ -73,13 +73,13 @@ TASK_CATEGORIES = {
 class TaskBase(BaseModel):
     """Base schema for tasks."""
     title: str = Field(..., min_length=1, max_length=255)
-    description: str = ""
+    description: str = Field("", max_length=5000)
     category: str = Field(..., pattern="^(ai_optimal|collaborative|human_primary)$")
-    reasoning: str = ""  # Why this category
+    reasoning: str = Field("", max_length=5000)
     order: int = 0
     dependencies: list[str] = []  # List of task IDs this depends on
     is_decision_gate: bool = False  # Review point before continuing
-    parallel_group: Optional[str] = None  # Tasks that can run in parallel
+    parallel_group: Optional[str] = Field(None, max_length=100)
     status: str = Field(default="pending", pattern="^(pending|in_progress|completed)$")
 
 
@@ -91,13 +91,13 @@ class TaskCreate(TaskBase):
 class TaskUpdate(BaseModel):
     """Schema for updating a task."""
     title: Optional[str] = Field(None, min_length=1, max_length=255)
-    description: Optional[str] = None
+    description: Optional[str] = Field(None, max_length=5000)
     category: Optional[str] = Field(None, pattern="^(ai_optimal|collaborative|human_primary)$")
-    reasoning: Optional[str] = None
+    reasoning: Optional[str] = Field(None, max_length=5000)
     order: Optional[int] = None
     dependencies: Optional[list[str]] = None
     is_decision_gate: Optional[bool] = None
-    parallel_group: Optional[str] = None
+    parallel_group: Optional[str] = Field(None, max_length=100)
     status: Optional[str] = Field(None, pattern="^(pending|in_progress|completed)$")
 
 
@@ -116,14 +116,14 @@ class TaskResponse(TaskBase):
 class DecompositionCreate(BaseModel):
     """Schema for creating a decomposition."""
     project_name: str = Field(..., min_length=1, max_length=255)
-    description: str = ""
+    description: str = Field("", max_length=5000)
     tasks: list[TaskCreate] = []
 
 
 class DecompositionUpdate(BaseModel):
     """Schema for updating a decomposition."""
     project_name: Optional[str] = Field(None, min_length=1, max_length=255)
-    description: Optional[str] = None
+    description: Optional[str] = Field(None, max_length=5000)
     tasks: Optional[list[TaskCreate]] = None
 
 

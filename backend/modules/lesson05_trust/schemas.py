@@ -13,8 +13,8 @@ class OutputTypeCreate(BaseModel):
     name: str = Field(..., min_length=1, max_length=100)
     category: str = Field(..., min_length=1, max_length=50)
     trust_level: str = Field(..., pattern="^(high|medium|low)$")
-    reasoning: str = ""
-    verification_approach: str = ""
+    reasoning: str = Field("", max_length=5000)
+    verification_approach: str = Field("", max_length=5000)
     examples: list[str] = []
 
 
@@ -23,8 +23,8 @@ class OutputTypeUpdate(BaseModel):
     name: Optional[str] = Field(None, min_length=1, max_length=100)
     category: Optional[str] = Field(None, min_length=1, max_length=50)
     trust_level: Optional[str] = Field(None, pattern="^(high|medium|low)$")
-    reasoning: Optional[str] = None
-    verification_approach: Optional[str] = None
+    reasoning: Optional[str] = Field(None, max_length=5000)
+    verification_approach: Optional[str] = Field(None, max_length=5000)
     examples: Optional[list[str]] = None
 
 
@@ -65,16 +65,16 @@ class PredictionCreate(BaseModel):
     output_type_id: Optional[str] = None
     output_description: str = Field(..., min_length=5, max_length=1000)
     confidence_rating: int = Field(..., ge=1, le=10)
-    uncertainty_notes: str = ""
+    uncertainty_notes: str = Field("", max_length=5000)
 
 
 class PredictionVerify(BaseModel):
     """Request model for verifying a prediction."""
     was_correct: bool
-    actual_issues: str = ""
-    verification_method: str = ""
+    actual_issues: str = Field("", max_length=5000)
+    verification_method: str = Field("", max_length=500)
     verification_time_seconds: Optional[int] = None
-    calibration_note: str = ""
+    calibration_note: str = Field("", max_length=5000)
 
 
 class PredictionResponse(BaseModel):

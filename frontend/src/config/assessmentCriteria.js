@@ -35,6 +35,15 @@ export const LESSON_CRITERIA = {
         return data.some((c) => c.analysis && c.analysis.coaching);
       },
     },
+    {
+      id: 'l1_edited',
+      label: 'Edited notes on at least 1 conversation',
+      endpoint: '/lesson1/conversations',
+      check: (data) => {
+        if (!Array.isArray(data)) return false;
+        return data.some((c) => c.user_edits);
+      },
+    },
   ],
 
   2: [
@@ -59,6 +68,16 @@ export const LESSON_CRITERIA = {
       label: 'Reviewed all 5 vague feedback patterns',
       endpoint: '/lesson2/patterns',
       check: (data) => Array.isArray(data) && data.length >= 5,
+    },
+    {
+      id: 'l2_spread',
+      label: 'Entries span 3+ different categories',
+      endpoint: '/lesson2/entries',
+      check: (data) => {
+        if (!Array.isArray(data)) return false;
+        const cats = new Set(data.map((e) => e.category).filter(Boolean));
+        return cats.size >= 3;
+      },
     },
   ],
 
@@ -85,6 +104,12 @@ export const LESSON_CRITERIA = {
         return data.some((t) => t.variables && t.variables.length > 0);
       },
     },
+    {
+      id: 'l3_rated',
+      label: 'Rated at least 1 test result',
+      endpoint: '/lesson3/stats',
+      check: (data) => data && (data.avg_rating || 0) > 0,
+    },
   ],
 
   4: [
@@ -106,6 +131,15 @@ export const LESSON_CRITERIA = {
       label: 'Generated a context prompt',
       endpoint: '/lesson4/stats',
       check: (data) => data && (data.total_prompts_generated || 0) >= 1,
+    },
+    {
+      id: 'l4_decisions',
+      label: 'Documented decisions in a context doc',
+      endpoint: '/lesson4/docs',
+      check: (data) => {
+        if (!Array.isArray(data)) return false;
+        return data.some((d) => d.key_decisions && d.key_decisions.length > 0);
+      },
     },
   ],
 
@@ -129,6 +163,13 @@ export const LESSON_CRITERIA = {
       endpoint: '/lesson5/calibration/stats',
       check: (data) => data && ((data.over_trust_count || 0) > 0 || (data.over_verify_count || 0) > 0),
     },
+    {
+      id: 'l5_types',
+      label: 'Added 3+ output types to trust matrix',
+      endpoint: '/lesson5/output-types',
+      check: (data) => Array.isArray(data) && data.length >= 3,
+      progressLabel: (data) => `${Array.isArray(data) ? data.length : 0}/3`,
+    },
   ],
 
   6: [
@@ -150,6 +191,15 @@ export const LESSON_CRITERIA = {
       label: 'Tracked verification issues found',
       endpoint: '/lesson6/stats',
       check: (data) => data && (data.total_sessions || 0) >= 1,
+    },
+    {
+      id: 'l6_completed',
+      label: 'Completed a full verification session',
+      endpoint: '/lesson6/sessions',
+      check: (data) => {
+        if (!Array.isArray(data)) return false;
+        return data.some((s) => s.completed_at || s.ended_at);
+      },
     },
   ],
 
@@ -180,6 +230,21 @@ export const LESSON_CRITERIA = {
         if (!Array.isArray(data) || data.length === 0) return false;
         const allTasks = data.flatMap((d) => d.tasks || []);
         return allTasks.some((t) => t.reasoning);
+      },
+    },
+    {
+      id: 'l7_depth',
+      label: 'Created 5+ tasks across decompositions',
+      endpoint: '/lesson7/decompositions',
+      check: (data) => {
+        if (!Array.isArray(data)) return false;
+        const totalTasks = data.reduce((sum, d) => sum + (d.tasks || []).length, 0);
+        return totalTasks >= 5;
+      },
+      progressLabel: (data) => {
+        if (!Array.isArray(data)) return '0/5';
+        const totalTasks = data.reduce((sum, d) => sum + (d.tasks || []).length, 0);
+        return `${Math.min(totalTasks, 5)}/5`;
       },
     },
   ],
@@ -216,6 +281,21 @@ export const LESSON_CRITERIA = {
         });
       },
     },
+    {
+      id: 'l8_depth',
+      label: 'Created 3+ delegation tasks total',
+      endpoint: '/lesson8/delegations',
+      check: (data) => {
+        if (!Array.isArray(data)) return false;
+        const totalTasks = data.reduce((sum, d) => sum + (d.task_sequence || []).length, 0);
+        return totalTasks >= 3;
+      },
+      progressLabel: (data) => {
+        if (!Array.isArray(data)) return '0/3';
+        const totalTasks = data.reduce((sum, d) => sum + (d.task_sequence || []).length, 0);
+        return `${Math.min(totalTasks, 3)}/3`;
+      },
+    },
   ],
 
   9: [
@@ -247,6 +327,13 @@ export const LESSON_CRITERIA = {
         });
       },
     },
+    {
+      id: 'l9_depth',
+      label: 'Created 2+ iteration tasks',
+      endpoint: '/lesson9/tasks',
+      check: (data) => Array.isArray(data) && data.length >= 2,
+      progressLabel: (data) => `${Math.min(Array.isArray(data) ? data.length : 0, 2)}/2`,
+    },
   ],
 
   10: [
@@ -272,6 +359,13 @@ export const LESSON_CRITERIA = {
         return data.some((r) => r.actual_time_minutes > 0);
       },
     },
+    {
+      id: 'l10_depth',
+      label: 'Generated 2+ status reports',
+      endpoint: '/lesson10/reports',
+      check: (data) => Array.isArray(data) && data.length >= 2,
+      progressLabel: (data) => `${Math.min(Array.isArray(data) ? data.length : 0, 2)}/2`,
+    },
   ],
 
   11: [
@@ -293,6 +387,16 @@ export const LESSON_CRITERIA = {
       label: 'Reviewed frontier statistics',
       endpoint: '/lesson11/stats',
       check: (data) => data && (data.total_zones || 0) >= 1,
+    },
+    {
+      id: 'l11_categories',
+      label: 'Mapped zones in 2+ categories',
+      endpoint: '/lesson11/zones',
+      check: (data) => {
+        if (!Array.isArray(data)) return false;
+        const cats = new Set(data.map((z) => z.category).filter(Boolean));
+        return cats.size >= 2;
+      },
     },
   ],
 
@@ -319,6 +423,24 @@ export const LESSON_CRITERIA = {
       check: (data) => {
         if (!Array.isArray(data)) return false;
         return data.some((c) => c.personal_rules && c.personal_rules.length > 0);
+      },
+    },
+    {
+      id: 'l12_sections',
+      label: 'Filled 3+ card sections',
+      endpoint: '/lesson12/cards',
+      check: (data) => {
+        if (!Array.isArray(data)) return false;
+        return data.some((c) => {
+          let filled = 0;
+          if (c.context_patterns && c.context_patterns.length > 0) filled++;
+          if (c.feedback_principles && c.feedback_principles.length > 0) filled++;
+          if (c.trust_insights && c.trust_insights.length > 0) filled++;
+          if (c.decomposition_strategies && c.decomposition_strategies.length > 0) filled++;
+          if (c.personal_rules && c.personal_rules.length > 0) filled++;
+          if (c.frontier_notes && c.frontier_notes.length > 0) filled++;
+          return filled >= 3;
+        });
       },
     },
   ],

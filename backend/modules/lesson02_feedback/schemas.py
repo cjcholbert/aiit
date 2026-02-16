@@ -100,24 +100,24 @@ class FeedbackAnalysis(BaseModel):
 
 class AnalyzeFeedbackRequest(BaseModel):
     """Request to analyze feedback quality."""
-    feedback: str = Field(..., min_length=1)
-    context: str = ""  # Optional context about what the feedback is for
-    category: str = "other"
+    feedback: str = Field(..., min_length=1, max_length=10000)
+    context: str = Field("", max_length=5000)
+    category: str = Field("other", max_length=50)
 
 
 class FeedbackEntryCreate(BaseModel):
     """Schema for creating a feedback entry (after analysis)."""
-    original_feedback: str = Field(..., min_length=1)
-    context: str = ""
+    original_feedback: str = Field(..., min_length=1, max_length=10000)
+    context: str = Field("", max_length=5000)
     analysis: FeedbackAnalysis
-    category: str = "other"
+    category: str = Field("other", max_length=50)
 
 
 class FeedbackEntryUpdate(BaseModel):
     """Schema for updating a feedback entry."""
-    rewritten_feedback: Optional[str] = None
+    rewritten_feedback: Optional[str] = Field(None, max_length=10000)
     is_example: Optional[bool] = None
-    category: Optional[str] = None
+    category: Optional[str] = Field(None, max_length=50)
 
 
 class FeedbackEntrySummary(BaseModel):

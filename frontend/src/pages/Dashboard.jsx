@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { MODULES, CONCEPTS, APP_NAME } from '../config/modules';
 import { useTheme } from '../contexts/ThemeContext';
 import { useProgress } from '../hooks/useProgress';
+import { useRecommendedLesson } from '../hooks/useRecommendedLesson';
+import GettingStartedOverlay from '../components/GettingStartedOverlay';
 import { useApi } from '../hooks/useApi';
 
 const BANNER_DISMISSED_KEY = 'ams_welcome_dismissed';
@@ -27,6 +29,7 @@ function isBannerDismissed() {
 export default function Dashboard() {
     const { theme } = useTheme();
     const { isLessonComplete, completionPercentage, progress } = useProgress();
+    const { lesson: recommendedLesson } = useRecommendedLesson();
     const [dismissed, setDismissed] = useState(isBannerDismissed);
     const api = useApi();
     const [lessonStats, setLessonStats] = useState({});
@@ -51,6 +54,7 @@ export default function Dashboard() {
 
     return (
         <div>
+            <GettingStartedOverlay />
             {showWelcome && (
                 <div className="welcome-banner">
                     <button className="welcome-banner-close" onClick={handleDismiss} aria-label="Dismiss">&times;</button>
@@ -70,6 +74,15 @@ export default function Dashboard() {
                     <span className="continue-banner-text">Continue where you left off:</span>
                     <Link to={`/lesson/${lastLesson}`} className="continue-banner-link">
                         Lesson {lastLesson}
+                    </Link>
+                </div>
+            )}
+
+            {recommendedLesson && progress && progress.completed_count > 0 && progress.completed_count < 12 && (
+                <div className="recommended-banner">
+                    <span className="recommended-banner-label">Recommended Next</span>
+                    <Link to={`/lesson/${recommendedLesson}`} className="recommended-banner-link">
+                        Lesson {recommendedLesson}
                     </Link>
                 </div>
             )}

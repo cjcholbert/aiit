@@ -6,8 +6,8 @@ from pydantic import BaseModel, Field
 
 class Turn(BaseModel):
     """A single turn in a conversation."""
-    role: str  # "user" or "assistant"
-    content: str
+    role: str = Field(max_length=50)  # "user" or "assistant"
+    content: str = Field(max_length=10000)
 
 
 class ParsedTranscript(BaseModel):
@@ -67,15 +67,15 @@ class Analysis(BaseModel):
 
 class UserEdits(BaseModel):
     """User edits to the analysis."""
-    topic: Optional[str] = None
-    pattern_category: Optional[str] = None
-    habit_to_build: Optional[str] = None
-    notes: Optional[str] = None
+    topic: Optional[str] = Field(None, max_length=500)
+    pattern_category: Optional[str] = Field(None, max_length=500)
+    habit_to_build: Optional[str] = Field(None, max_length=1000)
+    notes: Optional[str] = Field(None, max_length=5000)
 
 
 class ConversationCreate(BaseModel):
     """Request to create/analyze a new conversation."""
-    raw_transcript: str
+    raw_transcript: str = Field(max_length=50000)
 
 
 class ConversationUpdate(BaseModel):

@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useApi } from '../hooks/useApi';
 import { useAuth } from '../auth/AuthContext';
+import { useRecommendedLesson } from '../hooks/useRecommendedLesson';
 
 export default function Analytics() {
     const api = useApi();
     const { user } = useAuth();
+    const { lesson: recommendedLesson } = useRecommendedLesson();
     const [stats, setStats] = useState(null);
     const [lessonStats, setLessonStats] = useState([]);
     const [recentFeedback, setRecentFeedback] = useState([]);
@@ -48,12 +51,12 @@ export default function Analytics() {
 
     if (loading) {
         return (
-            <div>
+            <div aria-busy={true}>
                 <div className="page-header">
                     <h1 className="page-title">Analytics</h1>
                 </div>
-                <div className="loading">
-                    <div className="spinner"></div>
+                <div className="loading" role="status">
+                    <div className="spinner" aria-hidden="true"></div>
                     Loading analytics...
                 </div>
             </div>
@@ -61,7 +64,7 @@ export default function Analytics() {
     }
 
     return (
-        <div>
+        <div aria-busy={false}>
             <div className="page-header">
                 <h1 className="page-title">Analytics Dashboard</h1>
                 <p className="page-description">
@@ -103,6 +106,15 @@ export default function Analytics() {
                         <div className="analytics-value yellow">{stats.avg_session_minutes || 0}m</div>
                         <div className="analytics-label">Avg Session</div>
                     </div>
+                </div>
+            )}
+
+            {recommendedLesson && (
+                <div className="recommended-banner" style={{ marginBottom: '1.5rem' }}>
+                    <span className="recommended-banner-label">Next Recommended Lesson</span>
+                    <Link to={`/lesson/${recommendedLesson}`} className="recommended-banner-link">
+                        Lesson {recommendedLesson}
+                    </Link>
                 </div>
             )}
 

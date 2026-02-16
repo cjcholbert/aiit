@@ -34,6 +34,44 @@ export default function Sidebar({ isMobileMenuOpen, setIsMobileMenuOpen }) {
         return () => document.removeEventListener('keydown', handleEscape);
     }, [setIsMobileMenuOpen]);
 
+    // Focus trap for mobile menu
+    useEffect(() => {
+        if (!isMobileMenuOpen) return;
+
+        const sidebar = document.getElementById('curriculum-sidebar');
+        if (!sidebar) return;
+
+        const focusableElements = sidebar.querySelectorAll(
+            'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusableElements.length === 0) return;
+
+        const firstEl = focusableElements[0];
+        const lastEl = focusableElements[focusableElements.length - 1];
+
+        const handleTab = (e) => {
+            if (e.key !== 'Tab') return;
+
+            if (e.shiftKey) {
+                if (document.activeElement === firstEl) {
+                    e.preventDefault();
+                    lastEl.focus();
+                }
+            } else {
+                if (document.activeElement === lastEl) {
+                    e.preventDefault();
+                    firstEl.focus();
+                }
+            }
+        };
+
+        sidebar.addEventListener('keydown', handleTab);
+        // Focus the first element when menu opens
+        firstEl.focus();
+
+        return () => sidebar.removeEventListener('keydown', handleTab);
+    }, [isMobileMenuOpen]);
+
     // Prevent body scroll when mobile menu is open
     useEffect(() => {
         if (isMobileMenuOpen) {

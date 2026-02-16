@@ -13,7 +13,7 @@ class UserCreate(BaseModel):
 class UserLogin(BaseModel):
     """Request schema for user login."""
     email: EmailStr
-    password: str
+    password: str = Field(max_length=100)
 
 
 class TokenResponse(BaseModel):
@@ -25,7 +25,7 @@ class TokenResponse(BaseModel):
 
 class RefreshRequest(BaseModel):
     """Request schema for token refresh."""
-    refresh_token: str
+    refresh_token: str = Field(max_length=1000)
 
 
 class UserResponse(BaseModel):
@@ -42,4 +42,10 @@ class UserResponse(BaseModel):
 
 class PasswordChange(BaseModel):
     """Request schema for password change (admin)."""
+    new_password: str = Field(min_length=8, max_length=100)
+
+
+class PasswordChangeRequest(BaseModel):
+    """Request schema for user-initiated password change."""
+    current_password: str = Field(max_length=100)
     new_password: str = Field(min_length=8, max_length=100)

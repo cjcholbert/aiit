@@ -53,7 +53,7 @@ class ChecklistCreate(BaseModel):
     name: str = Field(..., min_length=1, max_length=255)
     output_type: str = Field(..., min_length=1, max_length=100)
     output_type_id: Optional[str] = None  # Link to Lesson 5 output type
-    description: str = ""
+    description: str = Field("", max_length=5000)
     items: list[ChecklistItemCreate] = []
     skip_criteria: Optional[SkipCriteria] = None
 
@@ -63,7 +63,7 @@ class ChecklistUpdate(BaseModel):
     name: Optional[str] = Field(None, min_length=1, max_length=255)
     output_type: Optional[str] = Field(None, min_length=1, max_length=100)
     output_type_id: Optional[str] = None
-    description: Optional[str] = None
+    description: Optional[str] = Field(None, max_length=5000)
     items: Optional[list[ChecklistItemCreate]] = None
     skip_criteria: Optional[SkipCriteria] = None
 
@@ -119,7 +119,7 @@ class VerificationItemResult(BaseModel):
     item_id: str
     was_checked: bool = True
     caught_issue: bool = False
-    notes: str = ""
+    notes: str = Field("", max_length=5000)
 
 
 class VerificationSessionComplete(BaseModel):
@@ -127,8 +127,8 @@ class VerificationSessionComplete(BaseModel):
     item_results: list[VerificationItemResult]
     time_seconds: int
     overall_passed: bool
-    issues_found: str = ""
-    notes: str = ""
+    issues_found: str = Field("", max_length=10000)
+    notes: str = Field("", max_length=5000)
 
 
 class VerificationSessionResponse(BaseModel):

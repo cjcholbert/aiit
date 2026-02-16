@@ -1,15 +1,19 @@
 """Authentication dependencies for FastAPI."""
+import logging
 from datetime import datetime, timezone
 from typing import Optional
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from jose import JWTError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from backend.database import get_db
 from backend.database.models import User, RefreshToken
 from .jwt import decode_token
+
+logger = logging.getLogger(__name__)
 
 # HTTP Bearer token scheme
 security = HTTPBearer()
@@ -108,7 +112,9 @@ async def get_optional_user(
         if user and user.is_active:
             return user
 
-    except Exception:
-        pass
+    except JWTError:
+        return None
+    except Exception as e:
+        logger.warning("Unexpected error in optional auth: %s", str(e))
 
     return None

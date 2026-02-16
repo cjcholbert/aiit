@@ -69,17 +69,17 @@ TEMPLATE_ELEMENTS = {
 class SequenceTaskBase(BaseModel):
     """Base schema for tasks in a delegation sequence."""
     title: str = Field(..., min_length=1, max_length=255)
-    description: str = ""
+    description: str = Field("", max_length=5000)
     category: str = Field(default="ai_optimal", pattern="^(ai_optimal|collaborative|human_primary)$")
-    prompt: str = ""  # The actual delegation prompt for this task
-    expected_output: str = ""
+    prompt: str = Field("", max_length=10000)
+    expected_output: str = Field("", max_length=5000)
     order: int = 0
     status: str = Field(default="pending", pattern="^(pending|delegated|reviewing|completed|blocked)$")
-    output_received: str = ""  # What AI actually returned
-    review_notes: str = ""
+    output_received: str = Field("", max_length=10000)
+    review_notes: str = Field("", max_length=5000)
     is_decision_gate: bool = False
-    success_criteria: list[str] = []  # Task-level criteria (overrides template if set)
-    ai_review: Optional[dict] = None  # Stores DelegationReview as JSON
+    success_criteria: list[str] = []
+    ai_review: Optional[dict] = None
 
 
 class SequenceTaskCreate(SequenceTaskBase):
@@ -90,14 +90,14 @@ class SequenceTaskCreate(SequenceTaskBase):
 class SequenceTaskUpdate(BaseModel):
     """Schema for updating a sequence task."""
     title: Optional[str] = Field(None, min_length=1, max_length=255)
-    description: Optional[str] = None
+    description: Optional[str] = Field(None, max_length=5000)
     category: Optional[str] = Field(None, pattern="^(ai_optimal|collaborative|human_primary)$")
-    prompt: Optional[str] = None
-    expected_output: Optional[str] = None
+    prompt: Optional[str] = Field(None, max_length=10000)
+    expected_output: Optional[str] = Field(None, max_length=5000)
     order: Optional[int] = None
     status: Optional[str] = Field(None, pattern="^(pending|delegated|reviewing|completed|blocked)$")
-    output_received: Optional[str] = None
-    review_notes: Optional[str] = None
+    output_received: Optional[str] = Field(None, max_length=10000)
+    review_notes: Optional[str] = Field(None, max_length=5000)
     is_decision_gate: Optional[bool] = None
     success_criteria: Optional[list[str]] = None
     ai_review: Optional[dict] = None
@@ -118,17 +118,17 @@ class SequenceTaskResponse(SequenceTaskBase):
 class DelegationCreate(BaseModel):
     """Schema for creating a delegation."""
     name: str = Field(..., min_length=1, max_length=255)
-    template: str = ""  # The delegation prompt template
+    template: str = Field("", max_length=10000)
     task_sequence: list[SequenceTaskCreate] = []
-    notes: str = ""
+    notes: str = Field("", max_length=5000)
 
 
 class DelegationUpdate(BaseModel):
     """Schema for updating a delegation."""
     name: Optional[str] = Field(None, min_length=1, max_length=255)
-    template: Optional[str] = None
+    template: Optional[str] = Field(None, max_length=10000)
     task_sequence: Optional[list[SequenceTaskCreate]] = None
-    notes: Optional[str] = None
+    notes: Optional[str] = Field(None, max_length=5000)
 
 
 class DelegationSummary(BaseModel):
@@ -197,7 +197,7 @@ class DelegationReview(BaseModel):
 
 class AnalyzeRequest(BaseModel):
     """Request body for analyze endpoint."""
-    raw_output: str = Field(..., min_length=1)
+    raw_output: str = Field(..., min_length=1, max_length=10000)
 
 
 # =============================================================================
