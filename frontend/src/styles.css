@@ -26,6 +26,24 @@
 
   --sidebar-bg: #ffffff;
 
+  /* Layout */
+  --sidebar-width: 260px;
+  --sidebar-width-tablet: 200px;
+
+  /* Derived colors (alpha variants) */
+  --accent-blue-bg: rgba(64, 120, 160, 0.15);
+  --accent-blue-bg-subtle: rgba(64, 120, 160, 0.08);
+  --accent-blue-border-subtle: rgba(64, 120, 160, 0.2);
+  --accent-blue-bg-faint: rgba(64, 120, 160, 0.06);
+  --accent-purple-bg: rgba(130, 80, 223, 0.15);
+  --overlay-backdrop: rgba(0, 0, 0, 0.5);
+  --overlay-backdrop-heavy: rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.15);
+  --spinner-border: rgba(255, 255, 255, 0.3);
+  --btn-text-on-color: #ffffff;
+  --btn-text-on-warning: #000000;
+  --accent-yellow-hover: #b87a00;
+
   /* Spacing */
   --space-xs: 4px;
   --space-sm: 8px;
@@ -77,6 +95,19 @@
 
   --sidebar-bg: #161b22;
 
+  --accent-blue-bg: rgba(110, 154, 187, 0.15);
+  --accent-blue-bg-subtle: rgba(110, 154, 187, 0.08);
+  --accent-blue-border-subtle: rgba(110, 154, 187, 0.2);
+  --accent-blue-bg-faint: rgba(110, 154, 187, 0.06);
+  --accent-purple-bg: rgba(163, 113, 247, 0.15);
+  --overlay-backdrop: rgba(0, 0, 0, 0.5);
+  --overlay-backdrop-heavy: rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.5);
+  --spinner-border: rgba(255, 255, 255, 0.3);
+  --btn-text-on-color: #ffffff;
+  --btn-text-on-warning: #000000;
+  --accent-yellow-hover: #e5a920;
+
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
@@ -97,9 +128,31 @@
 
   --accent-blue: #8ab4d0;
   --accent-green: #4ae168;
+  --accent-green-hover: #5ef07e;
   --accent-red: #ff6b6b;
   --accent-yellow: #ffd93d;
   --accent-purple: #c9a0ff;
+
+  --success-bg: rgba(74, 225, 104, 0.15);
+  --error-bg: rgba(255, 107, 107, 0.15);
+  --warning-bg: rgba(255, 217, 61, 0.15);
+
+  --accent-blue-bg: rgba(138, 180, 208, 0.2);
+  --accent-blue-bg-subtle: rgba(138, 180, 208, 0.1);
+  --accent-blue-border-subtle: rgba(138, 180, 208, 0.3);
+  --accent-blue-bg-faint: rgba(138, 180, 208, 0.08);
+  --accent-purple-bg: rgba(201, 160, 255, 0.2);
+  --overlay-backdrop: rgba(0, 0, 0, 0.7);
+  --overlay-backdrop-heavy: rgba(0, 0, 0, 0.8);
+  --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.6);
+  --spinner-border: rgba(255, 255, 255, 0.4);
+  --btn-text-on-color: #000000;
+  --btn-text-on-warning: #000000;
+  --accent-yellow-hover: #ffe566;
+
+  --shadow-sm: 0 1px 2px rgba(255, 255, 255, 0.1);
+  --shadow-md: 0 4px 6px rgba(255, 255, 255, 0.1);
+  --shadow-lg: 0 10px 15px rgba(255, 255, 255, 0.1);
 }
 
 * {
@@ -126,7 +179,7 @@ body {
 /* Content Column (right side) */
 .content-column {
   flex: 1;
-  margin-left: 260px;
+  margin-left: var(--sidebar-width);
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -326,7 +379,7 @@ body {
 
 /* Sidebar - Full Height Left Column */
 .sidebar {
-  width: 260px;
+  width: var(--sidebar-width);
   background: var(--sidebar-bg, var(--bg-tertiary));
   border-right: 1px solid var(--border-color);
   display: flex;
@@ -649,7 +702,7 @@ button:active:not(:disabled), .btn:active:not(:disabled) {
 
 .btn-danger {
   background: var(--accent-red);
-  color: #fff;
+  color: var(--btn-text-on-color);
   border-color: var(--accent-red);
 }
 
@@ -720,7 +773,7 @@ input, textarea, select {
 input:focus, textarea:focus, select:focus {
   outline: none;
   border-color: var(--accent-blue);
-  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.15);
+  box-shadow: 0 0 0 3px var(--accent-blue-bg);
 }
 
 input::placeholder, textarea::placeholder {
@@ -983,7 +1036,7 @@ tr:hover td {
 }
 
 .badge-blue {
-  background: rgba(88, 166, 255, 0.15);
+  background: var(--accent-blue-bg);
   color: var(--accent-blue);
 }
 
@@ -1003,7 +1056,7 @@ tr:hover td {
 }
 
 .badge-purple {
-  background: rgba(163, 113, 247, 0.15);
+  background: var(--accent-purple-bg);
   color: var(--accent-purple);
 }
 
@@ -1431,7 +1484,7 @@ tr:hover td {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--overlay-backdrop);
   z-index: 99;
   opacity: 0;
   transition: opacity var(--transition-normal);
@@ -1564,11 +1617,11 @@ tr:hover td {
 /* Tablet breakpoint */
 @media (max-width: 1024px) and (min-width: 769px) {
   .sidebar {
-    width: 200px;
+    width: var(--sidebar-width-tablet);
   }
 
   .content-column {
-    margin-left: 200px;
+    margin-left: var(--sidebar-width-tablet);
   }
 
   .module-grid {
@@ -1707,7 +1760,7 @@ tr:hover td {
 }
 
 .status-indicator.info {
-  background: rgba(88, 166, 255, 0.15);
+  background: var(--accent-blue-bg);
   color: var(--accent-blue);
 }
 
@@ -1829,7 +1882,7 @@ tr:hover td {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--overlay-backdrop-heavy);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1889,12 +1942,12 @@ tr:hover td {
 /* Warning button style */
 .btn-warning {
   background: var(--accent-yellow);
-  color: #000;
+  color: var(--btn-text-on-warning);
   border-color: var(--accent-yellow);
 }
 
 .btn-warning:hover {
-  background: #e5a920;
+  background: var(--accent-yellow-hover);
 }
 
 /* =============================================================================
@@ -1950,8 +2003,8 @@ tr:hover td {
 }
 
 .btn-primary.btn-loading::after {
-  border-color: rgba(255, 255, 255, 0.3);
-  border-right-color: white;
+  border-color: var(--spinner-border);
+  border-right-color: var(--btn-text-on-color);
 }
 
 /* =============================================================================
@@ -2259,7 +2312,7 @@ tr:hover td {
 
 .learn-problem-skill {
   background: var(--bg-secondary);
-  border: 1px solid var(--border-primary);
+  border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: var(--space-md) var(--space-lg);
   margin-bottom: var(--space-lg);
@@ -3628,7 +3681,7 @@ tr:hover td {
 
 .l12-scenario-card:hover {
   border-color: var(--accent-purple);
-  box-shadow: 0 4px 12px rgba(130, 80, 223, 0.15);
+  box-shadow: 0 4px 12px var(--accent-purple-bg);
 }
 
 .l12-scenario-desc {
@@ -3678,7 +3731,7 @@ tr:hover td {
 .l12-concept-textarea:focus {
   outline: none;
   border-color: var(--accent-purple);
-  box-shadow: 0 0 0 2px rgba(130, 80, 223, 0.15);
+  box-shadow: 0 0 0 2px var(--accent-purple-bg);
 }
 
 .l12-evaluate-bar {
@@ -4046,12 +4099,12 @@ tr:hover td {
 .recommended-banner {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  background: rgba(88, 166, 255, 0.08);
-  border: 1px solid rgba(88, 166, 255, 0.2);
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--accent-blue-bg-subtle);
+  border: 1px solid var(--accent-blue-border-subtle);
   border-radius: var(--radius-md);
-  margin-bottom: 16px;
+  margin-bottom: var(--space-md);
 }
 
 .recommended-banner-label {
@@ -4074,7 +4127,7 @@ tr:hover td {
 .getting-started-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--overlay-backdrop-heavy);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -4084,23 +4137,23 @@ tr:hover td {
 .getting-started-modal {
   background: var(--bg-tertiary);
   border-radius: var(--radius-xl);
-  padding: 32px;
+  padding: var(--space-xl);
   max-width: 500px;
   width: 90%;
   position: relative;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-xl);
 }
 
 .getting-started-close {
   position: absolute;
-  top: 12px;
-  right: 16px;
+  top: var(--space-sm);
+  right: var(--space-md);
   background: none;
   border: none;
   font-size: 1.5rem;
   color: var(--text-muted);
   cursor: pointer;
-  padding: 4px;
+  padding: var(--space-xs);
   line-height: 1;
 }
 
@@ -4109,22 +4162,22 @@ tr:hover td {
 }
 
 .getting-started-title {
-  margin: 0 0 24px 0;
+  margin: 0 0 var(--space-lg) 0;
   font-size: 1.25rem;
   font-weight: 600;
 }
 
 .getting-started-steps {
   display: flex;
-  gap: 8px;
-  margin-bottom: 20px;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
 }
 
 .getting-started-step {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-sm);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   background: none;
@@ -4138,7 +4191,7 @@ tr:hover td {
 .getting-started-step.active {
   border-color: var(--accent-blue);
   color: var(--accent-blue);
-  background: rgba(88, 166, 255, 0.06);
+  background: var(--accent-blue-bg-faint);
 }
 
 .getting-started-step.completed {
