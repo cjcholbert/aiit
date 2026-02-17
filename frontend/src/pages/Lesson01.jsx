@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useApi } from '../hooks/useApi';
 import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
-import LessonNav from '../components/LessonNav';
+import CurriculumNav from '../components/CurriculumNav';
 import StatsPanel from '../components/StatsPanel';
 import ConnectionCallout from '../components/ConnectionCallout';
 import ExamplesDropdown from '../components/ExamplesDropdown';
@@ -38,6 +38,7 @@ export default function Lesson01() {
             loadConversations();
         }
     }, [activeTab]);
+
 
     const loadConversations = async () => {
         try {
@@ -291,18 +292,24 @@ export default function Lesson01() {
 
     return (
         <div>
-            <div className="page-header">
-                <h1 className="page-title">Context Pattern Tracker</h1>
-            </div>
-
-            <div className="lesson-progress-row">
-                <SelfAssessmentChecklist lessonNumber={1} criteria={LESSON_CRITERIA[1]} />
-                <StatsPanel stats={[
-                    { label: 'Conversations', value: stats?.total_conversations ?? '-', color: 'var(--accent-blue)' },
-                    { label: 'Avg Confidence', value: stats?.avg_confidence_score != null ? stats.avg_confidence_score.toFixed(1) : '-', color: 'var(--accent-green)' },
-                    { label: 'Recurring Gaps', value: insights?.context_gaps?.length ?? '-', color: 'var(--accent-yellow)' },
-                    { label: 'Context Strengths', value: insights?.context_strengths?.length ?? '-', color: 'var(--accent-purple)' },
-                ]} />
+            <div className="lesson-header">
+                <div className="lesson-header-left">
+                    <h1 className="page-title">Context Pattern Tracker</h1>
+                    <div className="lesson-header-problem-skill">
+                        <p><strong>The Problem:</strong> AI conversations fail when critical context is missing. You waste time on back-and-forth clarifications or get unusable outputs because you forgot to mention key constraints.</p>
+                        <p><strong>The Skill:</strong> Identify your personal context gaps by analyzing past conversations. Discover what information you consistently forget to provide so you can fix it upfront.</p>
+                    </div>
+                    <CurriculumNav currentLesson={1} />
+                </div>
+                <div className="lesson-header-right">
+                    <StatsPanel stats={[
+                        { label: 'Conversations', value: stats?.total_conversations ?? '-', color: 'var(--accent-blue)' },
+                        { label: 'Avg Confidence', value: stats?.avg_confidence_score != null ? stats.avg_confidence_score.toFixed(1) : '-', color: 'var(--accent-green)' },
+                        { label: 'Recurring Gaps', value: insights?.context_gaps?.length ?? '-', color: 'var(--accent-yellow)' },
+                        { label: 'Context Strengths', value: insights?.context_strengths?.length ?? '-', color: 'var(--accent-purple)' },
+                    ]} />
+                    <SelfAssessmentChecklist lessonNumber={1} criteria={LESSON_CRITERIA[1]} />
+                </div>
             </div>
 
             <div className="tabs">
@@ -326,11 +333,6 @@ export default function Lesson01() {
             {/* Learn Tab */}
             {activeTab === 'learn' && (
                 <div className="learn-section">
-                    <div className="learn-problem-skill">
-                    <p><strong>The Problem:</strong> AI conversations fail when critical context is missing. You waste time on back-and-forth clarifications or get unusable outputs because you forgot to mention key constraints.</p>
-                    <p><strong>The Skill:</strong> Identify your personal context gaps by analyzing past conversations. Discover what information you consistently forget to provide so you can fix it upfront.</p>
-                </div>
-
                 <div className="learn-intro">
                         <h2>The Foundation: Knowing What Context Your AI Needs</h2>
                         <p>
@@ -1054,7 +1056,6 @@ export default function Lesson01() {
                 </div>
             )}
 
-            <LessonNav currentLesson={1} />
         </div>
     );
 }

@@ -3,7 +3,7 @@ import { useApi } from '../hooks/useApi';
 import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
-import LessonNav from '../components/LessonNav';
+import CurriculumNav from '../components/CurriculumNav';
 import StatsPanel from '../components/StatsPanel';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 
@@ -331,6 +331,7 @@ export default function Lesson05() {
             <p><strong>The Problem:</strong> You either over-verify everything (wasting time) or blindly trust AI output (introducing errors). Without calibrated judgment, you can't efficiently allocate your review effort.</p>
             <p><strong>The Skill:</strong> Build a personal trust matrix by tracking predictions about AI accuracy. Learn which output types you can trust and which require careful verification.</p>
           </div>
+          <CurriculumNav currentLesson={5} />
         </div>
         <div className="lesson-header-right">
           <StatsPanel stats={stats ? [
@@ -1366,7 +1367,6 @@ export default function Lesson05() {
         </div>
       )}
 
-      <LessonNav currentLesson={5} />
     </div>
   );
 }

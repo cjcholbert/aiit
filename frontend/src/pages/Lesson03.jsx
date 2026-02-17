@@ -3,7 +3,7 @@ import { useApi } from '../hooks/useApi';
 import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
-import LessonNav from '../components/LessonNav';
+import CurriculumNav from '../components/CurriculumNav';
 import StatsPanel from '../components/StatsPanel';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 
@@ -744,18 +744,24 @@ ${gapSections}
 
   return (
     <div>
-      <div className="page-header">
-        <h1 className="page-title">Context Template Builder</h1>
-        <ConnectionCallout lessonNumber={1} lessonTitle="Context Tracker" message="Turn your context patterns into reusable templates so you never start from scratch." />
-      </div>
-
-      <div className="lesson-progress-row">
-        <SelfAssessmentChecklist lessonNumber={3} criteria={LESSON_CRITERIA[3]} />
-        <StatsPanel stats={stats ? [
-            { label: 'Templates', value: stats.total_templates, color: 'var(--accent-blue)' },
-            { label: 'Tests Run', value: stats.total_tests, color: 'var(--accent-green)' },
-            { label: 'Avg Rating', value: stats.avg_rating?.toFixed(1) ?? '-', color: 'var(--accent-yellow)' },
-        ] : []} />
+      <div className="lesson-header">
+        <div className="lesson-header-left">
+          <h1 className="page-title">Context Template Builder</h1>
+          <ConnectionCallout lessonNumber={1} lessonTitle="Context Tracker" message="Turn your context patterns into reusable templates so you never start from scratch." />
+          <div className="lesson-header-problem-skill">
+            <p><strong>The Problem:</strong> You keep forgetting to provide the same context over and over. Each conversation starts from scratch, and you waste time re-explaining your project, constraints, and preferences.</p>
+            <p><strong>The Skill:</strong> Build reusable templates that capture the context AI needs upfront. Turn your Lesson 1 insights into structured prompts you can use consistently.</p>
+          </div>
+          <CurriculumNav currentLesson={3} />
+        </div>
+        <div className="lesson-header-right">
+          <StatsPanel stats={stats ? [
+              { label: 'Templates', value: stats.total_templates, color: 'var(--accent-blue)' },
+              { label: 'Tests Run', value: stats.total_tests, color: 'var(--accent-green)' },
+              { label: 'Avg Rating', value: stats.avg_rating?.toFixed(1) ?? '-', color: 'var(--accent-yellow)' },
+          ] : []} />
+          <SelfAssessmentChecklist lessonNumber={3} criteria={LESSON_CRITERIA[3]} />
+        </div>
       </div>
 
       {error && <div className="alert alert-error">{error}</div>}
@@ -816,12 +822,6 @@ ${gapSections}
       {/* Learn Tab */}
       {activeTab === 'learn' && (
         <div className="learn-section">
-          <div className="learn-problem-skill">
-            <p><strong>The Problem:</strong> You keep forgetting to provide the same context over and over. Each conversation starts from scratch, and you waste time re-explaining your project, constraints, and preferences.</p>
-            <p><strong>The Skill:</strong> Build reusable templates that capture the context AI needs upfront. Turn your Lesson 1 insights into structured prompts you can use consistently.</p>
-          </div>
-
-
           <div className="learn-intro">
             <h2>Why Templates Transform Your AI Workflow</h2>
             <p>
@@ -2251,7 +2251,6 @@ ${gapSections}
           )}
         </div>
       )}
-      <LessonNav currentLesson={3} />
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { useApi } from '../hooks/useApi';
 import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
-import LessonNav from '../components/LessonNav';
+import CurriculumNav from '../components/CurriculumNav';
 import StatsPanel from '../components/StatsPanel';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 
@@ -295,6 +295,7 @@ export default function Lesson11() {
                     <div className="lesson-header-problem-skill">
                         <p>Map AI reliability zones and log frontier encounters to build your personal AI capability map.</p>
                     </div>
+                    <CurriculumNav currentLesson={11} />
                 </div>
                 <div className="lesson-header-right">
                     <StatsPanel stats={stats ? [
@@ -893,7 +894,6 @@ export default function Lesson11() {
                 </div>
             )}
 
-            <LessonNav currentLesson={11} />
         </div>
     );
 }

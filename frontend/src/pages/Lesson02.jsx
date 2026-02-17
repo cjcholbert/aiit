@@ -3,7 +3,7 @@ import { useApi } from '../hooks/useApi';
 import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
-import LessonNav from '../components/LessonNav';
+import CurriculumNav from '../components/CurriculumNav';
 import StatsPanel from '../components/StatsPanel';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 
@@ -75,6 +75,7 @@ export default function Lesson02() {
     };
     loadData();
   }, []);
+
 
   // Handlers
   const handleAnalyze = async (saveEntry = false) => {
@@ -313,19 +314,25 @@ export default function Lesson02() {
 
   return (
     <div className="page-container">
-      <header className="page-header">
-        <h1>Feedback Analyzer</h1>
-        <ConnectionCallout lessonNumber={1} lessonTitle="Context Tracker" message="Builds on discovering what context you forget to provide. This lesson tackles how you respond when AI output isn't right." />
-      </header>
-
-      <div className="lesson-progress-row">
-        <SelfAssessmentChecklist lessonNumber={2} criteria={LESSON_CRITERIA[2]} />
-        <StatsPanel stats={[
-            { label: 'Total Entries', value: stats?.total_entries ?? '-', color: 'var(--accent-blue)' },
-            { label: 'Avg Score', value: stats?.avg_quality_score ?? '-', color: 'var(--accent-yellow)' },
-            { label: 'Examples Saved', value: stats?.examples_saved ?? '-', color: 'var(--accent-green)' },
-            { label: 'Rewrites Done', value: stats?.rewrites_completed ?? '-', color: 'var(--accent-purple)' },
-        ]} />
+      <div className="lesson-header">
+        <div className="lesson-header-left">
+          <h1>Feedback Analyzer</h1>
+          <ConnectionCallout lessonNumber={1} lessonTitle="Context Tracker" message="Spot vague feedback patterns and rewrite them into specific, actionable directions that get better results faster." />
+          <div className="lesson-header-problem-skill">
+            <p><strong>The Problem:</strong> Vague feedback like "make it better" or "this isn't right" wastes iteration cycles and frustrates both you and the AI. Without specific, actionable feedback, you'll keep going in circles.</p>
+            <p><strong>The Skill:</strong> Write feedback that identifies specific locations, states clear actions, and explains reasoning. Learn to spot vague patterns in your own feedback and rewrite them.</p>
+          </div>
+          <CurriculumNav currentLesson={2} />
+        </div>
+        <div className="lesson-header-right">
+          <StatsPanel stats={[
+              { label: 'Total Entries', value: stats?.total_entries ?? '-', color: 'var(--accent-blue)' },
+              { label: 'Avg Score', value: stats?.avg_quality_score ?? '-', color: 'var(--accent-yellow)' },
+              { label: 'Examples Saved', value: stats?.examples_saved ?? '-', color: 'var(--accent-green)' },
+              { label: 'Rewrites Done', value: stats?.rewrites_completed ?? '-', color: 'var(--accent-purple)' },
+          ]} />
+          <SelfAssessmentChecklist lessonNumber={2} criteria={LESSON_CRITERIA[2]} />
+        </div>
       </div>
 
       {error && (
@@ -351,12 +358,6 @@ export default function Lesson02() {
       {/* Learn Tab */}
       {activeTab === 'learn' && (
         <div className="learn-section">
-          <div className="learn-problem-skill">
-            <p><strong>The Problem:</strong> Vague feedback like "make it better" or "this isn't right" wastes iteration cycles and frustrates both you and the AI. Without specific, actionable feedback, you'll keep going in circles.</p>
-            <p><strong>The Skill:</strong> Write feedback that identifies specific locations, states clear actions, and explains reasoning. Learn to spot vague patterns in your own feedback and rewrite them.</p>
-          </div>
-
-
           <div className="learn-intro">
             <h2>Why Your Feedback Is the Bottleneck</h2>
             <p>
@@ -920,7 +921,6 @@ export default function Lesson02() {
           </div>
         </div>
       )}
-      <LessonNav currentLesson={2} />
     </div>
   );
 }

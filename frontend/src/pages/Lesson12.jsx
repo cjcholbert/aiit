@@ -4,7 +4,7 @@ import { useAuth } from '../auth/AuthContext';
 import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
-import LessonNav from '../components/LessonNav';
+import CurriculumNav from '../components/CurriculumNav';
 import StatsPanel from '../components/StatsPanel';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
@@ -263,6 +263,7 @@ export default function Lesson12() {
                     <div className="lesson-header-problem-skill">
                         <p>Generate your personal AI collaboration quick reference card from your learnings across all lessons.</p>
                     </div>
+                    <CurriculumNav currentLesson={12} />
                 </div>
                 <div className="lesson-header-right">
                     <StatsPanel stats={stats ? [
@@ -787,7 +788,6 @@ export default function Lesson12() {
                 </div>
             )}
 
-            <LessonNav currentLesson={12} />
         </div>
     );
 }

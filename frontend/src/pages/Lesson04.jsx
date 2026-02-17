@@ -3,7 +3,7 @@ import { useApi } from '../hooks/useApi';
 import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
-import LessonNav from '../components/LessonNav';
+import CurriculumNav from '../components/CurriculumNav';
 import StatsPanel from '../components/StatsPanel';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 
@@ -107,6 +107,7 @@ export default function Lesson04() {
     };
     loadData();
   }, []);
+
 
   // Document form handlers
   const resetDocForm = () => {
@@ -391,20 +392,26 @@ export default function Lesson04() {
 
   return (
     <div className="page-container">
-      <header className="page-header">
-        <h1>Context Docs</h1>
-        <ConnectionCallout lessonNumber={3} lessonTitle="Template Builder" message="Keep AI informed about ongoing projects across sessions, so it never loses track of where you are." />
-      </header>
-
-      <div className="lesson-progress-row">
-        <SelfAssessmentChecklist lessonNumber={4} criteria={LESSON_CRITERIA[4]} />
-        <StatsPanel stats={stats ? [
-            { label: 'Documents', value: stats.total_docs, color: 'var(--accent-blue)' },
-            { label: 'Sessions', value: stats.total_sessions, color: 'var(--accent-green)' },
-            { label: 'This Week', value: stats.sessions_this_week, color: 'var(--accent-yellow)' },
-            { label: 'Avg Quality', value: stats.avg_context_quality, color: 'var(--accent-purple)' },
-            { label: 'Avg Continuity', value: stats.avg_continuity_rating, color: 'var(--accent-blue)' },
-        ] : []} />
+      <div className="lesson-header">
+        <div className="lesson-header-left">
+          <h1>Context Docs</h1>
+          <ConnectionCallout lessonNumber={3} lessonTitle="Template Builder" message="Keep AI informed about ongoing projects across sessions, so it never loses track of where you are." />
+          <div className="lesson-header-problem-skill">
+            <p><strong>The Problem:</strong> You've been working with AI on a project for weeks, but every new conversation starts blank. You re-explain the same background, the AI suggests approaches you already rejected, and you lose 10 minutes before real work begins.</p>
+            <p><strong>The Skill:</strong> Keep a living document for each project that captures what's done, what's decided, and what's next. Paste it at the start of any AI session so the conversation picks up where you left off -- no re-explaining needed.</p>
+          </div>
+          <CurriculumNav currentLesson={4} />
+        </div>
+        <div className="lesson-header-right">
+          <StatsPanel stats={stats ? [
+              { label: 'Documents', value: stats.total_docs, color: 'var(--accent-blue)' },
+              { label: 'Sessions', value: stats.total_sessions, color: 'var(--accent-green)' },
+              { label: 'This Week', value: stats.sessions_this_week, color: 'var(--accent-yellow)' },
+              { label: 'Avg Quality', value: stats.avg_context_quality, color: 'var(--accent-purple)' },
+              { label: 'Avg Continuity', value: stats.avg_continuity_rating, color: 'var(--accent-blue)' },
+          ] : []} />
+          <SelfAssessmentChecklist lessonNumber={4} criteria={LESSON_CRITERIA[4]} />
+        </div>
       </div>
 
       {error && (
@@ -447,12 +454,6 @@ export default function Lesson04() {
       {/* Learn Tab */}
       {activeTab === 'learn' && (
         <div className="learn-section">
-          <div className="learn-problem-skill">
-            <p><strong>The Problem:</strong> You've been working with AI on a project for weeks, but every new conversation starts blank. You re-explain the same background, the AI suggests approaches you already rejected, and you lose 10 minutes before real work begins.</p>
-            <p><strong>The Skill:</strong> Keep a living document for each project that captures what's done, what's decided, and what's next. Paste it at the start of any AI session so the conversation picks up where you left off -- no re-explaining needed.</p>
-          </div>
-
-
           <div className="learn-intro">
             <h2>Why Every Ongoing Project Needs a Context Doc</h2>
             <p>
@@ -1059,7 +1060,6 @@ export default function Lesson04() {
         </div>
       )}
 
-      <LessonNav currentLesson={4} />
     </div>
   );
 }

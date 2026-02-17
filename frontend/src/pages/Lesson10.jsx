@@ -3,7 +3,7 @@ import { useApi } from '../hooks/useApi';
 import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
-import LessonNav from '../components/LessonNav';
+import CurriculumNav from '../components/CurriculumNav';
 import StatsPanel from '../components/StatsPanel';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 
@@ -428,6 +428,7 @@ export default function Lesson10() {
             <p><strong>The Problem:</strong> Recurring tasks like status reports, meeting summaries, and client updates eat up valuable time when done manually each time. Without a systematic approach, you're reinventing the wheel with every iteration.</p>
             <p><strong>The Skill:</strong> Design AI-integrated workflows for recurring tasks. Create templates, track inputs, and measure time savings to build sustainable AI collaboration habits.</p>
           </div>
+          <CurriculumNav currentLesson={10} />
         </div>
         <div className="lesson-header-right">
           <StatsPanel stats={stats ? [
@@ -1291,7 +1292,6 @@ export default function Lesson10() {
         </div>
       )}
 
-      <LessonNav currentLesson={10} />
     </div>
   );
 }
