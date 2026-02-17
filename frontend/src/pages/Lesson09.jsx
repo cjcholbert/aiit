@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
-import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
-import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
-import CurriculumNav from '../components/CurriculumNav';
 import StatsPanel from '../components/StatsPanel';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 
@@ -317,7 +314,7 @@ export default function Lesson09() {
             <p><strong>The Problem:</strong> Random iteration ("make it better") wastes cycles and leads to scope creep. Without structure, you'll keep tweaking without knowing when "done" is reached.</p>
             <p><strong>The Skill:</strong> Use the 70-85-95 framework to iterate with purpose. Each pass has a specific focus and key question, so you know exactly what to evaluate and when to move on.</p>
           </div>
-          <CurriculumNav currentLesson={9} />
+
         </div>
         <div className="lesson-header-right">
           <StatsPanel stats={stats ? [
@@ -326,7 +323,7 @@ export default function Lesson09() {
               { label: 'In Progress', value: stats.in_progress_tasks, color: 'var(--accent-yellow)' },
               { label: 'Passes', value: stats.total_passes_recorded, color: 'var(--accent-purple)' },
           ] : []} />
-          <SelfAssessmentChecklist lessonNumber={9} criteria={LESSON_CRITERIA[9]} />
+
         </div>
       </div>
 

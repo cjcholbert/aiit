@@ -16,7 +16,6 @@ export default function NavDropdown() {
         if (path === '/') return 'Dashboard';
         if (path === '/concepts') return 'Core Concepts';
         if (path === '/curriculum') return 'Curriculum';
-        if (path === '/analytics') return 'Analytics';
         if (path === '/admin') return 'Admin';
         if (path.startsWith('/lesson/')) return `Lesson ${path.split('/')[2]}`;
         return 'Navigate';
@@ -49,10 +48,6 @@ export default function NavDropdown() {
 
     return (
         <>
-            <NavLink to="/curriculum" className="nav-header-link">
-                Curriculum
-            </NavLink>
-
             <div className="nav-dropdown-container" ref={dropdownRef}>
                 <button
                     className="nav-dropdown-trigger"
@@ -90,13 +85,6 @@ export default function NavDropdown() {
                             >
                                 Curriculum
                             </NavLink>
-                            <NavLink
-                                to="/analytics"
-                                className={({ isActive }) => `nav-dropdown-item ${isActive ? 'active' : ''}`}
-                                role="menuitem"
-                            >
-                                Analytics
-                            </NavLink>
                             {user?.is_admin && (
                                 <NavLink
                                     to="/admin"
@@ -108,21 +96,18 @@ export default function NavDropdown() {
                             )}
                         </div>
 
-                        <div className="nav-dropdown-divider" />
-
-                        <div className="nav-dropdown-section">
-                            <div className="nav-dropdown-section-title">Settings</div>
-                            <button
-                                className="nav-dropdown-item"
-                                onClick={toggleTheme}
-                                role="menuitem"
-                            >
-                                {theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-                            </button>
-                        </div>
                     </div>
                 )}
             </div>
+
+            <button
+                className="nav-theme-toggle"
+                onClick={toggleTheme}
+                aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+                {theme === 'dark' ? '\u2600' : '\u263D'}
+            </button>
 
             {/* Always-visible user info and sign out */}
             <div className="nav-user-bar">

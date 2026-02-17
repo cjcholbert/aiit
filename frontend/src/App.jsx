@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from './auth/AuthContext';
 import { ProgressProvider } from './hooks/useProgress';
-import Sidebar from './components/Sidebar';
 import NavDropdown from './components/NavDropdown';
+import ModuleTabNav from './components/ModuleTabNav';
+import ProgressSidebar from './components/ProgressSidebar';
 import ErrorBoundary from './components/ErrorBoundary';
 import FeedbackWidget from './components/FeedbackWidget';
 import CelebrationToast from './components/CelebrationToast';
@@ -11,7 +12,6 @@ import SkipLink from './components/SkipLink';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
-import Analytics from './pages/Analytics';
 import Lesson01 from './pages/Lesson01';
 import Lesson02 from './pages/Lesson02';
 import Lesson03 from './pages/Lesson03';
@@ -97,58 +97,40 @@ function PublicOrDashboard() {
 }
 
 function AppLayout({ children }) {
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const location = useLocation();
+
+    // Parse lesson number from route for sidebar
+    const lessonMatch = location.pathname.match(/^\/lesson\/(\d+)$/);
+    const lessonNumber = lessonMatch ? parseInt(lessonMatch[1], 10) : null;
 
     // Track last-visited lesson for "Continue where you left off"
     useEffect(() => {
-        const match = location.pathname.match(/^\/lesson\/(\d+)$/);
-        if (match) {
-            localStorage.setItem('ams_last_lesson', match[1]);
+        if (lessonNumber) {
+            localStorage.setItem('ams_last_lesson', String(lessonNumber));
         }
-    }, [location.pathname]);
-
-    const toggleMobileMenu = () => {
-        setIsMobileMenuOpen(prev => !prev);
-    };
+    }, [lessonNumber]);
 
     return (
         <ProgressProvider>
             <div className="app-layout">
                 <SkipLink targetId="main-content" />
 
-                {/* Left column: Sidebar (spans full height) */}
-                <Sidebar
-                    isMobileMenuOpen={isMobileMenuOpen}
-                    setIsMobileMenuOpen={setIsMobileMenuOpen}
-                />
-
-                {/* Right column: Nav dropdown + Main content */}
                 <div className="content-column">
-                    {/* Hamburger button - visible on mobile only */}
-                    <button
-                        className="hamburger-btn"
-                        onClick={toggleMobileMenu}
-                        aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
-                        aria-expanded={isMobileMenuOpen}
-                        aria-controls="curriculum-sidebar"
-                    >
-                        <span className={`hamburger-icon ${isMobileMenuOpen ? 'open' : ''}`}>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </span>
-                    </button>
-
-                    {/* Navigation dropdown - hidden on mobile */}
                     <div className="content-header">
                         <NavDropdown />
                     </div>
 
-                    {/* Main content area */}
-                    <main id="main-content" className="main-content" tabIndex="-1">
-                        <ErrorBoundary>{children}</ErrorBoundary>
-                    </main>
+                    <ModuleTabNav />
+
+                    <div className={`content-body${lessonNumber ? ' content-body--with-sidebar' : ''}`}>
+                        <main id="main-content" className="main-content" tabIndex="-1">
+                            <ErrorBoundary>{children}</ErrorBoundary>
+                        </main>
+
+                        {lessonNumber && (
+                            <ProgressSidebar lessonNumber={lessonNumber} />
+                        )}
+                    </div>
                 </div>
 
                 <FeedbackWidget />
@@ -197,14 +179,6 @@ export default function App() {
                 <ProtectedRoute>
                     <AppLayout>
                         <Curriculum />
-                    </AppLayout>
-                </ProtectedRoute>
-            } />
-
-            <Route path="/analytics" element={
-                <ProtectedRoute>
-                    <AppLayout>
-                        <Analytics />
                     </AppLayout>
                 </ProtectedRoute>
             } />

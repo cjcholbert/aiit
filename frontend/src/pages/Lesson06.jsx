@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
-import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
-import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
-import CurriculumNav from '../components/CurriculumNav';
 import StatsPanel from '../components/StatsPanel';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 
@@ -349,7 +346,7 @@ export default function Lesson06() {
             <p><strong>The Problem:</strong> Without systematic verification, you either waste time over-checking outputs you could trust, or miss critical errors by under-checking outputs that needed scrutiny. Lesson 5 helped you calibrate <em>when</em> to verify -- now you build <em>how</em> to verify efficiently.</p>
             <p><strong>The Skill:</strong> Create reusable verification checklists tied to output types, so checking becomes quick and consistent rather than ad-hoc. Track which checks actually catch issues to refine your process over time. Define clear "skip criteria" so you can confidently trust appropriate outputs without guilt or risk.</p>
           </div>
-          <CurriculumNav currentLesson={6} />
+
         </div>
         <div className="lesson-header-right">
           <StatsPanel stats={stats ? [
@@ -357,7 +354,7 @@ export default function Lesson06() {
               { label: 'Sessions', value: stats.total_sessions, color: 'var(--accent-green)' },
               { label: 'Avg Time', value: formatTime(Math.round(stats.avg_verification_time || 0)), color: 'var(--accent-yellow)' },
           ] : []} />
-          <SelfAssessmentChecklist lessonNumber={6} criteria={LESSON_CRITERIA[6]} />
+
         </div>
       </div>
 

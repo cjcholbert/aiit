@@ -1,7 +1,5 @@
-export default function ConnectionCallout({ lessonNumber, lessonTitle, message }) {
+export default function ConnectionCallout({ message }) {
     return (
-        <p className="connection-callout">
-            Builds on Lesson {lessonNumber}: {lessonTitle} &mdash; {message}
-        </p>
+        <p className="connection-callout">{message}</p>
     );
 }

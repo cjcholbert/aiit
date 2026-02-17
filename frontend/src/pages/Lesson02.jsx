@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
-import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
-import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
-import CurriculumNav from '../components/CurriculumNav';
 import StatsPanel from '../components/StatsPanel';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 
@@ -322,7 +319,7 @@ export default function Lesson02() {
             <p><strong>The Problem:</strong> Vague feedback like "make it better" or "this isn't right" wastes iteration cycles and frustrates both you and the AI. Without specific, actionable feedback, you'll keep going in circles.</p>
             <p><strong>The Skill:</strong> Write feedback that identifies specific locations, states clear actions, and explains reasoning. Learn to spot vague patterns in your own feedback and rewrite them.</p>
           </div>
-          <CurriculumNav currentLesson={2} />
+
         </div>
         <div className="lesson-header-right">
           <StatsPanel stats={[
@@ -331,7 +328,7 @@ export default function Lesson02() {
               { label: 'Examples Saved', value: stats?.examples_saved ?? '-', color: 'var(--accent-green)' },
               { label: 'Rewrites Done', value: stats?.rewrites_completed ?? '-', color: 'var(--accent-purple)' },
           ]} />
-          <SelfAssessmentChecklist lessonNumber={2} criteria={LESSON_CRITERIA[2]} />
+
         </div>
       </div>
 

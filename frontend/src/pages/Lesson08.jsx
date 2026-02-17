@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
-import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
-import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
-import CurriculumNav from '../components/CurriculumNav';
 import StatsPanel from '../components/StatsPanel';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 
@@ -426,7 +423,7 @@ export default function Lesson08() {
             <p><strong>The Problem:</strong> Knowing what to delegate is only half the battle. Without structured delegation practices, you'll give vague instructions and get disappointing results, or spend more time explaining than doing the work yourself.</p>
             <p><strong>The Skill:</strong> Create delegation templates with clear context, objectives, scope, deliverables, and success criteria. Then execute decomposed tasks in sequence, tracking what you delegated, what you received, and what decisions you made at each gate.</p>
           </div>
-          <CurriculumNav currentLesson={8} />
+
         </div>
         <div className="lesson-header-right">
           <StatsPanel stats={stats ? [
@@ -435,7 +432,7 @@ export default function Lesson08() {
               { label: 'Completed', value: stats.tasks_completed, color: 'var(--accent-green)' },
               { label: 'Pending', value: stats.tasks_pending, color: 'var(--accent-yellow)' },
           ] : []} />
-          <SelfAssessmentChecklist lessonNumber={8} criteria={LESSON_CRITERIA[8]} />
+
         </div>
       </div>
 

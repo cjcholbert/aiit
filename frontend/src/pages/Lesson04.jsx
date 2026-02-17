@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
-import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
-import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
-import CurriculumNav from '../components/CurriculumNav';
 import StatsPanel from '../components/StatsPanel';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 
@@ -400,7 +397,7 @@ export default function Lesson04() {
             <p><strong>The Problem:</strong> You've been working with AI on a project for weeks, but every new conversation starts blank. You re-explain the same background, the AI suggests approaches you already rejected, and you lose 10 minutes before real work begins.</p>
             <p><strong>The Skill:</strong> Keep a living document for each project that captures what's done, what's decided, and what's next. Paste it at the start of any AI session so the conversation picks up where you left off -- no re-explaining needed.</p>
           </div>
-          <CurriculumNav currentLesson={4} />
+
         </div>
         <div className="lesson-header-right">
           <StatsPanel stats={stats ? [
@@ -410,7 +407,7 @@ export default function Lesson04() {
               { label: 'Avg Quality', value: stats.avg_context_quality, color: 'var(--accent-purple)' },
               { label: 'Avg Continuity', value: stats.avg_continuity_rating, color: 'var(--accent-blue)' },
           ] : []} />
-          <SelfAssessmentChecklist lessonNumber={4} criteria={LESSON_CRITERIA[4]} />
+
         </div>
       </div>
 

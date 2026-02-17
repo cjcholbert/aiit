@@ -1,9 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useApi } from '../hooks/useApi';
-import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
-import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
-import CurriculumNav from '../components/CurriculumNav';
 import StatsPanel from '../components/StatsPanel';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 
@@ -752,7 +749,7 @@ ${gapSections}
             <p><strong>The Problem:</strong> You keep forgetting to provide the same context over and over. Each conversation starts from scratch, and you waste time re-explaining your project, constraints, and preferences.</p>
             <p><strong>The Skill:</strong> Build reusable templates that capture the context AI needs upfront. Turn your Lesson 1 insights into structured prompts you can use consistently.</p>
           </div>
-          <CurriculumNav currentLesson={3} />
+
         </div>
         <div className="lesson-header-right">
           <StatsPanel stats={stats ? [
@@ -760,7 +757,7 @@ ${gapSections}
               { label: 'Tests Run', value: stats.total_tests, color: 'var(--accent-green)' },
               { label: 'Avg Rating', value: stats.avg_rating?.toFixed(1) ?? '-', color: 'var(--accent-yellow)' },
           ] : []} />
-          <SelfAssessmentChecklist lessonNumber={3} criteria={LESSON_CRITERIA[3]} />
+
         </div>
       </div>
 

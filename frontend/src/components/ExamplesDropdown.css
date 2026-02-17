@@ -1,6 +1,7 @@
 .examples-dropdown {
   position: relative;
   display: inline-block;
+  margin-left: auto;
 }
 
 .examples-dropdown__trigger {
@@ -41,7 +42,7 @@
 .examples-dropdown__menu {
   position: absolute;
   top: calc(100% + 4px);
-  left: 0;
+  right: 0;
   z-index: 100;
   min-width: 320px;
   max-width: 400px;

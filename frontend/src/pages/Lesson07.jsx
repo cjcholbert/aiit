@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
-import SelfAssessmentChecklist from '../components/SelfAssessmentChecklist';
-import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
-import CurriculumNav from '../components/CurriculumNav';
 import StatsPanel from '../components/StatsPanel';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 
@@ -252,7 +249,7 @@ export default function Lesson07() {
             <p><strong>The Problem:</strong> Without decomposition skills, you either delegate tasks that need your judgment (getting poor results) or do everything yourself (wasting AI's potential). Learning to categorize tasks lets you optimize the human-AI division of labor.</p>
             <p><strong>The Skill:</strong> Break projects into subtasks and categorize each as AI-Optimal (delegate freely), Collaborative (work together), or Human-Primary (you lead). Sequence tasks with dependencies so you know what to hand off, what to co-create, and where to insert decision gates.</p>
           </div>
-          <CurriculumNav currentLesson={7} />
+
         </div>
         <div className="lesson-header-right">
           <StatsPanel stats={stats ? [
@@ -261,7 +258,7 @@ export default function Lesson07() {
               { label: 'Avg Tasks/Project', value: stats.avg_tasks_per_decomposition, color: 'var(--accent-yellow)' },
               { label: 'Decision Gates', value: stats.decision_gates_count, color: 'var(--accent-red)' },
           ] : []} />
-          <SelfAssessmentChecklist lessonNumber={7} criteria={LESSON_CRITERIA[7]} />
+
         </div>
       </div>
 

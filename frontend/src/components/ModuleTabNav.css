@@ -1,0 +1,186 @@
+/* ModuleTabNav — horizontal module tab navigation bar */
+
+.module-tab-nav {
+    display: flex;
+    gap: var(--space-lg);
+    align-items: flex-start;
+    padding: var(--space-sm) var(--space-xl);
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+}
+
+.module-tab-group {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Label is a button for accordion, but on desktop acts like a pill label */
+.module-tab-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--module-text);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    white-space: nowrap;
+    padding: 4px 12px;
+    border: 1.5px solid var(--module-border);
+    border-radius: 999px;
+    margin-bottom: 4px;
+    background: var(--module-color);
+    cursor: default;
+    text-align: left;
+}
+
+.module-tab-label-count,
+.module-tab-label-arrow {
+    display: none;
+}
+
+.module-tab-lessons {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.module-tab-lesson {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 6px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-size: 12px;
+    line-height: 1.4;
+    transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.module-tab-lesson:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+.module-tab-lesson--current {
+    background: var(--module-color);
+    color: var(--module-text);
+    font-weight: 600;
+}
+
+.module-tab-lesson--current:hover {
+    background: var(--module-color);
+    color: var(--module-text);
+}
+
+.module-tab-lesson-num {
+    font-weight: 600;
+    min-width: 14px;
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.module-tab-lesson-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.module-tab-check {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--module-text);
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.module-tab-lesson--complete:not(.module-tab-lesson--current) .module-tab-check {
+    color: var(--accent-green);
+}
+
+/* Responsive: 2x2 grid at tablet */
+@media (max-width: 768px) and (min-width: 481px) {
+    .module-tab-nav {
+        flex-wrap: wrap;
+        gap: var(--space-md);
+        padding: var(--space-sm) var(--space-md);
+    }
+
+    .module-tab-group {
+        flex: 1 1 calc(50% - var(--space-md));
+        min-width: 0;
+    }
+}
+
+/* Mobile: accordion layout */
+@media (max-width: 480px) {
+    .module-tab-nav {
+        flex-direction: column;
+        gap: 0;
+        padding: 0;
+    }
+
+    .module-tab-group {
+        flex: none;
+        gap: 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .module-tab-group:last-child {
+        border-bottom: none;
+    }
+
+    .module-tab-label {
+        cursor: pointer;
+        padding: var(--space-sm) var(--space-md);
+        margin-bottom: 0;
+        width: 100%;
+        font-size: 12px;
+        border-radius: 0;
+        border: none;
+        border-left: 3px solid var(--module-border);
+        background: var(--module-color);
+    }
+
+    .module-tab-label-count {
+        display: inline;
+        font-size: 10px;
+        font-weight: 500;
+        color: var(--text-muted);
+        margin-left: auto;
+    }
+
+    .module-tab-label-arrow {
+        display: inline;
+        font-size: 10px;
+        color: var(--text-muted);
+        flex-shrink: 0;
+    }
+
+    /* Lessons hidden by default on mobile */
+    .module-tab-lessons {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 200ms ease;
+        padding: 0 var(--space-md) 0 var(--space-lg);
+    }
+
+    /* Expanded state */
+    .module-tab-lessons--open {
+        max-height: 300px;
+        padding-bottom: var(--space-sm);
+    }
+
+    .module-tab-lesson {
+        padding: 4px 6px;
+    }
+}

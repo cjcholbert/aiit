@@ -3,20 +3,10 @@ import { Link } from 'react-router-dom';
 import { MODULES, CONCEPTS, APP_NAME } from '../config/modules';
 import { useTheme } from '../contexts/ThemeContext';
 import { useProgress } from '../hooks/useProgress';
-import { useRecommendedLesson } from '../hooks/useRecommendedLesson';
 import GettingStartedOverlay from '../components/GettingStartedOverlay';
 import { useApi } from '../hooks/useApi';
 
 const BANNER_DISMISSED_KEY = 'ams_welcome_dismissed';
-const LAST_LESSON_KEY = 'ams_last_lesson';
-
-function getLastLesson() {
-    try {
-        return parseInt(localStorage.getItem(LAST_LESSON_KEY)) || null;
-    } catch {
-        return null;
-    }
-}
 
 function isBannerDismissed() {
     try {
@@ -28,8 +18,7 @@ function isBannerDismissed() {
 
 export default function Dashboard() {
     const { theme } = useTheme();
-    const { isLessonComplete, completionPercentage, progress } = useProgress();
-    const { lesson: recommendedLesson } = useRecommendedLesson();
+    const { isLessonComplete, progress } = useProgress();
     const [dismissed, setDismissed] = useState(isBannerDismissed);
     const api = useApi();
     const [lessonStats, setLessonStats] = useState({});
@@ -44,8 +33,6 @@ export default function Dashboard() {
 
     const isNewUser = progress && progress.completed_count === 0;
     const showWelcome = isNewUser && !dismissed;
-    const lastLesson = getLastLesson();
-    const showContinue = !showWelcome && lastLesson && progress && progress.completed_count < 12;
 
     const handleDismiss = () => {
         localStorage.setItem(BANNER_DISMISSED_KEY, '1');
@@ -69,46 +56,11 @@ export default function Dashboard() {
                 </div>
             )}
 
-            {showContinue && (
-                <div className="continue-banner">
-                    <span className="continue-banner-text">Continue where you left off:</span>
-                    <Link to={`/lesson/${lastLesson}`} className="continue-banner-link">
-                        Lesson {lastLesson}
-                    </Link>
-                </div>
-            )}
-
-            {recommendedLesson && progress && progress.completed_count > 0 && progress.completed_count < 12 && (
-                <div className="recommended-banner">
-                    <span className="recommended-banner-label">Recommended Next</span>
-                    <Link to={`/lesson/${recommendedLesson}`} className="recommended-banner-link">
-                        Lesson {recommendedLesson}
-                    </Link>
-                </div>
-            )}
-
             <div className="page-header">
                 <h1 className="page-title">{APP_NAME}</h1>
                 <p className="page-description">
                     12-lesson curriculum organized into 4 modules for mastering AI collaboration. Build systematic habits for effective AI partnership.
                 </p>
-                {progress && (
-                    <div className="dashboard-progress-bar">
-                        <div className="dashboard-progress-header">
-                            <span className="dashboard-progress-label">Overall Progress</span>
-                            <span className="dashboard-progress-pct">{completionPercentage}%</span>
-                        </div>
-                        <div className="dashboard-progress-track">
-                            <div
-                                className="dashboard-progress-fill"
-                                style={{ width: `${completionPercentage}%` }}
-                            />
-                        </div>
-                        <span className="dashboard-progress-detail">
-                            {progress.completed_count} of {progress.total_count} lessons complete
-                        </span>
-                    </div>
-                )}
             </div>
 
             {MODULES.map((module) => (
