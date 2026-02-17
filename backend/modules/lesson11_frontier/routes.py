@@ -19,6 +19,11 @@ from .schemas import (
     EncounterCreate, EncounterUpdate, EncounterSummary, EncounterResponse,
     FrontierStats
 )
+from .examples import (
+    EXAMPLE_CATEGORIES,
+    EXAMPLE_ZONES as CATEGORY_ZONES,
+    EXAMPLE_ENCOUNTERS as CATEGORY_ENCOUNTERS
+)
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/lesson11", tags=["Lesson 11: Frontier Mapper"])
@@ -44,6 +49,16 @@ async def get_categories():
 async def get_encounter_types():
     """Get available encounter types."""
     return ENCOUNTER_TYPES
+
+
+@router.get("/examples")
+async def get_category_examples():
+    """Get example zones and encounters organized by category."""
+    return {
+        "categories": EXAMPLE_CATEGORIES,
+        "zones": CATEGORY_ZONES,
+        "encounters": CATEGORY_ENCOUNTERS
+    }
 
 
 @router.get("/examples/zones")

@@ -5,6 +5,7 @@ import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
 import LessonNav from '../components/LessonNav';
 import StatsPanel from '../components/StatsPanel';
+import ExamplesDropdown from '../components/ExamplesDropdown';
 
 // Trust level colors and guidelines
 const TRUST_LEVELS = {
@@ -721,7 +722,23 @@ export default function Lesson05() {
           {showAddForm && (
             <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
               <div style={{ background: 'var(--bg-secondary)', borderRadius: '12px', padding: '24px', width: '550px', maxWidth: '90vw', maxHeight: '90vh', overflow: 'auto' }}>
-                <h3 style={{ margin: '0 0 8px' }}>Add Output Type</h3>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                  <h3 style={{ margin: 0 }}>Add Output Type</h3>
+                  <ExamplesDropdown
+                    endpoint="/lesson5/examples"
+                    onSelect={(example) => {
+                      setNewOutputType({
+                        ...newOutputType,
+                        name: example.name || '',
+                        category: example.category || 'Code',
+                        trust_level: example.trust_level || 'medium',
+                        reasoning: example.reasoning || '',
+                        verification_approach: example.verification_approach || '',
+                        examples: example.examples || [],
+                      });
+                    }}
+                  />
+                </div>
                 <p style={{ margin: '0 0 20px', fontSize: '13px', color: 'var(--text-muted)' }}>
                   Think about types of AI output you use in your work. What do you ask AI to generate?
                 </p>

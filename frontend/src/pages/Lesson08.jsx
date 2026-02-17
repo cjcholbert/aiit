@@ -5,6 +5,7 @@ import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
 import LessonNav from '../components/LessonNav';
 import StatsPanel from '../components/StatsPanel';
+import ExamplesDropdown from '../components/ExamplesDropdown';
 
 // Task status colors
 const STATUS_COLORS = {
@@ -798,7 +799,21 @@ export default function Lesson08() {
           ) : showCreateForm ? (
             // Create Form
             <div className="card" style={{ padding: '24px' }}>
-              <h2>Create Delegation</h2>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <h2 style={{ margin: 0 }}>Create Delegation</h2>
+                <ExamplesDropdown
+                  endpoint="/lesson8/examples"
+                  onSelect={(example) => {
+                    setNewDelegation({
+                      ...newDelegation,
+                      name: example.name || '',
+                      template: example.template || '',
+                      task_sequence: example.task_sequence || [],
+                      notes: example.notes || '',
+                    });
+                  }}
+                />
+              </div>
 
               {/* Import from Task Decomposer */}
               <div style={{ marginTop: '12px', marginBottom: '16px' }}>

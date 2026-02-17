@@ -20,6 +20,7 @@ from .schemas import (
     WorkflowStats,
     WORKFLOW_FREQUENCIES, WORKFLOW_CRITERIA, QUALITY_CHECK_TYPES, EXAMPLE_WORKFLOWS
 )
+from .examples import EXAMPLE_CATEGORIES, EXAMPLE_WORKFLOW_TEMPLATES
 
 logger = logging.getLogger(__name__)
 
@@ -171,8 +172,11 @@ async def get_quality_checks():
 
 @router.get("/examples")
 async def get_example_workflows():
-    """Get example workflow templates for reference."""
-    return EXAMPLE_WORKFLOWS
+    """Get example workflow templates organized by category."""
+    return {
+        "categories": EXAMPLE_CATEGORIES,
+        "examples": EXAMPLE_WORKFLOW_TEMPLATES
+    }
 
 
 # =============================================================================

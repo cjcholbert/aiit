@@ -5,6 +5,7 @@ import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
 import LessonNav from '../components/LessonNav';
 import StatsPanel from '../components/StatsPanel';
+import ExamplesDropdown from '../components/ExamplesDropdown';
 
 // Frequency colors
 const FREQUENCY_COLORS = {
@@ -691,7 +692,23 @@ export default function Lesson10() {
         <div className="design-section">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <h2>{editingTemplate ? 'Edit Template' : 'Create Template'}</h2>
-            <div style={{ display: 'flex', gap: '8px' }}>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <ExamplesDropdown
+                endpoint="/lesson10/examples"
+                onSelect={(example) => {
+                  setTemplateForm({
+                    ...templateForm,
+                    name: example.name || '',
+                    description: example.description || '',
+                    frequency: example.frequency || 'weekly',
+                    estimated_time_minutes: example.estimated_time_minutes || 30,
+                    inputs: example.inputs || [],
+                    steps: example.steps || [],
+                    prompt_template: example.prompt_template || '',
+                    quality_checks: example.quality_checks || [],
+                  });
+                }}
+              />
               {templates.length === 0 && (
                 <button className="btn btn-secondary" onClick={handleSeedExamples}>
                   Load Examples

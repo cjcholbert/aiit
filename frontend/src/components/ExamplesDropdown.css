@@ -1,0 +1,100 @@
+.examples-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.examples-dropdown__trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 6px 12px;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-family: inherit;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.examples-dropdown__trigger:hover {
+  background: var(--bg-hover);
+}
+
+.examples-dropdown__trigger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.examples-dropdown__arrow {
+  font-size: 0.625rem;
+  transition: transform var(--transition-fast);
+  line-height: 1;
+}
+
+.examples-dropdown__arrow--open {
+  transform: rotate(180deg);
+}
+
+.examples-dropdown__menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 100;
+  min-width: 320px;
+  max-width: 400px;
+  max-height: 360px;
+  overflow-y: auto;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-xs) 0;
+}
+
+.examples-dropdown__loading,
+.examples-dropdown__error,
+.examples-dropdown__empty {
+  padding: var(--space-md) var(--space-lg);
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.examples-dropdown__error {
+  color: var(--accent-red);
+}
+
+.examples-dropdown__item {
+  display: block;
+  width: 100%;
+  padding: 10px var(--space-md);
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  font-family: inherit;
+  color: var(--text-primary);
+}
+
+.examples-dropdown__item:hover {
+  background: var(--bg-hover);
+}
+
+.examples-dropdown__item-category {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.examples-dropdown__item-description {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.3;
+}

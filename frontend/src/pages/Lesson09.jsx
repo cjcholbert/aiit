@@ -5,6 +5,7 @@ import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
 import LessonNav from '../components/LessonNav';
 import StatsPanel from '../components/StatsPanel';
+import ExamplesDropdown from '../components/ExamplesDropdown';
 
 // Pass indicator colors and labels
 const PASS_STYLES = {
@@ -812,7 +813,20 @@ export default function Lesson09() {
           ) : showCreateForm ? (
             // Create form
             <div className="card" style={{ padding: '24px' }}>
-              <h2>Start New Iteration Task</h2>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <h2 style={{ margin: 0 }}>Start New Iteration Task</h2>
+                <ExamplesDropdown
+                  endpoint="/lesson9/examples"
+                  onSelect={(example) => {
+                    setNewTask({
+                      ...newTask,
+                      task_name: example.task_name || '',
+                      target_outcome: example.target_outcome || '',
+                      notes: example.notes || '',
+                    });
+                  }}
+                />
+              </div>
 
               {/* Import from Context Tracker */}
               <div style={{ marginTop: '12px', marginBottom: '16px' }}>

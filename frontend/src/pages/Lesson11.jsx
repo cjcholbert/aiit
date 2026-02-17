@@ -5,6 +5,7 @@ import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
 import LessonNav from '../components/LessonNav';
 import StatsPanel from '../components/StatsPanel';
+import ExamplesDropdown from '../components/ExamplesDropdown';
 
 // Icon mappings for categories and reliability
 const CATEGORY_ICONS = {
@@ -536,9 +537,27 @@ export default function Lesson11() {
                     <div className="card">
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                             <h2 style={{ margin: 0 }}>Create Zone</h2>
-                            <button className="btn btn-secondary" onClick={() => seedExamples('zones')} disabled={loading}>
-                                {loading ? 'Seeding...' : 'Seed Examples'}
-                            </button>
+                            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                <ExamplesDropdown
+                                    endpoint="/lesson11/examples"
+                                    onSelect={(example) => {
+                                        setZoneForm({
+                                            ...zoneForm,
+                                            name: example.name || '',
+                                            category: example.category || categories[0]?.id || '',
+                                            reliability: example.reliability || 'moderate',
+                                            confidence: example.confidence || 50,
+                                            strengths: example.strengths || [],
+                                            weaknesses: example.weaknesses || [],
+                                            verification_needs: example.verification_needs || [],
+                                            notes: example.notes || '',
+                                        });
+                                    }}
+                                />
+                                <button className="btn btn-secondary" onClick={() => seedExamples('zones')} disabled={loading}>
+                                    {loading ? 'Seeding...' : 'Seed Examples'}
+                                </button>
+                            </div>
                         </div>
 
                         {/* Import from Trust Matrix */}

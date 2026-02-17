@@ -19,10 +19,24 @@ from .schemas import (
 )
 from backend.rate_limit import limiter
 from .analyzer import analyze_calibration
+from .examples import EXAMPLE_CATEGORIES, EXAMPLE_OUTPUT_TYPES
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/lesson5", tags=["Lesson 5: Trust Matrix"])
+
+
+# =============================================================================
+# Examples (public, no auth required)
+# =============================================================================
+
+@router.get("/examples")
+async def get_examples():
+    """Get example output types organized by professional category."""
+    return {
+        "categories": EXAMPLE_CATEGORIES,
+        "examples": EXAMPLE_OUTPUT_TYPES
+    }
 
 
 # =============================================================================

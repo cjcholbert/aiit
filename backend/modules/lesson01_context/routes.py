@@ -465,18 +465,19 @@ async def get_insights(
 
 @router.get("/examples")
 async def get_examples():
-    """Get example conversations organized by category."""
-    by_category = {}
-    for ex in EXAMPLE_CONVERSATIONS:
-        cat = ex["category"]
-        if cat not in by_category:
-            by_category[cat] = []
-        by_category[cat].append({
-            "title": ex["title"],
-            "description": ex["description"],
-            "raw_transcript": ex["raw_transcript"]
-        })
-    return {"categories": EXAMPLE_CATEGORIES, "examples": by_category}
+    """Get example case scenarios for learning."""
+    return {
+        "categories": EXAMPLE_CATEGORIES,
+        "examples": [
+            {
+                "category": ex["category"],
+                "title": ex["title"],
+                "description": ex["description"],
+                "raw_transcript": ex["raw_transcript"],
+            }
+            for ex in EXAMPLE_CONVERSATIONS
+        ]
+    }
 
 
 @router.post("/conversations/seed-examples")
@@ -500,7 +501,7 @@ async def seed_example_conversations(
         )
 
     created = []
-    for example in EXAMPLE_CONVERSATIONS[:6]:  # One per category
+    for example in EXAMPLE_CONVERSATIONS:
         parsed = parse_transcript(example["raw_transcript"])
         is_valid, _ = validate_transcript(parsed)
         if not is_valid:

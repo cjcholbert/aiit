@@ -19,10 +19,24 @@ from .schemas import (
     ChecklistStats, VerificationStats,
     DEFAULT_CHECKLISTS
 )
+from .examples import EXAMPLE_CATEGORIES, EXAMPLE_CHECKLISTS
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/lesson6", tags=["Lesson 6: Verification Tools"])
+
+
+# =============================================================================
+# Examples (public, no auth required)
+# =============================================================================
+
+@router.get("/examples")
+async def get_examples():
+    """Get example verification checklists organized by professional category."""
+    return {
+        "categories": EXAMPLE_CATEGORIES,
+        "examples": EXAMPLE_CHECKLISTS
+    }
 
 
 # =============================================================================

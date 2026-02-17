@@ -492,19 +492,20 @@ async def get_template_stats(
 async def get_examples():
     """Get example templates organized by category."""
     from .examples import EXAMPLE_TEMPLATES, EXAMPLE_CATEGORIES
-    by_category = {}
-    for ex in EXAMPLE_TEMPLATES:
-        cat = ex["category"]
-        if cat not in by_category:
-            by_category[cat] = []
-        by_category[cat].append({
-            "name": ex["name"],
-            "description": ex["description"],
-            "content": ex["content"],
-            "variables": ex["variables"],
-            "tags": ex["tags"],
-        })
-    return {"categories": EXAMPLE_CATEGORIES, "examples": by_category}
+    return {
+        "categories": EXAMPLE_CATEGORIES,
+        "examples": [
+            {
+                "category": t["category"],
+                "name": t["name"],
+                "description": t["description"],
+                "content": t["content"],
+                "variables": t["variables"],
+                "tags": t["tags"],
+            }
+            for t in EXAMPLE_TEMPLATES
+        ]
+    }
 
 
 @router.post("/templates/seed-examples")

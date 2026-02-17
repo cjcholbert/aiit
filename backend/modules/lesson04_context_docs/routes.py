@@ -140,7 +140,12 @@ async def get_sections():
 @router.get("/examples")
 async def get_examples():
     """Get example context documents for reference."""
-    return EXAMPLE_CONTEXT_DOCS
+    from .examples import EXAMPLE_CATEGORIES as EXAMPLE_PROF_CATEGORIES
+    from .examples import EXAMPLE_CONTEXT_DOCS as EXAMPLE_PROF_CONTEXT_DOCS
+    return {
+        "categories": EXAMPLE_PROF_CATEGORIES,
+        "examples": EXAMPLE_PROF_CONTEXT_DOCS
+    }
 
 
 # =============================================================================

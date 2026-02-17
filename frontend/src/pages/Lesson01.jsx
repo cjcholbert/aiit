@@ -5,6 +5,7 @@ import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import LessonNav from '../components/LessonNav';
 import StatsPanel from '../components/StatsPanel';
 import ConnectionCallout from '../components/ConnectionCallout';
+import ExamplesDropdown from '../components/ExamplesDropdown';
 
 export default function Lesson01() {
     const [activeTab, setActiveTab] = useState('learn');
@@ -560,7 +561,13 @@ export default function Lesson01() {
 
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                                 <div>
-                                    <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Paste Conversation</label>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                                        <label style={{ fontWeight: '500', margin: 0 }}>Paste Conversation</label>
+                                        <ExamplesDropdown
+                                            endpoint="/lesson1/examples"
+                                            onSelect={(example) => setConverterInput(example.raw_transcript)}
+                                        />
+                                    </div>
                                     <textarea
                                         value={converterInput}
                                         onChange={(e) => setConverterInput(e.target.value)}

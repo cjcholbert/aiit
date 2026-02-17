@@ -17,8 +17,9 @@ from .schemas import (
     IterationTaskCreate, IterationTaskUpdate,
     IterationTaskResponse, IterationTaskSummary,
     IterationStats,
-    PASS_INFO, TRANSITION_TEMPLATES, EXAMPLE_TASKS, EXAMPLE_CATEGORIES
+    PASS_INFO, TRANSITION_TEMPLATES, EXAMPLE_TASKS
 )
+from .examples import EXAMPLE_CATEGORIES
 
 logger = logging.getLogger(__name__)
 
@@ -369,17 +370,18 @@ async def get_stats(
 @router.get("/examples")
 async def get_examples():
     """Get example tasks organized by category."""
-    by_category = {}
-    for ex in EXAMPLE_TASKS:
-        cat = ex.get("category", "Tech")
-        if cat not in by_category:
-            by_category[cat] = []
-        by_category[cat].append({
-            "task_name": ex["task_name"],
-            "target_outcome": ex["target_outcome"],
-            "notes": ex["notes"],
-        })
-    return {"categories": EXAMPLE_CATEGORIES, "examples": by_category}
+    return {
+        "categories": EXAMPLE_CATEGORIES,
+        "examples": [
+            {
+                "category": ex["category"],
+                "task_name": ex["task_name"],
+                "target_outcome": ex["target_outcome"],
+                "notes": ex["notes"],
+            }
+            for ex in EXAMPLE_TASKS
+        ]
+    }
 
 
 # =============================================================================

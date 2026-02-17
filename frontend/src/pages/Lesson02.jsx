@@ -5,6 +5,7 @@ import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
 import LessonNav from '../components/LessonNav';
 import StatsPanel from '../components/StatsPanel';
+import ExamplesDropdown from '../components/ExamplesDropdown';
 
 // Quality level styles
 const QUALITY_STYLES = {
@@ -672,7 +673,17 @@ export default function Lesson02() {
 
               <div className="card" style={{ padding: '24px', marginBottom: '24px' }}>
                 <div style={{ marginBottom: '16px' }}>
-                  <label style={{ display: 'block', marginBottom: '4px' }}>Your Feedback *</label>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '4px' }}>
+                    <label style={{ margin: 0 }}>Your Feedback *</label>
+                    <ExamplesDropdown
+                      endpoint="/lesson2/examples"
+                      onSelect={(example) => {
+                        setFeedbackInput(example.feedback || '');
+                        setContextInput(example.context || '');
+                        setCategoryInput(example.category || 'code');
+                      }}
+                    />
+                  </div>
                   <textarea
                     value={feedbackInput}
                     onChange={(e) => setFeedbackInput(e.target.value)}

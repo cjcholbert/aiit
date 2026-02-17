@@ -5,6 +5,7 @@ import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
 import LessonNav from '../components/LessonNav';
 import StatsPanel from '../components/StatsPanel';
+import ExamplesDropdown from '../components/ExamplesDropdown';
 
 // Category colors and info - using CSS custom properties for theme support
 const CATEGORIES = {
@@ -744,7 +745,20 @@ export default function Lesson07() {
           ) : showCreateForm ? (
             // Create Form
             <div className="card" style={{ padding: '24px' }}>
-              <h2>Decompose a Project</h2>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <h2 style={{ margin: 0 }}>Decompose a Project</h2>
+                <ExamplesDropdown
+                  endpoint="/lesson7/examples"
+                  onSelect={(example) => {
+                    setNewProject({
+                      ...newProject,
+                      project_name: example.project_name || '',
+                      description: example.description || '',
+                      tasks: example.tasks || [],
+                    });
+                  }}
+                />
+              </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '16px' }}>
                 <div>
                   <label style={{ display: 'block', marginBottom: '4px' }}>Project Name</label>

@@ -5,6 +5,7 @@ import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
 import LessonNav from '../components/LessonNav';
 import StatsPanel from '../components/StatsPanel';
+import ExamplesDropdown from '../components/ExamplesDropdown';
 
 const DEFAULT_CATEGORIES = [
   { value: 'general', label: 'General', color: 'var(--accent-purple)', icon: '📋' },
@@ -1287,6 +1288,22 @@ ${gapSections}
           )}
 
           <form onSubmit={handleCreateTemplate}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+              <ExamplesDropdown
+                endpoint="/lesson3/examples"
+                onSelect={(example) => {
+                  setFormData({
+                    ...formData,
+                    name: example.name || '',
+                    category: example.category || 'general',
+                    description: example.description || '',
+                    content: example.content || '',
+                    variables: example.variables || [],
+                    tags: example.tags || [],
+                  });
+                }}
+              />
+            </div>
             <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px', marginBottom: '16px' }}>
               <div className="form-group" style={{ margin: 0 }}>
                 <label>Template Name</label>

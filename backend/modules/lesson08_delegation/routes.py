@@ -21,6 +21,7 @@ from .schemas import (
 )
 from backend.rate_limit import limiter
 from .analyzer import analyze_delegation_output, AnalyzerError
+from .examples import EXAMPLE_CATEGORIES, EXAMPLE_DELEGATIONS
 
 logger = logging.getLogger(__name__)
 
@@ -104,6 +105,19 @@ def delegation_to_summary(deleg: Delegation) -> DelegationSummary:
         has_template=bool(deleg.template and deleg.template.strip()),
         created_at=deleg.created_at
     )
+
+
+# =============================================================================
+# Examples (public, no auth required)
+# =============================================================================
+
+@router.get("/examples")
+async def get_examples():
+    """Get example delegation templates organized by professional category."""
+    return {
+        "categories": EXAMPLE_CATEGORIES,
+        "examples": EXAMPLE_DELEGATIONS
+    }
 
 
 # =============================================================================

@@ -5,6 +5,7 @@ import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
 import LessonNav from '../components/LessonNav';
 import StatsPanel from '../components/StatsPanel';
+import ExamplesDropdown from '../components/ExamplesDropdown';
 
 // Category badge colors
 const CATEGORY_COLORS = {
@@ -604,7 +605,20 @@ export default function Lesson06() {
           {/* Create Form */}
           {showCreateForm && (
             <div className="card" style={{ marginBottom: '24px', padding: '20px' }}>
-              <h3>Create New Checklist</h3>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                <h3 style={{ margin: 0 }}>Create New Checklist</h3>
+                <ExamplesDropdown
+                  endpoint="/lesson6/examples"
+                  onSelect={(example) => {
+                    setNewChecklist({
+                      ...newChecklist,
+                      name: example.name || '',
+                      output_type: example.output_type || '',
+                      items: example.items || [],
+                    });
+                  }}
+                />
+              </div>
 
               {/* Import from Trust Matrix */}
               <div style={{ marginTop: '8px', marginBottom: '12px' }}>

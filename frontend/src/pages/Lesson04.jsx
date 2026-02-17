@@ -5,6 +5,7 @@ import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import ConnectionCallout from '../components/ConnectionCallout';
 import LessonNav from '../components/LessonNav';
 import StatsPanel from '../components/StatsPanel';
+import ExamplesDropdown from '../components/ExamplesDropdown';
 
 // Priority colors
 const PRIORITY_COLORS = {
@@ -654,7 +655,22 @@ export default function Lesson04() {
         <div className="docs-section">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <h2>{editingDoc ? 'Edit Document' : 'Create Document'}</h2>
-            <div style={{ display: 'flex', gap: '8px' }}>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <ExamplesDropdown
+                endpoint="/lesson4/examples"
+                onSelect={(example) => {
+                  setDocForm({
+                    ...docForm,
+                    project_name: example.project_name || '',
+                    description: example.description || '',
+                    current_state: example.current_state || { complete: [], in_progress: [], blocked: [] },
+                    key_decisions: example.key_decisions || [],
+                    known_issues: example.known_issues || [],
+                    lessons_learned: example.lessons_learned || [],
+                    next_goals: example.next_goals || [],
+                  });
+                }}
+              />
               {docs.length === 0 && (
                 <button className="btn btn-secondary" onClick={handleSeedExamples}>
                   Load Examples

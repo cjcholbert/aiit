@@ -20,6 +20,8 @@ from .schemas import (
     VAGUE_PATTERNS, QUALITY_LEVELS, FEEDBACK_CATEGORIES, EXAMPLE_FEEDBACK
 )
 
+from .examples import EXAMPLE_CATEGORIES as EXAMPLE_PROF_CATEGORIES, EXAMPLE_FEEDBACK as EXAMPLE_PROF_FEEDBACK
+
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/lesson2", tags=["Lesson 2: Feedback Analyzer"])
@@ -441,6 +443,15 @@ async def get_stats(
 # =============================================================================
 # Examples
 # =============================================================================
+
+@router.get("/examples")
+async def get_examples():
+    """Get example feedback entries organized by professional category."""
+    return {
+        "categories": EXAMPLE_PROF_CATEGORIES,
+        "examples": EXAMPLE_PROF_FEEDBACK
+    }
+
 
 @router.post("/entries/seed-examples")
 async def seed_examples(

@@ -18,6 +18,7 @@ from .schemas import (
     DecompositionStats,
     TASK_CATEGORIES, EXAMPLE_DECOMPOSITIONS
 )
+from .examples import EXAMPLE_CATEGORIES, EXAMPLE_DECOMPOSITIONS as EXAMPLE_DECOMPOSITIONS_DATA
 
 logger = logging.getLogger(__name__)
 
@@ -107,6 +108,19 @@ def decomposition_to_summary(decomp: Decomposition) -> DecompositionSummary:
         completed_count=completed,
         created_at=decomp.created_at
     )
+
+
+# =============================================================================
+# Examples (public, no auth required)
+# =============================================================================
+
+@router.get("/examples")
+async def get_examples():
+    """Get example project decompositions organized by professional category."""
+    return {
+        "categories": EXAMPLE_CATEGORIES,
+        "examples": EXAMPLE_DECOMPOSITIONS_DATA
+    }
 
 
 # =============================================================================
