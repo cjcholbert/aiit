@@ -315,6 +315,7 @@ export default function Lesson02() {
     <div className="page-container">
       <header className="page-header">
         <h1>Feedback Analyzer</h1>
+        <ConnectionCallout lessonNumber={1} lessonTitle="Context Tracker" message="Builds on discovering what context you forget to provide. This lesson tackles how you respond when AI output isn't right." />
       </header>
 
       <div className="lesson-progress-row">
@@ -355,11 +356,6 @@ export default function Lesson02() {
             <p><strong>The Skill:</strong> Write feedback that identifies specific locations, states clear actions, and explains reasoning. Learn to spot vague patterns in your own feedback and rewrite them.</p>
           </div>
 
-          <ConnectionCallout
-            lessonNumber={1}
-            lessonTitle="Context Tracker"
-            message="Lesson 1 helped you discover what context you forget to provide. This lesson tackles the next bottleneck: how you respond when AI output isn't right. Vague feedback wastes iterations; specific feedback fixes things fast."
-          />
 
           <div className="learn-intro">
             <h2>Why Your Feedback Is the Bottleneck</h2>
@@ -767,11 +763,6 @@ export default function Lesson02() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                 <h2 style={{ margin: 0 }}>Feedback History</h2>
                 <div style={{ display: 'flex', gap: '8px' }}>
-                  {entries.length === 0 && (
-                    <button className="btn btn-secondary" onClick={handleSeedExamples}>
-                      Load Examples
-                    </button>
-                  )}
                   {entries.length > 0 && (
                     <button className="btn btn-danger" onClick={handleClearAll}>
                       Clear All

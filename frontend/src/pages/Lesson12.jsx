@@ -7,7 +7,7 @@ import ConnectionCallout from '../components/ConnectionCallout';
 import LessonNav from '../components/LessonNav';
 import StatsPanel from '../components/StatsPanel';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_BASE = import.meta.env.VITE_API_URL || '';
 
 // Icon mappings for reference card sections
 const SECTION_ICONS = {
@@ -258,6 +258,7 @@ export default function Lesson12() {
         <div>
             <div className="page-header">
                 <h1 className="page-title">Reference Card</h1>
+                <ConnectionCallout lessonNumber={1} lessonTitle="Context Tracker" message="Pull together everything you've learned across all six skill areas into one personal reference." />
             </div>
 
             <div className="lesson-progress-row">
@@ -284,11 +285,6 @@ export default function Lesson12() {
                         <p>Generate your personal AI collaboration quick reference card from your learnings across all lessons.</p>
                     </div>
 
-                    <ConnectionCallout
-                        lessonNumber={1}
-                        lessonTitle="Context Tracker"
-                        message="You started Lesson 1 by discovering which context patterns actually help AI do better work. Now in Lesson 12, you are pulling together everything you have learned across all six skill areas into one personal reference you can use every day. This is the bookend: from first discovery to consolidated practice."
-                    />
 
                     <div className="learn-intro">
                         <h2>Why a Personal Reference Card Matters</h2>

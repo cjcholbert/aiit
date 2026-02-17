@@ -317,6 +317,7 @@ export default function Lesson09() {
     <div className="page-container">
       <header className="page-header">
         <h1>Iteration Passes</h1>
+        <ConnectionCallout lessonNumber={2} lessonTitle="Feedback Analyzer" message="Apply specific feedback systematically using structured passes with clear purpose." />
       </header>
 
       <div className="lesson-progress-row">
@@ -357,11 +358,6 @@ export default function Lesson09() {
             <p><strong>The Skill:</strong> Use the 70-85-95 framework to iterate with purpose. Each pass has a specific focus and key question, so you know exactly what to evaluate and when to move on.</p>
           </div>
 
-          <ConnectionCallout
-            lessonNumber={2}
-            lessonTitle="Feedback Analyzer"
-            message="Lesson 2 taught you to give specific, actionable feedback instead of vague requests. Now you'll apply that skill systematically — using structured passes so each round of feedback has a clear purpose and you know exactly when you're done."
-          />
 
           <div className="learn-intro">
             <h2>Why "Make It Better" Never Works</h2>
@@ -946,11 +942,6 @@ export default function Lesson09() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                 <h2>Active Tasks</h2>
                 <div style={{ display: 'flex', gap: '8px' }}>
-                  {tasks.length === 0 && (
-                    <button className="btn btn-secondary" onClick={handleSeedExamples}>
-                      Load Examples
-                    </button>
-                  )}
                   <button className="btn btn-primary" onClick={() => setShowCreateForm(true)}>
                     + New Task
                   </button>

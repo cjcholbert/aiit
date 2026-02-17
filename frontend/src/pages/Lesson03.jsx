@@ -746,6 +746,7 @@ ${gapSections}
     <div>
       <div className="page-header">
         <h1 className="page-title">Context Template Builder</h1>
+        <ConnectionCallout lessonNumber={1} lessonTitle="Context Tracker" message="Turn your context patterns into reusable templates so you never start from scratch." />
       </div>
 
       <div className="lesson-progress-row">
@@ -820,11 +821,6 @@ ${gapSections}
             <p><strong>The Skill:</strong> Build reusable templates that capture the context AI needs upfront. Turn your Lesson 1 insights into structured prompts you can use consistently.</p>
           </div>
 
-          <ConnectionCallout
-            lessonNumber={1}
-            lessonTitle="Context Tracker"
-            message="Lesson 1 showed your context patterns and common gaps. Now turn those insights into reusable templates so you never start from scratch — the same context gets provided every time, automatically."
-          />
 
           <div className="learn-intro">
             <h2>Why Templates Transform Your AI Workflow</h2>
@@ -1978,9 +1974,6 @@ ${gapSections}
               <div style={{ display: 'flex', gap: '12px' }}>
                 <button className="btn btn-primary" onClick={() => setBuildStep(2)}>
                   Next: Define Task Types
-                </button>
-                <button className="btn btn-secondary" onClick={loadBuildExample}>
-                  Load Example Data
                 </button>
               </div>
             </div>

@@ -2900,43 +2900,10 @@ tr:hover td {
    ============================================================================= */
 
 .connection-callout {
-  display: flex;
-  gap: var(--space-md);
-  padding: var(--space-md);
-  margin-bottom: var(--space-lg);
-  background: var(--bg-secondary);
-  border: 1px solid var(--accent-purple);
-  border-left: 4px solid var(--accent-purple);
-  border-radius: var(--radius-md);
-}
-
-.connection-callout-icon {
-  font-size: 18px;
-  color: var(--accent-purple);
-  flex-shrink: 0;
-  line-height: 1.5;
-}
-
-.connection-callout-body {
-  flex: 1;
-}
-
-.connection-callout-text {
-  margin: 0 0 var(--space-sm) 0;
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--text-secondary);
-}
-
-.connection-callout-link {
+  margin: 0;
   font-size: 12px;
-  font-weight: 600;
-  color: var(--accent-purple);
-  text-decoration: none;
-}
-
-.connection-callout-link:hover {
-  text-decoration: underline;
+  line-height: 1.4;
+  color: var(--text-muted);
 }
 
 /* =============================================================================

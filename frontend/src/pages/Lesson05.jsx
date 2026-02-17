@@ -324,6 +324,7 @@ export default function Lesson05() {
     <div>
       <div className="page-header">
         <h1 className="page-title">Trust Matrix</h1>
+        <ConnectionCallout lessonNumber={2} lessonTitle="Feedback Analyzer" message="Predict which outputs will need review so you spend your effort where it matters most." />
       </div>
 
       <div className="lesson-progress-row">
@@ -373,11 +374,6 @@ export default function Lesson05() {
             <p><strong>The Skill:</strong> Build a personal trust matrix by tracking predictions about AI accuracy. Learn which output types you can trust and which require careful verification.</p>
           </div>
 
-          <ConnectionCallout
-            lessonNumber={2}
-            lessonTitle="Feedback Analyzer"
-            message="Lesson 2 taught you to give better feedback when AI output misses the mark. This lesson helps you predict which outputs will need that feedback in the first place — so you spend your review effort where it matters most."
-          />
 
           <div className="learn-intro">
             <h2>You Probably Trust AI in the Wrong Places</h2>
@@ -562,11 +558,6 @@ export default function Lesson05() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
             <h2 style={{ margin: 0 }}>Your Trust Matrix</h2>
             <div style={{ display: 'flex', gap: '8px' }}>
-              {outputTypes.length === 0 && (
-                <button className="btn btn-primary" onClick={handleSeedDefaults}>
-                  Load Starter Output Types
-                </button>
-              )}
               <button className="btn btn-secondary" onClick={() => setShowAddForm(true)}>
                 + Add Output Type
               </button>
@@ -600,9 +591,6 @@ export default function Lesson05() {
               <p style={{ color: 'var(--text-muted)', marginBottom: '8px', fontStyle: 'italic' }}>{OUTPUT_TYPE_PROMPTS[1]}</p>
               <p style={{ color: 'var(--text-muted)', marginBottom: '20px' }}>{OUTPUT_TYPE_PROMPTS[2]}</p>
               <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
-                <button className="btn btn-primary" onClick={handleSeedDefaults}>
-                  Start with Common Output Types
-                </button>
                 <button className="btn btn-secondary" onClick={() => setShowAddForm(true)}>
                   Create Your Own
                 </button>

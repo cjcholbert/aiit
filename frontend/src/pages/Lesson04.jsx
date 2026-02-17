@@ -393,6 +393,7 @@ export default function Lesson04() {
     <div className="page-container">
       <header className="page-header">
         <h1>Context Docs</h1>
+        <ConnectionCallout lessonNumber={3} lessonTitle="Template Builder" message="Keep AI informed about ongoing projects across sessions, so it never loses track of where you are." />
       </header>
 
       <div className="lesson-progress-row">
@@ -451,11 +452,6 @@ export default function Lesson04() {
             <p><strong>The Skill:</strong> Keep a living document for each project that captures what's done, what's decided, and what's next. Paste it at the start of any AI session so the conversation picks up where you left off -- no re-explaining needed.</p>
           </div>
 
-          <ConnectionCallout
-            lessonNumber={3}
-            lessonTitle="Template Builder"
-            message="Lesson 3 helped you build reusable prompt templates. Context Docs solve a different problem: keeping AI informed about ongoing projects across multiple sessions, so it never loses track of where you are."
-          />
 
           <div className="learn-intro">
             <h2>Why Every Ongoing Project Needs a Context Doc</h2>
@@ -671,11 +667,6 @@ export default function Lesson04() {
                   });
                 }}
               />
-              {docs.length === 0 && (
-                <button className="btn btn-secondary" onClick={handleSeedExamples}>
-                  Load Examples
-                </button>
-              )}
               {editingDoc && (
                 <button className="btn btn-secondary" onClick={resetDocForm}>
                   New Document

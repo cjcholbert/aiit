@@ -346,6 +346,7 @@ export default function Lesson06() {
     <div className="page-container">
       <header className="page-header">
         <h1>Verification Tools</h1>
+        <ConnectionCallout lessonNumber={5} lessonTitle="Trust Matrix" message="Systematically verify the outputs your trust matrix flags for review." />
       </header>
 
       <div className="lesson-progress-row">
@@ -385,11 +386,6 @@ export default function Lesson06() {
             <p><strong>The Skill:</strong> Create reusable verification checklists tied to output types, so checking becomes quick and consistent rather than ad-hoc. Track which checks actually catch issues to refine your process over time. Define clear "skip criteria" so you can confidently trust appropriate outputs without guilt or risk.</p>
           </div>
 
-          <ConnectionCallout
-            lessonNumber={5}
-            lessonTitle="Trust Matrix"
-            message="Lesson 5 helped you calibrate when to trust AI output and when to be skeptical. This lesson gives you the other half: a systematic way to actually verify the outputs your trust matrix flags for review."
-          />
 
           <div className="learn-intro">
             <h2>Checking AI Output Shouldn't Be Guesswork</h2>
@@ -586,11 +582,6 @@ export default function Lesson06() {
           <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <h2>Your Verification Checklists</h2>
             <div style={{ display: 'flex', gap: '8px' }}>
-              {checklists.length === 0 && (
-                <button className="btn btn-secondary" onClick={handleSeedDefaults}>
-                  Start with Defaults
-                </button>
-              )}
               <button className="btn btn-primary" onClick={() => setShowCreateForm(true)}>
                 + New Checklist
               </button>

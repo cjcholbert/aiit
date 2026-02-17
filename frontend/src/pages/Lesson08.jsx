@@ -434,6 +434,7 @@ export default function Lesson08() {
     <div className="page-container">
       <header className="page-header">
         <h1>Delegation Tracker</h1>
+        <ConnectionCallout lessonNumber={7} lessonTitle="Task Decomposer" message="Delegate decomposed tasks effectively so AI delivers what you need on the first try." />
       </header>
 
       <div className="lesson-progress-row">
@@ -474,11 +475,6 @@ export default function Lesson08() {
             <p><strong>The Skill:</strong> Create delegation templates with clear context, objectives, scope, deliverables, and success criteria. Then execute decomposed tasks in sequence, tracking what you delegated, what you received, and what decisions you made at each gate.</p>
           </div>
 
-          <ConnectionCallout
-            lessonNumber={7}
-            lessonTitle="Task Decomposer"
-            message="Lesson 7 helped you break projects into categorized subtasks. Now learn to delegate those tasks effectively — with enough structure that AI delivers what you actually need on the first try."
-          />
 
           <div className="learn-intro">
             <h2>Why "Just Handle This" Gets You Bad Results</h2>
@@ -1012,11 +1008,6 @@ export default function Lesson08() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                 <h2>Your Delegations</h2>
                 <div style={{ display: 'flex', gap: '8px' }}>
-                  {delegations.length === 0 && (
-                    <button className="btn btn-secondary" onClick={handleSeedExamples}>
-                      Load Examples
-                    </button>
-                  )}
                   <button className="btn btn-primary" onClick={() => setShowCreateForm(true)}>
                     + New Delegation
                   </button>

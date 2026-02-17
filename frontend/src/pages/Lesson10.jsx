@@ -426,6 +426,7 @@ export default function Lesson10() {
     <div className="page-container">
       <header className="page-header">
         <h1>Status Reporter</h1>
+        <ConnectionCallout lessonNumber={4} lessonTitle="Context Docs" message="Turn recurring reports and updates into repeatable AI workflows you can run on a schedule." />
       </header>
 
       <div className="lesson-progress-row">
@@ -467,11 +468,6 @@ export default function Lesson10() {
             <p><strong>The Skill:</strong> Design AI-integrated workflows for recurring tasks. Create templates, track inputs, and measure time savings to build sustainable AI collaboration habits.</p>
           </div>
 
-          <ConnectionCallout
-            lessonNumber={4}
-            lessonTitle="Context Docs"
-            message="Lesson 4 taught you to keep living project documents so AI never loses track of where you are. Status Reporter takes the next step: turning recurring reports and updates into repeatable AI workflows you can run on a schedule."
-          />
 
           <div className="learn-intro">
             <h2>Why Recurring Tasks Deserve Their Own Workflow</h2>
@@ -709,11 +705,6 @@ export default function Lesson10() {
                   });
                 }}
               />
-              {templates.length === 0 && (
-                <button className="btn btn-secondary" onClick={handleSeedExamples}>
-                  Load Examples
-                </button>
-              )}
               {editingTemplate && (
                 <button className="btn btn-secondary" onClick={resetTemplateForm}>
                   New Template

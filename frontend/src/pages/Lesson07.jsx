@@ -245,6 +245,7 @@ export default function Lesson07() {
     <div className="page-container">
       <header className="page-header">
         <h1>Task Decomposer</h1>
+        <ConnectionCallout lessonNumber={1} lessonTitle="Context Tracker" message="The better you understand a project's details, the better you can break it into the right pieces." />
       </header>
 
       <div className="lesson-progress-row">
@@ -285,11 +286,6 @@ export default function Lesson07() {
             <p><strong>The Skill:</strong> Break projects into subtasks and categorize each as AI-Optimal (delegate freely), Collaborative (work together), or Human-Primary (you lead). Sequence tasks with dependencies so you know what to hand off, what to co-create, and where to insert decision gates.</p>
           </div>
 
-          <ConnectionCallout
-            lessonNumber={1}
-            lessonTitle="Context Tracker"
-            message="Lesson 1 helped you provide clear context to AI. Good decomposition depends on that same skill — the better you understand a project's details, the better you can break it into the right pieces."
-          />
 
           <div className="learn-intro">
             <h2>Why "Just Ask AI to Do It" Fails on Real Projects</h2>
@@ -848,11 +844,6 @@ export default function Lesson07() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                 <h2>Your Decompositions</h2>
                 <div style={{ display: 'flex', gap: '8px' }}>
-                  {decompositions.length === 0 && (
-                    <button className="btn btn-secondary" onClick={handleSeedExamples}>
-                      Load Examples
-                    </button>
-                  )}
                   <button className="btn btn-primary" onClick={() => setShowCreateForm(true)}>
                     + New Decomposition
                   </button>

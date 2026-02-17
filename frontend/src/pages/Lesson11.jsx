@@ -289,6 +289,7 @@ export default function Lesson11() {
         <div>
             <div className="page-header">
                 <h1 className="page-title">Frontier Mapper</h1>
+                <ConnectionCallout lessonNumber={5} lessonTitle="Trust Matrix" message="Map broader patterns of where AI is safe, risky, or unreliable for your specific work." />
             </div>
 
             <div className="lesson-progress-row">
@@ -315,11 +316,6 @@ export default function Lesson11() {
                         <p>Map AI reliability zones and log frontier encounters to build your personal AI capability map.</p>
                     </div>
 
-                    <ConnectionCallout
-                        lessonNumber={5}
-                        lessonTitle="Trust Matrix"
-                        message="Lesson 5 helped you predict AI reliability for individual tasks. Frontier Mapper zooms out: instead of one-off predictions, you are building a map of broader patterns — entire categories where AI is safe, risky, or unreliable for your specific work."
-                    />
 
                     <div className="learn-intro">
                         <h2>Why You Need a Personal AI Capability Map</h2>
@@ -554,9 +550,6 @@ export default function Lesson11() {
                                         });
                                     }}
                                 />
-                                <button className="btn btn-secondary" onClick={() => seedExamples('zones')} disabled={loading}>
-                                    {loading ? 'Seeding...' : 'Seed Examples'}
-                                </button>
                             </div>
                         </div>
 
@@ -785,9 +778,6 @@ export default function Lesson11() {
                     <div className="card">
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                             <h2 style={{ margin: 0 }}>Log Encounter</h2>
-                            <button className="btn btn-secondary" onClick={() => seedExamples('encounters')} disabled={loading}>
-                                {loading ? 'Seeding...' : 'Seed Examples'}
-                            </button>
                         </div>
 
                         <form onSubmit={createEncounter}>
