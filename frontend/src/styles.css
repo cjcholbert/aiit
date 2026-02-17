@@ -2096,6 +2096,7 @@ tr:hover td {
 .learn-pattern-card-heading-green { color: var(--accent-green); }
 .learn-pattern-card-heading-purple { color: var(--accent-purple); }
 .learn-pattern-card-heading-muted { color: var(--text-secondary); }
+.learn-pattern-card-heading-yellow { color: var(--accent-yellow); }
 
 .learn-pattern-label {
   font-size: 11px;
@@ -4346,6 +4347,15 @@ tr:hover td {
 .no-margin { margin: 0; }
 .w-full { width: 100%; }
 .cursor-pointer { cursor: pointer; }
+.flex-wrap { flex-wrap: wrap; }
+.flex-1 { flex: 1; }
+.flex-2 { flex: 2; }
+
+.button-group-mt {
+  display: flex;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+}
 
 .grid-auto-fill {
   display: grid;
@@ -4518,6 +4528,11 @@ tr:hover td {
   border-radius: var(--radius-md);
 }
 
+.l9-pass-history-card {
+  padding: 20px;
+  background: var(--bg-secondary);
+}
+
 /* Conversation import items */
 .import-item {
   padding: var(--space-md);
@@ -4665,6 +4680,10 @@ tr:hover td {
   font-size: 1.5rem;
   font-weight: bold;
 }
+
+.l10-report-stat-value.color-blue { color: var(--accent-blue); }
+.l10-report-stat-value.color-green { color: var(--accent-green); }
+.l10-report-stat-value.color-purple { color: var(--accent-purple); }
 
 .l10-report-stat-label {
   color: var(--text-secondary);
@@ -5007,6 +5026,31 @@ tr:hover td {
   display: inline-flex;
   align-items: center;
   gap: var(--space-xs);
+}
+
+.l8-status-pending {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+}
+
+.l8-status-delegated {
+  background: var(--bg-tertiary);
+  color: var(--accent-blue);
+}
+
+.l8-status-reviewing {
+  background: var(--warning-bg);
+  color: var(--accent-yellow);
+}
+
+.l8-status-completed {
+  background: var(--success-bg);
+  color: var(--accent-green);
+}
+
+.l8-status-blocked {
+  background: var(--error-bg);
+  color: var(--accent-red);
 }
 
 .l8-category-text {

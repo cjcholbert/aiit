@@ -114,6 +114,7 @@ export default function Lesson10() {
     loadData();
   }, []);
 
+
   // Template form handlers
   const resetTemplateForm = () => {
     setTemplateForm({
@@ -398,16 +399,11 @@ export default function Lesson10() {
 
   // Render frequency badge
   const renderFrequencyBadge = (frequency) => {
-    const style = FREQUENCY_COLORS[frequency] || FREQUENCY_COLORS.weekly;
+    const freqStyle = FREQUENCY_COLORS[frequency] || FREQUENCY_COLORS.weekly;
     return (
-      <span style={{
-        background: style.bg,
-        color: style.color,
-        padding: '4px 12px',
-        borderRadius: '12px',
-        fontSize: '0.8rem',
-        fontWeight: 'bold',
-        textTransform: 'capitalize'
+      <span className="l10-frequency-badge" style={{
+        background: freqStyle.bg,
+        color: freqStyle.color,
       }}>
         {frequency}
       </span>
@@ -424,26 +420,31 @@ export default function Lesson10() {
 
   return (
     <div className="page-container">
-      <header className="page-header">
-        <h1>Status Reporter</h1>
-        <ConnectionCallout lessonNumber={4} lessonTitle="Context Docs" message="Turn recurring reports and updates into repeatable AI workflows you can run on a schedule." />
-      </header>
-
-      <div className="lesson-progress-row">
-        <SelfAssessmentChecklist lessonNumber={10} criteria={LESSON_CRITERIA[10]} />
-        <StatsPanel stats={stats ? [
-            { label: 'Templates', value: stats.total_templates, color: 'var(--accent-blue)' },
-            { label: 'Reports', value: stats.total_reports, color: 'var(--accent-blue)' },
-            { label: 'Min Saved', value: stats.total_time_saved_minutes, color: 'var(--accent-green)' },
-            { label: 'Avg Quality', value: stats.avg_quality_score, color: 'var(--accent-purple)' },
-            { label: 'This Week', value: stats.reports_this_week, color: 'var(--accent-yellow)' },
-        ] : []} />
+      <div className="lesson-header">
+        <div className="lesson-header-left">
+          <h1>Status Reporter</h1>
+          <ConnectionCallout lessonNumber={4} lessonTitle="Context Docs" message="Turn recurring reports and updates into repeatable AI workflows you can run on a schedule." />
+          <div className="lesson-header-problem-skill">
+            <p><strong>The Problem:</strong> Recurring tasks like status reports, meeting summaries, and client updates eat up valuable time when done manually each time. Without a systematic approach, you're reinventing the wheel with every iteration.</p>
+            <p><strong>The Skill:</strong> Design AI-integrated workflows for recurring tasks. Create templates, track inputs, and measure time savings to build sustainable AI collaboration habits.</p>
+          </div>
+        </div>
+        <div className="lesson-header-right">
+          <StatsPanel stats={stats ? [
+              { label: 'Templates', value: stats.total_templates, color: 'var(--accent-blue)' },
+              { label: 'Reports', value: stats.total_reports, color: 'var(--accent-blue)' },
+              { label: 'Min Saved', value: stats.total_time_saved_minutes, color: 'var(--accent-green)' },
+              { label: 'Avg Quality', value: stats.avg_quality_score, color: 'var(--accent-purple)' },
+              { label: 'This Week', value: stats.reports_this_week, color: 'var(--accent-yellow)' },
+          ] : []} />
+          <SelfAssessmentChecklist lessonNumber={10} criteria={LESSON_CRITERIA[10]} />
+        </div>
       </div>
 
       {error && (
-        <div className="error-banner" style={{ background: 'var(--error-bg)', padding: '12px', marginBottom: '16px', borderRadius: '8px', color: 'var(--accent-red)' }}>
+        <div className="error-banner">
           {error}
-          <button onClick={() => setError(null)} style={{ marginLeft: '12px', cursor: 'pointer' }}>Dismiss</button>
+          <button className="btn-dismiss" onClick={() => setError(null)}>Dismiss</button>
         </div>
       )}
 
@@ -463,12 +464,6 @@ export default function Lesson10() {
       {/* Learn Tab */}
       {activeTab === 'learn' && (
         <div className="learn-section">
-          <div className="learn-problem-skill">
-            <p><strong>The Problem:</strong> Recurring tasks like status reports, meeting summaries, and client updates eat up valuable time when done manually each time. Without a systematic approach, you're reinventing the wheel with every iteration.</p>
-            <p><strong>The Skill:</strong> Design AI-integrated workflows for recurring tasks. Create templates, track inputs, and measure time savings to build sustainable AI collaboration habits.</p>
-          </div>
-
-
           <div className="learn-intro">
             <h2>Why Recurring Tasks Deserve Their Own Workflow</h2>
             <p>
@@ -492,20 +487,20 @@ export default function Lesson10() {
           </div>
 
           <h3>How This Lesson Works</h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+          <p className="text-secondary mb-md">
             Two practice areas to build sustainable AI workflow habits:
           </p>
 
           <div className="learn-patterns-grid">
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-blue)' }}>Design Tab — Build Your Workflow Templates</h4>
+              <h4 className="learn-pattern-card-heading-blue">Design Tab — Build Your Workflow Templates</h4>
               <p>Create a template for a recurring task. Define what information you need to gather
               each time, write the prompt with placeholders, and choose quality checks to run before
               you use the output.</p>
               <button className="learn-tab-link" onClick={() => setActiveTab('design')}>Go to Design →</button>
             </div>
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-green)' }}>Run Tab — Execute and Track Results</h4>
+              <h4 className="learn-pattern-card-heading-green">Run Tab — Execute and Track Results</h4>
               <p>Run your workflow by filling in the inputs, generating the prompt, and recording how
               long it took and how good the output was. Over time, you will see your time savings
               add up and spot which templates need improvement.</p>
@@ -546,13 +541,13 @@ export default function Lesson10() {
           </div>
 
           <h3>What Makes a Task Worth Turning Into a Workflow</h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+          <p className="text-secondary mb-md">
             Not every AI task needs a formal workflow. Focus on tasks that have these qualities:
           </p>
 
           <div className="learn-patterns-grid">
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-blue)' }}>It Recurs on a Schedule</h4>
+              <h4 className="learn-pattern-card-heading-blue">It Recurs on a Schedule</h4>
               <p>Weekly team updates, monthly reports, quarterly reviews. If you do it more than
               twice, it is worth templating.</p>
               <div className="learn-pattern-label better">Good Candidate</div>
@@ -561,7 +556,7 @@ export default function Lesson10() {
               </div>
             </div>
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-purple)' }}>The Structure Stays the Same</h4>
+              <h4 className="learn-pattern-card-heading-purple">The Structure Stays the Same</h4>
               <p>The sections, format, and tone are consistent. Only the specific content changes.
               If every instance is wildly different, a template will not help much.</p>
               <div className="learn-pattern-label better">Good Candidate</div>
@@ -570,7 +565,7 @@ export default function Lesson10() {
               </div>
             </div>
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-green)' }}>You Can Identify the Inputs</h4>
+              <h4 className="learn-pattern-card-heading-green">You Can Identify the Inputs</h4>
               <p>You know what changes each time and can name those variables. The rest is boilerplate
               that AI can handle consistently.</p>
               <div className="learn-pattern-label better">Good Candidate</div>
@@ -580,7 +575,7 @@ export default function Lesson10() {
               </div>
             </div>
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-yellow)' }}>Quality Is Verifiable</h4>
+              <h4 className="learn-pattern-card-heading-yellow">Quality Is Verifiable</h4>
               <p>You can check the output against clear criteria before using it. "Does it include
               all required sections? Are the numbers accurate? Is the tone right for this audience?"</p>
               <div className="learn-pattern-label better">Good Candidate</div>
@@ -591,13 +586,13 @@ export default function Lesson10() {
           </div>
 
           <h3>Anatomy of a Good Workflow Template</h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+          <p className="text-secondary mb-md">
             When you design your template in the Design tab, you will fill in four parts:
           </p>
 
           <div className="learn-patterns-grid">
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-blue)' }}>1. Inputs</h4>
+              <h4 className="learn-pattern-card-heading-blue">1. Inputs</h4>
               <p>The variables that change each time you run the workflow. Name them clearly so
               anyone could fill them in.</p>
               <div className="learn-example-good">
@@ -607,7 +602,7 @@ export default function Lesson10() {
               </div>
             </div>
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-purple)' }}>2. Steps</h4>
+              <h4 className="learn-pattern-card-heading-purple">2. Steps</h4>
               <p>The sequence of actions: gather data, run the AI prompt, review, send. Mark which
               steps involve AI and which are human tasks.</p>
               <div className="learn-example-good">
@@ -617,7 +612,7 @@ export default function Lesson10() {
               </div>
             </div>
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-green)' }}>3. Prompt Template</h4>
+              <h4 className="learn-pattern-card-heading-green">3. Prompt Template</h4>
               <p>The AI instructions with {'{{placeholders}}'} where your inputs go. This is the
               part that stays the same every run.</p>
               <div className="learn-example-good">
@@ -626,7 +621,7 @@ export default function Lesson10() {
               </div>
             </div>
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-yellow)' }}>4. Quality Checks</h4>
+              <h4 className="learn-pattern-card-heading-yellow">4. Quality Checks</h4>
               <p>What to verify before using the output. These act as your checklist so you catch
               issues before they reach the recipient.</p>
               <div className="learn-example-good">
@@ -638,7 +633,7 @@ export default function Lesson10() {
           </div>
 
           <h3>Common Mistakes</h3>
-          <div className="learn-patterns-grid" style={{ marginBottom: '24px' }}>
+          <div className="learn-patterns-grid mb-lg">
             <div className="learn-pattern-card">
               <div className="learn-pattern-label avoid">Mistake</div>
               <p>Creating a template for a task you do once. The setup time is not worth it for
@@ -686,9 +681,9 @@ export default function Lesson10() {
       {/* Design Tab */}
       {activeTab === 'design' && (
         <div className="design-section">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+          <div className="flex-between mb-md">
             <h2>{editingTemplate ? 'Edit Template' : 'Create Template'}</h2>
-            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <div className="flex-center gap-sm">
               <ExamplesDropdown
                 endpoint="/lesson10/examples"
                 onSelect={(example) => {
@@ -713,42 +708,39 @@ export default function Lesson10() {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '24px' }}>
+          <div className="l10-design-grid">
             {/* Template Form */}
-            <div className="card" style={{ padding: '24px' }}>
+            <div className="card card-padded">
               {/* Basic Info */}
-              <div style={{ marginBottom: '20px' }}>
-                <label style={{ display: 'block', marginBottom: '4px' }}>Template Name *</label>
+              <div className="form-group">
+                <label>Template Name *</label>
                 <input
                   type="text"
                   value={templateForm.name}
                   onChange={(e) => setTemplateForm({ ...templateForm, name: e.target.value })}
                   placeholder="e.g., Weekly Status Report"
-                  className="input"
-                  style={{ width: '100%' }}
+                  className="input w-full"
                 />
               </div>
 
-              <div style={{ marginBottom: '20px' }}>
-                <label style={{ display: 'block', marginBottom: '4px' }}>Description</label>
+              <div className="form-group">
+                <label>Description</label>
                 <input
                   type="text"
                   value={templateForm.description}
                   onChange={(e) => setTemplateForm({ ...templateForm, description: e.target.value })}
                   placeholder="What does this workflow produce?"
-                  className="input"
-                  style={{ width: '100%' }}
+                  className="input w-full"
                 />
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+              <div className="grid-2col mb-lg">
                 <div>
-                  <label style={{ display: 'block', marginBottom: '4px' }}>Frequency</label>
+                  <label>Frequency</label>
                   <select
                     value={templateForm.frequency}
                     onChange={(e) => setTemplateForm({ ...templateForm, frequency: e.target.value })}
-                    className="input"
-                    style={{ width: '100%' }}
+                    className="input w-full"
                   >
                     {Object.entries(frequencies).map(([key, value]) => (
                       <option key={key} value={key}>{value.name}</option>
@@ -756,55 +748,51 @@ export default function Lesson10() {
                   </select>
                 </div>
                 <div>
-                  <label style={{ display: 'block', marginBottom: '4px' }}>Estimated Time (minutes)</label>
+                  <label>Estimated Time (minutes)</label>
                   <input
                     type="number"
                     value={templateForm.estimated_time_minutes}
                     onChange={(e) => setTemplateForm({ ...templateForm, estimated_time_minutes: parseInt(e.target.value) || 0 })}
-                    className="input"
-                    style={{ width: '100%' }}
+                    className="input w-full"
                     min="1"
                   />
                 </div>
               </div>
 
               {/* Inputs */}
-              <div style={{ marginBottom: '20px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+              <div className="form-group">
+                <div className="flex-between mb-sm">
                   <label>Inputs</label>
                   <button
-                    className="btn btn-secondary"
-                    style={{ padding: '4px 12px', fontSize: '0.85rem' }}
+                    className="btn btn-secondary btn-sm"
                     onClick={handleAddInput}
                   >
                     + Add Input
                   </button>
                 </div>
                 {templateForm.inputs.length === 0 ? (
-                  <div style={{ padding: '16px', background: 'var(--bg-secondary)', borderRadius: '8px', textAlign: 'center', color: 'var(--text-secondary)' }}>
+                  <div className="empty-state">
                     No inputs defined. Add inputs that will be collected before running the workflow.
                   </div>
                 ) : (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <div className="flex-col gap-sm">
                     {templateForm.inputs.map((input, idx) => (
-                      <div key={idx} style={{ display: 'flex', gap: '8px', alignItems: 'center', background: 'var(--bg-secondary)', padding: '12px', borderRadius: '8px' }}>
+                      <div key={idx} className="l10-input-row">
                         <input
                           type="text"
                           value={input.name}
                           onChange={(e) => handleUpdateInput(idx, 'name', e.target.value)}
                           placeholder="Variable name"
                           className="input"
-                          style={{ flex: 1 }}
                         />
                         <input
                           type="text"
                           value={input.description}
                           onChange={(e) => handleUpdateInput(idx, 'description', e.target.value)}
                           placeholder="Description"
-                          className="input"
-                          style={{ flex: 2 }}
+                          className="input input-wide"
                         />
-                        <label style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}>
+                        <label className="checkbox-label">
                           <input
                             type="checkbox"
                             checked={input.required}
@@ -813,8 +801,8 @@ export default function Lesson10() {
                           Req
                         </label>
                         <button
+                          className="btn-remove"
                           onClick={() => handleRemoveInput(idx)}
-                          style={{ background: 'var(--accent-red)', border: 'none', color: '#fff', padding: '4px 8px', borderRadius: '4px', cursor: 'pointer' }}
                         >
                           X
                         </button>
@@ -825,26 +813,25 @@ export default function Lesson10() {
               </div>
 
               {/* Steps */}
-              <div style={{ marginBottom: '20px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+              <div className="form-group">
+                <div className="flex-between mb-sm">
                   <label>Workflow Steps</label>
                   <button
-                    className="btn btn-secondary"
-                    style={{ padding: '4px 12px', fontSize: '0.85rem' }}
+                    className="btn btn-secondary btn-sm"
                     onClick={handleAddStep}
                   >
                     + Add Step
                   </button>
                 </div>
                 {templateForm.steps.length === 0 ? (
-                  <div style={{ padding: '16px', background: 'var(--bg-secondary)', borderRadius: '8px', textAlign: 'center', color: 'var(--text-secondary)' }}>
+                  <div className="empty-state">
                     No steps defined. Add the steps to complete this workflow.
                   </div>
                 ) : (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <div className="flex-col gap-sm">
                     {templateForm.steps.map((step, idx) => (
-                      <div key={idx} style={{ display: 'flex', gap: '8px', alignItems: 'center', background: 'var(--bg-secondary)', padding: '12px', borderRadius: '8px' }}>
-                        <span style={{ background: step.is_ai_step ? 'var(--accent-blue)' : 'var(--bg-hover)', padding: '4px 10px', borderRadius: '12px', fontWeight: 'bold' }}>
+                      <div key={idx} className="l10-input-row">
+                        <span className={`l10-step-number ${step.is_ai_step ? 'l10-step-number-ai' : 'l10-step-number-human'}`}>
                           {step.order}
                         </span>
                         <input
@@ -852,10 +839,9 @@ export default function Lesson10() {
                           value={step.description}
                           onChange={(e) => handleUpdateStep(idx, 'description', e.target.value)}
                           placeholder="Step description"
-                          className="input"
-                          style={{ flex: 1 }}
+                          className="input input-wide"
                         />
-                        <label style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                        <label className="checkbox-label-nowrap">
                           <input
                             type="checkbox"
                             checked={step.is_ai_step}
@@ -864,8 +850,8 @@ export default function Lesson10() {
                           AI Step
                         </label>
                         <button
+                          className="btn-remove"
                           onClick={() => handleRemoveStep(idx)}
-                          style={{ background: 'var(--accent-red)', border: 'none', color: '#fff', padding: '4px 8px', borderRadius: '4px', cursor: 'pointer' }}
                         >
                           X
                         </button>
@@ -876,10 +862,10 @@ export default function Lesson10() {
               </div>
 
               {/* Prompt Template */}
-              <div style={{ marginBottom: '20px' }}>
-                <label style={{ display: 'block', marginBottom: '4px' }}>
+              <div className="form-group">
+                <label>
                   Prompt Template
-                  <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginLeft: '8px' }}>
+                  <span className="l10-input-desc">
                     Use {'{{variable_name}}'} for placeholders
                   </span>
                 </label>
@@ -887,28 +873,20 @@ export default function Lesson10() {
                   value={templateForm.prompt_template}
                   onChange={(e) => setTemplateForm({ ...templateForm, prompt_template: e.target.value })}
                   placeholder="Write your prompt template here. Use {{variable}} syntax for inputs."
-                  className="input"
+                  className="input w-full font-mono"
                   rows={8}
-                  style={{ width: '100%', fontFamily: 'monospace' }}
                 />
               </div>
 
               {/* Quality Checks */}
-              <div style={{ marginBottom: '20px' }}>
-                <label style={{ display: 'block', marginBottom: '8px' }}>Quality Checks</label>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+              <div className="form-group">
+                <label className="mb-sm">Quality Checks</label>
+                <div className="flex-center gap-sm flex-wrap">
                   {qualityChecks.map((check) => (
                     <button
                       key={check.id}
                       onClick={() => handleToggleQualityCheck(check.id)}
-                      style={{
-                        padding: '8px 16px',
-                        background: templateForm.quality_checks.includes(check.id) ? 'var(--accent-green)' : 'var(--bg-secondary)',
-                        border: 'none',
-                        borderRadius: '20px',
-                        color: 'var(--text-primary)',
-                        cursor: 'pointer'
-                      }}
+                      className={`l10-quality-check-btn ${templateForm.quality_checks.includes(check.id) ? 'l10-quality-check-btn-active' : 'l10-quality-check-btn-inactive'}`}
                       title={check.description}
                     >
                       {check.name}
@@ -919,10 +897,9 @@ export default function Lesson10() {
 
               {/* Save Button */}
               <button
-                className="btn btn-primary"
+                className="btn btn-primary w-full"
                 onClick={handleSaveTemplate}
                 disabled={saving || !templateForm.name.trim()}
-                style={{ width: '100%' }}
               >
                 {saving ? 'Saving...' : editingTemplate ? 'Update Template' : 'Create Template'}
               </button>
@@ -930,43 +907,37 @@ export default function Lesson10() {
 
             {/* Template List */}
             <div>
-              <h3 style={{ marginTop: 0 }}>Your Templates</h3>
+              <h3 className="no-margin mb-md">Your Templates</h3>
               {templates.length === 0 ? (
-                <div className="card" style={{ padding: '24px', textAlign: 'center' }}>
-                  <p style={{ color: 'var(--text-secondary)' }}>No templates yet.</p>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Create one or load examples to get started.</p>
+                <div className="card empty-state">
+                  <p className="text-secondary">No templates yet.</p>
+                  <p className="text-secondary text-sm">Create one or load examples to get started.</p>
                 </div>
               ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <div className="flex-col gap-md">
                   {templates.map((template) => (
                     <div
                       key={template.id}
-                      className="card"
-                      style={{
-                        padding: '16px',
-                        cursor: 'pointer',
-                        border: editingTemplate?.id === template.id ? '2px solid var(--accent-blue)' : 'none'
-                      }}
+                      className={`card l10-template-card ${editingTemplate?.id === template.id ? 'card-selected' : ''}`}
                       onClick={() => handleEditTemplate(template.id)}
                     >
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
-                        <div style={{ fontWeight: 'bold' }}>{template.name}</div>
+                      <div className="flex-between-start mb-sm">
+                        <div className="l10-template-name">{template.name}</div>
                         {renderFrequencyBadge(template.frequency)}
                       </div>
                       {template.description && (
-                        <p style={{ margin: '0 0 8px', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+                        <p className="l10-template-desc">
                           {template.description}
                         </p>
                       )}
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                      <div className="flex-between">
+                        <span className="l10-template-meta">
                           {template.estimated_time_minutes ? `${template.estimated_time_minutes} min` : 'No estimate'}
                           {' | '}
                           {template.report_count} runs
                         </span>
                         <button
-                          className="btn btn-danger"
-                          style={{ padding: '2px 8px', fontSize: '0.75rem', background: 'var(--accent-red)', color: '#fff' }}
+                          className="btn btn-danger btn-sm"
                           onClick={(e) => { e.stopPropagation(); handleDeleteTemplate(template.id); }}
                         >
                           Delete
@@ -987,52 +958,52 @@ export default function Lesson10() {
           {viewingReport ? (
             // View Report
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <div className="flex-between mb-md">
                 <h2>Report Details</h2>
                 <button className="btn btn-secondary" onClick={() => setViewingReport(null)}>
                   Back
                 </button>
               </div>
 
-              <div className="card" style={{ padding: '24px' }}>
-                <h3 style={{ marginTop: 0 }}>{viewingReport.title}</h3>
+              <div className="card card-padded">
+                <h3 className="no-margin mb-sm">{viewingReport.title}</h3>
                 {viewingReport.template_name && (
-                  <div style={{ marginBottom: '16px', color: 'var(--text-secondary)' }}>
+                  <div className="text-secondary mb-md">
                     Template: {viewingReport.template_name}
                   </div>
                 )}
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '24px' }}>
-                  <div style={{ padding: '16px', background: 'var(--bg-secondary)', borderRadius: '8px', textAlign: 'center' }}>
-                    <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--accent-blue)' }}>
+                <div className="grid-3col mb-lg">
+                  <div className="l10-report-stat">
+                    <div className="l10-report-stat-value color-blue">
                       {viewingReport.actual_time_minutes || '-'} min
                     </div>
-                    <div style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Actual Time</div>
+                    <div className="l10-report-stat-label">Actual Time</div>
                   </div>
-                  <div style={{ padding: '16px', background: 'var(--bg-secondary)', borderRadius: '8px', textAlign: 'center' }}>
-                    <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--accent-green)' }}>
+                  <div className="l10-report-stat">
+                    <div className="l10-report-stat-value color-green">
                       {viewingReport.time_saved_minutes != null
                         ? `${viewingReport.time_saved_minutes > 0 ? '+' : ''}${viewingReport.time_saved_minutes} min`
                         : '-'}
                     </div>
-                    <div style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Time Saved</div>
+                    <div className="l10-report-stat-label">Time Saved</div>
                   </div>
-                  <div style={{ padding: '16px', background: 'var(--bg-secondary)', borderRadius: '8px', textAlign: 'center' }}>
-                    <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--accent-purple)' }}>
+                  <div className="l10-report-stat">
+                    <div className="l10-report-stat-value color-purple">
                       {viewingReport.quality_score || '-'}/10
                     </div>
-                    <div style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Quality</div>
+                    <div className="l10-report-stat-label">Quality</div>
                   </div>
                 </div>
 
                 {Object.keys(viewingReport.inputs_used || {}).length > 0 && (
-                  <div style={{ marginBottom: '24px' }}>
+                  <div className="mb-lg">
                     <h4>Inputs Used</h4>
-                    <div style={{ background: 'var(--bg-secondary)', padding: '16px', borderRadius: '8px' }}>
+                    <div className="l10-report-inputs">
                       {Object.entries(viewingReport.inputs_used).map(([key, value]) => (
-                        <div key={key} style={{ marginBottom: '12px' }}>
-                          <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>{key}</div>
-                          <div style={{ color: 'var(--text-secondary)', whiteSpace: 'pre-wrap' }}>{value || '-'}</div>
+                        <div key={key} className="l10-input-entry">
+                          <div className="l10-input-key">{key}</div>
+                          <div className="l10-input-value">{value || '-'}</div>
                         </div>
                       ))}
                     </div>
@@ -1040,9 +1011,9 @@ export default function Lesson10() {
                 )}
 
                 {viewingReport.generated_content && (
-                  <div style={{ marginBottom: '24px' }}>
+                  <div className="mb-lg">
                     <h4>Generated Content</h4>
-                    <div style={{ background: 'var(--bg-tertiary)', padding: '16px', borderRadius: '8px', fontFamily: 'monospace', whiteSpace: 'pre-wrap' }}>
+                    <div className="l10-report-content">
                       {viewingReport.generated_content}
                     </div>
                   </div>
@@ -1051,7 +1022,7 @@ export default function Lesson10() {
                 {viewingReport.notes && (
                   <div>
                     <h4>Notes</h4>
-                    <div style={{ color: 'var(--text-secondary)', whiteSpace: 'pre-wrap' }}>{viewingReport.notes}</div>
+                    <div className="l10-notes-pre">{viewingReport.notes}</div>
                   </div>
                 )}
               </div>
@@ -1059,36 +1030,28 @@ export default function Lesson10() {
           ) : selectedTemplate ? (
             // Run Workflow
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <div className="flex-between mb-md">
                 <h2>Run: {selectedTemplate.name}</h2>
                 <button className="btn btn-secondary" onClick={() => setSelectedTemplate(null)}>
                   Back to Templates
                 </button>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+              <div className="l10-run-grid">
                 {/* Left: Inputs & Steps */}
                 <div>
                   {/* Steps Reference */}
-                  <div className="card" style={{ padding: '20px', marginBottom: '16px' }}>
-                    <h3 style={{ marginTop: 0 }}>Workflow Steps</h3>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <div className="card card-compact mb-md">
+                    <h3 className="no-margin mb-sm">Workflow Steps</h3>
+                    <div className="flex-col gap-sm">
                       {(selectedTemplate.steps || []).map((step, idx) => (
-                        <div key={idx} style={{ display: 'flex', gap: '12px', alignItems: 'center', padding: '8px 12px', background: 'var(--bg-secondary)', borderRadius: '6px' }}>
-                          <span style={{
-                            background: step.is_ai_step ? 'var(--accent-blue)' : 'var(--bg-hover)',
-                            padding: '4px 10px',
-                            borderRadius: '12px',
-                            fontWeight: 'bold',
-                            fontSize: '0.85rem'
-                          }}>
+                        <div key={idx} className="l10-step-row">
+                          <span className={`l10-step-number ${step.is_ai_step ? 'l10-step-number-ai' : 'l10-step-number-human'}`}>
                             {step.order}
                           </span>
-                          <span style={{ flex: 1 }}>{step.description}</span>
+                          <span className="flex-1">{step.description}</span>
                           {step.is_ai_step && (
-                            <span style={{ color: 'var(--accent-blue)', fontSize: '0.75rem', background: 'var(--bg-hover)', padding: '2px 8px', borderRadius: '4px' }}>
-                              AI
-                            </span>
+                            <span className="l10-ai-label">AI</span>
                           )}
                         </div>
                       ))}
@@ -1096,64 +1059,46 @@ export default function Lesson10() {
                   </div>
 
                   {/* Input Fields */}
-                  <div className="card" style={{ padding: '20px' }}>
-                    <h3 style={{ marginTop: 0 }}>Provide Inputs</h3>
+                  <div className="card card-compact">
+                    <h3 className="no-margin mb-sm">Provide Inputs</h3>
 
                     {/* Import from Context Docs */}
                     {(selectedTemplate.inputs || []).length > 0 && (
-                      <div style={{ marginBottom: '16px' }}>
+                      <div className="mb-md">
                         <button
-                          className="btn btn-secondary"
+                          className="btn btn-secondary flex-center gap-sm"
                           onClick={handleOpenDocImport}
                           disabled={loadingDocs}
-                          style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
                         >
                           {loadingDocs ? 'Loading...' : showDocImport ? 'Hide Import' : 'Import from Context Docs'}
                         </button>
 
                         {showDocImport && (
-                          <div className="card" style={{ padding: '16px', marginTop: '12px', maxHeight: '250px', overflowY: 'auto' }}>
-                            <h4 style={{ margin: '0 0 12px' }}>Select a Context Doc</h4>
+                          <div className="card import-panel import-panel-sm">
+                            <h4 className="no-margin mb-md">Select a Context Doc</h4>
                             {contextDocs.length === 0 ? (
-                              <div style={{ textAlign: 'center', padding: '24px', color: 'var(--text-secondary)' }}>
+                              <div className="empty-state">
                                 <p>No context docs saved yet.</p>
-                                <p style={{ fontSize: '0.85rem' }}>
-                                  Go to <a href="/lesson/4" style={{ color: 'var(--accent-blue)' }}>Lesson 4 — Context Docs</a> to create a project document first.
+                                <p className="empty-state-hint">
+                                  Go to <a href="/lesson/4" className="import-empty">Lesson 4 — Context Docs</a> to create a project document first.
                                 </p>
                               </div>
                             ) : (
-                              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                              <div className="flex-col gap-sm">
                                 {contextDocs.map((doc) => (
                                   <div
                                     key={doc.id}
+                                    className="import-item"
                                     onClick={() => handleImportContextDoc(doc.id)}
-                                    style={{
-                                      padding: '12px',
-                                      background: 'var(--bg-tertiary)',
-                                      borderRadius: '6px',
-                                      cursor: 'pointer',
-                                      border: '1px solid var(--border-color)',
-                                      transition: 'border-color 0.2s',
-                                    }}
-                                    onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--accent-blue)'}
-                                    onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border-color)'}
                                   >
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                      <strong style={{ color: 'var(--text-primary)' }}>{doc.project_name || 'Untitled'}</strong>
+                                    <div className="flex-between">
+                                      <strong>{doc.project_name || 'Untitled'}</strong>
                                       {doc.is_active && (
-                                        <span style={{
-                                          fontSize: '0.75rem',
-                                          padding: '2px 8px',
-                                          borderRadius: '4px',
-                                          background: 'var(--success-bg)',
-                                          color: 'var(--accent-green)',
-                                        }}>
-                                          Active
-                                        </span>
+                                        <span className="badge badge-green">Active</span>
                                       )}
                                     </div>
                                     {doc.description && (
-                                      <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                                      <div className="text-xs text-muted mt-xs">
                                         {doc.description}
                                       </div>
                                     )}
@@ -1167,16 +1112,16 @@ export default function Lesson10() {
                     )}
 
                     {(selectedTemplate.inputs || []).length === 0 ? (
-                      <p style={{ color: 'var(--text-secondary)' }}>This template has no defined inputs.</p>
+                      <p className="l10-no-inputs">This template has no defined inputs.</p>
                     ) : (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                      <div className="flex-col gap-md">
                         {selectedTemplate.inputs.map((input, idx) => (
                           <div key={idx}>
-                            <label style={{ display: 'block', marginBottom: '4px' }}>
+                            <label>
                               {input.name}
-                              {input.required && <span style={{ color: 'var(--accent-red)' }}> *</span>}
+                              {input.required && <span className="l10-required-star"> *</span>}
                               {input.description && (
-                                <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginLeft: '8px' }}>
+                                <span className="l10-input-desc">
                                   ({input.description})
                                 </span>
                               )}
@@ -1184,18 +1129,16 @@ export default function Lesson10() {
                             <textarea
                               value={inputValues[input.name] || ''}
                               onChange={(e) => setInputValues({ ...inputValues, [input.name]: e.target.value })}
-                              className="input"
+                              className="input w-full"
                               rows={3}
-                              style={{ width: '100%' }}
                             />
                           </div>
                         ))}
                       </div>
                     )}
                     <button
-                      className="btn btn-primary"
+                      className="btn btn-primary w-full mt-md"
                       onClick={handleGeneratePrompt}
-                      style={{ marginTop: '16px', width: '100%' }}
                     >
                       Generate Prompt
                     </button>
@@ -1204,71 +1147,66 @@ export default function Lesson10() {
 
                 {/* Right: Generated Content & Save */}
                 <div>
-                  <div className="card" style={{ padding: '20px', marginBottom: '16px' }}>
-                    <h3 style={{ marginTop: 0 }}>Generated Prompt</h3>
+                  <div className="card card-compact mb-md">
+                    <h3 className="no-margin mb-sm">Generated Prompt</h3>
                     <textarea
                       value={generatedContent}
                       onChange={(e) => setGeneratedContent(e.target.value)}
                       placeholder="Click 'Generate Prompt' to fill inputs into the template, then copy this to your AI assistant."
-                      className="input"
+                      className="input w-full font-mono"
                       rows={12}
-                      style={{ width: '100%', fontFamily: 'monospace' }}
                     />
                     {generatedContent && (
                       <button
-                        className="btn btn-secondary"
+                        className="btn btn-secondary mt-sm"
                         onClick={() => { navigator.clipboard.writeText(generatedContent); }}
-                        style={{ marginTop: '8px' }}
                       >
                         Copy to Clipboard
                       </button>
                     )}
                   </div>
 
-                  <div className="card" style={{ padding: '20px' }}>
-                    <h3 style={{ marginTop: 0 }}>Record Results</h3>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                  <div className="card card-compact">
+                    <h3 className="no-margin mb-sm">Record Results</h3>
+                    <div className="grid-2col mb-md">
                       <div>
-                        <label style={{ display: 'block', marginBottom: '4px' }}>Actual Time (minutes)</label>
+                        <label>Actual Time (minutes)</label>
                         <input
                           type="number"
                           value={actualTime}
                           onChange={(e) => setActualTime(e.target.value)}
                           placeholder={selectedTemplate.estimated_time_minutes ? `Estimated: ${selectedTemplate.estimated_time_minutes}` : ''}
-                          className="input"
-                          style={{ width: '100%' }}
+                          className="input w-full"
                           min="1"
                         />
                       </div>
                       <div>
-                        <label style={{ display: 'block', marginBottom: '4px' }}>Quality Score (1-10)</label>
+                        <label>Quality Score (1-10)</label>
                         <input
                           type="range"
                           value={qualityScore}
                           onChange={(e) => setQualityScore(parseInt(e.target.value))}
                           min="1"
                           max="10"
-                          style={{ width: '100%' }}
+                          className="w-full"
                         />
-                        <div style={{ textAlign: 'center', fontWeight: 'bold' }}>{qualityScore}/10</div>
+                        <div className="l10-score-display">{qualityScore}/10</div>
                       </div>
                     </div>
-                    <div style={{ marginBottom: '16px' }}>
-                      <label style={{ display: 'block', marginBottom: '4px' }}>Notes (optional)</label>
+                    <div className="mb-md">
+                      <label>Notes (optional)</label>
                       <textarea
                         value={reportNotes}
                         onChange={(e) => setReportNotes(e.target.value)}
                         placeholder="Any observations, improvements, or issues..."
-                        className="input"
+                        className="input w-full"
                         rows={3}
-                        style={{ width: '100%' }}
                       />
                     </div>
                     <button
-                      className="btn btn-primary"
+                      className="btn btn-primary w-full"
                       onClick={handleSaveReport}
                       disabled={saving}
-                      style={{ width: '100%', background: 'var(--accent-green)' }}
                     >
                       {saving ? 'Saving...' : 'Save Report'}
                     </button>
@@ -1281,30 +1219,25 @@ export default function Lesson10() {
             <div>
               <h2>Select a Workflow to Run</h2>
               {templates.length === 0 ? (
-                <div className="card" style={{ padding: '48px', textAlign: 'center' }}>
-                  <h3>No templates yet</h3>
-                  <p style={{ color: 'var(--text-secondary)' }}>Create a workflow template in the Design tab first.</p>
-                  <button className="btn btn-primary" onClick={() => setActiveTab('design')}>
-                    Go to Design
-                  </button>
+                <div className="card empty-state">
+                  <p className="text-secondary">Create a workflow template in the Design tab to start running workflows.</p>
                 </div>
               ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px', marginBottom: '32px' }}>
+                <div className="grid-auto-fit mb-xl">
                   {templates.filter(t => t.is_active).map((template) => (
                     <div
                       key={template.id}
-                      className="card"
-                      style={{ padding: '20px', cursor: 'pointer' }}
+                      className="card card-compact card-clickable"
                       onClick={() => handleSelectTemplate(template.id)}
                     >
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
-                        <h3 style={{ margin: 0 }}>{template.name}</h3>
+                      <div className="flex-between-start mb-md">
+                        <h3 className="no-margin">{template.name}</h3>
                         {renderFrequencyBadge(template.frequency)}
                       </div>
                       {template.description && (
-                        <p style={{ margin: '0 0 12px', color: 'var(--text-secondary)' }}>{template.description}</p>
+                        <p className="text-secondary no-margin mb-md">{template.description}</p>
                       )}
-                      <div style={{ display: 'flex', gap: '16px', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+                      <div className="flex-center gap-md text-secondary text-sm">
                         <span>{template.estimated_time_minutes ? `${template.estimated_time_minutes} min est.` : 'No estimate'}</span>
                         <span>{template.report_count} previous runs</span>
                       </div>
@@ -1317,34 +1250,32 @@ export default function Lesson10() {
               {reports.length > 0 && (
                 <div>
                   <h3>Recent Reports</h3>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div className="flex-col gap-md">
                     {reports.slice(0, 10).map((report) => (
                       <div
                         key={report.id}
-                        className="card"
-                        style={{ padding: '16px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                        className="card l10-report-row"
                         onClick={() => handleViewReport(report.id)}
                       >
                         <div>
-                          <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>{report.title}</div>
-                          <div style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+                          <div className="l10-report-info">{report.title}</div>
+                          <div className="l10-report-meta">
                             {report.template_name || 'No template'}
                             {' | '}
                             {new Date(report.created_at).toLocaleDateString()}
                           </div>
                         </div>
-                        <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                        <div className="flex-center gap-md">
                           {report.time_saved_minutes != null && (
-                            <span style={{ color: report.time_saved_minutes > 0 ? 'var(--accent-green)' : 'var(--accent-red)' }}>
+                            <span className={report.time_saved_minutes > 0 ? 'l10-time-saved-positive' : 'l10-time-saved-negative'}>
                               {report.time_saved_minutes > 0 ? '+' : ''}{report.time_saved_minutes} min
                             </span>
                           )}
                           {report.quality_score && (
-                            <span style={{ color: 'var(--accent-purple)' }}>{report.quality_score}/10</span>
+                            <span className="l10-quality-score">{report.quality_score}/10</span>
                           )}
                           <button
-                            className="btn btn-danger"
-                            style={{ padding: '4px 8px', fontSize: '0.75rem', background: 'var(--accent-red)', color: '#fff' }}
+                            className="btn btn-danger btn-sm"
                             onClick={(e) => { e.stopPropagation(); handleDeleteReport(report.id); }}
                           >
                             Delete

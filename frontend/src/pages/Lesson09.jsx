@@ -88,6 +88,7 @@ export default function Lesson09() {
     loadData();
   }, []);
 
+
   // Handlers
   const handleSeedExamples = async () => {
     try {
@@ -127,7 +128,7 @@ export default function Lesson09() {
       setShowCreateForm(false);
       setNewTask({ task_name: '', target_outcome: '', notes: '' });
       setSelectedTask(created);
-      setActiveTab('practice');
+      setActiveTab('iterate');
       setError(null);
     } catch (err) {
       setError(err.message);
@@ -239,35 +240,32 @@ export default function Lesson09() {
   // Render pass progress indicator
   const renderPassProgress = (currentPass, isComplete) => {
     return (
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <div className="l9-pass-progress">
         {[1, 2, 3].map((pass) => {
           const style = PASS_STYLES[pass];
           const isActive = pass === currentPass && !isComplete;
           const isCompleted = pass < currentPass || isComplete;
 
+          let className = 'l9-pass-step';
+          if (isCompleted) className += ' l9-pass-step-completed';
+          else if (!isActive) className += ' l9-pass-step-default';
+
           return (
             <div
               key={pass}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '48px',
-                height: '32px',
-                borderRadius: '6px',
-                background: isCompleted ? 'var(--success-bg)' : isActive ? style.bg : 'var(--bg-secondary)',
-                border: isActive ? `2px solid ${style.color}` : '2px solid transparent',
-                color: isCompleted ? 'var(--accent-green)' : isActive ? style.color : 'var(--text-muted)',
-                fontWeight: 'bold',
-                fontSize: '0.85rem',
-              }}
+              className={className}
+              style={isActive ? {
+                background: style.bg,
+                borderColor: style.color,
+                color: style.color,
+              } : undefined}
             >
               {isCompleted ? '[OK]' : style.label}
             </div>
           );
         })}
         {isComplete && (
-          <span style={{ color: 'var(--accent-green)', fontSize: '0.85rem', marginLeft: '8px' }}>Complete!</span>
+          <span className="l9-pass-complete-label">Complete!</span>
         )}
       </div>
     );
@@ -280,25 +278,21 @@ export default function Lesson09() {
     return (
       <div
         key={task.id}
-        className="card"
+        className="card l9-task-card"
         style={{
-          padding: '16px',
-          cursor: 'pointer',
           background: task.is_complete ? 'var(--success-bg)' : passStyle.bg,
           borderLeft: task.is_complete ? '4px solid var(--accent-green)' : `4px solid ${passStyle.color}`,
         }}
         onClick={() => onClick(task.id)}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
-          <h4 style={{ margin: 0 }}>{task.task_name}</h4>
+        <div className="flex-between-start mb-md">
+          <h4 className="no-margin">{task.task_name}</h4>
           {task.is_complete && (
-            <span style={{ background: 'var(--accent-green)', color: 'var(--text-primary)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.7rem' }}>
-              COMPLETE
-            </span>
+            <span className="badge-complete">COMPLETE</span>
           )}
         </div>
         {renderPassProgress(task.current_pass, task.is_complete)}
-        <div style={{ marginTop: '12px', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+        <div className="l9-task-meta">
           {task.passes_completed}/3 passes recorded
         </div>
       </div>
@@ -315,31 +309,36 @@ export default function Lesson09() {
 
   return (
     <div className="page-container">
-      <header className="page-header">
-        <h1>Iteration Passes</h1>
-        <ConnectionCallout lessonNumber={2} lessonTitle="Feedback Analyzer" message="Apply specific feedback systematically using structured passes with clear purpose." />
-      </header>
-
-      <div className="lesson-progress-row">
-        <SelfAssessmentChecklist lessonNumber={9} criteria={LESSON_CRITERIA[9]} />
-        <StatsPanel stats={stats ? [
-            { label: 'Total Tasks', value: stats.total_tasks, color: 'var(--accent-blue)' },
-            { label: 'Completed', value: stats.completed_tasks, color: 'var(--accent-green)' },
-            { label: 'In Progress', value: stats.in_progress_tasks, color: 'var(--accent-yellow)' },
-            { label: 'Passes', value: stats.total_passes_recorded, color: 'var(--accent-purple)' },
-        ] : []} />
+      <div className="lesson-header">
+        <div className="lesson-header-left">
+          <h1>Iteration Passes</h1>
+          <ConnectionCallout lessonNumber={2} lessonTitle="Feedback Analyzer" message="Apply specific feedback systematically using structured passes with clear purpose." />
+          <div className="lesson-header-problem-skill">
+            <p><strong>The Problem:</strong> Random iteration ("make it better") wastes cycles and leads to scope creep. Without structure, you'll keep tweaking without knowing when "done" is reached.</p>
+            <p><strong>The Skill:</strong> Use the 70-85-95 framework to iterate with purpose. Each pass has a specific focus and key question, so you know exactly what to evaluate and when to move on.</p>
+          </div>
+        </div>
+        <div className="lesson-header-right">
+          <StatsPanel stats={stats ? [
+              { label: 'Total Tasks', value: stats.total_tasks, color: 'var(--accent-blue)' },
+              { label: 'Completed', value: stats.completed_tasks, color: 'var(--accent-green)' },
+              { label: 'In Progress', value: stats.in_progress_tasks, color: 'var(--accent-yellow)' },
+              { label: 'Passes', value: stats.total_passes_recorded, color: 'var(--accent-purple)' },
+          ] : []} />
+          <SelfAssessmentChecklist lessonNumber={9} criteria={LESSON_CRITERIA[9]} />
+        </div>
       </div>
 
       {error && (
-        <div className="error-banner" style={{ background: 'var(--error-bg)', padding: '12px', marginBottom: '16px', borderRadius: '8px', color: 'var(--accent-red)' }}>
+        <div className="error-banner">
           {error}
-          <button onClick={() => setError(null)} style={{ marginLeft: '12px', cursor: 'pointer' }}>Dismiss</button>
+          <button className="btn-dismiss" onClick={() => setError(null)}>Dismiss</button>
         </div>
       )}
 
       {/* Tabs */}
       <div className="tabs">
-        {['learn', 'practice', 'history'].map((tab) => (
+        {['learn', 'iterate', 'history'].map((tab) => (
           <button
             key={tab}
             className={`tab ${activeTab === tab ? 'active' : ''}`}
@@ -353,12 +352,6 @@ export default function Lesson09() {
       {/* Learn Tab */}
       {activeTab === 'learn' && (
         <div className="learn-section">
-          <div className="learn-problem-skill">
-            <p><strong>The Problem:</strong> Random iteration ("make it better") wastes cycles and leads to scope creep. Without structure, you'll keep tweaking without knowing when "done" is reached.</p>
-            <p><strong>The Skill:</strong> Use the 70-85-95 framework to iterate with purpose. Each pass has a specific focus and key question, so you know exactly what to evaluate and when to move on.</p>
-          </div>
-
-
           <div className="learn-intro">
             <h2>Why "Make It Better" Never Works</h2>
             <p>
@@ -385,26 +378,26 @@ export default function Lesson09() {
           </div>
 
           <h3>How This Lesson Works</h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+          <p className="text-secondary mb-md">
             Three areas that build your structured iteration skill:
           </p>
 
           <div className="learn-patterns-grid">
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-blue)' }}>Practice Tab — Run Your Passes</h4>
+              <h4 className="learn-pattern-card-heading-blue">Practice Tab — Run Your Passes</h4>
               <p>Create a real task (or import one from Context Tracker), then work through each
               pass. For every pass you answer its key question and record the specific feedback
               you gave the AI. This builds the muscle of focusing on one thing at a time.</p>
-              <button className="learn-tab-link" onClick={() => setActiveTab('practice')}>Go to Practice →</button>
+              <button className="learn-tab-link" onClick={() => setActiveTab('iterate')}>Go to Practice →</button>
             </div>
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-green)' }}>Feedback Quality Check — Sharpen Your Requests</h4>
+              <h4 className="learn-pattern-card-heading-green">Feedback Quality Check — Sharpen Your Requests</h4>
               <p>After recording a pass, use the "Check Feedback Quality" button to get an analysis
               of your iteration feedback. It flags vague language, scope creep, and misalignment
               with the pass focus — so your feedback improves with every task.</p>
             </div>
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-purple)' }}>History Tab — See Your Progress</h4>
+              <h4 className="learn-pattern-card-heading-purple">History Tab — See Your Progress</h4>
               <p>Review completed tasks to see how your iteration approach evolves. Over time you'll
               notice your Pass 1 feedback getting sharper and your total passes-to-done shrinking.
               That's the skill developing.</p>
@@ -450,14 +443,14 @@ export default function Lesson09() {
           </div>
 
           <h3>The Three Passes — In Detail</h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+          <p className="text-secondary mb-md">
             Each pass targets a different layer of quality. Doing them in order prevents the
             "fix one thing, break another" cycle.
           </p>
 
           <div className="learn-patterns-grid">
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--text-secondary)' }}>Pass 1: Structure and Completeness (70%)</h4>
+              <h4 className="learn-pattern-card-heading-muted">Pass 1: Structure and Completeness (70%)</h4>
               <p>
                 <strong>Key question: "Is the foundation right?"</strong><br />
                 Don't worry about word choice or polish yet. Focus entirely on whether the output
@@ -476,7 +469,7 @@ export default function Lesson09() {
               </div>
             </div>
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-blue)' }}>Pass 2: Accuracy and Tone (85%)</h4>
+              <h4 className="learn-pattern-card-heading-blue">Pass 2: Accuracy and Tone (85%)</h4>
               <p>
                 <strong>Key question: "Are the details correct?"</strong><br />
                 Now that the structure is solid, check the content inside it. Are the facts right?
@@ -496,7 +489,7 @@ export default function Lesson09() {
               </div>
             </div>
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-green)' }}>Pass 3: Polish and Edge Cases (95%)</h4>
+              <h4 className="learn-pattern-card-heading-green">Pass 3: Polish and Edge Cases (95%)</h4>
               <p>
                 <strong>Key question: "Is it ready for its audience?"</strong><br />
                 Structure is locked. Facts are verified. Now make it audience-ready. Would a
@@ -518,7 +511,7 @@ export default function Lesson09() {
           </div>
 
           <h3>Common Mistakes</h3>
-          <div className="learn-patterns-grid" style={{ marginBottom: '24px' }}>
+          <div className="learn-patterns-grid mb-lg">
             <div className="learn-pattern-card">
               <div className="learn-pattern-label avoid">Mistake</div>
               <p>Jumping to polish before the structure is right. You spend 10 minutes perfecting
@@ -563,24 +556,24 @@ export default function Lesson09() {
             <p>Pick a real task you're working on — a report, a proposal, a client email, a project
             plan — and run it through all three passes. You'll feel the difference between "make it
             better" and knowing exactly what to fix at each stage.</p>
-            <button className="btn btn-primary" onClick={() => setActiveTab('practice')}>
+            <button className="btn btn-primary" onClick={() => setActiveTab('iterate')}>
               Go to Practice
             </button>
           </div>
         </div>
       )}
 
-      {/* Practice Tab */}
-      {activeTab === 'practice' && (
+      {/* Iterate Tab */}
+      {activeTab === 'iterate' && (
         <div className="practice-section">
           {selectedTask ? (
             // Active task view
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <div className="flex-between mb-md">
                 <div>
-                  <h2 style={{ margin: 0 }}>{selectedTask.task_name}</h2>
+                  <h2 className="no-margin">{selectedTask.task_name}</h2>
                   {selectedTask.target_outcome && (
-                    <div style={{ color: 'var(--text-secondary)', marginTop: '4px', fontSize: '0.9rem' }}>
+                    <div className="text-secondary mt-xs text-sm">
                       <strong>Target:</strong> {selectedTask.target_outcome}
                     </div>
                   )}
@@ -591,54 +584,49 @@ export default function Lesson09() {
               </div>
 
               {/* Pass progress */}
-              <div style={{ marginBottom: '24px' }}>
+              <div className="mb-lg">
                 {renderPassProgress(selectedTask.current_pass, selectedTask.is_complete)}
               </div>
 
               {/* Current pass form (if not complete) */}
               {!selectedTask.is_complete && selectedTask.current_pass_info && (
-                <div className="card" style={{
-                  padding: '24px',
+                <div className="card card-padded mb-lg" style={{
                   background: PASS_STYLES[selectedTask.current_pass]?.bg || 'var(--bg-secondary)',
                   borderLeft: `4px solid ${PASS_STYLES[selectedTask.current_pass]?.color || 'var(--text-secondary)'}`,
-                  marginBottom: '24px'
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                    <div style={{
-                      padding: '8px 16px',
-                      borderRadius: '20px',
-                      background: 'var(--bg-secondary)',
-                      fontWeight: 'bold',
+                  <div className="flex-center gap-md mb-md">
+                    <div className="l9-pass-label" style={{
                       color: PASS_STYLES[selectedTask.current_pass]?.color || 'var(--text-secondary)',
                     }}>
                       {selectedTask.current_pass_info.label}
                     </div>
                     <div>
-                      <h3 style={{ margin: 0 }}>{selectedTask.current_pass_info.name}</h3>
-                      <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{selectedTask.current_pass_info.focus}</div>
+                      <h3 className="no-margin">{selectedTask.current_pass_info.name}</h3>
+                      <div className="l9-pass-focus">{selectedTask.current_pass_info.focus}</div>
                     </div>
                   </div>
 
                   {/* Key Question */}
-                  <div style={{ marginBottom: '20px' }}>
-                    <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold', color: PASS_STYLES[selectedTask.current_pass]?.color || 'var(--text-secondary)' }}>
+                  <div className="mb-lg">
+                    <label className="l9-key-question-label" style={{
+                      color: PASS_STYLES[selectedTask.current_pass]?.color || 'var(--text-secondary)',
+                    }}>
                       Key Question: "{selectedTask.current_pass_info.key_question}"
                     </label>
                     <textarea
                       value={passForm.key_question_answer}
                       onChange={(e) => setPassForm({ ...passForm, key_question_answer: e.target.value })}
                       placeholder={`Answer the question: ${selectedTask.current_pass_info.key_question}`}
-                      className="input"
+                      className="input w-full"
                       rows={3}
-                      style={{ width: '100%' }}
                     />
                   </div>
 
                   {/* Feedback */}
-                  <div style={{ marginBottom: '20px' }}>
-                    <label style={{ display: 'block', marginBottom: '8px' }}>
+                  <div className="mb-lg">
+                    <label>
                       Iteration Feedback
-                      <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginLeft: '8px' }}>
+                      <span className="l9-feedback-label-hint">
                         (What did you tell the AI to improve?)
                       </span>
                     </label>
@@ -646,17 +634,15 @@ export default function Lesson09() {
                       value={passForm.feedback}
                       onChange={(e) => setPassForm({ ...passForm, feedback: e.target.value })}
                       placeholder="Paste or describe the feedback you gave to the AI for this iteration pass..."
-                      className="input"
+                      className="input w-full font-mono text-sm"
                       rows={5}
-                      style={{ width: '100%', fontFamily: 'monospace', fontSize: '0.9rem' }}
                     />
                   </div>
 
                   <button
-                    className="btn btn-primary"
+                    className="btn btn-primary btn-sm"
                     onClick={handleRecordPass}
                     disabled={submittingPass || !passForm.key_question_answer.trim() || !passForm.feedback.trim()}
-                    style={{ padding: '12px 24px' }}
                   >
                     {submittingPass ? 'Recording...' : `Complete Pass ${selectedTask.current_pass} (${selectedTask.current_pass_info.label})`}
                   </button>
@@ -665,9 +651,9 @@ export default function Lesson09() {
 
               {/* Completed message */}
               {selectedTask.is_complete && (
-                <div className="card" style={{ padding: '24px', background: 'var(--success-bg)', borderLeft: '4px solid var(--accent-green)', marginBottom: '24px' }}>
-                  <h3 style={{ margin: '0 0 8px', color: 'var(--accent-green)' }}>Task Complete!</h3>
-                  <p style={{ margin: 0, color: 'var(--text-secondary)' }}>
+                <div className="card card-padded card-success mb-lg">
+                  <h3 className="no-margin mb-sm learn-pattern-card-heading-green">Task Complete!</h3>
+                  <p className="no-margin text-secondary">
                     All three passes have been recorded. This task has been refined through the full 70-85-95 framework.
                   </p>
                 </div>
@@ -677,42 +663,36 @@ export default function Lesson09() {
               {selectedTask.passes && selectedTask.passes.length > 0 && (
                 <div>
                   <h3>Pass History</h3>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  <div className="flex-col gap-md">
                     {selectedTask.passes.map((pass, idx) => (
                       <div
                         key={idx}
-                        className="card"
+                        className="card l9-pass-history-card"
                         style={{
-                          padding: '20px',
-                          background: 'var(--bg-secondary)',
                           borderLeft: `4px solid ${PASS_STYLES[pass.pass_number]?.color || 'var(--text-secondary)'}`,
                         }}
                       >
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <span style={{
-                              padding: '4px 12px',
-                              borderRadius: '12px',
+                        <div className="l9-pass-history-header">
+                          <div className="flex-center gap-md">
+                            <span className="l9-pass-badge" style={{
                               background: PASS_STYLES[pass.pass_number]?.bg || 'var(--bg-tertiary)',
                               color: PASS_STYLES[pass.pass_number]?.color || 'var(--text-secondary)',
-                              fontWeight: 'bold',
-                              fontSize: '0.85rem',
                             }}>
                               {pass.pass_label}
                             </span>
-                            <span style={{ color: 'var(--text-secondary)' }}>{pass.focus}</span>
+                            <span className="text-secondary">{pass.focus}</span>
                           </div>
-                          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                          <span className="text-xxs text-muted">
                             {new Date(pass.completed_at).toLocaleDateString()}
                           </span>
                         </div>
-                        <div style={{ marginBottom: '12px' }}>
-                          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '4px' }}>KEY QUESTION ANSWER</div>
-                          <div style={{ color: 'var(--text-secondary)', fontStyle: 'italic' }}>"{pass.key_question_answer}"</div>
+                        <div className="mb-md">
+                          <div className="l9-section-label">KEY QUESTION ANSWER</div>
+                          <div className="text-secondary text-italic">"{pass.key_question_answer}"</div>
                         </div>
                         <div>
-                          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '4px' }}>ITERATION FEEDBACK</div>
-                          <pre style={{ margin: 0, whiteSpace: 'pre-wrap', fontSize: '0.85rem', color: 'var(--text-muted)', background: 'var(--bg-tertiary)', padding: '12px', borderRadius: '6px' }}>
+                          <div className="l9-section-label">ITERATION FEEDBACK</div>
+                          <pre className="l9-feedback-pre">
                             {pass.feedback}
                           </pre>
                         </div>
@@ -806,11 +786,11 @@ export default function Lesson09() {
                 </div>
               )}
             </div>
-          ) : showCreateForm ? (
+          ) : (showCreateForm || tasks.filter(t => !t.is_complete).length === 0) ? (
             // Create form
-            <div className="card" style={{ padding: '24px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <h2 style={{ margin: 0 }}>Start New Iteration Task</h2>
+            <div className="card card-padded">
+              <div className="flex-center gap-md">
+                <h2 className="no-margin">Start New Iteration Task</h2>
                 <ExamplesDropdown
                   endpoint="/lesson9/examples"
                   onSelect={(example) => {
@@ -825,59 +805,43 @@ export default function Lesson09() {
               </div>
 
               {/* Import from Context Tracker */}
-              <div style={{ marginTop: '12px', marginBottom: '16px' }}>
+              <div className="mt-md mb-md">
                 <button
-                  className="btn btn-secondary"
+                  className="btn btn-secondary flex-center gap-sm"
                   onClick={handleOpenConvImport}
                   disabled={loadingConvs}
-                  style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
                 >
                   {loadingConvs ? 'Loading...' : showConvImport ? 'Hide Import' : 'Import from Context Tracker'}
                 </button>
 
                 {showConvImport && (
-                  <div className="card" style={{ padding: '16px', marginTop: '12px', maxHeight: '300px', overflowY: 'auto' }}>
-                    <h4 style={{ margin: '0 0 12px' }}>Select a Conversation</h4>
+                  <div className="card import-panel">
+                    <h4 className="no-margin mb-md">Select a Conversation</h4>
                     {conversations.length === 0 ? (
-                      <div style={{ textAlign: 'center', padding: '24px', color: 'var(--text-secondary)' }}>
+                      <div className="empty-state">
                         <p>No conversations saved yet.</p>
-                        <p style={{ fontSize: '0.85rem' }}>
-                          Go to <a href="/lesson/1" style={{ color: 'var(--accent-blue)' }}>Lesson 1 — Context Tracker</a> to analyze a conversation first.
+                        <p className="empty-state-hint">
+                          Go to <a href="/lesson/1" className="import-empty">Lesson 1 — Context Tracker</a> to analyze a conversation first.
                         </p>
                       </div>
                     ) : (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      <div className="flex-col gap-sm">
                         {conversations.map((conv) => (
                           <div
                             key={conv.id}
+                            className="import-item"
                             onClick={() => handleImportConversation(conv.id)}
-                            style={{
-                              padding: '12px',
-                              background: 'var(--bg-tertiary)',
-                              borderRadius: '6px',
-                              cursor: 'pointer',
-                              border: '1px solid var(--border-color)',
-                              transition: 'border-color 0.2s',
-                            }}
-                            onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--accent-blue)'}
-                            onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border-color)'}
                           >
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                              <strong style={{ color: 'var(--text-primary)' }}>{conv.topic || 'Untitled'}</strong>
+                            <div className="flex-between">
+                              <strong>{conv.topic || 'Untitled'}</strong>
                               {conv.pattern_category && (
-                                <span style={{
-                                  fontSize: '0.75rem',
-                                  padding: '2px 8px',
-                                  borderRadius: '4px',
-                                  background: 'var(--bg-secondary)',
-                                  color: 'var(--text-secondary)',
-                                }}>
+                                <span className="import-item-category">
                                   {conv.pattern_category}
                                 </span>
                               )}
                             </div>
                             {conv.created_at && (
-                              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                              <div className="text-xs text-muted mt-xs">
                                 {new Date(conv.created_at).toLocaleDateString()}
                               </div>
                             )}
@@ -889,44 +853,41 @@ export default function Lesson09() {
                 )}
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div className="flex-col gap-md">
                 <div>
-                  <label style={{ display: 'block', marginBottom: '4px' }}>Task Name *</label>
+                  <label>Task Name *</label>
                   <input
                     type="text"
                     value={newTask.task_name}
                     onChange={(e) => setNewTask({ ...newTask, task_name: e.target.value })}
                     placeholder="e.g., Refactor Authentication Module"
-                    className="input"
-                    style={{ width: '100%' }}
+                    className="input w-full"
                   />
                 </div>
                 <div>
-                  <label style={{ display: 'block', marginBottom: '4px' }}>
+                  <label>
                     Target Outcome
-                    <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginLeft: '8px' }}>(What does "done" look like?)</span>
+                    <span className="l9-feedback-label-hint">(What does "done" look like?)</span>
                   </label>
                   <textarea
                     value={newTask.target_outcome}
                     onChange={(e) => setNewTask({ ...newTask, target_outcome: e.target.value })}
                     placeholder="Describe the end state when this task is complete..."
-                    className="input"
+                    className="input w-full"
                     rows={3}
-                    style={{ width: '100%' }}
                   />
                 </div>
                 <div>
-                  <label style={{ display: 'block', marginBottom: '4px' }}>Notes (optional)</label>
+                  <label>Notes (optional)</label>
                   <textarea
                     value={newTask.notes}
                     onChange={(e) => setNewTask({ ...newTask, notes: e.target.value })}
                     placeholder="Any additional context or notes..."
-                    className="input"
+                    className="input w-full"
                     rows={2}
-                    style={{ width: '100%' }}
                   />
                 </div>
-                <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
+                <div className="flex-center gap-md mt-sm">
                   <button className="btn btn-primary" onClick={handleCreateTask}>
                     Create Task
                   </button>
@@ -939,9 +900,9 @@ export default function Lesson09() {
           ) : (
             // Task list
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <div className="flex-between mb-md">
                 <h2>Active Tasks</h2>
-                <div style={{ display: 'flex', gap: '8px' }}>
+                <div className="flex-center gap-sm">
                   <button className="btn btn-primary" onClick={() => setShowCreateForm(true)}>
                     + New Task
                   </button>
@@ -953,13 +914,8 @@ export default function Lesson09() {
                 </div>
               </div>
 
-              {tasks.filter(t => !t.is_complete).length === 0 ? (
-                <div className="empty-state" style={{ textAlign: 'center', padding: '48px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
-                  <h3>No active tasks</h3>
-                  <p>Create a new task to start practicing the 70-85-95 iteration framework.</p>
-                </div>
-              ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
+              {tasks.filter(t => !t.is_complete).length > 0 && (
+                <div className="grid-auto-fill">
                   {tasks.filter(t => !t.is_complete).map((task) => renderTaskCard(task, handleSelectTask))}
                 </div>
               )}
@@ -972,49 +928,35 @@ export default function Lesson09() {
       {activeTab === 'history' && (
         <div className="history-section">
           <h2>Completed Tasks</h2>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>
+          <p className="text-secondary mb-lg">
             Tasks that have gone through all three iteration passes (70% - 85% - 95%).
           </p>
 
-          {tasks.filter(t => t.is_complete).length === 0 ? (
-            <div className="empty-state" style={{ textAlign: 'center', padding: '48px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
-              <h3>No completed tasks yet</h3>
-              <p>Complete a task through all three passes to see it here.</p>
-            </div>
-          ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
+          {tasks.filter(t => t.is_complete).length > 0 && (
+            <div className="grid-auto-fill">
               {tasks.filter(t => t.is_complete).map((task) => (
                 <div
                   key={task.id}
-                  className="card"
-                  style={{
-                    padding: '16px',
-                    background: 'var(--success-bg)',
-                    borderLeft: '4px solid var(--accent-green)',
-                  }}
+                  className="card card-compact card-success"
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
-                    <h4 style={{ margin: 0 }}>{task.task_name}</h4>
-                    <span style={{ background: 'var(--accent-green)', color: 'var(--text-primary)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.7rem' }}>
-                      COMPLETE
-                    </span>
+                  <div className="flex-between-start mb-md">
+                    <h4 className="no-margin">{task.task_name}</h4>
+                    <span className="badge-complete">COMPLETE</span>
                   </div>
                   {renderPassProgress(task.current_pass, task.is_complete)}
-                  <div style={{ marginTop: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                  <div className="flex-between mt-md">
+                    <span className="text-xs text-secondary">
                       Completed {new Date(task.created_at).toLocaleDateString()}
                     </span>
-                    <div style={{ display: 'flex', gap: '8px' }}>
+                    <div className="flex-center gap-sm">
                       <button
-                        className="btn btn-secondary"
-                        style={{ padding: '4px 12px', fontSize: '0.8rem' }}
-                        onClick={() => { handleSelectTask(task.id); setActiveTab('practice'); }}
+                        className="btn btn-secondary btn-sm"
+                        onClick={() => { handleSelectTask(task.id); setActiveTab('iterate'); }}
                       >
                         View
                       </button>
                       <button
-                        className="btn btn-danger"
-                        style={{ padding: '4px 12px', fontSize: '0.8rem' }}
+                        className="btn btn-danger btn-sm"
                         onClick={(e) => { e.stopPropagation(); handleDeleteTask(task.id); }}
                       >
                         Delete
