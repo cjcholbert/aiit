@@ -4347,6 +4347,10 @@ tr:hover td {
 .no-margin { margin: 0; }
 .w-full { width: 100%; }
 .cursor-pointer { cursor: pointer; }
+.justify-end { justify-content: flex-end; }
+.mr-sm { margin-right: var(--space-sm); }
+.ml-sm { margin-left: var(--space-sm); }
+.text-right { text-align: right; }
 .flex-wrap { flex-wrap: wrap; }
 .flex-1 { flex: 1; }
 .flex-2 { flex: 2; }

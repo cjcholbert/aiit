@@ -101,6 +101,7 @@ export default function Lesson06() {
     loadData();
   }, []);
 
+
   // Timer effect
   useEffect(() => {
     let interval;
@@ -323,10 +324,6 @@ export default function Lesson06() {
           background: colors.bg,
           borderColor: colors.border,
           color: colors.text,
-          padding: '2px 8px',
-          borderRadius: '4px',
-          fontSize: '0.75rem',
-          border: '1px solid',
         }}
       >
         {colors.icon} {colors.label}
@@ -344,24 +341,29 @@ export default function Lesson06() {
 
   return (
     <div className="page-container">
-      <header className="page-header">
-        <h1>Verification Tools</h1>
-        <ConnectionCallout lessonNumber={5} lessonTitle="Trust Matrix" message="Systematically verify the outputs your trust matrix flags for review." />
-      </header>
-
-      <div className="lesson-progress-row">
-        <SelfAssessmentChecklist lessonNumber={6} criteria={LESSON_CRITERIA[6]} />
-        <StatsPanel stats={stats ? [
-            { label: 'Checklists', value: stats.total_checklists, color: 'var(--accent-blue)' },
-            { label: 'Sessions', value: stats.total_sessions, color: 'var(--accent-green)' },
-            { label: 'Avg Time', value: formatTime(Math.round(stats.avg_verification_time || 0)), color: 'var(--accent-yellow)' },
-        ] : []} />
+      <div className="lesson-header">
+        <div className="lesson-header-left">
+          <h1>Verification Tools</h1>
+          <ConnectionCallout lessonNumber={5} lessonTitle="Trust Matrix" message="Systematically verify the outputs your trust matrix flags for review." />
+          <div className="lesson-header-problem-skill">
+            <p><strong>The Problem:</strong> Without systematic verification, you either waste time over-checking outputs you could trust, or miss critical errors by under-checking outputs that needed scrutiny. Lesson 5 helped you calibrate <em>when</em> to verify -- now you build <em>how</em> to verify efficiently.</p>
+            <p><strong>The Skill:</strong> Create reusable verification checklists tied to output types, so checking becomes quick and consistent rather than ad-hoc. Track which checks actually catch issues to refine your process over time. Define clear "skip criteria" so you can confidently trust appropriate outputs without guilt or risk.</p>
+          </div>
+        </div>
+        <div className="lesson-header-right">
+          <StatsPanel stats={stats ? [
+              { label: 'Checklists', value: stats.total_checklists, color: 'var(--accent-blue)' },
+              { label: 'Sessions', value: stats.total_sessions, color: 'var(--accent-green)' },
+              { label: 'Avg Time', value: formatTime(Math.round(stats.avg_verification_time || 0)), color: 'var(--accent-yellow)' },
+          ] : []} />
+          <SelfAssessmentChecklist lessonNumber={6} criteria={LESSON_CRITERIA[6]} />
+        </div>
       </div>
 
       {error && (
-        <div className="error-banner" style={{ background: 'var(--error-bg)', padding: '12px', marginBottom: '16px', borderRadius: '8px', color: 'var(--accent-red)' }}>
+        <div className="alert alert-error mb-md">
           {error}
-          <button onClick={() => setError(null)} style={{ marginLeft: '12px', cursor: 'pointer' }}>Dismiss</button>
+          <button className="btn btn-link ml-sm" onClick={() => setError(null)}>Dismiss</button>
         </div>
       )}
 
@@ -381,12 +383,6 @@ export default function Lesson06() {
       {/* Learn Tab */}
       {activeTab === 'learn' && (
         <div className="learn-section">
-          <div className="learn-problem-skill">
-            <p><strong>The Problem:</strong> Without systematic verification, you either waste time over-checking outputs you could trust, or miss critical errors by under-checking outputs that needed scrutiny. Lesson 5 helped you calibrate <em>when</em> to verify -- now you build <em>how</em> to verify efficiently.</p>
-            <p><strong>The Skill:</strong> Create reusable verification checklists tied to output types, so checking becomes quick and consistent rather than ad-hoc. Track which checks actually catch issues to refine your process over time. Define clear "skip criteria" so you can confidently trust appropriate outputs without guilt or risk.</p>
-          </div>
-
-
           <div className="learn-intro">
             <h2>Checking AI Output Shouldn't Be Guesswork</h2>
             <p>
@@ -412,20 +408,20 @@ export default function Lesson06() {
           </div>
 
           <h3>How This Lesson Works</h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+          <p className="text-secondary mb-md">
             Two practice areas to build the systematic verification habit:
           </p>
 
           <div className="learn-patterns-grid">
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-blue)' }}>Checklists Tab — Build Your Verification Checklists</h4>
+              <h4 className="color-accent-blue">Checklists Tab — Build Your Verification Checklists</h4>
               <p>Create a reusable checklist for each output type that needs review. Each checklist
               has specific items to check, organized by priority — critical items first, cosmetic
               items last. You can import output types directly from your Lesson 5 Trust Matrix.</p>
               <button className="learn-tab-link" onClick={() => setActiveTab('checklists')}>Go to Checklists →</button>
             </div>
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-green)' }}>Practice Tab — Run Timed Verification Sessions</h4>
+              <h4 className="color-accent-green">Practice Tab — Run Timed Verification Sessions</h4>
               <p>Use your checklists in timed practice sessions. Track which items actually catch
               issues and which never flag anything. Over time, your checklists get leaner and
               more effective.</p>
@@ -468,14 +464,14 @@ export default function Lesson06() {
           </div>
 
           <h3>What Makes a Good Verification Checklist</h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+          <p className="text-secondary mb-md">
             Not all checklists are equally useful. Here's what separates one that actually catches
             problems from one that just makes you feel like you checked.
           </p>
 
           <div className="learn-patterns-grid">
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-red)' }}>1. Critical Items Come First</h4>
+              <h4 className="color-accent-red">1. Critical Items Come First</h4>
               <p>If you only have 60 seconds, you should still catch the most important issues.
               Put factual accuracy, compliance, and costly mistakes at the top. Formatting and
               style go at the bottom.</p>
@@ -487,7 +483,7 @@ export default function Lesson06() {
               </div>
             </div>
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-blue)' }}>2. Each Item Checks One Specific Thing</h4>
+              <h4 className="color-accent-blue">2. Each Item Checks One Specific Thing</h4>
               <p>Vague items like "check for accuracy" don't work under time pressure. Specific
               items like "verify the quarterly revenue figure against the source spreadsheet"
               tell you exactly what to do.</p>
@@ -501,7 +497,7 @@ export default function Lesson06() {
               </div>
             </div>
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-green)' }}>3. Tailored to the Output Type</h4>
+              <h4 className="color-accent-green">3. Tailored to the Output Type</h4>
               <p>A checklist for a meeting summary needs different items than one for a project
               budget. Your Trust Matrix output types map directly to the checklists you need.</p>
               <div className="learn-pattern-label better">Example</div>
@@ -513,7 +509,7 @@ export default function Lesson06() {
               </div>
             </div>
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-purple)' }}>4. Updated Based on What You Find</h4>
+              <h4 className="color-accent-purple">4. Updated Based on What You Find</h4>
               <p>A good checklist evolves. If an item never catches anything after 20 uses, drop
               it. If you keep finding a new type of mistake, add an item for it.</p>
               <div className="learn-pattern-label better">Example</div>
@@ -526,7 +522,7 @@ export default function Lesson06() {
           </div>
 
           <h3>Common Mistakes</h3>
-          <div className="learn-patterns-grid" style={{ marginBottom: '24px' }}>
+          <div className="learn-patterns-grid learn-patterns-grid-mb">
             <div className="learn-pattern-card">
               <div className="learn-pattern-label avoid">Mistake</div>
               <p>Making one giant checklist for all AI output. A 30-item checklist is so
@@ -579,9 +575,9 @@ export default function Lesson06() {
       {/* Checklists Tab */}
       {activeTab === 'checklists' && (
         <div className="checklists-section">
-          <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+          <div className="section-header flex-between mb-md">
             <h2>Your Verification Checklists</h2>
-            <div style={{ display: 'flex', gap: '8px' }}>
+            <div className="btn-group">
               <button className="btn btn-primary" onClick={() => setShowCreateForm(true)}>
                 + New Checklist
               </button>
@@ -595,9 +591,9 @@ export default function Lesson06() {
 
           {/* Create Form */}
           {showCreateForm && (
-            <div className="card" style={{ marginBottom: '24px', padding: '20px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                <h3 style={{ margin: 0 }}>Create New Checklist</h3>
+            <div className="card mb-lg card-compact">
+              <div className="flex-row items-center mb-sm">
+                <h3 className="no-margin">Create New Checklist</h3>
                 <ExamplesDropdown
                   endpoint="/lesson6/examples"
                   onSelect={(example) => {
@@ -612,57 +608,41 @@ export default function Lesson06() {
               </div>
 
               {/* Import from Trust Matrix */}
-              <div style={{ marginTop: '8px', marginBottom: '12px' }}>
+              <div className="mt-sm mb-sm">
                 <button
-                  className="btn btn-secondary"
+                  className="btn btn-secondary flex-row items-center"
                   onClick={handleOpenTrustImport}
                   disabled={loadingTrustTypes}
-                  style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
                 >
                   {loadingTrustTypes ? 'Loading...' : showTrustImport ? 'Hide Import' : 'Import from Trust Matrix'}
                 </button>
 
                 {showTrustImport && (
-                  <div className="card" style={{ padding: '16px', marginTop: '12px', maxHeight: '300px', overflowY: 'auto' }}>
-                    <h4 style={{ margin: '0 0 12px' }}>Select an Output Type</h4>
+                  <div className="card trust-import-panel">
+                    <h4>Select an Output Type</h4>
                     {outputTypes.length === 0 ? (
-                      <div style={{ textAlign: 'center', padding: '24px', color: 'var(--text-secondary)' }}>
+                      <div className="empty-state">
                         <p>No output types defined yet.</p>
-                        <p style={{ fontSize: '0.85rem' }}>
-                          Go to <a href="/lesson/5" style={{ color: 'var(--accent-blue)' }}>Lesson 5 — Trust Matrix</a> to define output types first.
+                        <p className="empty-state-hint">
+                          Go to <a href="/lesson/5" className="color-accent-blue">Lesson 5 — Trust Matrix</a> to define output types first.
                         </p>
                       </div>
                     ) : (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      <div className="flex-col gap-sm">
                         {outputTypes.map((ot) => (
                           <div
                             key={ot.id}
+                            className="trust-import-item"
                             onClick={() => handleImportOutputType(ot)}
-                            style={{
-                              padding: '12px',
-                              background: 'var(--bg-tertiary)',
-                              borderRadius: '6px',
-                              cursor: 'pointer',
-                              border: '1px solid var(--border-color)',
-                              transition: 'border-color 0.2s',
-                            }}
-                            onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--accent-blue)'}
-                            onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border-color)'}
                           >
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                              <strong style={{ color: 'var(--text-primary)' }}>{ot.name}</strong>
-                              <span style={{
-                                fontSize: '0.75rem',
-                                padding: '2px 8px',
-                                borderRadius: '4px',
-                                background: ot.trust_level === 'high' ? 'var(--success-bg)' : ot.trust_level === 'low' ? 'var(--error-bg)' : 'var(--warning-bg)',
-                                color: ot.trust_level === 'high' ? 'var(--accent-green)' : ot.trust_level === 'low' ? 'var(--accent-red)' : 'var(--accent-yellow)',
-                              }}>
+                            <div className="trust-import-item-header">
+                              <strong>{ot.name}</strong>
+                              <span className={`trust-level-badge trust-level-badge-${ot.trust_level}`}>
                                 {TRUST_COLORS[ot.trust_level]?.icon} {TRUST_COLORS[ot.trust_level]?.label || ot.trust_level}
                               </span>
                             </div>
                             {ot.category && (
-                              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                              <div className="trust-import-item-category">
                                 {ot.category}
                               </div>
                             )}
@@ -674,7 +654,7 @@ export default function Lesson06() {
                 )}
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '12px' }}>
+              <div className="flex-col gap-sm mt-sm">
                 <input
                   type="text"
                   placeholder="Checklist name"
@@ -695,44 +675,43 @@ export default function Lesson06() {
                 </select>
 
                 {/* Items list */}
-                <div style={{ marginTop: '12px' }}>
+                <div className="mt-sm">
                   <strong>Checklist Items:</strong>
                   {newChecklist.items.map((item, idx) => (
-                    <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px', padding: '8px', background: 'var(--bg-tertiary)', borderRadius: '4px' }}>
-                      {item.is_critical && <span style={{ color: 'var(--accent-red)' }}>*</span>}
-                      <span style={{ flex: 1 }}>{item.text}</span>
+                    <div key={idx} className="checklist-form-item">
+                      {item.is_critical && <span className="color-accent-red">*</span>}
+                      <span className="flex-1">{item.text}</span>
                       {renderCategoryBadge(item.category)}
-                      <button onClick={() => handleRemoveItem(idx)} style={{ color: 'var(--accent-red)', background: 'none', border: 'none', cursor: 'pointer' }}>x</button>
+                      <button className="checklist-form-item-remove" onClick={() => handleRemoveItem(idx)}>x</button>
                     </div>
                   ))}
                 </div>
 
                 {/* Add item form */}
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginTop: '8px' }}>
+                <div className="checklist-add-item-row">
                   <input
                     type="text"
                     placeholder="Add checklist item..."
                     value={newItemText}
                     onChange={(e) => setNewItemText(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleAddItem()}
-                    className="input"
-                    style={{ flex: 1 }}
+                    className="input flex-1"
                   />
-                  <select value={newItemCategory} onChange={(e) => setNewItemCategory(e.target.value)} className="input" style={{ width: '150px' }}>
+                  <select value={newItemCategory} onChange={(e) => setNewItemCategory(e.target.value)} className="input checklist-add-item-category">
                     <option value="critical">Critical</option>
                     <option value="common_failure">Common Failure</option>
                     <option value="edge_case">Edge Case</option>
                     <option value="domain_specific">Domain-Specific</option>
                     <option value="general">General</option>
                   </select>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <label className="checklist-add-item-critical">
                     <input type="checkbox" checked={newItemCritical} onChange={(e) => setNewItemCritical(e.target.checked)} />
                     Critical
                   </label>
                   <button className="btn btn-secondary" onClick={handleAddItem}>Add</button>
                 </div>
 
-                <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
+                <div className="btn-group mt-sm">
                   <button className="btn btn-primary" onClick={handleCreateChecklist}>Create Checklist</button>
                   <button className="btn btn-secondary" onClick={() => { setShowCreateForm(false); setNewChecklist({ name: '', output_type: '', items: [] }); }}>Cancel</button>
                 </div>
@@ -742,53 +721,50 @@ export default function Lesson06() {
 
           {/* Checklist cards */}
           {checklists.length === 0 && !showCreateForm ? (
-            <div className="empty-state" style={{ textAlign: 'center', padding: '48px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
+            <div className="empty-state">
               <h3>No checklists yet</h3>
               <p>Create verification checklists to efficiently validate AI outputs.</p>
-              <p style={{ color: 'var(--text-secondary)', marginTop: '8px' }}>
+              <p className="text-secondary mt-sm">
                 Based on your Lesson 5 Trust Matrix, build checklists with critical checks,
                 common failure points, and edge cases to consider.
               </p>
             </div>
           ) : (
-            <div className="checklist-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '16px' }}>
+            <div className="checklist-grid">
               {checklists.map((checklist) => (
                 <div
                   key={checklist.id}
-                  className="card"
-                  style={{ padding: '16px', cursor: 'pointer' }}
+                  className="card checklist-card"
                   onClick={() => setExpandedChecklist(expandedChecklist?.id === checklist.id ? null : checklist)}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <div className="flex-between-start">
                     <div>
-                      <h3 style={{ margin: 0 }}>{checklist.name}</h3>
-                      <div style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '4px' }}>
+                      <h3 className="no-margin">{checklist.name}</h3>
+                      <div className="checklist-card-output-type">
                         {checklist.output_type}
                       </div>
                     </div>
-                    <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{checklist.item_count}</div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>items</div>
+                    <div className="text-right">
+                      <div className="checklist-card-count">{checklist.item_count}</div>
+                      <div className="checklist-card-count-label">items</div>
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '12px', marginTop: '12px', fontSize: '0.875rem' }}>
-                    <span style={{ color: 'var(--accent-red)' }}>{checklist.critical_count} critical</span>
-                    {checklist.has_skip_criteria && <span style={{ color: 'var(--accent-green)' }}>skip criteria set</span>}
+                  <div className="checklist-card-footer">
+                    <span className="color-accent-red">{checklist.critical_count} critical</span>
+                    {checklist.has_skip_criteria && <span className="color-accent-green">skip criteria set</span>}
                   </div>
 
                   {expandedChecklist?.id === checklist.id && (
-                    <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #333' }} onClick={(e) => e.stopPropagation()}>
+                    <div className="checklist-card-expanded" onClick={(e) => e.stopPropagation()}>
                       <button
-                        className="btn btn-primary"
-                        style={{ marginRight: '8px' }}
+                        className="btn btn-primary mr-sm"
                         onClick={() => startSession(checklist)}
                       >
                         Start Practice
                       </button>
                       <button
-                        className="btn btn-secondary"
-                        style={{ marginRight: '8px' }}
+                        className="btn btn-secondary mr-sm"
                         onClick={async () => {
                           const full = await api.get(`/lesson6/checklists/${checklist.id}`);
                           setEditingChecklist(full);
@@ -811,10 +787,10 @@ export default function Lesson06() {
 
           {/* Edit Modal */}
           {editingChecklist && (
-            <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-              <div className="card" style={{ width: '600px', maxHeight: '80vh', overflow: 'auto', padding: '24px' }}>
+            <div className="modal-overlay">
+              <div className="modal-content modal-content-wide">
                 <h3>Edit Checklist</h3>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '12px' }}>
+                <div className="flex-col gap-sm mt-sm">
                   <input
                     type="text"
                     value={editingChecklist.name}
@@ -832,43 +808,42 @@ export default function Lesson06() {
                     <option value="Other">Other (custom)</option>
                   </select>
 
-                  <div style={{ marginTop: '12px' }}>
+                  <div className="mt-sm">
                     <strong>Items:</strong>
                     {editingChecklist.items.map((item, idx) => (
-                      <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px', padding: '8px', background: 'var(--bg-tertiary)', borderRadius: '4px' }}>
-                        {item.is_critical && <span style={{ color: 'var(--accent-red)' }}>*</span>}
-                        <span style={{ flex: 1 }}>{item.text}</span>
+                      <div key={idx} className="checklist-form-item">
+                        {item.is_critical && <span className="color-accent-red">*</span>}
+                        <span className="flex-1">{item.text}</span>
                         {renderCategoryBadge(item.category)}
-                        <button onClick={() => handleEditRemoveItem(idx)} style={{ color: 'var(--accent-red)', background: 'none', border: 'none', cursor: 'pointer' }}>x</button>
+                        <button className="checklist-form-item-remove" onClick={() => handleEditRemoveItem(idx)}>x</button>
                       </div>
                     ))}
                   </div>
 
-                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <div className="checklist-add-item-row">
                     <input
                       type="text"
                       placeholder="Add item..."
                       value={editItemText}
                       onChange={(e) => setEditItemText(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && handleEditAddItem()}
-                      className="input"
-                      style={{ flex: 1 }}
+                      className="input flex-1"
                     />
-                    <select value={editItemCategory} onChange={(e) => setEditItemCategory(e.target.value)} className="input" style={{ width: '130px' }}>
+                    <select value={editItemCategory} onChange={(e) => setEditItemCategory(e.target.value)} className="input checklist-add-item-category">
                       <option value="critical">Critical</option>
                       <option value="common_failure">Common Failure</option>
                       <option value="edge_case">Edge Case</option>
                       <option value="domain_specific">Domain-Specific</option>
                       <option value="general">General</option>
                     </select>
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.875rem' }}>
+                    <label className="checklist-add-item-critical">
                       <input type="checkbox" checked={editItemCritical} onChange={(e) => setEditItemCritical(e.target.checked)} />
                       Crit
                     </label>
                     <button className="btn btn-secondary" onClick={handleEditAddItem}>Add</button>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
+                  <div className="btn-group mt-md">
                     <button className="btn btn-primary" onClick={handleSaveEdit}>Save</button>
                     <button className="btn btn-secondary" onClick={() => setEditingChecklist(null)}>Cancel</button>
                   </div>
@@ -884,50 +859,41 @@ export default function Lesson06() {
         <div className="practice-section">
           {activeSession ? (
             <div className="active-session">
-              <div className="card" style={{ padding: '24px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+              <div className="card card-padded">
+                <div className="session-header">
                   <div>
-                    <h2 style={{ margin: 0 }}>{activeSession.checklist.name}</h2>
-                    <div style={{ color: 'var(--text-secondary)' }}>{activeSession.checklist.output_type}</div>
+                    <h2 className="no-margin">{activeSession.checklist.name}</h2>
+                    <div className="text-secondary">{activeSession.checklist.output_type}</div>
                   </div>
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: '2.5rem', fontWeight: 'bold', fontFamily: 'monospace', color: timerRunning ? 'var(--accent-green)' : 'var(--text-secondary)' }}>
+                  <div className="session-timer">
+                    <div className={`session-timer-value ${timerRunning ? 'running' : 'stopped'}`}>
                       {formatTime(sessionTimer)}
                     </div>
-                    <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Elapsed Time</div>
+                    <div className="session-timer-label">Elapsed Time</div>
                   </div>
                 </div>
 
-                <div style={{ marginBottom: '24px' }}>
+                <div className="mb-lg">
                   <h3>Verification Checklist</h3>
                   {(activeSession.checklist.items || []).map((item) => (
                     <div
                       key={item.id}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '12px',
-                        padding: '12px',
-                        marginTop: '8px',
-                        background: checkedItems[item.id] ? 'var(--success-bg)' : 'var(--bg-tertiary)',
-                        borderRadius: '8px',
-                        border: item.is_critical ? '1px solid var(--accent-red)' : '1px solid transparent',
-                      }}
+                      className={`session-checklist-item ${checkedItems[item.id] ? 'checked' : ''} ${item.is_critical ? 'critical' : ''}`}
                     >
                       <input
                         type="checkbox"
                         checked={checkedItems[item.id] || false}
                         onChange={(e) => setCheckedItems({ ...checkedItems, [item.id]: e.target.checked })}
-                        style={{ width: '20px', height: '20px' }}
+                        className="session-checklist-item-checkbox"
                       />
-                      <div style={{ flex: 1 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          {item.is_critical && <span style={{ color: 'var(--accent-red)', fontWeight: 'bold' }}>*</span>}
+                      <div className="flex-1">
+                        <div className="flex-row items-center gap-sm">
+                          {item.is_critical && <span className="color-accent-red text-bold">*</span>}
                           <span>{item.text}</span>
                         </div>
                       </div>
                       {renderCategoryBadge(item.category)}
-                      <label style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.875rem', color: issuesFound[item.id] ? 'var(--accent-red)' : 'var(--text-secondary)' }}>
+                      <label className={`session-issue-label ${issuesFound[item.id] ? 'active' : ''}`}>
                         <input
                           type="checkbox"
                           checked={issuesFound[item.id] || false}
@@ -939,19 +905,18 @@ export default function Lesson06() {
                   ))}
                 </div>
 
-                <div style={{ marginBottom: '24px' }}>
+                <div className="mb-lg">
                   <label>Notes (issues found, observations):</label>
                   <textarea
                     value={sessionNotes}
                     onChange={(e) => setSessionNotes(e.target.value)}
-                    className="input"
+                    className="input w-full mt-sm"
                     rows={3}
-                    style={{ width: '100%', marginTop: '8px' }}
                   />
                 </div>
 
-                <div style={{ display: 'flex', gap: '12px' }}>
-                  <button className="btn btn-primary" style={{ background: 'var(--accent-green)' }} onClick={() => completeSession(true)}>
+                <div className="btn-group">
+                  <button className="btn btn-primary" onClick={() => completeSession(true)}>
                     Complete - Passed
                   </button>
                   <button className="btn btn-danger" onClick={() => completeSession(false)}>
@@ -966,23 +931,23 @@ export default function Lesson06() {
           ) : (
             <div>
               <h2>Verification Practice</h2>
-              <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>
+              <p className="text-secondary mb-lg">
                 Select a checklist to start a timed verification practice session.
                 Track which items catch issues to refine your checklists over time.
               </p>
 
               {checklists.length === 0 ? (
-                <div className="empty-state" style={{ textAlign: 'center', padding: '48px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
+                <div className="empty-state">
                   <h3>No checklists available</h3>
                   <p>Create checklists in the Checklists tab first.</p>
                 </div>
               ) : (
-                <div className="checklist-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '16px' }}>
+                <div className="checklist-grid">
                   {checklists.map((checklist) => (
-                    <div key={checklist.id} className="card" style={{ padding: '16px' }}>
-                      <h3 style={{ margin: 0 }}>{checklist.name}</h3>
-                      <div style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginBottom: '12px' }}>{checklist.output_type}</div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div key={checklist.id} className="card card-compact">
+                      <h3 className="no-margin">{checklist.name}</h3>
+                      <div className="checklist-card-output-type mb-sm">{checklist.output_type}</div>
+                      <div className="flex-between">
                         <span>{checklist.item_count} items ({checklist.critical_count} critical)</span>
                         <button className="btn btn-primary" onClick={() => startSession(checklist)}>
                           Start

@@ -151,6 +151,7 @@ export default function Lesson05() {
     loadData();
   }, []);
 
+
   const handleSeedDefaults = async () => {
     try {
       const result = await api.post('/lesson5/output-types/seed-defaults', {});
@@ -322,19 +323,24 @@ export default function Lesson05() {
 
   return (
     <div>
-      <div className="page-header">
-        <h1 className="page-title">Trust Matrix</h1>
-        <ConnectionCallout lessonNumber={2} lessonTitle="Feedback Analyzer" message="Predict which outputs will need review so you spend your effort where it matters most." />
-      </div>
-
-      <div className="lesson-progress-row">
-        <SelfAssessmentChecklist lessonNumber={5} criteria={LESSON_CRITERIA[5]} />
-        <StatsPanel stats={stats ? [
-            { label: 'Predictions', value: stats.total_predictions, color: 'var(--accent-blue)' },
-            { label: 'Verified', value: stats.verified_predictions, color: 'var(--accent-green)' },
-            { label: 'AI Accuracy', value: stats.overall_accuracy != null ? `${stats.overall_accuracy}%` : '-', color: 'var(--accent-yellow)' },
-            { label: 'Calibration', value: stats.calibration_score ?? '-', color: 'var(--accent-purple)' },
-        ] : []} />
+      <div className="lesson-header">
+        <div className="lesson-header-left">
+          <h1 className="page-title">Trust Matrix</h1>
+          <ConnectionCallout lessonNumber={2} lessonTitle="Feedback Analyzer" message="Predict which outputs will need review so you spend your effort where it matters most." />
+          <div className="lesson-header-problem-skill">
+            <p><strong>The Problem:</strong> You either over-verify everything (wasting time) or blindly trust AI output (introducing errors). Without calibrated judgment, you can't efficiently allocate your review effort.</p>
+            <p><strong>The Skill:</strong> Build a personal trust matrix by tracking predictions about AI accuracy. Learn which output types you can trust and which require careful verification.</p>
+          </div>
+        </div>
+        <div className="lesson-header-right">
+          <StatsPanel stats={stats ? [
+              { label: 'Predictions', value: stats.total_predictions, color: 'var(--accent-blue)' },
+              { label: 'Verified', value: stats.verified_predictions, color: 'var(--accent-green)' },
+              { label: 'AI Accuracy', value: stats.overall_accuracy != null ? `${stats.overall_accuracy}%` : '-', color: 'var(--accent-yellow)' },
+              { label: 'Calibration', value: stats.calibration_score ?? '-', color: 'var(--accent-purple)' },
+          ] : []} />
+          <SelfAssessmentChecklist lessonNumber={5} criteria={LESSON_CRITERIA[5]} />
+        </div>
       </div>
 
       {error && <div className="alert alert-error">{error}</div>}
@@ -369,12 +375,6 @@ export default function Lesson05() {
       {/* Learn Tab */}
       {activeTab === 'learn' && (
         <div className="learn-section">
-          <div className="learn-problem-skill">
-            <p><strong>The Problem:</strong> You either over-verify everything (wasting time) or blindly trust AI output (introducing errors). Without calibrated judgment, you can't efficiently allocate your review effort.</p>
-            <p><strong>The Skill:</strong> Build a personal trust matrix by tracking predictions about AI accuracy. Learn which output types you can trust and which require careful verification.</p>
-          </div>
-
-
           <div className="learn-intro">
             <h2>You Probably Trust AI in the Wrong Places</h2>
             <p>
@@ -399,27 +399,27 @@ export default function Lesson05() {
           </div>
 
           <h3>How This Lesson Works</h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+          <p className="text-secondary mb-md">
             Three practice areas that build your trust calibration skill:
           </p>
 
           <div className="learn-patterns-grid">
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-blue)' }}>Build Matrix Tab — Map Your Output Types</h4>
+              <h4 className="color-accent-blue">Build Matrix Tab — Map Your Output Types</h4>
               <p>List the kinds of AI output you use in your work — email drafts, data analysis,
               client proposals, meeting summaries — and assign each an initial trust level (high,
               medium, or low) based on your gut feeling. This is your starting hypothesis.</p>
               <button className="learn-tab-link" onClick={() => setActiveTab('matrix')}>Go to Build Matrix →</button>
             </div>
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-green)' }}>Track Predictions Tab — Test Your Instincts</h4>
+              <h4 className="color-accent-green">Track Predictions Tab — Test Your Instincts</h4>
               <p>Before you verify any AI output, rate your confidence (1-10) that it's correct.
               Then check it and record what you find. Over time, this reveals where your gut is
               right and where it misleads you.</p>
               <button className="learn-tab-link" onClick={() => setActiveTab('predictions')}>Go to Predictions →</button>
             </div>
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-purple)' }}>Calibration Tab — See Your Patterns</h4>
+              <h4 className="color-accent-purple">Calibration Tab — See Your Patterns</h4>
               <p>After 10+ predictions, the app analyzes where you over-trusted (were confident
               but wrong) and where you over-verified (were skeptical but right). This is your
               personal calibration report.</p>
@@ -462,14 +462,14 @@ export default function Lesson05() {
           </div>
 
           <h3>What Trust Levels Actually Mean</h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+          <p className="text-secondary mb-md">
             Trust levels aren't about whether AI is "good" or "bad." They're about how much review
             effort a particular output type needs from you, based on real experience.
           </p>
 
           <div className="learn-patterns-grid">
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-green)' }}>High Trust — Quick Scan</h4>
+              <h4 className="color-accent-green">High Trust — Quick Scan</h4>
               <p>Output types where AI is consistently reliable for your use case. You still glance
               at the result, but you're not expecting problems.</p>
               <div className="learn-pattern-label better">Examples</div>
@@ -479,7 +479,7 @@ export default function Lesson05() {
               </div>
             </div>
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-yellow)' }}>Medium Trust — Targeted Check</h4>
+              <h4 className="color-accent-yellow">Medium Trust — Targeted Check</h4>
               <p>Output types where AI is usually right but makes predictable mistakes. You know
               which parts to double-check.</p>
               <div className="learn-pattern-label better">Examples</div>
@@ -490,7 +490,7 @@ export default function Lesson05() {
               </div>
             </div>
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-red)' }}>Low Trust — Full Review</h4>
+              <h4 className="color-accent-red">Low Trust — Full Review</h4>
               <p>Output types where AI frequently gets things wrong or where mistakes are costly.
               Treat AI output as a rough draft that needs serious editing.</p>
               <div className="learn-pattern-label better">Examples</div>
@@ -503,7 +503,7 @@ export default function Lesson05() {
           </div>
 
           <h3>Common Mistakes</h3>
-          <div className="learn-patterns-grid" style={{ marginBottom: '24px' }}>
+          <div className="learn-patterns-grid learn-patterns-grid-mb">
             <div className="learn-pattern-card">
               <div className="learn-pattern-label avoid">Mistake</div>
               <p>Assigning trust levels based on how the output <em>looks</em> rather than whether
@@ -555,9 +555,9 @@ export default function Lesson05() {
       {/* Build Matrix Tab */}
       {activeTab === 'matrix' && (
         <div className="card">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
-            <h2 style={{ margin: 0 }}>Your Trust Matrix</h2>
-            <div style={{ display: 'flex', gap: '8px' }}>
+          <div className="card-header-actions">
+            <h2>Your Trust Matrix</h2>
+            <div className="btn-group">
               <button className="btn btn-secondary" onClick={() => setShowAddForm(true)}>
                 + Add Output Type
               </button>
@@ -570,94 +570,75 @@ export default function Lesson05() {
           </div>
 
           {/* Trust Level Legend */}
-          <div style={{ marginBottom: '20px', padding: '12px', background: 'var(--bg-tertiary)', borderRadius: '8px' }}>
-            <div style={{ fontSize: '12px', fontWeight: 'bold', marginBottom: '8px', color: 'var(--text-muted)' }}>TRUST LEVEL GUIDELINES</div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
+          <div className="trust-level-legend">
+            <div className="trust-level-legend-title">TRUST LEVEL GUIDELINES</div>
+            <div className="trust-level-legend-grid">
               {['high', 'medium', 'low'].map((level) => (
-                <div key={level} style={{ fontSize: '12px' }}>
-                  <div style={{ color: TRUST_LEVELS[level].text, fontWeight: 'bold', marginBottom: '2px' }}>
+                <div key={level} className="trust-level-legend-item">
+                  <div className="trust-level-legend-label" style={{ color: TRUST_LEVELS[level].text }}>
                     {TRUST_LEVELS[level].icon} {TRUST_LEVELS[level].label}
                   </div>
-                  <div style={{ color: 'var(--text-muted)' }}>{TRUST_LEVELS[level].description}</div>
+                  <div className="text-muted">{TRUST_LEVELS[level].description}</div>
                 </div>
               ))}
             </div>
           </div>
 
           {outputTypes.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '40px', background: 'var(--bg-tertiary)', borderRadius: '8px' }}>
-              <p style={{ fontSize: '18px', marginBottom: '16px', color: 'var(--text-primary)' }}>No output types defined yet.</p>
-              <p style={{ color: 'var(--text-muted)', marginBottom: '8px' }}>{OUTPUT_TYPE_PROMPTS[0]}</p>
-              <p style={{ color: 'var(--text-muted)', marginBottom: '8px', fontStyle: 'italic' }}>{OUTPUT_TYPE_PROMPTS[1]}</p>
-              <p style={{ color: 'var(--text-muted)', marginBottom: '20px' }}>{OUTPUT_TYPE_PROMPTS[2]}</p>
-              <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+            <div className="empty-state">
+              <h3 className="mb-md">No output types defined yet.</h3>
+              <p className="text-muted mb-sm">{OUTPUT_TYPE_PROMPTS[0]}</p>
+              <p className="text-muted text-italic mb-sm">{OUTPUT_TYPE_PROMPTS[1]}</p>
+              <p className="text-muted mb-lg">{OUTPUT_TYPE_PROMPTS[2]}</p>
+              <div className="btn-group flex-center">
                 <button className="btn btn-secondary" onClick={() => setShowAddForm(true)}>
                   Create Your Own
                 </button>
               </div>
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+            <div className="grid-3col">
               {['high', 'medium', 'low'].map((level) => (
                 <div
                   key={level}
-                  style={{
-                    background: TRUST_LEVELS[level].bg,
-                    border: `2px solid ${TRUST_LEVELS[level].border}`,
-                    borderRadius: '12px',
-                    padding: '16px',
-                    minHeight: '200px',
-                  }}
+                  className="trust-level-column"
+                  style={{ background: TRUST_LEVELS[level].bg }}
                 >
-                  <h3 style={{ margin: '0 0 4px', color: TRUST_LEVELS[level].text, textTransform: 'capitalize' }}>
+                  <h3 style={{ color: TRUST_LEVELS[level].text }}>
                     {TRUST_LEVELS[level].icon} {level} Trust
-                    <span style={{ fontSize: '12px', fontWeight: 'normal', marginLeft: '8px', opacity: 0.8 }}>
+                    <span className="trust-level-column-count">
                       ({outputTypesByLevel[level].length})
                     </span>
                   </h3>
-                  <p style={{ margin: '0 0 16px', fontSize: '11px', color: 'var(--text-muted)' }}>
+                  <p className="trust-level-column-action">
                     {TRUST_LEVELS[level].action}
                   </p>
 
                   {outputTypesByLevel[level].map((domain) => (
                     <div
                       key={domain.id}
-                      style={{
-                        background: 'var(--bg-secondary)',
-                        borderRadius: '8px',
-                        padding: '12px',
-                        marginBottom: '12px',
-                        cursor: 'pointer',
-                      }}
+                      className="trust-level-card"
                       onClick={() => setExpandedOutputType(expandedOutputType === domain.id ? null : domain.id)}
                     >
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '4px' }}>
-                        <div style={{ flex: 1 }}>
-                          <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>{domain.name}</div>
+                      <div className="flex-between-start mb-xs">
+                        <div className="flex-1">
+                          <div className="trust-level-card-name">{domain.name}</div>
                           <span
-                            style={{
-                              display: 'inline-block',
-                              fontSize: '11px',
-                              padding: '2px 8px',
-                              borderRadius: '10px',
-                              background: CATEGORY_COLORS[domain.category] || CATEGORY_COLORS.Custom,
-                              color: 'white',
-                            }}
+                            className="trust-level-card-category"
+                            style={{ background: CATEGORY_COLORS[domain.category] || CATEGORY_COLORS.Custom }}
                           >
                             {domain.category}
                           </span>
                         </div>
-                        <div style={{ display: 'flex', gap: '4px' }} onClick={(e) => e.stopPropagation()}>
+                        <div className="btn-group" onClick={(e) => e.stopPropagation()}>
                           <button
                             className="btn btn-sm"
-                            style={{ padding: '4px 8px', fontSize: '12px' }}
                             onClick={() => setEditingOutputType({ ...domain, examples: domain.examples || [] })}
                           >
                             Edit
                           </button>
                           <button
                             className="btn btn-sm btn-danger"
-                            style={{ padding: '4px 8px', fontSize: '12px' }}
                             onClick={() => handleDeleteOutputType(domain.id)}
                           >
                             X
@@ -667,21 +648,21 @@ export default function Lesson05() {
 
                       {/* Expanded view with Why and Verification */}
                       {expandedOutputType === domain.id && (
-                        <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid var(--border-color)' }}>
+                        <div className="trust-level-card-expanded">
                           {domain.reasoning && (
-                            <div style={{ marginBottom: '8px' }}>
-                              <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '2px' }}>WHY THIS TRUST LEVEL:</div>
-                              <div style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>{domain.reasoning}</div>
+                            <div className="trust-level-card-field">
+                              <div className="trust-level-card-field-label">WHY THIS TRUST LEVEL:</div>
+                              <div className="trust-level-card-field-value">{domain.reasoning}</div>
                             </div>
                           )}
                           {domain.verification_approach && (
-                            <div style={{ marginBottom: '8px' }}>
-                              <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '2px' }}>HOW TO VERIFY:</div>
-                              <div style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>{domain.verification_approach}</div>
+                            <div className="trust-level-card-field">
+                              <div className="trust-level-card-field-label">HOW TO VERIFY:</div>
+                              <div className="trust-level-card-field-value">{domain.verification_approach}</div>
                             </div>
                           )}
                           {!domain.reasoning && !domain.verification_approach && (
-                            <div style={{ fontSize: '12px', color: 'var(--text-muted)', fontStyle: 'italic' }}>
+                            <div className="text-xs text-muted text-italic">
                               Click Edit to add reasoning and verification approach
                             </div>
                           )}
@@ -689,7 +670,7 @@ export default function Lesson05() {
                       )}
 
                       {domain.prediction_count > 0 && (
-                        <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '8px' }}>
+                        <div className="trust-level-card-stats">
                           {domain.prediction_count} predictions ({domain.accuracy_rate.toFixed(0)}% accurate)
                         </div>
                       )}
@@ -697,7 +678,7 @@ export default function Lesson05() {
                   ))}
 
                   {outputTypesByLevel[level].length === 0 && (
-                    <div style={{ fontSize: '14px', color: 'var(--text-muted)', fontStyle: 'italic', textAlign: 'center', padding: '20px' }}>
+                    <div className="trust-level-empty">
                       No output types at this trust level
                     </div>
                   )}
@@ -708,10 +689,10 @@ export default function Lesson05() {
 
           {/* Add Domain Modal */}
           {showAddForm && (
-            <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-              <div style={{ background: 'var(--bg-secondary)', borderRadius: '12px', padding: '24px', width: '550px', maxWidth: '90vw', maxHeight: '90vh', overflow: 'auto' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                  <h3 style={{ margin: 0 }}>Add Output Type</h3>
+            <div className="modal-overlay">
+              <div className="modal-content">
+                <div className="flex-row items-center mb-sm">
+                  <h3 className="no-margin">Add Output Type</h3>
                   <ExamplesDropdown
                     endpoint="/lesson5/examples"
                     onSelect={(example) => {
@@ -727,7 +708,7 @@ export default function Lesson05() {
                     }}
                   />
                 </div>
-                <p style={{ margin: '0 0 20px', fontSize: '13px', color: 'var(--text-muted)' }}>
+                <p className="text-muted text-sm mb-lg">
                   Think about types of AI output you use in your work. What do you ask AI to generate?
                 </p>
                 <form onSubmit={handleCreateOutputType}>
@@ -764,18 +745,14 @@ export default function Lesson05() {
                       <option value="medium">Medium Trust</option>
                       <option value="low">Low Trust</option>
                     </select>
-                    <div style={{
-                      marginTop: '8px',
-                      padding: '10px',
-                      background: TRUST_LEVELS[newOutputType.trust_level].bg,
-                      border: `1px solid ${TRUST_LEVELS[newOutputType.trust_level].border}`,
-                      borderRadius: '6px',
-                      fontSize: '12px',
-                    }}>
-                      <div style={{ color: TRUST_LEVELS[newOutputType.trust_level].text, fontWeight: 'bold', marginBottom: '4px' }}>
+                    <div
+                      className="trust-level-hint"
+                      style={{ background: TRUST_LEVELS[newOutputType.trust_level].bg }}
+                    >
+                      <div className="trust-level-hint-action" style={{ color: TRUST_LEVELS[newOutputType.trust_level].text }}>
                         {TRUST_LEVELS[newOutputType.trust_level].action}
                       </div>
-                      <div style={{ color: 'var(--text-muted)' }}>
+                      <div className="text-muted">
                         {TRUST_LEVELS[newOutputType.trust_level].description}
                       </div>
                     </div>
@@ -790,7 +767,7 @@ export default function Lesson05() {
                       rows={2}
                       required
                     />
-                    <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                    <div className="form-hint">
                       Consider: training data quality, how quickly things change, your ability to spot errors
                     </div>
                   </div>
@@ -804,20 +781,20 @@ export default function Lesson05() {
                       rows={2}
                       required
                     />
-                    <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                    <div className="form-hint">
                       Examples: Run the code, check official docs, test with known data, review with colleague
                     </div>
                   </div>
 
                   <div className="form-group">
                     <label>Examples (optional)</label>
-                    <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+                    <div className="flex-row mb-sm">
                       <input
                         type="text"
                         value={newExample}
                         onChange={(e) => setNewExample(e.target.value)}
                         placeholder="Add an example output type"
-                        style={{ flex: 1 }}
+                        className="flex-1"
                       />
                       <button
                         type="button"
@@ -833,25 +810,14 @@ export default function Lesson05() {
                       </button>
                     </div>
                     {newOutputType.examples.length > 0 && (
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                      <div className="tag-list">
                         {newOutputType.examples.map((ex, i) => (
-                          <span
-                            key={i}
-                            style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: '4px',
-                              background: 'var(--bg-tertiary)',
-                              padding: '4px 8px',
-                              borderRadius: '4px',
-                              fontSize: '12px',
-                            }}
-                          >
+                          <span key={i} className="tag">
                             {ex}
                             <button
                               type="button"
+                              className="tag-remove"
                               onClick={() => setNewOutputType({ ...newOutputType, examples: newOutputType.examples.filter((_, idx) => idx !== i) })}
-                              style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', padding: '0 2px' }}
                             >
                               x
                             </button>
@@ -861,7 +827,7 @@ export default function Lesson05() {
                     )}
                   </div>
 
-                  <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '20px' }}>
+                  <div className="btn-group mt-lg justify-end">
                     <button type="button" className="btn btn-secondary" onClick={() => setShowAddForm(false)}>
                       Cancel
                     </button>
@@ -876,9 +842,9 @@ export default function Lesson05() {
 
           {/* Edit Domain Modal */}
           {editingOutputType && (
-            <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-              <div style={{ background: 'var(--bg-secondary)', borderRadius: '12px', padding: '24px', width: '550px', maxWidth: '90vw', maxHeight: '90vh', overflow: 'auto' }}>
-                <h3 style={{ margin: '0 0 20px' }}>Edit Output Type</h3>
+            <div className="modal-overlay">
+              <div className="modal-content">
+                <h3 className="mb-lg">Edit Output Type</h3>
                 <form onSubmit={handleUpdateOutputType}>
                   <div className="form-group">
                     <label>Output Type Name *</label>
@@ -912,18 +878,14 @@ export default function Lesson05() {
                       <option value="medium">Medium Trust</option>
                       <option value="low">Low Trust</option>
                     </select>
-                    <div style={{
-                      marginTop: '8px',
-                      padding: '10px',
-                      background: TRUST_LEVELS[editingOutputType.trust_level].bg,
-                      border: `1px solid ${TRUST_LEVELS[editingOutputType.trust_level].border}`,
-                      borderRadius: '6px',
-                      fontSize: '12px',
-                    }}>
-                      <div style={{ color: TRUST_LEVELS[editingOutputType.trust_level].text, fontWeight: 'bold', marginBottom: '4px' }}>
+                    <div
+                      className="trust-level-hint"
+                      style={{ background: TRUST_LEVELS[editingOutputType.trust_level].bg }}
+                    >
+                      <div className="trust-level-hint-action" style={{ color: TRUST_LEVELS[editingOutputType.trust_level].text }}>
                         {TRUST_LEVELS[editingOutputType.trust_level].action}
                       </div>
-                      <div style={{ color: 'var(--text-muted)' }}>
+                      <div className="text-muted">
                         {TRUST_LEVELS[editingOutputType.trust_level].description}
                       </div>
                     </div>
@@ -951,13 +913,13 @@ export default function Lesson05() {
 
                   <div className="form-group">
                     <label>Examples</label>
-                    <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+                    <div className="flex-row mb-sm">
                       <input
                         type="text"
                         value={editExample}
                         onChange={(e) => setEditExample(e.target.value)}
                         placeholder="Add an example"
-                        style={{ flex: 1 }}
+                        className="flex-1"
                       />
                       <button
                         type="button"
@@ -973,25 +935,14 @@ export default function Lesson05() {
                       </button>
                     </div>
                     {editingOutputType.examples && editingOutputType.examples.length > 0 && (
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                      <div className="tag-list">
                         {editingOutputType.examples.map((ex, i) => (
-                          <span
-                            key={i}
-                            style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: '4px',
-                              background: 'var(--bg-tertiary)',
-                              padding: '4px 8px',
-                              borderRadius: '4px',
-                              fontSize: '12px',
-                            }}
-                          >
+                          <span key={i} className="tag">
                             {ex}
                             <button
                               type="button"
+                              className="tag-remove"
                               onClick={() => setEditingOutputType({ ...editingOutputType, examples: editingOutputType.examples.filter((_, idx) => idx !== i) })}
-                              style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', padding: '0 2px' }}
                             >
                               x
                             </button>
@@ -1001,7 +952,7 @@ export default function Lesson05() {
                     )}
                   </div>
 
-                  <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '20px' }}>
+                  <div className="btn-group mt-lg justify-end">
                     <button type="button" className="btn btn-secondary" onClick={() => setEditingOutputType(null)}>
                       Cancel
                     </button>
@@ -1020,24 +971,24 @@ export default function Lesson05() {
       {activeTab === 'predictions' && (
         <div>
           {/* Daily Practice Reminder */}
-          <div style={{ marginBottom: '20px', padding: '12px 16px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '20px' }}>*</span>
+          <div className="daily-practice-banner">
+            <span className="daily-practice-banner-icon">*</span>
             <div>
-              <div style={{ fontSize: '13px', color: 'var(--accent-blue)', fontWeight: 'bold' }}>Daily Practice</div>
-              <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+              <div className="daily-practice-banner-title">Daily Practice</div>
+              <div className="daily-practice-banner-text">
                 Before accepting any AI output, consciously rate your confidence and note why.
               </div>
             </div>
           </div>
 
-          <div className="card" style={{ marginBottom: '20px' }}>
-            <h2 style={{ margin: '0 0 16px' }}>Log New Prediction</h2>
-            <p style={{ color: 'var(--text-muted)', marginBottom: '16px' }}>
+          <div className="card mb-lg">
+            <h2 className="mb-md">Log New Prediction</h2>
+            <p className="text-muted mb-md">
               Before verifying AI output, rate your confidence (1-10) that it's correct as-is.
             </p>
 
             <form onSubmit={handleCreatePrediction}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <div className="grid-2col">
                 <div className="form-group">
                   <label>Output Type</label>
                   <select
@@ -1053,27 +1004,26 @@ export default function Lesson05() {
 
                 <div className="form-group">
                   <label>Your Confidence (1-10) *</label>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div className="confidence-row">
                     <input
                       type="range"
                       min="1"
                       max="10"
                       value={newPrediction.confidence_rating}
                       onChange={(e) => setNewPrediction({ ...newPrediction, confidence_rating: parseInt(e.target.value) })}
-                      style={{ flex: 1 }}
+                      className="flex-1"
                     />
-                    <span style={{
-                      fontSize: '20px',
-                      fontWeight: 'bold',
-                      width: '40px',
-                      textAlign: 'center',
-                      color: newPrediction.confidence_rating >= 7 ? 'var(--accent-green)' :
-                             newPrediction.confidence_rating <= 4 ? 'var(--accent-red)' : 'var(--accent-yellow)'
-                    }}>
+                    <span
+                      className="confidence-display"
+                      style={{
+                        color: newPrediction.confidence_rating >= 7 ? 'var(--accent-green)' :
+                               newPrediction.confidence_rating <= 4 ? 'var(--accent-red)' : 'var(--accent-yellow)'
+                      }}
+                    >
                       {newPrediction.confidence_rating}
                     </span>
                   </div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                  <div className="form-hint">
                     1-4: Low confidence | 5-6: Medium | 7-10: High confidence
                   </div>
                 </div>
@@ -1108,37 +1058,27 @@ export default function Lesson05() {
 
           {/* Pending Predictions */}
           {pendingPredictions.length > 0 && (
-            <div className="card" style={{ marginBottom: '20px' }}>
-              <h2 style={{ margin: '0 0 16px' }}>Pending Verification ({pendingPredictions.length})</h2>
+            <div className="card mb-lg">
+              <h2 className="mb-md">Pending Verification ({pendingPredictions.length})</h2>
               {pendingPredictions.map((pred) => (
-                <div
-                  key={pred.id}
-                  style={{
-                    background: 'var(--bg-tertiary)',
-                    borderRadius: '8px',
-                    padding: '16px',
-                    marginBottom: '12px',
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                <div key={pred.id} className="prediction-card">
+                  <div className="flex-between-start mb-sm">
                     <div>
-                      <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>{pred.output_description}</div>
-                      <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                      <div className="prediction-card-title">{pred.output_description}</div>
+                      <div className="prediction-card-meta">
                         {pred.output_type_name && <span>{pred.output_type_name} | </span>}
                         Confidence: {pred.confidence_rating}/10 | {new Date(pred.created_at).toLocaleDateString()}
                       </div>
                     </div>
-                    <div style={{ display: 'flex', gap: '8px' }}>
+                    <div className="btn-group">
                       <button
-                        className="btn btn-sm"
-                        style={{ background: 'var(--accent-green)', color: 'white' }}
+                        className="btn btn-sm btn-primary"
                         onClick={() => handleQuickVerify(pred, true)}
                       >
                         Correct
                       </button>
                       <button
-                        className="btn btn-sm"
-                        style={{ background: 'var(--accent-red)', color: 'white' }}
+                        className="btn btn-sm btn-danger"
                         onClick={() => handleQuickVerify(pred, false)}
                       >
                         Wrong
@@ -1161,7 +1101,7 @@ export default function Lesson05() {
                     </div>
                   </div>
                   {pred.uncertainty_notes && (
-                    <div style={{ fontSize: '13px', color: 'var(--text-secondary)', fontStyle: 'italic' }}>
+                    <div className="prediction-card-note">
                       Uncertainty: {pred.uncertainty_notes}
                     </div>
                   )}
@@ -1172,62 +1112,46 @@ export default function Lesson05() {
 
           {/* Verification History */}
           <div className="card">
-            <h2 style={{ margin: '0 0 16px' }}>Verification History</h2>
+            <h2 className="mb-md">Verification History</h2>
             {verifiedPredictions.length === 0 ? (
-              <p style={{ color: 'var(--text-muted)', textAlign: 'center', padding: '20px' }}>
-                No verified predictions yet. Log some predictions and verify them to build your history.
-              </p>
+              <div className="empty-state">
+                <p>No verified predictions yet. Log some predictions and verify them to build your history.</p>
+              </div>
             ) : (
               verifiedPredictions.slice(0, 20).map((pred) => {
                 const miscalibration = getMiscalibrationType(pred);
                 return (
                   <div
                     key={pred.id}
-                    style={{
-                      background: 'var(--bg-tertiary)',
-                      borderRadius: '8px',
-                      padding: '12px',
-                      marginBottom: '8px',
-                      borderLeft: `4px solid ${pred.was_correct ? 'var(--accent-green)' : 'var(--accent-red)'}`,
-                    }}
+                    className={`prediction-card-verified ${pred.was_correct ? 'correct' : 'wrong'}`}
                   >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontWeight: 'bold', marginBottom: '2px' }}>{pred.output_description}</div>
-                        <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                    <div className="flex-between">
+                      <div className="flex-1">
+                        <div className="prediction-card-title">{pred.output_description}</div>
+                        <div className="prediction-card-meta">
                           Confidence: {pred.confidence_rating}/10 |
                           Result: {pred.was_correct ? 'Correct' : 'Wrong'} |
                           {new Date(pred.verified_at).toLocaleDateString()}
                         </div>
                       </div>
-                      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                      <div className="flex-row items-center">
                         {miscalibration === 'over_trust' && (
-                          <span style={{ fontSize: '11px', padding: '2px 8px', borderRadius: '10px', background: 'var(--error-bg)', color: 'var(--accent-red)' }}>
+                          <span className="verification-badge verification-badge-overtrust">
                             Over-trusted
                           </span>
                         )}
                         {miscalibration === 'over_verify' && (
-                          <span style={{ fontSize: '11px', padding: '2px 8px', borderRadius: '10px', background: 'var(--warning-bg)', color: 'var(--accent-yellow)' }}>
+                          <span className="verification-badge verification-badge-oververify">
                             Over-verified
                           </span>
                         )}
-                        <span
-                          style={{
-                            display: 'inline-block',
-                            padding: '4px 12px',
-                            borderRadius: '12px',
-                            fontSize: '12px',
-                            fontWeight: 'bold',
-                            background: pred.was_correct ? 'var(--success-bg)' : 'var(--error-bg)',
-                            color: pred.was_correct ? 'var(--accent-green)' : 'var(--accent-red)',
-                          }}
-                        >
+                        <span className={`result-badge ${pred.was_correct ? 'result-badge-correct' : 'result-badge-wrong'}`}>
                           {pred.was_correct ? 'CORRECT' : 'WRONG'}
                         </span>
                       </div>
                     </div>
                     {pred.calibration_note && (
-                      <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '8px', fontStyle: 'italic' }}>
+                      <div className="prediction-card-verified-note">
                         Note: {pred.calibration_note}
                       </div>
                     )}
@@ -1239,30 +1163,28 @@ export default function Lesson05() {
 
           {/* Detailed Verification Modal */}
           {verifyingPrediction && (
-            <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-              <div style={{ background: 'var(--bg-secondary)', borderRadius: '12px', padding: '24px', width: '550px', maxWidth: '90vw', maxHeight: '90vh', overflow: 'auto' }}>
-                <h3 style={{ margin: '0 0 8px' }}>Verify Prediction</h3>
-                <p style={{ color: 'var(--text-secondary)', marginBottom: '8px' }}>{verifyingPrediction.output_description}</p>
-                <p style={{ color: 'var(--text-muted)', marginBottom: '16px', fontSize: '12px' }}>
+            <div className="modal-overlay">
+              <div className="modal-content">
+                <h3 className="mb-sm">Verify Prediction</h3>
+                <p className="text-secondary mb-sm">{verifyingPrediction.output_description}</p>
+                <p className="text-muted text-sm mb-md">
                   Your confidence: {verifyingPrediction.confidence_rating}/10
                 </p>
 
                 <form onSubmit={handleVerifyPrediction}>
                   <div className="form-group">
                     <label>Was the output correct? *</label>
-                    <div style={{ display: 'flex', gap: '12px' }}>
+                    <div className="verify-choice-row">
                       <button
                         type="button"
                         className={`btn ${verificationForm.was_correct === true ? 'btn-primary' : 'btn-secondary'}`}
-                        style={{ flex: 1 }}
                         onClick={() => setVerificationForm({ ...verificationForm, was_correct: true })}
                       >
                         Yes, Correct
                       </button>
                       <button
                         type="button"
-                        className={`btn ${verificationForm.was_correct === false ? 'btn-primary' : 'btn-secondary'}`}
-                        style={{ flex: 1, background: verificationForm.was_correct === false ? 'var(--accent-red)' : undefined }}
+                        className={`btn ${verificationForm.was_correct === false ? 'btn-danger' : 'btn-secondary'}`}
                         onClick={() => setVerificationForm({ ...verificationForm, was_correct: false })}
                       >
                         No, Wrong
@@ -1322,7 +1244,7 @@ export default function Lesson05() {
                     </div>
                   )}
 
-                  <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '20px' }}>
+                  <div className="btn-group mt-lg justify-end">
                     <button type="button" className="btn btn-secondary" onClick={() => setVerifyingPrediction(null)}>
                       Cancel
                     </button>
@@ -1340,8 +1262,8 @@ export default function Lesson05() {
       {/* Calibration Tab */}
       {activeTab === 'calibration' && (
         <div className="card">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-            <h2 style={{ margin: 0 }}>Calibration Analysis</h2>
+          <div className="card-header-actions">
+            <h2>Calibration Analysis</h2>
             <button
               className="btn btn-primary"
               onClick={handleAnalyze}
@@ -1351,41 +1273,41 @@ export default function Lesson05() {
             </button>
           </div>
 
-          <p style={{ color: 'var(--text-muted)', marginBottom: '20px' }}>
+          <p className="text-muted mb-lg">
             Calibration means your confidence matches reality. Over-trust means you were confident but wrong.
             Over-verify means you doubted yourself but were right.
           </p>
 
           {(stats?.verified_predictions || 0) < 10 && (
-            <div className="alert alert-info" style={{ marginBottom: '20px' }}>
+            <div className="alert alert-info mb-lg">
               You need at least 10 verified predictions to generate AI insights.
               Current: {stats?.verified_predictions || 0}/10
             </div>
           )}
 
           {stats && stats.verified_predictions >= 1 && (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '24px' }}>
-              <div style={{ background: TRUST_LEVELS.low.bg, borderRadius: '8px', padding: '16px', textAlign: 'center' }}>
-                <div style={{ fontSize: '32px', fontWeight: 'bold', color: TRUST_LEVELS.low.text }}>{stats.over_trust_count}</div>
-                <div style={{ color: 'var(--text-primary)', fontWeight: 'bold' }}>Over-Trust</div>
-                <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>High confidence (7-10) but wrong</div>
+            <div className="calibration-stats-grid">
+              <div className="calibration-stat" style={{ background: TRUST_LEVELS.low.bg }}>
+                <div className="calibration-stat-value" style={{ color: TRUST_LEVELS.low.text }}>{stats.over_trust_count}</div>
+                <div className="calibration-stat-label">Over-Trust</div>
+                <div className="calibration-stat-description">High confidence (7-10) but wrong</div>
                 {stats.over_trust_count > 0 && (
-                  <div style={{ fontSize: '11px', color: TRUST_LEVELS.low.text, marginTop: '8px' }}>
+                  <div className="calibration-stat-action" style={{ color: TRUST_LEVELS.low.text }}>
                     Action: Be more skeptical in these areas
                   </div>
                 )}
               </div>
-              <div style={{ background: 'var(--bg-tertiary)', borderRadius: '8px', padding: '16px', textAlign: 'center' }}>
-                <div style={{ fontSize: '32px', fontWeight: 'bold', color: 'var(--accent-blue)' }}>{stats.well_calibrated_count}</div>
-                <div style={{ color: 'var(--text-primary)', fontWeight: 'bold' }}>Well Calibrated</div>
-                <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>Confidence matched outcome</div>
+              <div className="calibration-stat" style={{ background: 'var(--bg-tertiary)' }}>
+                <div className="calibration-stat-value" style={{ color: 'var(--accent-blue)' }}>{stats.well_calibrated_count}</div>
+                <div className="calibration-stat-label">Well Calibrated</div>
+                <div className="calibration-stat-description">Confidence matched outcome</div>
               </div>
-              <div style={{ background: TRUST_LEVELS.medium.bg, borderRadius: '8px', padding: '16px', textAlign: 'center' }}>
-                <div style={{ fontSize: '32px', fontWeight: 'bold', color: TRUST_LEVELS.medium.text }}>{stats.over_verify_count}</div>
-                <div style={{ color: 'var(--text-primary)', fontWeight: 'bold' }}>Over-Verify</div>
-                <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>Low confidence (1-4) but right</div>
+              <div className="calibration-stat" style={{ background: TRUST_LEVELS.medium.bg }}>
+                <div className="calibration-stat-value" style={{ color: TRUST_LEVELS.medium.text }}>{stats.over_verify_count}</div>
+                <div className="calibration-stat-label">Over-Verify</div>
+                <div className="calibration-stat-description">Low confidence (1-4) but right</div>
                 {stats.over_verify_count > 0 && (
-                  <div style={{ fontSize: '11px', color: TRUST_LEVELS.medium.text, marginTop: '8px' }}>
+                  <div className="calibration-stat-action" style={{ color: TRUST_LEVELS.medium.text }}>
                     Action: You can trust more in these areas
                   </div>
                 )}
@@ -1394,35 +1316,28 @@ export default function Lesson05() {
           )}
 
           {insights.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '40px', color: 'var(--text-muted)' }}>
+            <div className="empty-state">
               <p>No insights yet. Click "Analyze Patterns" after logging 10+ predictions.</p>
             </div>
           ) : (
             <div>
-              <h3 style={{ marginBottom: '16px' }}>AI-Generated Insights</h3>
+              <h3 className="mb-md">AI-Generated Insights</h3>
               {insights.map((insight) => (
                 <div
                   key={insight.id}
+                  className="insight-card"
                   style={{
-                    background: 'var(--bg-tertiary)',
-                    borderRadius: '8px',
-                    padding: '16px',
-                    marginBottom: '12px',
-                    borderLeft: `4px solid ${
+                    borderLeftColor:
                       insight.insight_type === 'over_trust' ? 'var(--accent-red)' :
                       insight.insight_type === 'over_verify' ? 'var(--accent-yellow)' :
                       insight.insight_type === 'well_calibrated' ? 'var(--accent-green)' :
-                      'var(--accent-blue)'
-                    }`,
+                      'var(--accent-blue)',
                   }}
                 >
-                  <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+                  <div className="insight-card-header">
                     <span
+                      className="insight-card-type"
                       style={{
-                        display: 'inline-block',
-                        fontSize: '11px',
-                        padding: '2px 8px',
-                        borderRadius: '10px',
                         background:
                           insight.insight_type === 'over_trust' ? 'var(--error-bg)' :
                           insight.insight_type === 'over_verify' ? 'var(--warning-bg)' :
@@ -1433,18 +1348,17 @@ export default function Lesson05() {
                           insight.insight_type === 'over_verify' ? 'var(--accent-yellow)' :
                           insight.insight_type === 'well_calibrated' ? 'var(--accent-green)' :
                           'var(--accent-blue)',
-                        textTransform: 'capitalize',
                       }}
                     >
                       {insight.insight_type.replace('_', ' ')}
                     </span>
                     {insight.output_type_name && (
-                      <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                      <span className="insight-card-domain">
                         {insight.output_type_name}
                       </span>
                     )}
                   </div>
-                  <p style={{ margin: 0, color: 'var(--text-primary)' }}>{insight.description}</p>
+                  <p className="no-margin">{insight.description}</p>
                 </div>
               ))}
             </div>
