@@ -8,6 +8,10 @@ services:
     image: postgres:16-alpine
     container_name: ams-postgres
     restart: unless-stopped
+    mem_limit: 512m
+    cpus: 1.0
+    security_opt:
+      - no-new-privileges:true
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
@@ -32,6 +36,13 @@ services:
       dockerfile: Dockerfile
     container_name: ams-backend
     restart: unless-stopped
+    mem_limit: 512m
+    cpus: 1.0
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
     environment:
       DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-ai_manager_skills}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
@@ -55,6 +66,15 @@ services:
         VITE_API_URL: ${VITE_API_URL:-}
     container_name: ams-frontend
     restart: unless-stopped
+    mem_limit: 128m
+    cpus: 0.5
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
+      - /var/cache/nginx
+      - /var/run
     ports:
       - "3000:80"
     depends_on:
@@ -72,6 +92,15 @@ services:
     image: nginx:alpine
     container_name: ams-nginx
     restart: unless-stopped
+    mem_limit: 128m
+    cpus: 0.5
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
+      - /var/cache/nginx
+      - /var/run
     ports:
       - "80:80"
       - "443:443"
@@ -96,6 +125,13 @@ services:
       dockerfile: Dockerfile
     container_name: ams-admin-api
     restart: unless-stopped
+    mem_limit: 512m
+    cpus: 1.0
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
     environment:
       DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-ai_manager_skills}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
@@ -122,6 +158,15 @@ services:
         VITE_ADMIN_API_URL: ${VITE_ADMIN_API_URL:-http://localhost:8001}
     container_name: ams-admin-frontend
     restart: unless-stopped
+    mem_limit: 128m
+    cpus: 0.5
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
+      - /var/cache/nginx
+      - /var/run
     ports:
       - "3001:80"
     depends_on:
