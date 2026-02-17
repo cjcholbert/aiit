@@ -19,8 +19,14 @@ DATABASE_URL = os.getenv(
     "sqlite+aiosqlite:///./ai_manager_skills.db"
 )
 
+# Railway provides DATABASE_URL as postgres:// but SQLAlchemy 2.0 requires postgresql+asyncpg://
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+asyncpg://", 1)
+elif DATABASE_URL.startswith("postgresql://") and "+asyncpg" not in DATABASE_URL:
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://", 1)
+
 # For sync operations (like Alembic migrations)
-SYNC_DATABASE_URL = DATABASE_URL.replace("+asyncpg", "")
+SYNC_DATABASE_URL = DATABASE_URL.replace("+asyncpg", "").replace("+aiosqlite", "")
 
 # Async engine for FastAPI
 engine = create_async_engine(DATABASE_URL, echo=False)

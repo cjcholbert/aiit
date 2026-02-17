@@ -52,10 +52,6 @@ async def analyze_conversation(
     Analyze a raw transcript and return the analysis.
     Saves the conversation to the user's history.
     """
-    connected, message, _ = await check_api_connection()
-    if not connected:
-        raise HTTPException(status_code=503, detail=message)
-
     parsed = parse_transcript(body.raw_transcript)
     is_valid, error_msg = validate_transcript(parsed)
 
@@ -115,10 +111,6 @@ async def upload_conversation(
     # Validate file extension
     if not any(file.filename.lower().endswith(ext) for ext in ALLOWED_EXTENSIONS):
         raise HTTPException(status_code=400, detail="Only .json and .txt files allowed")
-
-    connected, message, _ = await check_api_connection()
-    if not connected:
-        raise HTTPException(status_code=503, detail=message)
 
     try:
         content = await file.read()

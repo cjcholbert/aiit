@@ -798,7 +798,7 @@ ${gapSections}
             className={`tab ${activeTab === 'test' ? 'active' : ''}`}
             onClick={() => setActiveTab('test')}
           >
-            Test Template
+            Copy Prompt
           </button>
         )}
         {editingTemplate && (
@@ -1575,7 +1575,7 @@ ${gapSections}
             onClick={handleRunTest}
             disabled={testLoading || !testPrompt}
           >
-            {testLoading ? 'Running Test...' : 'Run Test'}
+            {testLoading ? 'Rendering...' : 'Copy Prompt'}
           </button>
 
           {testResult && (

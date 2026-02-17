@@ -1,20 +1,13 @@
-"""Lesson 8: AI-powered delegation output analysis.
+"""Lesson 8: Rule-based delegation output analysis.
 
-Reuses Lesson 1 transcript normalization pattern to parse AI conversation output
-and evaluates it against user-defined success criteria.
+Parses AI conversation output using regex-based extraction and evaluates it
+against user-defined success criteria using keyword matching. No external AI
+service is required -- all logic is deterministic and runs locally.
 """
-import json
 import logging
 import re
 
-import anthropic
-
 from .schemas import CriterionResult, DelegationReview
-from backend.services.anthropic_client import (
-    async_call_anthropic,
-    ANTHROPIC_MODEL,
-    CircuitBreakerError,
-)
 
 logger = logging.getLogger(__name__)
 
@@ -24,90 +17,124 @@ class AnalyzerError(Exception):
     pass
 
 
-def _raise_for_circuit_breaker(exc):
-    """Convert CircuitBreakerError to AnalyzerError with user-friendly message."""
-    raise AnalyzerError("AI service temporarily unavailable — too many recent failures. Try again shortly.") from exc
+# =============================================================================
+# Conversation Marker Constants
+# =============================================================================
+
+# Markers that indicate a user/human turn
+_USER_MARKERS = {"user", "you", "human", "me"}
+
+# Markers that indicate an assistant/AI turn
+_ASSISTANT_MARKERS = {"assistant", "claude", "chatgpt", "ai", "bot"}
+
+# All recognised conversation role markers (union of both sets)
+_ALL_MARKERS = _USER_MARKERS | _ASSISTANT_MARKERS
+
+# Regex that splits on lines starting with a conversation marker followed by ':'
+_MARKER_PATTERN = re.compile(
+    r"^(" + "|".join(re.escape(m) for m in sorted(_ALL_MARKERS)) + r")\s*:",
+    re.IGNORECASE | re.MULTILINE,
+)
 
 
 # =============================================================================
-# Transcript Parsing (reuses Lesson 1 patterns)
+# Transcript Parsing
 # =============================================================================
-
-EXTRACT_OUTPUT_PROMPT = '''Extract the AI's final output/response from this text.
-
-This may be:
-- A conversation transcript (extract the AI's responses, especially the final one)
-- Raw AI output that was copied
-- A mix of user messages and AI responses
-
-Return ONLY the AI-generated content, cleaned of:
-- User messages/prompts
-- Timestamps, metadata, UI elements
-- Formatting artifacts
-
-If there are multiple AI responses, focus on the final/complete deliverable.
-If unclear what's the AI output, return the largest substantive text block.
-
-Return ONLY the extracted output, nothing else.
-
-TEXT TO EXTRACT FROM:
-'''
-
 
 async def parse_delegation_output(raw_text: str, model: str = None) -> str:
-    """
-    Parse and extract AI output from a pasted conversation or raw output.
+    """Parse and extract AI output from a pasted conversation or raw output.
 
-    Reuses Lesson 1's normalization pattern but focuses on extracting
-    the AI's deliverable rather than the full conversation structure.
+    Uses regex-based conversation marker detection:
+    1. If no conversation markers found and text is long enough, return as-is.
+    2. Otherwise split by markers, identify assistant turns, and return the
+       last/longest assistant response.
+
+    Args:
+        raw_text: The raw pasted text (conversation transcript or clean output).
+        model: Unused -- kept for API compatibility.
+
+    Returns:
+        The extracted AI output string.
     """
     if not raw_text or not raw_text.strip():
         return ""
 
-    # If the text is already clean (no obvious conversation markers), return as-is
-    conversation_markers = ['User:', 'Assistant:', 'Claude:', 'ChatGPT:', 'You:', 'Human:']
+    # Quick check: are there any conversation markers at all?
+    conversation_markers = ["User:", "Assistant:", "Claude:", "ChatGPT:", "You:", "Human:"]
     has_markers = any(marker.lower() in raw_text.lower() for marker in conversation_markers)
 
     if not has_markers and len(raw_text.strip()) > 50:
         # Likely already clean output
         return raw_text.strip()
 
-    model = model or ANTHROPIC_MODEL
+    # --- Rule-based extraction when markers are present ---
 
-    try:
-        message = await async_call_anthropic(
-            lambda client: client.messages.create(
-                model=model,
-                max_tokens=4096,
-                messages=[
-                    {"role": "user", "content": f"{EXTRACT_OUTPUT_PROMPT}\n{raw_text}"}
-                ]
-            )
-        )
+    # Split text into (marker, content) segments
+    segments = _split_by_markers(raw_text)
 
-        extracted = message.content[0].text.strip()
-        logger.info("Extracted AI output: %d -> %d chars", len(raw_text), len(extracted))
-        return extracted
+    if not segments:
+        # Could not parse any segments; return the whole text stripped
+        return raw_text.strip()
 
-    except CircuitBreakerError as exc:
-        _raise_for_circuit_breaker(exc)
-    except anthropic.AuthenticationError:
-        raise AnalyzerError("Invalid Anthropic API key")
-    except anthropic.RateLimitError:
-        raise AnalyzerError("Anthropic rate limit exceeded")
-    except AnalyzerError:
-        raise
-    except Exception as e:
-        raise AnalyzerError(f"Output extraction failed: {str(e)}")
+    # Collect assistant responses
+    assistant_segments: list[str] = []
+    for role, content in segments:
+        if role.lower() in _ASSISTANT_MARKERS:
+            cleaned = content.strip()
+            if cleaned:
+                assistant_segments.append(cleaned)
+
+    if not assistant_segments:
+        # No identifiable assistant segments; return full text
+        logger.info("No assistant segments found in transcript; returning full text")
+        return raw_text.strip()
+
+    # Prefer the last assistant response; fall back to the longest if the last
+    # one is very short (< 30 chars, likely just an acknowledgement)
+    last_response = assistant_segments[-1]
+    longest_response = max(assistant_segments, key=len)
+
+    if len(last_response) >= 30 or last_response == longest_response:
+        extracted = last_response
+    else:
+        extracted = longest_response
+
+    logger.info("Extracted AI output: %d -> %d chars", len(raw_text), len(extracted))
+    return extracted
+
+
+def _split_by_markers(text: str) -> list[tuple[str, str]]:
+    """Split a transcript into (role, content) pairs using conversation markers.
+
+    Returns:
+        List of (role_string, content_text) tuples. role_string is the
+        normalised marker label (e.g. "assistant", "user").
+    """
+    # Find all marker positions
+    matches = list(_MARKER_PATTERN.finditer(text))
+
+    if not matches:
+        return []
+
+    segments: list[tuple[str, str]] = []
+
+    for idx, match in enumerate(matches):
+        role = match.group(1).lower()
+        start = match.end()
+        # Content runs until the next marker or end of text
+        end = matches[idx + 1].start() if idx + 1 < len(matches) else len(text)
+        content = text[start:end]
+        segments.append((role, content))
+
+    return segments
 
 
 # =============================================================================
-# Success Criteria Extraction
+# Success Criteria Extraction (already rule-based -- kept unchanged)
 # =============================================================================
 
 def extract_success_criteria(template: str) -> list[str]:
-    """
-    Parse the "Success Criteria" section from a delegation template.
+    """Parse the "Success Criteria" section from a delegation template.
 
     Looks for markdown-style lists under a Success Criteria header.
     Returns a list of individual criterion strings.
@@ -143,10 +170,10 @@ def extract_success_criteria(template: str) -> list[str]:
     section_text = template[section_start:section_end]
 
     # Extract list items
-    # Match: - [ ] item, - item, * item, 1. item, • item
+    # Match: - [ ] item, - item, * item, 1. item, bullet item
     list_patterns = [
-        r'^\s*[-*•]\s*\[[ x]\]\s*(.+)$',  # - [ ] or - [x] checkbox
-        r'^\s*[-*•]\s+(.+)$',              # - item or * item
+        r'^\s*[-*\u2022]\s*\[[ x]\]\s*(.+)$',  # - [ ] or - [x] checkbox
+        r'^\s*[-*\u2022]\s+(.+)$',              # - item or * item
         r'^\s*\d+\.\s+(.+)$',              # 1. item
     ]
 
@@ -167,51 +194,42 @@ def extract_success_criteria(template: str) -> list[str]:
 
 
 # =============================================================================
-# AI Review Against Criteria
+# Keyword-Based Review Against Criteria
 # =============================================================================
 
-REVIEW_PROMPT_TEMPLATE = '''You are evaluating an AI's output against specific success criteria.
+def _extract_key_terms(text: str) -> list[str]:
+    """Extract meaningful terms (length > 3) from a text string.
 
-TASK CONTEXT:
-Title: {task_title}
-Description: {task_description}
+    Strips common stop words and returns lowercased terms.
+    """
+    stop_words = {
+        "the", "and", "for", "are", "but", "not", "you", "all", "can",
+        "had", "her", "was", "one", "our", "out", "has", "have", "been",
+        "from", "this", "that", "with", "they", "will", "each", "make",
+        "like", "just", "over", "such", "than", "them", "very", "when",
+        "what", "your", "into", "also", "more", "some", "then", "does",
+        "should", "would", "could", "about", "which", "their", "there",
+        "these", "those", "being", "other", "where", "after", "before",
+    }
+    # Tokenise: split on non-alphanumeric chars, keep words > 3 chars
+    words = re.findall(r"[a-zA-Z]{4,}", text.lower())
+    return [w for w in words if w not in stop_words]
 
-EXPECTED OUTPUT:
-{expected_output}
 
-SUCCESS CRITERIA TO EVALUATE:
-{criteria_list}
+def _compute_keyword_overlap(criterion_terms: list[str], output_lower: str) -> float:
+    """Return the fraction of criterion terms found in the output text.
 
-ACTUAL OUTPUT RECEIVED:
-{output}
+    Args:
+        criterion_terms: Key terms extracted from a criterion.
+        output_lower: The lowercased output text to search in.
 
----
-
-Evaluate each success criterion listed above. For each:
-1. Determine if the output meets the criterion (pass/fail)
-2. Provide brief reasoning (1-2 sentences)
-3. Rate your confidence (0.0 to 1.0)
-
-Return ONLY valid JSON in this exact format:
-{{
-  "overall_pass": true or false,
-  "criteria_results": [
-    {{
-      "criterion": "the exact criterion text",
-      "passed": true or false,
-      "reasoning": "Brief explanation of why it passed or failed",
-      "confidence": 0.85
-    }}
-  ],
-  "summary": "1-2 sentence overall assessment",
-  "suggestions": ["Specific improvement if not passing", "Another suggestion if needed"]
-}}
-
-Rules:
-- overall_pass is true only if ALL criteria pass
-- Be specific in reasoning - reference actual content from the output
-- suggestions should be empty array [] if all criteria pass
-- If criteria list is empty, evaluate based on expected_output match instead'''
+    Returns:
+        Float between 0.0 and 1.0 representing the overlap ratio.
+    """
+    if not criterion_terms:
+        return 0.0
+    found = sum(1 for term in criterion_terms if term in output_lower)
+    return found / len(criterion_terms)
 
 
 async def review_against_criteria(
@@ -220,104 +238,122 @@ async def review_against_criteria(
     success_criteria: list[str],
     task_title: str = "",
     task_description: str = "",
-    model: str = None
+    model: str = None,
 ) -> DelegationReview:
-    """
-    Use AI to evaluate output against success criteria.
+    """Evaluate output against success criteria using keyword matching.
 
-    Returns a structured DelegationReview with per-criterion results.
-    """
-    model = model or ANTHROPIC_MODEL
+    For each criterion:
+        - Extract key terms from the criterion text.
+        - Check what percentage of those terms appear in the output.
+        - >= 40% overlap -> passed, confidence proportional to overlap.
 
-    # Format criteria list for the prompt
-    if success_criteria:
-        criteria_list = "\n".join(f"{i+1}. {c}" for i, c in enumerate(success_criteria))
+    Args:
+        output: The extracted AI output to evaluate.
+        expected_output: Description of expected output (used as fallback criterion).
+        success_criteria: List of criterion strings.
+        task_title: Title of the task (informational).
+        task_description: Description of the task (informational).
+        model: Unused -- kept for API compatibility.
+
+    Returns:
+        DelegationReview with per-criterion results.
+    """
+    output_lower = output.lower()
+    criteria_results: list[CriterionResult] = []
+
+    # If no explicit criteria, synthesise one from expected_output
+    effective_criteria = list(success_criteria) if success_criteria else []
+    if not effective_criteria and expected_output:
+        effective_criteria = [f"Output matches expected: {expected_output}"]
+
+    if not effective_criteria:
+        # Nothing to evaluate against -- pass with a note
+        return DelegationReview(
+            overall_pass=True,
+            criteria_results=[],
+            summary="No success criteria provided. Output accepted as-is.",
+            suggestions=["Define explicit success criteria for more rigorous evaluation."],
+            ai_extracted_output=output,
+        )
+
+    pass_threshold = 0.40
+
+    for criterion_text in effective_criteria:
+        terms = _extract_key_terms(criterion_text)
+
+        if not terms:
+            # If no meaningful terms could be extracted, do a simple substring check
+            criterion_words = criterion_text.lower().split()
+            short_terms = [w for w in criterion_words if len(w) > 2]
+            if short_terms:
+                overlap = sum(1 for t in short_terms if t in output_lower) / len(short_terms)
+            else:
+                overlap = 0.0
+            terms_for_reporting = short_terms
+        else:
+            overlap = _compute_keyword_overlap(terms, output_lower)
+            terms_for_reporting = terms
+
+        passed = overlap >= pass_threshold
+        # Confidence scales linearly with overlap, capped at 0.95
+        confidence = round(min(overlap, 0.95), 2)
+
+        if passed:
+            found_count = sum(1 for t in terms_for_reporting if t in output_lower)
+            reasoning = (
+                f"Found {found_count} of {len(terms_for_reporting)} key terms "
+                f"from criterion in output ({overlap:.0%} match)."
+            )
+        else:
+            missing = [t for t in terms_for_reporting if t not in output_lower]
+            # Show at most 5 missing terms to keep the message readable
+            displayed_missing = missing[:5]
+            extra = f" (and {len(missing) - 5} more)" if len(missing) > 5 else ""
+            reasoning = (
+                f"Missing key terms: {', '.join(displayed_missing)}{extra}. "
+                f"Only {overlap:.0%} keyword overlap (threshold: {pass_threshold:.0%})."
+            )
+
+        criteria_results.append(CriterionResult(
+            criterion=criterion_text,
+            passed=passed,
+            reasoning=reasoning,
+            confidence=confidence,
+        ))
+
+    # Aggregate results
+    passed_count = sum(1 for cr in criteria_results if cr.passed)
+    total_count = len(criteria_results)
+    overall_pass = passed_count == total_count
+
+    if overall_pass:
+        summary = f"All {total_count} criteria met."
     else:
-        criteria_list = "(No explicit criteria provided - evaluate against expected output)"
+        failed_count = total_count - passed_count
+        summary = (
+            f"{passed_count} of {total_count} criteria met. "
+            f"{failed_count} criterion{'s' if failed_count != 1 else ''} "
+            f"not satisfied."
+        )
 
-    prompt = REVIEW_PROMPT_TEMPLATE.format(
-        task_title=task_title or "Untitled task",
-        task_description=task_description or "No description provided",
-        expected_output=expected_output or "No expected output specified",
-        criteria_list=criteria_list,
-        output=output
+    # Build suggestions from failed criteria
+    suggestions: list[str] = []
+    for cr in criteria_results:
+        if not cr.passed:
+            suggestions.append(f"Ensure the output addresses: {cr.criterion}")
+
+    return DelegationReview(
+        overall_pass=overall_pass,
+        criteria_results=criteria_results,
+        summary=summary,
+        suggestions=suggestions,
+        ai_extracted_output=output,
     )
 
-    try:
-        message = await async_call_anthropic(
-            lambda client: client.messages.create(
-                model=model,
-                max_tokens=2048,
-                system="You are a task review assistant. Evaluate outputs against criteria and return ONLY valid JSON. Be objective and specific.",
-                messages=[
-                    {"role": "user", "content": prompt}
-                ]
-            )
-        )
 
-        content = message.content[0].text.strip()
-        logger.info("Review response (first 300 chars): %s", content[:300])
-
-    except CircuitBreakerError as exc:
-        _raise_for_circuit_breaker(exc)
-    except anthropic.AuthenticationError:
-        raise AnalyzerError("Invalid Anthropic API key")
-    except anthropic.RateLimitError:
-        raise AnalyzerError("Anthropic rate limit exceeded")
-    except AnalyzerError:
-        raise
-    except Exception as e:
-        raise AnalyzerError(f"Review failed: {str(e)}")
-
-    # Parse JSON response
-    try:
-        # Clean markdown code blocks if present
-        if content.startswith("```"):
-            lines = content.split("\n")
-            if lines[0].startswith("```"):
-                lines = lines[1:]
-            if lines[-1].strip() == "```":
-                lines = lines[:-1]
-            content = "\n".join(lines)
-
-        # Find JSON object
-        if not content.startswith("{"):
-            start = content.find("{")
-            end = content.rfind("}") + 1
-            if start != -1 and end > start:
-                content = content[start:end]
-
-        review_data = json.loads(content)
-
-    except json.JSONDecodeError as e:
-        logger.error("Failed to parse review JSON: %s", content[:500])
-        raise AnalyzerError(f"Failed to parse review response: {str(e)}")
-
-    # Build DelegationReview object
-    try:
-        criteria_results = []
-        for result in review_data.get("criteria_results", []):
-            criteria_results.append(CriterionResult(
-                criterion=result.get("criterion", ""),
-                passed=result.get("passed", False),
-                reasoning=result.get("reasoning", ""),
-                confidence=float(result.get("confidence", 0.5))
-            ))
-
-        review = DelegationReview(
-            overall_pass=review_data.get("overall_pass", False),
-            criteria_results=criteria_results,
-            summary=review_data.get("summary", ""),
-            suggestions=review_data.get("suggestions", []),
-            ai_extracted_output=output
-        )
-
-        return review
-
-    except Exception as e:
-        logger.error("Failed to create DelegationReview: %s", e)
-        raise AnalyzerError(f"Review response missing required fields: {str(e)}")
-
+# =============================================================================
+# Full Analysis Pipeline
+# =============================================================================
 
 async def analyze_delegation_output(
     raw_output: str,
@@ -326,25 +362,24 @@ async def analyze_delegation_output(
     task_title: str = "",
     task_description: str = "",
     task_success_criteria: list[str] = None,
-    model: str = None
+    model: str = None,
 ) -> DelegationReview:
-    """
-    Full analysis pipeline:
+    """Full analysis pipeline:
     1. Parse/extract AI output from raw text
     2. Extract success criteria from template (or use task-level overrides)
     3. Review output against criteria
 
     Args:
-        raw_output: Pasted conversation or AI output
-        template: Delegation template text (for extracting criteria)
-        expected_output: What the task expected to receive
-        task_title: Title of the task being reviewed
-        task_description: Description of the task
-        task_success_criteria: Optional task-level criteria override
-        model: Anthropic model to use
+        raw_output: Pasted conversation or AI output.
+        template: Delegation template text (for extracting criteria).
+        expected_output: What the task expected to receive.
+        task_title: Title of the task being reviewed.
+        task_description: Description of the task.
+        task_success_criteria: Optional task-level criteria override.
+        model: Unused -- kept for API compatibility.
 
     Returns:
-        DelegationReview with structured assessment
+        DelegationReview with structured assessment.
     """
     # Step 1: Parse/extract the AI output
     extracted_output = await parse_delegation_output(raw_output, model)
@@ -365,7 +400,7 @@ async def analyze_delegation_output(
         success_criteria=criteria,
         task_title=task_title,
         task_description=task_description,
-        model=model
+        model=model,
     )
 
     return review

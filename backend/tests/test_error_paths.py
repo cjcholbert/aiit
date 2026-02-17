@@ -305,33 +305,17 @@ class TestAuthEdgeCases:
 class TestAPIFailures:
     """Mocked Anthropic API failures should return appropriate errors."""
 
-    async def test_lesson1_api_disconnected(self, client, test_user, monkeypatch):
+    async def test_lesson1_rule_based_analysis(self, client, test_user, monkeypatch):
+        """Analysis is now rule-based — no API dependency, always succeeds."""
         _, token = test_user
-
-        async def mock_check():
-            return False, "API key not set", []
-
-        def mock_parse(text):
-            from backend.modules.lesson01_context.schemas import ParsedTranscript, Turn
-            return ParsedTranscript(turns=[
-                Turn(role="user", content="Hi"),
-                Turn(role="assistant", content="Hello"),
-            ])
-
-        def mock_validate(parsed):
-            return True, None
-
-        monkeypatch.setattr("backend.modules.lesson01_context.routes.check_api_connection", mock_check)
-        monkeypatch.setattr("backend.modules.lesson01_context.routes.parse_transcript", mock_parse)
-        monkeypatch.setattr("backend.modules.lesson01_context.routes.validate_transcript", mock_validate)
 
         resp = await client.post(
             "/lesson1/analyze",
             json={"raw_transcript": "User: Hi\nAssistant: Hello"},
             headers=auth_headers(token),
         )
-        # Should fail with 503 (service unavailable) or similar error
-        assert resp.status_code in (500, 503)
+        # Rule-based analysis should succeed without any API
+        assert resp.status_code == 200
 
     async def test_lesson1_analyzer_error(self, client, test_user, monkeypatch):
         _, token = test_user

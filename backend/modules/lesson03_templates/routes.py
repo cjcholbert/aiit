@@ -215,11 +215,8 @@ async def test_template(
             detail=f"Missing required variables: {', '.join(missing)}"
         )
 
-    # Send to Claude
-    try:
-        ai_response = await test_template_with_ai(rendered)
-    except (ValueError, ConnectionError) as e:
-        raise HTTPException(status_code=503, detail=f"AI test failed: {str(e)}")
+    # Return rendered prompt with copy instruction (no AI call)
+    ai_response = await test_template_with_ai(rendered)
 
     # Save the test result
     db_test = TemplateTest(

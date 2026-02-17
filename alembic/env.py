@@ -20,6 +20,9 @@ database_url = os.environ.get(
     "DATABASE_URL",
     "postgresql://postgres:postgres@localhost:5432/ai_manager_skills",
 )
+# Railway provides DATABASE_URL as postgres:// — normalize to postgresql://
+if database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
 # Alembic needs sync driver — strip async prefixes
 database_url = database_url.replace("+asyncpg", "").replace("+aiosqlite", "")
 config.set_main_option("sqlalchemy.url", database_url)

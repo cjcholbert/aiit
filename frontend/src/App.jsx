@@ -27,6 +27,7 @@ import Lesson12 from './pages/Lesson12';
 import CoreConcepts from './pages/CoreConcepts';
 import Curriculum from './pages/Curriculum';
 import Admin from './pages/Admin';
+import Landing from './pages/Landing';
 
 function ProtectedRoute({ children }) {
     const { isAuthenticated, loading } = useAuth();
@@ -64,10 +65,35 @@ function AuthRoute({ children }) {
     }
 
     if (isAuthenticated) {
-        return <Navigate to="/" replace />;
+        return <Navigate to="/dashboard" replace />;
     }
 
     return children;
+}
+
+function PublicOrDashboard() {
+    const { isAuthenticated, loading } = useAuth();
+
+    if (loading) {
+        return (
+            <div className="auth-container">
+                <div className="loading">
+                    <div className="spinner"></div>
+                    Loading...
+                </div>
+            </div>
+        );
+    }
+
+    if (isAuthenticated) {
+        return (
+            <AppLayout>
+                <Dashboard />
+            </AppLayout>
+        );
+    }
+
+    return <Landing />;
 }
 
 function AppLayout({ children }) {
@@ -147,8 +173,11 @@ export default function App() {
                 </AuthRoute>
             } />
 
-            {/* Protected routes */}
-            <Route path="/" element={
+            {/* Public landing / authenticated dashboard */}
+            <Route path="/" element={<PublicOrDashboard />} />
+
+            {/* Explicit dashboard route for authenticated users */}
+            <Route path="/dashboard" element={
                 <ProtectedRoute>
                     <AppLayout>
                         <Dashboard />
