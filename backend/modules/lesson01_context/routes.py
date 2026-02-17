@@ -5,7 +5,7 @@ from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, Request, UploadFile, File
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, func
 import json
 
 from backend.database import get_db
@@ -20,6 +20,7 @@ from .schemas import (
 from backend.rate_limit import limiter
 from .parser import parse_transcript, validate_transcript
 from .analyzer import analyze_transcript, normalize_transcript, check_api_connection, AnalyzerError
+from .examples import EXAMPLE_CONVERSATIONS, EXAMPLE_CATEGORIES
 
 logger = logging.getLogger(__name__)
 
@@ -460,3 +461,63 @@ async def get_insights(
         context_strengths=top_strengths,
         audit_summary=audit_entries[:10]
     )
+
+
+@router.get("/examples")
+async def get_examples():
+    """Get example conversations organized by category."""
+    by_category = {}
+    for ex in EXAMPLE_CONVERSATIONS:
+        cat = ex["category"]
+        if cat not in by_category:
+            by_category[cat] = []
+        by_category[cat].append({
+            "title": ex["title"],
+            "description": ex["description"],
+            "raw_transcript": ex["raw_transcript"]
+        })
+    return {"categories": EXAMPLE_CATEGORIES, "examples": by_category}
+
+
+@router.post("/conversations/seed-examples")
+async def seed_example_conversations(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Create example conversations to learn from."""
+    from .analyzer import analyze_transcript
+    from .parser import parse_transcript, validate_transcript
+
+    result = await db.execute(
+        select(func.count(Conversation.id)).where(Conversation.user_id == current_user.id)
+    )
+    existing_count = result.scalar()
+
+    if existing_count > 0:
+        raise HTTPException(
+            status_code=400,
+            detail=f"You already have {existing_count} conversations. Delete them first to seed examples."
+        )
+
+    created = []
+    for example in EXAMPLE_CONVERSATIONS[:6]:  # One per category
+        parsed = parse_transcript(example["raw_transcript"])
+        is_valid, _ = validate_transcript(parsed)
+        if not is_valid:
+            continue
+
+        try:
+            analysis = await analyze_transcript(parsed)
+            conversation = Conversation(
+                user_id=current_user.id,
+                raw_transcript=example["raw_transcript"],
+                analysis=analysis.model_dump()
+            )
+            db.add(conversation)
+            created.append(example["title"])
+        except Exception:
+            continue
+
+    await db.commit()
+    logger.info("Seeded %s example conversations for user %s", len(created), current_user.email)
+    return {"created": len(created), "conversations": created}

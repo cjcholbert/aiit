@@ -485,6 +485,67 @@ async def get_template_stats(
 
 
 # =============================================================================
+# Example Templates
+# =============================================================================
+
+@router.get("/examples")
+async def get_examples():
+    """Get example templates organized by category."""
+    from .examples import EXAMPLE_TEMPLATES, EXAMPLE_CATEGORIES
+    by_category = {}
+    for ex in EXAMPLE_TEMPLATES:
+        cat = ex["category"]
+        if cat not in by_category:
+            by_category[cat] = []
+        by_category[cat].append({
+            "name": ex["name"],
+            "description": ex["description"],
+            "content": ex["content"],
+            "variables": ex["variables"],
+            "tags": ex["tags"],
+        })
+    return {"categories": EXAMPLE_CATEGORIES, "examples": by_category}
+
+
+@router.post("/templates/seed-examples")
+async def seed_example_templates(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Create example templates for the current user to learn from."""
+    from .examples import EXAMPLE_TEMPLATES
+
+    result = await db.execute(
+        select(func.count(Template.id)).where(Template.user_id == current_user.id)
+    )
+    existing_count = result.scalar()
+
+    if existing_count > 0:
+        raise HTTPException(
+            status_code=400,
+            detail=f"You already have {existing_count} templates. Delete them first to seed examples.",
+        )
+
+    created = []
+    for example in EXAMPLE_TEMPLATES:
+        db_template = Template(
+            user_id=current_user.id,
+            name=example["name"],
+            category=example["category"],
+            description=example["description"],
+            content=example["content"],
+            variables=example["variables"],
+            tags=example["tags"],
+        )
+        db.add(db_template)
+        created.append(example["name"])
+
+    await db.commit()
+    logger.info("Seeded %s example templates for user %s", len(created), current_user.email)
+    return {"created": len(created), "templates": created}
+
+
+# =============================================================================
 # Helpers
 # =============================================================================
 

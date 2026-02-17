@@ -149,23 +149,9 @@ class IterationStats(BaseModel):
 
 
 # =============================================================================
-# Example Tasks
+# Example Tasks (imported from examples.py)
 # =============================================================================
 
-EXAMPLE_TASKS = [
-    {
-        "task_name": "API Error Handler Refactoring",
-        "target_outcome": "Consolidated error handling with consistent response format across all endpoints",
-        "notes": "Example task demonstrating the 70-85-95 progression for code refactoring"
-    },
-    {
-        "task_name": "User Documentation for Settings Page",
-        "target_outcome": "Clear, scannable documentation that helps users configure all settings independently",
-        "notes": "Example task for documentation iteration"
-    },
-    {
-        "task_name": "Database Query Optimization",
-        "target_outcome": "Queries execute in under 100ms for typical data volumes with proper indexing",
-        "notes": "Example task for performance-focused iteration"
-    }
-]
+from .examples import EXAMPLE_TASKS, EXAMPLE_CATEGORIES  # noqa: E402
+
+__all_exports__ = ["EXAMPLE_TASKS", "EXAMPLE_CATEGORIES"]
