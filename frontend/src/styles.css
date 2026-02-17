@@ -6114,6 +6114,164 @@ tr:hover td {
   color: var(--text-secondary);
 }
 
+/* =============================================================================
+   Dashboard Module Sections
+   ============================================================================= */
+
+.module-section {
+  margin-bottom: var(--space-xl);
+}
+
+.module-section-header {
+  background-color: var(--module-bg);
+  border-left: 4px solid var(--module-border);
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-md);
+}
+
+.module-section-title {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--module-text);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.module-card--coming {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.concept-tag {
+  margin-top: 12px;
+  padding: 4px 8px;
+  background: var(--concept-color-bg);
+  border-left: 3px solid var(--concept-color);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.7rem;
+  color: var(--concept-color);
+  font-weight: 500;
+}
+
+/* =============================================================================
+   Analytics Page Styles
+   ============================================================================= */
+
+.analytics-time-range {
+  margin-bottom: 1.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.analytics-recommended {
+  margin-bottom: 1.5rem;
+}
+
+.analytics-section-title {
+  margin-bottom: 1rem;
+}
+
+.analytics-activity-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.analytics-most-active-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.analytics-most-active-item:last-child {
+  border-bottom: none;
+}
+
+.analytics-streak-container {
+  text-align: center;
+  padding: 1rem;
+}
+
+.analytics-streak-value {
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--accent-purple);
+}
+
+.analytics-streak-label {
+  color: var(--text-secondary);
+}
+
+.analytics-streak-detail {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.analytics-lesson-title-col {
+  color: var(--text-secondary);
+}
+
+.analytics-feedback-comment {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.analytics-weekly-card {
+  margin-top: 1.5rem;
+}
+
+.analytics-weekly-chart {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+
+.analytics-weekly-bar-wrapper {
+  flex: 1;
+  text-align: center;
+}
+
+.analytics-weekly-bar-container {
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.analytics-weekly-bar {
+  width: 100%;
+  background: linear-gradient(180deg, var(--accent-blue), var(--accent-purple));
+  border-radius: var(--radius-sm);
+}
+
+.analytics-weekly-day {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.analytics-weekly-count {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.analytics-per-lesson-card {
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .analytics-activity-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ---- Responsive overrides for L5/L6 ---- */
 
 @media (max-width: 768px) {

@@ -75,7 +75,7 @@ export default function Analytics() {
             {error && <div className="error-message">{error}</div>}
 
             {/* Time Range Selector */}
-            <div style={{ marginBottom: '1.5rem', display: 'flex', gap: '0.5rem' }}>
+            <div className="analytics-time-range">
                 {['day', 'week', 'month', 'all'].map(range => (
                     <button
                         key={range}
@@ -110,7 +110,7 @@ export default function Analytics() {
             )}
 
             {recommendedLesson && (
-                <div className="recommended-banner" style={{ marginBottom: '1.5rem' }}>
+                <div className="recommended-banner analytics-recommended">
                     <span className="recommended-banner-label">Next Recommended Lesson</span>
                     <Link to={`/lesson/${recommendedLesson}`} className="recommended-banner-link">
                         Lesson {recommendedLesson}
@@ -120,7 +120,7 @@ export default function Analytics() {
 
             {/* Lesson Usage Chart */}
             <div className="chart-container">
-                <h2 style={{ marginBottom: '1rem' }}>Lesson Engagement</h2>
+                <h2 className="analytics-section-title">Lesson Engagement</h2>
                 <div className="bar-chart">
                     {lessonStats.map(lesson => (
                         <div className="bar-row" key={lesson.lesson}>
@@ -144,13 +144,13 @@ export default function Analytics() {
 
             {/* Per-Lesson Detail */}
             {lessonStats.length > 0 && (
-                <div className="card" style={{ marginBottom: '1.5rem' }}>
-                    <h2 style={{ marginBottom: '1rem' }}>Per-Lesson Detail</h2>
+                <div className="card analytics-per-lesson-card">
+                    <h2 className="analytics-section-title">Per-Lesson Detail</h2>
                     <div className="analytics-lesson-detail">
                         {lessonStats.map(lesson => (
                             <div key={lesson.lesson} className="analytics-lesson-row">
                                 <span>Lesson {lesson.lesson}</span>
-                                <span style={{ color: 'var(--text-secondary)' }}>{lesson.title}</span>
+                                <span className="analytics-lesson-title-col">{lesson.title}</span>
                                 <div className="analytics-lesson-stat">
                                     <strong>{lesson.items_created}</strong>
                                     items
@@ -171,19 +171,14 @@ export default function Analytics() {
 
             {/* Activity Summary */}
             {stats && (
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                <div className="analytics-activity-grid">
                     <div className="card">
-                        <h3 style={{ marginBottom: '1rem' }}>Most Active Lessons</h3>
+                        <h3 className="analytics-section-title">Most Active Lessons</h3>
                         {lessonStats
                             .sort((a, b) => b.views - a.views)
                             .slice(0, 5)
-                            .map((lesson, idx) => (
-                                <div key={lesson.lesson} style={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    padding: '0.5rem 0',
-                                    borderBottom: idx < 4 ? '1px solid var(--border-color)' : 'none'
-                                }}>
+                            .map((lesson) => (
+                                <div key={lesson.lesson} className="analytics-most-active-item">
                                     <span>Lesson {lesson.lesson}: {lesson.title}</span>
                                     <span className="badge badge-blue">{lesson.views} views</span>
                                 </div>
@@ -191,13 +186,13 @@ export default function Analytics() {
                     </div>
 
                     <div className="card">
-                        <h3 style={{ marginBottom: '1rem' }}>Learning Streak</h3>
-                        <div style={{ textAlign: 'center', padding: '1rem' }}>
-                            <div style={{ fontSize: '3rem', fontWeight: 'bold', color: 'var(--accent-purple)' }}>
+                        <h3 className="analytics-section-title">Learning Streak</h3>
+                        <div className="analytics-streak-container">
+                            <div className="analytics-streak-value">
                                 {stats.current_streak || 0}
                             </div>
-                            <div style={{ color: 'var(--text-secondary)' }}>Days in a row</div>
-                            <div style={{ marginTop: '1rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+                            <div className="analytics-streak-label">Days in a row</div>
+                            <div className="analytics-streak-detail">
                                 Longest streak: {stats.longest_streak || 0} days
                             </div>
                         </div>
@@ -208,7 +203,7 @@ export default function Analytics() {
             {/* Recent Feedback */}
             {user?.is_admin && recentFeedback.length > 0 && (
                 <div className="card">
-                    <h3 style={{ marginBottom: '1rem' }}>Recent Feedback (Admin Only)</h3>
+                    <h3 className="analytics-section-title">Recent Feedback (Admin Only)</h3>
                     <table>
                         <thead>
                             <tr>
@@ -227,7 +222,7 @@ export default function Analytics() {
                                             {fb.rating}/5
                                         </span>
                                     </td>
-                                    <td style={{ maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                    <td className="analytics-feedback-comment">
                                         {fb.comment || '-'}
                                     </td>
                                     <td>{new Date(fb.created_at).toLocaleDateString()}</td>
@@ -240,34 +235,25 @@ export default function Analytics() {
 
             {/* Progress Over Time */}
             {stats?.weekly_activity && (
-                <div className="card" style={{ marginTop: '1.5rem' }}>
-                    <h3 style={{ marginBottom: '1rem' }}>Weekly Activity</h3>
-                    <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between' }}>
+                <div className="card analytics-weekly-card">
+                    <h3 className="analytics-section-title">Weekly Activity</h3>
+                    <div className="analytics-weekly-chart">
                         {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, idx) => {
                             const activity = stats.weekly_activity[idx] || 0;
                             const maxActivity = Math.max(...(stats.weekly_activity || [1]));
                             const height = maxActivity > 0 ? (activity / maxActivity) * 80 : 0;
                             return (
-                                <div key={day} style={{ flex: 1, textAlign: 'center' }}>
-                                    <div style={{
-                                        height: '100px',
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        justifyContent: 'flex-end',
-                                        alignItems: 'center'
-                                    }}>
-                                        <div style={{
-                                            width: '100%',
-                                            height: `${height}px`,
-                                            background: 'linear-gradient(180deg, var(--accent-blue), var(--accent-purple))',
-                                            borderRadius: 'var(--radius-sm)',
-                                            minHeight: activity > 0 ? '4px' : '0'
-                                        }} />
+                                <div key={day} className="analytics-weekly-bar-wrapper">
+                                    <div className="analytics-weekly-bar-container">
+                                        <div
+                                            className="analytics-weekly-bar"
+                                            style={{ height: `${height}px`, minHeight: activity > 0 ? '4px' : '0' }}
+                                        />
                                     </div>
-                                    <div style={{ marginTop: '0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                                    <div className="analytics-weekly-day">
                                         {day}
                                     </div>
-                                    <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                                    <div className="analytics-weekly-count">
                                         {activity}
                                     </div>
                                 </div>
