@@ -256,19 +256,23 @@ export default function Lesson12() {
 
     return (
         <div>
-            <div className="page-header">
-                <h1 className="page-title">Reference Card</h1>
-                <ConnectionCallout lessonNumber={1} lessonTitle="Context Tracker" message="Pull together everything you've learned across all six skill areas into one personal reference." />
-            </div>
-
-            <div className="lesson-progress-row">
-                <SelfAssessmentChecklist lessonNumber={12} criteria={LESSON_CRITERIA[12]} />
-                <StatsPanel stats={stats ? [
-                    { label: 'Complete', value: `${stats.completion_percentage}%`, color: 'var(--accent-purple)' },
-                    { label: 'Active Lessons', value: `${stats.weeks_with_data}/12`, color: 'var(--accent-green)' },
-                    { label: 'Items Created', value: stats.total_items_created, color: 'var(--accent-yellow)' },
-                    { label: 'Most Active', value: stats.most_active_week || 'N/A', color: 'var(--accent-purple)' },
-                ] : []} />
+            <div className="lesson-header">
+                <div className="lesson-header-left">
+                    <h1>Reference Card</h1>
+                    <ConnectionCallout lessonNumber={1} lessonTitle="Context Tracker" message="Pull together everything you've learned across all six skill areas into one personal reference." />
+                    <div className="lesson-header-problem-skill">
+                        <p>Generate your personal AI collaboration quick reference card from your learnings across all lessons.</p>
+                    </div>
+                </div>
+                <div className="lesson-header-right">
+                    <StatsPanel stats={stats ? [
+                        { label: 'Complete', value: `${stats.completion_percentage}%`, color: 'var(--accent-purple)' },
+                        { label: 'Active Lessons', value: `${stats.weeks_with_data}/12`, color: 'var(--accent-green)' },
+                        { label: 'Items Created', value: stats.total_items_created, color: 'var(--accent-yellow)' },
+                        { label: 'Most Active', value: stats.most_active_week || 'N/A', color: 'var(--accent-purple)' },
+                    ] : []} />
+                    <SelfAssessmentChecklist lessonNumber={12} criteria={LESSON_CRITERIA[12]} />
+                </div>
             </div>
 
             {error && <div className="error-message">{error}</div>}
@@ -281,11 +285,6 @@ export default function Lesson12() {
 
             {activeTab === 'learn' && (
                 <div className="learn-section">
-                    <div className="learn-problem-skill">
-                        <p>Generate your personal AI collaboration quick reference card from your learnings across all lessons.</p>
-                    </div>
-
-
                     <div className="learn-intro">
                         <h2>Why a Personal Reference Card Matters</h2>
                         <p>
@@ -310,13 +309,13 @@ export default function Lesson12() {
                     </div>
 
                     <h3>How This Lesson Works</h3>
-                    <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+                    <p className="learn-subtitle">
                         Two practice areas to consolidate your AI collaboration skills:
                     </p>
 
                     <div className="learn-patterns-grid">
                         <div className="learn-pattern-card">
-                            <h4 style={{ color: 'var(--accent-blue)' }}>My Card Tab — Build Your Quick Reference</h4>
+                            <h4 className="accent-blue">My Card Tab — Build Your Quick Reference</h4>
                             <p>Generate your reference card from the data you have created across all
                             lessons. It pulls in your top templates, trust zones, frontier map, feedback
                             principles, and workflow highlights. Then add your own personal rules and
@@ -324,7 +323,7 @@ export default function Lesson12() {
                             <button className="learn-tab-link" onClick={() => setActiveTab('card')}>Go to My Card →</button>
                         </div>
                         <div className="learn-pattern-card">
-                            <h4 style={{ color: 'var(--accent-green)' }}>Challenge Tab — Test All Six Skills at Once</h4>
+                            <h4 className="accent-green">Challenge Tab — Test All Six Skills at Once</h4>
                             <p>Pick a realistic workplace scenario and describe how you would apply each
                             of the six AI collaboration concepts. This is the integration test: can you
                             use context assembly, quality judgment, task decomposition, iterative
@@ -370,45 +369,45 @@ export default function Lesson12() {
                     </div>
 
                     <h3>What Your Reference Card Covers</h3>
-                    <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+                    <p className="learn-subtitle">
                         Your card draws from all six skill areas you have practiced throughout this course:
                     </p>
 
                     <div className="learn-patterns-grid">
                         <div className="learn-pattern-card">
-                            <h4 style={{ color: 'var(--accent-blue)' }}>Context Assembly (Lessons 1, 3, 4)</h4>
+                            <h4 className="accent-blue">Context Assembly (Lessons 1, 3, 4)</h4>
                             <p>Your best context patterns, top templates, and checklist of what to include
                             before sending any prompt. The habits that make your first attempt count.</p>
                         </div>
                         <div className="learn-pattern-card">
-                            <h4 style={{ color: 'var(--accent-purple)' }}>Quality Judgment (Lessons 5, 6)</h4>
+                            <h4 className="accent-purple">Quality Judgment (Lessons 5, 6)</h4>
                             <p>Your trust zones showing where AI is reliable versus risky for your work,
                             plus the verification steps you have found most useful.</p>
                         </div>
                         <div className="learn-pattern-card">
-                            <h4 style={{ color: 'var(--accent-green)' }}>Task Decomposition (Lessons 7, 8)</h4>
+                            <h4 className="accent-green">Task Decomposition (Lessons 7, 8)</h4>
                             <p>How you break complex work into AI-friendly chunks, and your delegation
                             patterns for deciding what goes to AI versus what stays with you.</p>
                         </div>
                         <div className="learn-pattern-card">
-                            <h4 style={{ color: 'var(--accent-yellow)' }}>Iterative Refinement (Lessons 2, 9)</h4>
+                            <h4 className="accent-yellow">Iterative Refinement (Lessons 2, 9)</h4>
                             <p>Your feedback principles for moving AI drafts from "rough" to "ready," and
                             how many passes different task types usually need.</p>
                         </div>
                         <div className="learn-pattern-card">
-                            <h4 style={{ color: 'var(--accent-blue)' }}>Workflow Integration (Lessons 10, 12)</h4>
+                            <h4 className="accent-blue">Workflow Integration (Lessons 10, 12)</h4>
                             <p>Your repeatable workflow templates, time-saving highlights, and the
                             quick prompts you reach for most often.</p>
                         </div>
                         <div className="learn-pattern-card">
-                            <h4 style={{ color: 'var(--accent-red)' }}>Frontier Recognition (Lesson 11)</h4>
+                            <h4 className="accent-red">Frontier Recognition (Lesson 11)</h4>
                             <p>Your personal map of where AI works well, where it needs heavy checking,
                             and where you have learned to skip it entirely.</p>
                         </div>
                     </div>
 
                     <h3>Common Mistakes</h3>
-                    <div className="learn-patterns-grid" style={{ marginBottom: '24px' }}>
+                    <div className="learn-patterns-grid mb-lg">
                         <div className="learn-pattern-card">
                             <div className="learn-pattern-label avoid">Mistake</div>
                             <p>Treating the reference card as a trophy instead of a tool. Generating it once,
@@ -459,11 +458,11 @@ export default function Lesson12() {
             )}
 
             {activeTab === 'card' && (
-                <div style={{ display: 'grid', gap: '1.5rem' }}>
+                <div className="grid-gap-lg">
                     <div className="card">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                            <h2 style={{ margin: 0 }}>{card?.name || 'My AI Reference Card'}</h2>
-                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        <div className="card-header">
+                            <h2 className="card-title">{card?.name || 'My AI Reference Card'}</h2>
+                            <div className="inline-add-row">
                                 <button className="btn btn-primary" onClick={generateCard} disabled={loading}>
                                     {loading ? 'Generating...' : 'Generate from My Data'}
                                 </button>
@@ -477,7 +476,7 @@ export default function Lesson12() {
                             </div>
                         </div>
                         {card?.last_generated && (
-                            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                            <p className="l12-card-meta">
                                 Last generated: {new Date(card.last_generated).toLocaleString()}
                             </p>
                         )}
@@ -487,14 +486,14 @@ export default function Lesson12() {
                     {card?.trust_zones?.length > 0 && (
                         <div className="card">
                             <h3>Trust Zones</h3>
-                            <div style={{ display: 'grid', gap: '0.5rem', marginTop: '1rem' }}>
+                            <div className="grid-gap-sm mt-md">
                                 {card.trust_zones.map((zone, i) => (
-                                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.5rem', background: 'var(--bg-tertiary)', borderRadius: '4px' }}>
-                                        <strong style={{ minWidth: '150px' }}>{zone.type}</strong>
+                                    <div key={i} className="l12-trust-zone-row">
+                                        <strong className="l12-trust-zone-type">{zone.type}</strong>
                                         <span className={`badge ${zone.level === 'high' ? 'badge-green' : zone.level === 'low' ? 'badge-red' : 'badge-yellow'}`}>
                                             {zone.level}
                                         </span>
-                                        <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{zone.verify}</span>
+                                        <span className="l12-trust-zone-verify">{zone.verify}</span>
                                     </div>
                                 ))}
                             </div>
@@ -505,14 +504,14 @@ export default function Lesson12() {
                     {card?.top_templates?.length > 0 && (
                         <div className="card">
                             <h3>Top Templates</h3>
-                            <div style={{ display: 'grid', gap: '1rem', marginTop: '1rem' }}>
+                            <div className="grid-gap-md mt-md">
                                 {card.top_templates.map((t, i) => (
-                                    <div key={i} style={{ padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <div key={i} className="l12-template-card">
+                                        <div className="l12-template-header">
                                             <strong>{t.name}</strong>
-                                            <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Used {t.usage_count}x</span>
+                                            <span className="l12-template-usage">Used {t.usage_count}x</span>
                                         </div>
-                                        <code style={{ display: 'block', marginTop: '0.5rem', padding: '0.5rem', background: 'var(--bg-tertiary)', borderRadius: '4px', fontSize: '0.85rem' }}>
+                                        <code className="l12-template-snippet">
                                             {t.snippet}
                                         </code>
                                     </div>
@@ -525,20 +524,16 @@ export default function Lesson12() {
                     {card?.frontier_map && Object.keys(card.frontier_map).length > 0 && (
                         <div className="card">
                             <h3>Frontier Map</h3>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginTop: '1rem' }}>
+                            <div className="l12-frontier-grid">
                                 {['reliable', 'mixed', 'unreliable'].map(level => (
-                                    <div key={level} style={{
-                                        padding: '1rem',
-                                        background: level === 'reliable' ? 'var(--success-bg)' : level === 'unreliable' ? 'var(--error-bg)' : 'var(--warning-bg)',
-                                        borderRadius: '8px'
-                                    }}>
-                                        <strong style={{ textTransform: 'capitalize' }}>{level}</strong>
-                                        <ul style={{ margin: '0.5rem 0 0 0', paddingLeft: '1.25rem' }}>
+                                    <div key={level} className={`l12-frontier-col ${level}`}>
+                                        <strong>{level}</strong>
+                                        <ul>
                                             {(card.frontier_map[level] || []).map((item, i) => (
-                                                <li key={i} style={{ fontSize: '0.9rem' }}>{item}</li>
+                                                <li key={i}>{item}</li>
                                             ))}
                                             {(!card.frontier_map[level] || card.frontier_map[level].length === 0) && (
-                                                <li style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>No items yet</li>
+                                                <li className="empty-item">No items yet</li>
                                             )}
                                         </ul>
                                     </div>
@@ -550,37 +545,39 @@ export default function Lesson12() {
                     {/* Personal Rules */}
                     <div className="card">
                         <h3>Personal Rules</h3>
-                        <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
+                        <div className="inline-add-row mt-md">
                             <input
+                                className="input-flex-1"
                                 type="text"
                                 value={newRule}
                                 onChange={(e) => setNewRule(e.target.value)}
                                 placeholder="Add a personal AI collaboration rule"
                                 onKeyPress={(e) => e.key === 'Enter' && addPersonalRule()}
-                                style={{ flex: 1 }}
                             />
                             <button className="btn btn-primary" onClick={addPersonalRule}>Add Rule</button>
                         </div>
                         {card?.personal_rules?.length > 0 ? (
-                            <ul style={{ marginTop: '1rem' }}>
+                            <ul className="l12-rules-list">
                                 {card.personal_rules.map((rule, i) => (
-                                    <li key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem 0', borderBottom: '1px solid var(--border-color)' }}>
+                                    <li key={i} className="l12-rules-item">
                                         <span>{rule}</span>
-                                        <button className="btn btn-secondary" onClick={() => removePersonalRule(i)} style={{ padding: '0.25rem 0.5rem', fontSize: '0.8rem' }}>
+                                        <button className="btn btn-secondary btn-xs" onClick={() => removePersonalRule(i)}>
                                             Remove
                                         </button>
                                     </li>
                                 ))}
                             </ul>
                         ) : (
-                            <p style={{ color: 'var(--text-muted)', marginTop: '1rem' }}>No personal rules yet. Add rules that work for you.</p>
+                            <div className="empty-state mt-md">
+                                <p>No personal rules yet. Add rules that work for you.</p>
+                            </div>
                         )}
                     </div>
 
                     {/* Quick Prompts */}
                     <div className="card">
                         <h3>Quick Prompts</h3>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 3fr auto', gap: '0.5rem', marginTop: '1rem' }}>
+                        <div className="l12-prompt-form">
                             <input
                                 type="text"
                                 value={newPrompt.trigger}
@@ -596,23 +593,25 @@ export default function Lesson12() {
                             <button className="btn btn-primary" onClick={addQuickPrompt}>Add</button>
                         </div>
                         {card?.quick_prompts?.length > 0 ? (
-                            <div style={{ marginTop: '1rem' }}>
+                            <div className="mt-md">
                                 {card.quick_prompts.map((p, i) => (
-                                    <div key={i} style={{ padding: '0.75rem', marginBottom: '0.5rem', background: 'var(--bg-tertiary)', borderRadius: '4px' }}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div key={i} className="l12-prompt-entry">
+                                        <div className="l12-prompt-entry-header">
                                             <strong>/{p.trigger}</strong>
-                                            <button className="btn btn-secondary" onClick={() => removeQuickPrompt(i)} style={{ padding: '0.25rem 0.5rem', fontSize: '0.8rem' }}>
+                                            <button className="btn btn-secondary btn-xs" onClick={() => removeQuickPrompt(i)}>
                                                 Remove
                                             </button>
                                         </div>
-                                        <code style={{ display: 'block', marginTop: '0.5rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                                        <code className="l12-prompt-snippet">
                                             {p.prompt}
                                         </code>
                                     </div>
                                 ))}
                             </div>
                         ) : (
-                            <p style={{ color: 'var(--text-muted)', marginTop: '1rem' }}>No quick prompts saved yet.</p>
+                            <div className="empty-state mt-md">
+                                <p>No quick prompts saved yet.</p>
+                            </div>
                         )}
                     </div>
 
@@ -620,9 +619,9 @@ export default function Lesson12() {
                     {card?.feedback_principles?.length > 0 && (
                         <div className="card">
                             <h3>Feedback Principles</h3>
-                            <ul style={{ marginTop: '1rem' }}>
+                            <ul className="l12-principles-list">
                                 {card.feedback_principles.map((p, i) => (
-                                    <li key={i} style={{ marginBottom: '0.5rem' }}>{p}</li>
+                                    <li key={i}>{p}</li>
                                 ))}
                             </ul>
                         </div>
@@ -632,9 +631,9 @@ export default function Lesson12() {
                     {card?.workflow_highlights?.length > 0 && (
                         <div className="card">
                             <h3>Workflow Highlights</h3>
-                            <div style={{ display: 'grid', gap: '0.5rem', marginTop: '1rem' }}>
+                            <div className="grid-gap-sm mt-md">
                                 {card.workflow_highlights.map((w, i) => (
-                                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem', background: 'var(--bg-tertiary)', borderRadius: '4px' }}>
+                                    <div key={i} className="l12-workflow-row">
                                         <span>{w.name}</span>
                                         <span className="badge badge-green">{w.time_saved}</span>
                                     </div>
@@ -658,7 +657,7 @@ export default function Lesson12() {
                                     <div key={scenario.id} className="card l12-scenario-card" onClick={() => selectScenario(scenario)}>
                                         <h3>{scenario.title}</h3>
                                         <p className="l12-scenario-desc">{scenario.description}</p>
-                                        <button className="btn btn-primary" style={{ marginTop: 'auto' }}>Start Challenge</button>
+                                        <button className="btn btn-primary">Start Challenge</button>
                                     </div>
                                 ))}
                             </div>

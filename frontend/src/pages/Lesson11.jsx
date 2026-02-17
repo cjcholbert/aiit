@@ -90,6 +90,7 @@ export default function Lesson11() {
         if (activeTab === 'encounters') fetchEncounters();
     }, [activeTab]);
 
+
     const fetchReferenceData = async () => {
         try {
             const [cats, rels, encs] = await Promise.all([
@@ -287,19 +288,23 @@ export default function Lesson11() {
 
     return (
         <div>
-            <div className="page-header">
-                <h1 className="page-title">Frontier Mapper</h1>
-                <ConnectionCallout lessonNumber={5} lessonTitle="Trust Matrix" message="Map broader patterns of where AI is safe, risky, or unreliable for your specific work." />
-            </div>
-
-            <div className="lesson-progress-row">
-                <SelfAssessmentChecklist lessonNumber={11} criteria={LESSON_CRITERIA[11]} />
-                <StatsPanel stats={stats ? [
-                    { label: 'Zones', value: stats.total_zones, color: 'var(--accent-purple)' },
-                    { label: 'Encounters', value: stats.total_encounters, color: 'var(--accent-green)' },
-                    { label: 'This Week', value: stats.encounters_this_week, color: 'var(--accent-yellow)' },
-                    { label: 'Avg Confidence', value: stats.avg_zone_confidence != null ? `${stats.avg_zone_confidence}%` : '-', color: 'var(--accent-purple)' },
-                ] : []} />
+            <div className="lesson-header">
+                <div className="lesson-header-left">
+                    <h1>Frontier Mapper</h1>
+                    <ConnectionCallout lessonNumber={5} lessonTitle="Trust Matrix" message="Map broader patterns of where AI is safe, risky, or unreliable for your specific work." />
+                    <div className="lesson-header-problem-skill">
+                        <p>Map AI reliability zones and log frontier encounters to build your personal AI capability map.</p>
+                    </div>
+                </div>
+                <div className="lesson-header-right">
+                    <StatsPanel stats={stats ? [
+                        { label: 'Zones', value: stats.total_zones, color: 'var(--accent-purple)' },
+                        { label: 'Encounters', value: stats.total_encounters, color: 'var(--accent-green)' },
+                        { label: 'This Week', value: stats.encounters_this_week, color: 'var(--accent-yellow)' },
+                        { label: 'Avg Confidence', value: stats.avg_zone_confidence != null ? `${stats.avg_zone_confidence}%` : '-', color: 'var(--accent-purple)' },
+                    ] : []} />
+                    <SelfAssessmentChecklist lessonNumber={11} criteria={LESSON_CRITERIA[11]} />
+                </div>
             </div>
 
             {error && <div className="error-message">{error}</div>}
@@ -312,11 +317,6 @@ export default function Lesson11() {
 
             {activeTab === 'learn' && (
                 <div className="learn-section">
-                    <div className="learn-problem-skill">
-                        <p>Map AI reliability zones and log frontier encounters to build your personal AI capability map.</p>
-                    </div>
-
-
                     <div className="learn-intro">
                         <h2>Why You Need a Personal AI Capability Map</h2>
                         <p>
@@ -342,20 +342,20 @@ export default function Lesson11() {
                     </div>
 
                     <h3>How This Lesson Works</h3>
-                    <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+                    <p className="learn-subtitle">
                         Two practice areas to build your personal AI capability map:
                     </p>
 
                     <div className="learn-patterns-grid">
                         <div className="learn-pattern-card">
-                            <h4 style={{ color: 'var(--accent-blue)' }}>Zones Tab — Map Your Reliability Zones</h4>
+                            <h4 className="accent-blue">Zones Tab — Map Your Reliability Zones</h4>
                             <p>Create zones for the types of work you do with AI. Rate each one as Safe,
                             Caution, or Frontier. Over time, your map becomes a quick-reference guide for
                             how much verification any task needs.</p>
                             <button className="learn-tab-link" onClick={() => setActiveTab('zones')}>Go to Zones →</button>
                         </div>
                         <div className="learn-pattern-card">
-                            <h4 style={{ color: 'var(--accent-green)' }}>Encounters Tab — Log What Actually Happened</h4>
+                            <h4 className="accent-green">Encounters Tab — Log What Actually Happened</h4>
                             <p>Each time you use AI for something notable — a success, a failure, or a
                             surprise — log it. These real-world data points are what make your zones accurate
                             instead of just guesswork.</p>
@@ -397,14 +397,14 @@ export default function Lesson11() {
                     </div>
 
                     <h3>The Three Reliability Zones</h3>
-                    <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+                    <p className="learn-subtitle">
                         Every type of AI task falls into one of three zones. The boundaries are personal —
                         they depend on your field, your tools, and your experience.
                     </p>
 
                     <div className="learn-patterns-grid">
                         <div className="learn-pattern-card">
-                            <h4 style={{ color: 'var(--accent-green)' }}>Safe Zone — Trust with Quick Checks</h4>
+                            <h4 className="accent-green">Safe Zone — Trust with Quick Checks</h4>
                             <p>AI consistently delivers usable results. A quick skim is enough before using
                             the output. You have run enough tasks in this zone to feel confident.</p>
                             <div className="learn-pattern-label better">Examples</div>
@@ -415,7 +415,7 @@ export default function Lesson11() {
                             </div>
                         </div>
                         <div className="learn-pattern-card">
-                            <h4 style={{ color: 'var(--accent-yellow)' }}>Caution Zone — Verify Before Using</h4>
+                            <h4 className="accent-yellow">Caution Zone — Verify Before Using</h4>
                             <p>AI sometimes gets it right, sometimes misses. You need to check specific
                             details, not just skim. Performance depends on how well you set up the prompt.</p>
                             <div className="learn-pattern-label better">Examples</div>
@@ -426,7 +426,7 @@ export default function Lesson11() {
                             </div>
                         </div>
                         <div className="learn-pattern-card">
-                            <h4 style={{ color: 'var(--accent-red)' }}>Frontier Zone — High Risk, Verify Everything</h4>
+                            <h4 className="accent-red">Frontier Zone — High Risk, Verify Everything</h4>
                             <p>AI frequently produces confident-sounding but wrong output. Using it here
                             without heavy verification is dangerous. Sometimes it is faster to skip AI
                             entirely.</p>
@@ -440,14 +440,14 @@ export default function Lesson11() {
                     </div>
 
                     <h3>What to Log as an Encounter</h3>
-                    <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+                    <p className="learn-subtitle">
                         You do not need to log every single AI interaction. Focus on encounters that teach
                         you something about where a boundary is:
                     </p>
 
                     <div className="learn-patterns-grid">
                         <div className="learn-pattern-card">
-                            <h4 style={{ color: 'var(--accent-green)' }}>Successes Worth Logging</h4>
+                            <h4 className="accent-green">Successes Worth Logging</h4>
                             <p>When AI handles something you were not sure it could do, that is worth
                             recording. It expands your map of safe territory.</p>
                             <div className="learn-example-good">
@@ -457,7 +457,7 @@ export default function Lesson11() {
                             </div>
                         </div>
                         <div className="learn-pattern-card">
-                            <h4 style={{ color: 'var(--accent-red)' }}>Failures Worth Logging</h4>
+                            <h4 className="accent-red">Failures Worth Logging</h4>
                             <p>When AI confidently gets something wrong, that is the most valuable data
                             point. It marks the boundary where you need to stop trusting.</p>
                             <div className="learn-example-good">
@@ -467,7 +467,7 @@ export default function Lesson11() {
                             </div>
                         </div>
                         <div className="learn-pattern-card">
-                            <h4 style={{ color: 'var(--accent-yellow)' }}>Surprises Worth Logging</h4>
+                            <h4 className="accent-yellow">Surprises Worth Logging</h4>
                             <p>When the result is not what you expected — good or bad — that tells you
                             your mental map needs updating.</p>
                             <div className="learn-example-good">
@@ -479,7 +479,7 @@ export default function Lesson11() {
                     </div>
 
                     <h3>Common Mistakes</h3>
-                    <div className="learn-patterns-grid" style={{ marginBottom: '24px' }}>
+                    <div className="learn-patterns-grid mb-lg">
                         <div className="learn-pattern-card">
                             <div className="learn-pattern-label avoid">Mistake</div>
                             <p>Mapping zones based on what you have heard about AI rather than your own
@@ -529,82 +529,64 @@ export default function Lesson11() {
             )}
 
             {activeTab === 'zones' && (
-                <div style={{ display: 'grid', gap: '1.5rem' }}>
+                <div className="grid-gap-lg">
                     <div className="card">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                            <h2 style={{ margin: 0 }}>Create Zone</h2>
-                            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                                <ExamplesDropdown
-                                    endpoint="/lesson11/examples"
-                                    onSelect={(example) => {
-                                        setZoneForm({
-                                            ...zoneForm,
-                                            name: example.name || '',
-                                            category: example.category || categories[0]?.id || '',
-                                            reliability: example.reliability || 'moderate',
-                                            confidence: example.confidence || 50,
-                                            strengths: example.strengths || [],
-                                            weaknesses: example.weaknesses || [],
-                                            verification_needs: example.verification_needs || [],
-                                            notes: example.notes || '',
-                                        });
-                                    }}
-                                />
-                            </div>
+                        <div className="card-header">
+                            <h2 className="card-title">Create Zone</h2>
+                            <ExamplesDropdown
+                                endpoint="/lesson11/examples"
+                                onSelect={(example) => {
+                                    setZoneForm({
+                                        ...zoneForm,
+                                        name: example.name || '',
+                                        category: example.category || categories[0]?.id || '',
+                                        reliability: example.reliability || 'moderate',
+                                        confidence: example.confidence || 50,
+                                        strengths: example.strengths || [],
+                                        weaknesses: example.weaknesses || [],
+                                        verification_needs: example.verification_needs || [],
+                                        notes: example.notes || '',
+                                    });
+                                }}
+                            />
                         </div>
 
                         {/* Import from Trust Matrix */}
-                        <div style={{ marginBottom: '1rem' }}>
+                        <div className="l11-trust-import">
                             <button
                                 className="btn btn-secondary"
                                 onClick={handleOpenTrustImport}
                                 disabled={loadingTrust}
-                                style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
                             >
                                 {loadingTrust ? 'Loading...' : showTrustImport ? 'Hide Import' : 'Import from Trust Matrix'}
                             </button>
 
                             {showTrustImport && (
-                                <div style={{ padding: '16px', marginTop: '12px', maxHeight: '300px', overflowY: 'auto', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
-                                    <h4 style={{ margin: '0 0 12px' }}>Select an Output Type</h4>
+                                <div className="l11-trust-import-panel">
+                                    <h4>Select an Output Type</h4>
                                     {trustTypes.length === 0 ? (
-                                        <div style={{ textAlign: 'center', padding: '24px', color: 'var(--text-muted)' }}>
+                                        <div className="empty-state">
                                             <p>No output types defined yet.</p>
-                                            <p style={{ fontSize: '0.85rem' }}>
-                                                Go to <a href="/lesson/5" style={{ color: 'var(--accent-blue)' }}>Lesson 5 — Trust Matrix</a> to define output types first.
+                                            <p>
+                                                Go to <a href="/lesson/5">Lesson 5 — Trust Matrix</a> to define output types first.
                                             </p>
                                         </div>
                                     ) : (
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                        <div className="l11-trust-type-list">
                                             {trustTypes.map((ot) => (
                                                 <div
                                                     key={ot.id}
+                                                    className="l11-trust-type-item"
                                                     onClick={() => handleImportTrustType(ot)}
-                                                    style={{
-                                                        padding: '12px',
-                                                        background: 'var(--bg-tertiary)',
-                                                        borderRadius: '6px',
-                                                        cursor: 'pointer',
-                                                        border: '1px solid var(--border-color)',
-                                                        transition: 'border-color 0.2s',
-                                                    }}
-                                                    onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--accent-blue)'}
-                                                    onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border-color)'}
                                                 >
-                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                    <div className="l11-trust-type-row">
                                                         <strong>{ot.name}</strong>
-                                                        <span style={{
-                                                            fontSize: '0.75rem',
-                                                            padding: '2px 8px',
-                                                            borderRadius: '4px',
-                                                            background: ot.trust_level === 'high' ? 'var(--success-bg)' : ot.trust_level === 'low' ? 'var(--error-bg)' : 'var(--warning-bg)',
-                                                            color: ot.trust_level === 'high' ? 'var(--accent-green)' : ot.trust_level === 'low' ? 'var(--accent-red)' : 'var(--accent-yellow)',
-                                                        }}>
+                                                        <span className={`l11-trust-level-badge ${ot.trust_level}`}>
                                                             {ot.trust_level} trust
                                                         </span>
                                                     </div>
                                                     {ot.category && (
-                                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                                                        <div className="l11-trust-type-meta">
                                                             {ot.category}
                                                         </div>
                                                     )}
@@ -618,7 +600,7 @@ export default function Lesson11() {
 
                         <form onSubmit={createZone}>
                             <div className="form-row">
-                                <div className="form-group" style={{ flex: 2 }}>
+                                <div className="form-group form-group-flex-2">
                                     <label>Zone Name</label>
                                     <input
                                         type="text"
@@ -628,7 +610,7 @@ export default function Lesson11() {
                                         required
                                     />
                                 </div>
-                                <div className="form-group" style={{ flex: 1 }}>
+                                <div className="form-group form-group-flex-1">
                                     <label>Category</label>
                                     <select
                                         value={zoneForm.category}
@@ -642,7 +624,7 @@ export default function Lesson11() {
                             </div>
 
                             <div className="form-row">
-                                <div className="form-group" style={{ flex: 1 }}>
+                                <div className="form-group form-group-flex-1">
                                     <label>Reliability</label>
                                     <select
                                         value={zoneForm.reliability}
@@ -653,7 +635,7 @@ export default function Lesson11() {
                                         ))}
                                     </select>
                                 </div>
-                                <div className="form-group" style={{ flex: 1 }}>
+                                <div className="form-group form-group-flex-1">
                                     <label>Confidence: {zoneForm.confidence}%</label>
                                     <input
                                         type="range"
@@ -666,9 +648,9 @@ export default function Lesson11() {
                             </div>
 
                             <div className="form-row">
-                                <div className="form-group" style={{ flex: 1 }}>
+                                <div className="form-group form-group-flex-1">
                                     <label>Strengths</label>
-                                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                    <div className="inline-add-row">
                                         <input
                                             type="text"
                                             value={newStrength}
@@ -678,18 +660,18 @@ export default function Lesson11() {
                                         />
                                         <button type="button" className="btn btn-secondary" onClick={addStrength}>+</button>
                                     </div>
-                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.5rem' }}>
+                                    <div className="chip-list">
                                         {zoneForm.strengths.map((s, i) => (
-                                            <span key={i} className="badge badge-green" style={{ cursor: 'pointer' }}
+                                            <span key={i} className="badge badge-green badge-clickable"
                                                 onClick={() => setZoneForm({ ...zoneForm, strengths: zoneForm.strengths.filter((_, idx) => idx !== i) })}>
                                                 {s} x
                                             </span>
                                         ))}
                                     </div>
                                 </div>
-                                <div className="form-group" style={{ flex: 1 }}>
+                                <div className="form-group form-group-flex-1">
                                     <label>Weaknesses</label>
-                                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                    <div className="inline-add-row">
                                         <input
                                             type="text"
                                             value={newWeakness}
@@ -699,9 +681,9 @@ export default function Lesson11() {
                                         />
                                         <button type="button" className="btn btn-secondary" onClick={addWeakness}>+</button>
                                     </div>
-                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.5rem' }}>
+                                    <div className="chip-list">
                                         {zoneForm.weaknesses.map((w, i) => (
-                                            <span key={i} className="badge badge-red" style={{ cursor: 'pointer' }}
+                                            <span key={i} className="badge badge-red badge-clickable"
                                                 onClick={() => setZoneForm({ ...zoneForm, weaknesses: zoneForm.weaknesses.filter((_, idx) => idx !== i) })}>
                                                 {w} x
                                             </span>
@@ -727,9 +709,9 @@ export default function Lesson11() {
                     </div>
 
                     <div className="card">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                            <h2 style={{ margin: 0 }}>Your Zones ({zones.length})</h2>
-                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        <div className="card-header">
+                            <h2 className="card-title">Your Zones ({zones.length})</h2>
+                            <div className="inline-add-row">
                                 <select value={filterCategory} onChange={(e) => { setFilterCategory(e.target.value); setTimeout(fetchZones, 0); }}>
                                     <option value="">All Categories</option>
                                     {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
@@ -744,25 +726,27 @@ export default function Lesson11() {
                         </div>
 
                         {zones.length === 0 ? (
-                            <p style={{ color: 'var(--text-muted)' }}>No zones yet. Create one above or seed examples to get started.</p>
+                            <div className="empty-state">
+                                <p>No zones yet. Create one above or seed examples to get started.</p>
+                            </div>
                         ) : (
-                            <div style={{ display: 'grid', gap: '1rem' }}>
+                            <div className="grid-gap-md">
                                 {zones.map(zone => (
-                                    <div key={zone.id} style={{ padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                    <div key={zone.id} className="l11-zone-card">
+                                        <div className="l11-zone-card-header">
                                             <div>
-                                                <h3 style={{ margin: 0 }}>{zone.name}</h3>
-                                                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
+                                                <h3>{zone.name}</h3>
+                                                <div className="l11-zone-badges">
                                                     <span className={`badge ${getReliabilityColor(zone.reliability)}`}>{zone.reliability}</span>
                                                     <span className="badge badge-blue">{zone.category}</span>
                                                     <span className="badge">{zone.confidence}% confidence</span>
                                                 </div>
                                             </div>
-                                            <button className="btn btn-secondary" onClick={() => deleteZone(zone.id)} style={{ padding: '0.25rem 0.5rem' }}>
+                                            <button className="btn btn-secondary btn-xs" onClick={() => deleteZone(zone.id)}>
                                                 Delete
                                             </button>
                                         </div>
-                                        <div style={{ marginTop: '0.75rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+                                        <div className="l11-zone-meta">
                                             <span>{zone.strength_count} strengths</span> | <span>{zone.weakness_count} weaknesses</span> | <span>{zone.encounter_count} encounters</span>
                                         </div>
                                     </div>
@@ -774,15 +758,15 @@ export default function Lesson11() {
             )}
 
             {activeTab === 'encounters' && (
-                <div style={{ display: 'grid', gap: '1.5rem' }}>
+                <div className="grid-gap-lg">
                     <div className="card">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                            <h2 style={{ margin: 0 }}>Log Encounter</h2>
+                        <div className="card-header">
+                            <h2 className="card-title">Log Encounter</h2>
                         </div>
 
                         <form onSubmit={createEncounter}>
                             <div className="form-row">
-                                <div className="form-group" style={{ flex: 1 }}>
+                                <div className="form-group form-group-flex-1">
                                     <label>Zone (optional)</label>
                                     <select
                                         value={encounterForm.zone_id}
@@ -792,7 +776,7 @@ export default function Lesson11() {
                                         {zones.map(z => <option key={z.id} value={z.id}>{z.name}</option>)}
                                     </select>
                                 </div>
-                                <div className="form-group" style={{ flex: 1 }}>
+                                <div className="form-group form-group-flex-1">
                                     <label>Encounter Type</label>
                                     <select
                                         value={encounterForm.encounter_type}
@@ -828,7 +812,7 @@ export default function Lesson11() {
                             </div>
 
                             <div className="form-row">
-                                <div className="form-group" style={{ flex: 1 }}>
+                                <div className="form-group form-group-flex-1">
                                     <label>Expected Result (optional)</label>
                                     <input
                                         type="text"
@@ -837,9 +821,9 @@ export default function Lesson11() {
                                         placeholder="What did you expect?"
                                     />
                                 </div>
-                                <div className="form-group" style={{ flex: 1 }}>
+                                <div className="form-group form-group-flex-1">
                                     <label>Tags</label>
-                                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                    <div className="inline-add-row">
                                         <input
                                             type="text"
                                             value={newTag}
@@ -849,9 +833,9 @@ export default function Lesson11() {
                                         />
                                         <button type="button" className="btn btn-secondary" onClick={addTag}>+</button>
                                     </div>
-                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', marginTop: '0.5rem' }}>
+                                    <div className="chip-list-tight">
                                         {encounterForm.tags.map((t, i) => (
-                                            <span key={i} className="badge" style={{ cursor: 'pointer' }}
+                                            <span key={i} className="badge badge-clickable"
                                                 onClick={() => setEncounterForm({ ...encounterForm, tags: encounterForm.tags.filter((_, idx) => idx !== i) })}>
                                                 {t} x
                                             </span>
@@ -879,23 +863,25 @@ export default function Lesson11() {
                     <div className="card">
                         <h2>Recent Encounters ({encounters.length})</h2>
                         {encounters.length === 0 ? (
-                            <p style={{ color: 'var(--text-muted)' }}>No encounters logged yet.</p>
+                            <div className="empty-state">
+                                <p>No encounters logged yet.</p>
+                            </div>
                         ) : (
-                            <div style={{ display: 'grid', gap: '1rem' }}>
+                            <div className="grid-gap-md">
                                 {encounters.map(enc => (
-                                    <div key={enc.id} style={{ padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                    <div key={enc.id} className="l11-encounter-card">
+                                        <div className="l11-encounter-header">
                                             <div>
                                                 <span className={`badge ${getEncounterColor(enc.encounter_type)}`}>{enc.encounter_type}</span>
-                                                {enc.zone_name && <span className="badge badge-blue" style={{ marginLeft: '0.5rem' }}>{enc.zone_name}</span>}
+                                                {enc.zone_name && <span className="badge badge-blue badge-ml">{enc.zone_name}</span>}
                                             </div>
-                                            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                                            <span className="l11-encounter-date">
                                                 {new Date(enc.created_at).toLocaleDateString()}
                                             </span>
                                         </div>
-                                        <p style={{ margin: '0.75rem 0 0 0' }}>{enc.task_description}</p>
+                                        <p className="l11-encounter-desc">{enc.task_description}</p>
                                         {enc.tags.length > 0 && (
-                                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', marginTop: '0.5rem' }}>
+                                            <div className="l11-encounter-tags">
                                                 {enc.tags.map((t, i) => <span key={i} className="badge">{t}</span>)}
                                             </div>
                                         )}
