@@ -91,6 +91,7 @@ export default function Lesson07() {
     loadData();
   }, []);
 
+
   // Handlers
   const handleSeedExamples = async () => {
     try {
@@ -243,25 +244,30 @@ export default function Lesson07() {
 
   return (
     <div className="page-container">
-      <header className="page-header">
-        <h1>Task Decomposer</h1>
-        <ConnectionCallout lessonNumber={1} lessonTitle="Context Tracker" message="The better you understand a project's details, the better you can break it into the right pieces." />
-      </header>
-
-      <div className="lesson-progress-row">
-        <SelfAssessmentChecklist lessonNumber={7} criteria={LESSON_CRITERIA[7]} />
-        <StatsPanel stats={stats ? [
-            { label: 'Decomposed', value: stats.total_decompositions, color: 'var(--accent-blue)' },
-            { label: 'Total Tasks', value: stats.total_tasks, color: 'var(--accent-green)' },
-            { label: 'Avg Tasks/Project', value: stats.avg_tasks_per_decomposition, color: 'var(--accent-yellow)' },
-            { label: 'Decision Gates', value: stats.decision_gates_count, color: 'var(--accent-red)' },
-        ] : []} />
+      <div className="lesson-header">
+        <div className="lesson-header-left">
+          <h1>Task Decomposer</h1>
+          <ConnectionCallout lessonNumber={1} lessonTitle="Context Tracker" message="The better you understand a project's details, the better you can break it into the right pieces." />
+          <div className="lesson-header-problem-skill">
+            <p><strong>The Problem:</strong> Without decomposition skills, you either delegate tasks that need your judgment (getting poor results) or do everything yourself (wasting AI's potential). Learning to categorize tasks lets you optimize the human-AI division of labor.</p>
+            <p><strong>The Skill:</strong> Break projects into subtasks and categorize each as AI-Optimal (delegate freely), Collaborative (work together), or Human-Primary (you lead). Sequence tasks with dependencies so you know what to hand off, what to co-create, and where to insert decision gates.</p>
+          </div>
+        </div>
+        <div className="lesson-header-right">
+          <StatsPanel stats={stats ? [
+              { label: 'Decomposed', value: stats.total_decompositions, color: 'var(--accent-blue)' },
+              { label: 'Total Tasks', value: stats.total_tasks, color: 'var(--accent-green)' },
+              { label: 'Avg Tasks/Project', value: stats.avg_tasks_per_decomposition, color: 'var(--accent-yellow)' },
+              { label: 'Decision Gates', value: stats.decision_gates_count, color: 'var(--accent-red)' },
+          ] : []} />
+          <SelfAssessmentChecklist lessonNumber={7} criteria={LESSON_CRITERIA[7]} />
+        </div>
       </div>
 
       {error && (
-        <div className="error-banner" style={{ background: 'var(--error-bg)', padding: '12px', marginBottom: '16px', borderRadius: '8px', color: 'var(--accent-red)' }}>
+        <div className="error-banner">
           {error}
-          <button onClick={() => setError(null)} style={{ marginLeft: '12px', cursor: 'pointer' }}>Dismiss</button>
+          <button className="btn-dismiss btn btn-secondary btn-sm" onClick={() => setError(null)}>Dismiss</button>
         </div>
       )}
 
@@ -281,12 +287,6 @@ export default function Lesson07() {
       {/* Learn Tab */}
       {activeTab === 'learn' && (
         <div className="learn-section">
-          <div className="learn-problem-skill">
-            <p><strong>The Problem:</strong> Without decomposition skills, you either delegate tasks that need your judgment (getting poor results) or do everything yourself (wasting AI's potential). Learning to categorize tasks lets you optimize the human-AI division of labor.</p>
-            <p><strong>The Skill:</strong> Break projects into subtasks and categorize each as AI-Optimal (delegate freely), Collaborative (work together), or Human-Primary (you lead). Sequence tasks with dependencies so you know what to hand off, what to co-create, and where to insert decision gates.</p>
-          </div>
-
-
           <div className="learn-intro">
             <h2>Why "Just Ask AI to Do It" Fails on Real Projects</h2>
             <p>
@@ -313,13 +313,13 @@ export default function Lesson07() {
           </div>
 
           <h3>How This Lesson Works</h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+          <p className="text-secondary mb-md">
             One practice area to build your decomposition muscle:
           </p>
 
           <div className="learn-patterns-grid">
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-blue)' }}>Decompose Tab — Break Down a Real Project</h4>
+              <h4 className="color-accent-blue">Decompose Tab — Break Down a Real Project</h4>
               <p>Pick a project you are working on (or about to start). Break it into individual tasks,
               categorize each one as AI-Optimal, Collaborative, or Human-Primary, and sequence them
               with dependencies. Then get AI feedback on your categorizations.</p>
@@ -360,13 +360,13 @@ export default function Lesson07() {
           </div>
 
           <h3>The Three Categories</h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+          <p className="text-secondary mb-md">
             Every subtask falls into one of three categories. The key is knowing which signals to look for.
           </p>
 
           <div className="learn-patterns-grid">
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-green)' }}>AI-Optimal — Delegate Freely</h4>
+              <h4 className="color-accent-green">AI-Optimal — Delegate Freely</h4>
               <p>The input and output are well-defined, the task is pattern-based, and there is low risk if
               the result needs a small correction.</p>
               <div className="learn-pattern-label better">Examples</div>
@@ -378,7 +378,7 @@ export default function Lesson07() {
               </div>
             </div>
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-yellow)' }}>Collaborative — Work Together</h4>
+              <h4 className="color-accent-yellow">Collaborative — Work Together</h4>
               <p>The task benefits from AI's speed or breadth, but requires your domain knowledge,
               judgment, or context to get right.</p>
               <div className="learn-pattern-label better">Examples</div>
@@ -390,7 +390,7 @@ export default function Lesson07() {
               </div>
             </div>
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-red)' }}>Human-Primary — You Lead</h4>
+              <h4 className="color-accent-red">Human-Primary — You Lead</h4>
               <p>The task requires your authority, access to confidential information, relationships,
               or judgment calls that cannot be delegated.</p>
               <div className="learn-pattern-label better">Examples</div>
@@ -404,14 +404,14 @@ export default function Lesson07() {
           </div>
 
           <h3>Decision Gates: Knowing When to Pause</h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+          <p className="text-secondary mb-md">
             Not every task flows automatically into the next. A decision gate is a point where you need to
             review results and make a choice before continuing.
           </p>
 
           <div className="learn-patterns-grid">
             <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-blue)' }}>When to Insert a Decision Gate</h4>
+              <h4 className="color-accent-blue">When to Insert a Decision Gate</h4>
               <p>Add a gate any time the next task depends on a judgment call, not just the previous task's output.</p>
               <div className="learn-pattern-label better">Example</div>
               <div className="learn-example-good">
@@ -420,7 +420,7 @@ export default function Lesson07() {
                 <strong>DECISION GATE:</strong> You choose which pricing option to present to the client<br/>
                 <strong>Task 4:</strong> AI writes the full proposal around the selected option (Collaborative)
               </div>
-              <p style={{ marginTop: '12px', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
+              <p className="l7-gate-note">
                 Without this gate, AI would pick a pricing option for you — a decision that affects the
                 entire client relationship.
               </p>
@@ -428,7 +428,7 @@ export default function Lesson07() {
           </div>
 
           <h3>Common Mistakes</h3>
-          <div className="learn-patterns-grid" style={{ marginBottom: '24px' }}>
+          <div className="learn-patterns-grid learn-patterns-grid-mb">
             <div className="learn-pattern-card">
               <div className="learn-pattern-label avoid">Mistake</div>
               <p>Making tasks too large. "Create the marketing strategy" is not a single task — it contains
@@ -479,10 +479,10 @@ export default function Lesson07() {
           {selectedDecomp ? (
             // View/Edit Decomposition
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <div className="flex-between mb-md">
                 <div>
-                  <h2 style={{ margin: 0 }}>{selectedDecomp.project_name}</h2>
-                  <div style={{ color: 'var(--text-secondary)', marginTop: '4px' }}>
+                  <h2 className="no-margin">{selectedDecomp.project_name}</h2>
+                  <div className="text-secondary mt-xs">
                     {selectedDecomp.tasks.length} tasks
                   </div>
                 </div>
@@ -501,11 +501,11 @@ export default function Lesson07() {
               </div>
 
               {/* Category summary */}
-              <div style={{ display: 'flex', gap: '16px', marginBottom: '24px' }}>
+              <div className="l7-category-summary">
                 {Object.entries(selectedDecomp.categories || {}).map(([cat, count]) => (
-                  <div key={cat} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div key={cat} className="l7-category-summary-item">
                     {renderCategoryBadge(cat)}
-                    <span style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>{count}</span>
+                    <span className="l7-category-summary-count">{count}</span>
                   </div>
                 ))}
               </div>
@@ -515,59 +515,52 @@ export default function Lesson07() {
                 {selectedDecomp.tasks.map((task, idx) => (
                   <div
                     key={task.id}
-                    className="card"
-                    style={{
-                      padding: '16px',
-                      marginBottom: '12px',
-                      background: task.status === 'completed' ? 'var(--success-bg)' : 'var(--bg-secondary)',
-                      opacity: task.status === 'completed' ? 0.7 : 1
-                    }}
+                    className={`card l7-task-card ${task.status === 'completed' ? 'l7-task-card-completed' : 'l7-task-card-default'}`}
                   >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                          <span style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>#{idx + 1}</span>
-                          <h4 style={{ margin: 0, textDecoration: task.status === 'completed' ? 'line-through' : 'none', color: 'var(--text-primary)' }}>
+                    <div className="l7-task-layout">
+                      <div className="l7-task-body">
+                        <div className="l7-task-title-row">
+                          <span className="l7-task-number">#{idx + 1}</span>
+                          <h4 className={`l7-task-title ${task.status === 'completed' ? 'l7-task-title-done' : ''}`}>
                             {task.title}
                           </h4>
                           {task.is_decision_gate && (
-                            <span style={{ background: 'var(--accent-blue)', color: 'var(--text-primary)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem' }}>
+                            <span className="l7-decision-gate-badge">
                               Decision Gate
                             </span>
                           )}
                         </div>
-                        {task.description && <p style={{ margin: '0 0 8px', color: 'var(--text-secondary)' }}>{task.description}</p>}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        {task.description && <p className="l7-task-description">{task.description}</p>}
+                        <div className="l7-task-meta-row">
                           {renderCategoryBadge(task.category)}
                           {task.reasoning && (
-                            <span style={{ fontSize: '0.875rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
+                            <span className="l7-task-reasoning">
                               "{task.reasoning}"
                             </span>
                           )}
                         </div>
                       </div>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginLeft: '16px' }}>
+                      <div className="l7-reorder-col">
                         <button
+                          className="l7-reorder-btn"
                           onClick={() => handleMoveTask(task.id, 'up')}
                           disabled={idx === 0}
-                          style={{ padding: '4px 8px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px', cursor: idx === 0 ? 'not-allowed' : 'pointer', opacity: idx === 0 ? 0.5 : 1 }}
                         >
                           ↑
                         </button>
                         <button
+                          className="l7-reorder-btn"
                           onClick={() => handleMoveTask(task.id, 'down')}
                           disabled={idx === selectedDecomp.tasks.length - 1}
-                          style={{ padding: '4px 8px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px', cursor: idx === selectedDecomp.tasks.length - 1 ? 'not-allowed' : 'pointer', opacity: idx === selectedDecomp.tasks.length - 1 ? 0.5 : 1 }}
                         >
                           ↓
                         </button>
                       </div>
                     </div>
-                    <div style={{ marginTop: '12px', display: 'flex', gap: '8px' }}>
+                    <div className="l7-task-actions">
                       {task.status !== 'completed' && (
                         <button
-                          className="btn btn-primary"
-                          style={{ padding: '4px 12px', fontSize: '0.875rem' }}
+                          className="btn btn-primary btn-sm"
                           onClick={() => handleUpdateTaskStatus(task.id, 'completed')}
                         >
                           Mark Complete
@@ -575,8 +568,7 @@ export default function Lesson07() {
                       )}
                       {task.status === 'completed' && (
                         <button
-                          className="btn btn-secondary"
-                          style={{ padding: '4px 12px', fontSize: '0.875rem' }}
+                          className="btn btn-secondary btn-sm"
                           onClick={() => handleUpdateTaskStatus(task.id, 'pending')}
                         >
                           Reopen
@@ -740,9 +732,9 @@ export default function Lesson07() {
             </div>
           ) : showCreateForm ? (
             // Create Form
-            <div className="card" style={{ padding: '24px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <h2 style={{ margin: 0 }}>Decompose a Project</h2>
+            <div className="card card-padded">
+              <div className="l7-create-form-header">
+                <h2>Decompose a Project</h2>
                 <ExamplesDropdown
                   endpoint="/lesson7/examples"
                   onSelect={(example) => {
@@ -755,48 +747,46 @@ export default function Lesson07() {
                   }}
                 />
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '16px' }}>
+              <div className="l7-form-stack">
                 <div>
-                  <label style={{ display: 'block', marginBottom: '4px' }}>Project Name</label>
+                  <label>Project Name</label>
                   <input
                     type="text"
                     value={newProject.project_name}
                     onChange={(e) => setNewProject({ ...newProject, project_name: e.target.value })}
                     placeholder="e.g., Build User Dashboard"
                     className="input"
-                    style={{ width: '100%' }}
                   />
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', marginBottom: '4px' }}>Description (optional)</label>
+                  <label>Description (optional)</label>
                   <textarea
                     value={newProject.description}
                     onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
                     placeholder="Brief description of the project..."
                     className="input"
                     rows={2}
-                    style={{ width: '100%' }}
                   />
                 </div>
 
                 {/* Tasks list */}
                 <div>
-                  <label style={{ display: 'block', marginBottom: '8px' }}>Tasks ({newProject.tasks.length})</label>
+                  <label className="mb-sm">Tasks ({newProject.tasks.length})</label>
                   {newProject.tasks.map((task, idx) => (
-                    <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', padding: '12px', background: 'var(--bg-tertiary)', borderRadius: '8px' }}>
-                      <span style={{ color: 'var(--text-muted)' }}>#{idx + 1}</span>
-                      <span style={{ flex: 1, color: 'var(--text-primary)' }}>{task.title}</span>
+                    <div key={idx} className="l7-task-list-item">
+                      <span className="text-muted">#{idx + 1}</span>
+                      <span className="flex-1">{task.title}</span>
                       {renderCategoryBadge(task.category)}
-                      <button onClick={() => handleRemoveTask(idx)} style={{ color: 'var(--accent-red)', background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.25rem' }}>×</button>
+                      <button className="l7-task-remove-btn" onClick={() => handleRemoveTask(idx)}>×</button>
                     </div>
                   ))}
                 </div>
 
                 {/* Add task form */}
-                <div style={{ padding: '16px', background: 'var(--bg-secondary)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-                  <h4 style={{ margin: '0 0 12px', color: 'var(--text-primary)' }}>Add Task</h4>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <div className="l7-add-task-panel">
+                  <h4>Add Task</h4>
+                  <div className="l7-add-task-fields">
                     <input
                       type="text"
                       value={newTask.title}
@@ -804,12 +794,11 @@ export default function Lesson07() {
                       placeholder="Task title..."
                       className="input"
                     />
-                    <div style={{ display: 'flex', gap: '12px' }}>
+                    <div className="form-row">
                       <select
                         value={newTask.category}
                         onChange={(e) => setNewTask({ ...newTask, category: e.target.value })}
-                        className="input"
-                        style={{ flex: 1 }}
+                        className="input flex-1"
                       >
                         <option value="ai_optimal">🤖 AI-Optimal</option>
                         <option value="collaborative">🤝 Collaborative</option>
@@ -820,15 +809,14 @@ export default function Lesson07() {
                         value={newTask.reasoning}
                         onChange={(e) => setNewTask({ ...newTask, reasoning: e.target.value })}
                         placeholder="Why this category? (optional)"
-                        className="input"
-                        style={{ flex: 2 }}
+                        className="input flex-2"
                       />
                     </div>
                     <button className="btn btn-secondary" onClick={handleAddTask}>+ Add Task</button>
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
+                <div className="button-group-mt">
                   <button className="btn btn-primary" onClick={handleCreateDecomposition}>
                     Save Decomposition
                   </button>
@@ -841,9 +829,9 @@ export default function Lesson07() {
           ) : (
             // Decomposition List
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <div className="flex-between mb-md">
                 <h2>Your Decompositions</h2>
-                <div style={{ display: 'flex', gap: '8px' }}>
+                <div className="gap-sm flex-center">
                   <button className="btn btn-primary" onClick={() => setShowCreateForm(true)}>
                     + New Decomposition
                   </button>
@@ -856,27 +844,27 @@ export default function Lesson07() {
               </div>
 
               {decompositions.length === 0 ? (
-                <div className="empty-state" style={{ textAlign: 'center', padding: '48px', background: 'var(--bg-secondary)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-                  <h3 style={{ color: 'var(--text-primary)' }}>No decompositions yet</h3>
-                  <p style={{ color: 'var(--text-secondary)' }}>Break down a project into categorized tasks to practice decomposition skills.</p>
+                <div className="empty-state">
+                  <h3>No decompositions yet</h3>
+                  <p>Break down a project into categorized tasks to practice decomposition skills.</p>
                 </div>
               ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '16px' }}>
+                <div className="grid-auto-fill">
                   {decompositions.map((decomp) => (
-                    <div key={decomp.id} className="card" style={{ padding: '16px' }}>
-                      <h3 style={{ margin: '0 0 8px', color: 'var(--text-primary)' }}>{decomp.project_name}</h3>
-                      <div style={{ display: 'flex', gap: '12px', marginBottom: '12px', fontSize: '0.875rem' }}>
-                        <span style={{ color: 'var(--accent-green)' }}>{decomp.ai_optimal_count} AI</span>
-                        <span style={{ color: 'var(--accent-yellow)' }}>{decomp.collaborative_count} Collab</span>
-                        <span style={{ color: 'var(--accent-red)' }}>{decomp.human_primary_count} Human</span>
+                    <div key={decomp.id} className="card l7-decomp-card">
+                      <h3>{decomp.project_name}</h3>
+                      <div className="l7-decomp-card-stats">
+                        <span className="color-accent-green">{decomp.ai_optimal_count} AI</span>
+                        <span className="color-accent-yellow">{decomp.collaborative_count} Collab</span>
+                        <span className="color-accent-red">{decomp.human_primary_count} Human</span>
                       </div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ color: 'var(--text-secondary)' }}>{decomp.task_count} tasks ({decomp.completed_count} done)</span>
-                        <div style={{ display: 'flex', gap: '8px' }}>
-                          <button className="btn btn-primary" style={{ padding: '4px 12px' }} onClick={() => handleViewDecomposition(decomp.id)}>
+                      <div className="l7-decomp-card-footer">
+                        <span className="l7-decomp-card-footer-info">{decomp.task_count} tasks ({decomp.completed_count} done)</span>
+                        <div className="gap-sm flex-center">
+                          <button className="btn btn-primary btn-sm" onClick={() => handleViewDecomposition(decomp.id)}>
                             View
                           </button>
-                          <button className="btn btn-danger" style={{ padding: '4px 12px' }} onClick={() => handleDeleteDecomposition(decomp.id)}>
+                          <button className="btn btn-danger btn-sm" onClick={() => handleDeleteDecomposition(decomp.id)}>
                             Delete
                           </button>
                         </div>
