@@ -112,24 +112,16 @@ export default function Dashboard() {
             </div>
 
             {MODULES.map((module) => (
-                <div key={module.name} style={{ marginBottom: '32px' }}>
+                <div key={module.name} className="module-section">
                     <div
+                        className="module-section-header"
                         style={{
-                            backgroundColor: theme === 'dark' ? module.darkColor : module.color,
-                            borderLeft: `4px solid ${theme === 'dark' ? module.darkBorderColor : module.borderColor}`,
-                            padding: '12px 16px',
-                            borderRadius: '4px',
-                            marginBottom: '16px'
+                            '--module-bg': theme === 'dark' ? module.darkColor : module.color,
+                            '--module-border': theme === 'dark' ? module.darkBorderColor : module.borderColor,
+                            '--module-text': theme === 'dark' ? module.darkTextColor : module.textColor
                         }}
                     >
-                        <h2 style={{
-                            margin: 0,
-                            fontSize: '0.9rem',
-                            fontWeight: 600,
-                            color: theme === 'dark' ? module.darkTextColor : module.textColor,
-                            textTransform: 'uppercase',
-                            letterSpacing: '0.5px'
-                        }}>
+                        <h2 className="module-section-title">
                             {module.name}
                         </h2>
                     </div>
@@ -141,11 +133,7 @@ export default function Dashboard() {
                                 <Link
                                     key={lesson.lesson}
                                     to={lesson.status === 'active' ? `/lesson/${lesson.lesson}` : '#'}
-                                    className={`module-card ${complete ? 'module-card-complete' : ''}`}
-                                    style={{
-                                        opacity: lesson.status === 'coming' ? 0.6 : 1,
-                                        cursor: lesson.status === 'coming' ? 'not-allowed' : 'pointer'
-                                    }}
+                                    className={`module-card ${complete ? 'module-card-complete' : ''} ${lesson.status === 'coming' ? 'module-card--coming' : ''}`}
                                     onClick={(e) => {
                                         if (lesson.status === 'coming') e.preventDefault();
                                     }}
@@ -174,16 +162,13 @@ export default function Dashboard() {
                                         </div>
                                     )}
                                     {concept && (
-                                        <div style={{
-                                            marginTop: '12px',
-                                            padding: '4px 8px',
-                                            background: concept.color + '30',
-                                            borderLeft: `3px solid ${concept.color}`,
-                                            borderRadius: '0 4px 4px 0',
-                                            fontSize: '0.7rem',
-                                            color: concept.color,
-                                            fontWeight: 500
-                                        }}>
+                                        <div
+                                            className="concept-tag"
+                                            style={{
+                                                '--concept-color': concept.color,
+                                                '--concept-color-bg': concept.color + '30'
+                                            }}
+                                        >
                                             {concept.name}
                                         </div>
                                     )}
