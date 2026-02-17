@@ -7,8 +7,8 @@ from pydantic import BaseModel, Field
 class Variable(BaseModel):
     """Template variable definition."""
     name: str = Field(..., min_length=1, max_length=50, pattern=r"^[a-zA-Z_][a-zA-Z0-9_]*$")
-    description: str = ""
-    default: str = ""
+    description: str = Field("", max_length=500)
+    default: str = Field("", max_length=5000)
     required: bool = False
 
 
@@ -16,7 +16,7 @@ class TemplateCreate(BaseModel):
     """Request model for creating a template."""
     name: str = Field(..., min_length=1, max_length=100)
     category: str = Field(..., min_length=1, max_length=50)
-    description: str = ""
+    description: str = Field("", max_length=5000)
     content: str = Field(..., min_length=10, max_length=5000)
     variables: list[Variable] = []
     tags: list[str] = []
@@ -26,7 +26,7 @@ class TemplateUpdate(BaseModel):
     """Request model for updating a template."""
     name: Optional[str] = Field(None, min_length=1, max_length=100)
     category: Optional[str] = Field(None, min_length=1, max_length=50)
-    description: Optional[str] = None
+    description: Optional[str] = Field(None, max_length=5000)
     content: Optional[str] = Field(None, min_length=10, max_length=5000)
     variables: Optional[list[Variable]] = None
     tags: Optional[list[str]] = None
@@ -93,16 +93,16 @@ class TemplateTestResponse(BaseModel):
 class TemplateTestFeedback(BaseModel):
     """Request model for submitting test feedback."""
     rating: int = Field(..., ge=1, le=5)
-    notes: str = ""
+    notes: str = Field("", max_length=5000)
 
 
 class TemplateSuggestion(BaseModel):
     """AI-generated template suggestion based on Lesson 1 patterns."""
-    name: str
-    category: str
-    content: str
+    name: str = Field(max_length=500)
+    category: str = Field(max_length=500)
+    content: str = Field(max_length=10000)
     variables: list[Variable]
-    reasoning: str
+    reasoning: str = Field(max_length=5000)
 
 
 class TemplateStats(BaseModel):
@@ -117,9 +117,9 @@ class TemplateStats(BaseModel):
 
 class RenderRequest(BaseModel):
     """Request model for rendering a template preview."""
-    content: str
+    content: str = Field(max_length=10000)
     variable_values: dict[str, str] = {}
-    test_prompt: str = ""
+    test_prompt: str = Field("", max_length=5000)
 
 
 class RenderResponse(BaseModel):

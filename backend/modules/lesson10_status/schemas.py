@@ -171,16 +171,16 @@ Keep the tone professional yet warm. Be concise but thorough.""",
 
 class WorkflowInput(BaseModel):
     """A single input field for a workflow."""
-    name: str
-    type: str = "text"  # text, list, number
-    description: str
+    name: str = Field(max_length=500)
+    type: str = Field("text", max_length=50)  # text, list, number
+    description: str = Field(max_length=5000)
     required: bool = True
 
 
 class WorkflowStep(BaseModel):
     """A single step in a workflow."""
     order: int
-    description: str
+    description: str = Field(max_length=5000)
     is_ai_step: bool = False
 
 
@@ -191,24 +191,24 @@ class WorkflowStep(BaseModel):
 class WorkflowTemplateCreate(BaseModel):
     """Schema for creating a workflow template."""
     name: str = Field(..., min_length=1, max_length=255)
-    description: Optional[str] = None
-    frequency: str = "weekly"
+    description: Optional[str] = Field(None, max_length=5000)
+    frequency: str = Field("weekly", max_length=50)
     estimated_time_minutes: Optional[int] = Field(None, ge=1)
     inputs: list[WorkflowInput] = []
     steps: list[WorkflowStep] = []
-    prompt_template: Optional[str] = None
+    prompt_template: Optional[str] = Field(None, max_length=10000)
     quality_checks: list[str] = []
 
 
 class WorkflowTemplateUpdate(BaseModel):
     """Schema for updating a workflow template."""
     name: Optional[str] = Field(None, min_length=1, max_length=255)
-    description: Optional[str] = None
-    frequency: Optional[str] = None
+    description: Optional[str] = Field(None, max_length=5000)
+    frequency: Optional[str] = Field(None, max_length=50)
     estimated_time_minutes: Optional[int] = Field(None, ge=1)
     inputs: Optional[list[WorkflowInput]] = None
     steps: Optional[list[WorkflowStep]] = None
-    prompt_template: Optional[str] = None
+    prompt_template: Optional[str] = Field(None, max_length=10000)
     quality_checks: Optional[list[str]] = None
     is_active: Optional[bool] = None
 
@@ -218,19 +218,19 @@ class StatusReportCreate(BaseModel):
     template_id: Optional[str] = None
     title: str = Field(..., min_length=1, max_length=255)
     inputs_used: dict = {}
-    generated_content: Optional[str] = None
+    generated_content: Optional[str] = Field(None, max_length=10000)
     actual_time_minutes: Optional[int] = Field(None, ge=1)
     quality_score: Optional[int] = Field(None, ge=1, le=10)
-    notes: Optional[str] = None
+    notes: Optional[str] = Field(None, max_length=5000)
 
 
 class StatusReportUpdate(BaseModel):
     """Schema for updating a status report."""
     title: Optional[str] = Field(None, min_length=1, max_length=255)
-    generated_content: Optional[str] = None
+    generated_content: Optional[str] = Field(None, max_length=10000)
     actual_time_minutes: Optional[int] = Field(None, ge=1)
     quality_score: Optional[int] = Field(None, ge=1, le=10)
-    notes: Optional[str] = None
+    notes: Optional[str] = Field(None, max_length=5000)
 
 
 # =============================================================================

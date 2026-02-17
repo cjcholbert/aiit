@@ -78,20 +78,20 @@ FEEDBACK_CATEGORIES = [
 
 class FeedbackIssue(BaseModel):
     """A specific issue found in feedback."""
-    pattern: str  # Key from VAGUE_PATTERNS
-    description: str
-    location: Optional[str] = None  # Where in the feedback
-    suggestion: str
+    pattern: str = Field(max_length=500)  # Key from VAGUE_PATTERNS
+    description: str = Field(max_length=5000)
+    location: Optional[str] = Field(None, max_length=500)  # Where in the feedback
+    suggestion: str = Field(max_length=5000)
 
 
 class FeedbackAnalysis(BaseModel):
     """Complete analysis of a piece of feedback."""
     quality_score: int = Field(..., ge=0, le=10)
-    quality_level: str  # "specific", "adequate", "vague"
+    quality_level: str = Field(max_length=50)  # "specific", "adequate", "vague"
     issues: list[FeedbackIssue]
     strengths: list[str]
-    rewrite_suggestion: str
-    summary: str
+    rewrite_suggestion: str = Field(max_length=10000)
+    summary: str = Field(max_length=5000)
 
 
 # =============================================================================

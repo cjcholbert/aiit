@@ -17,46 +17,46 @@ class ParsedTranscript(BaseModel):
 
 class ContextProvided(BaseModel):
     """Analysis of context provided in first message."""
-    details: str
-    what_worked: str
+    details: str = Field(max_length=5000)
+    what_worked: str = Field(max_length=5000)
 
 
 class ContextAddedLater(BaseModel):
     """Analysis of context added after first exchange."""
-    details: str
-    triggers: str
+    details: str = Field(max_length=5000)
+    triggers: str = Field(max_length=5000)
     could_have_been_upfront: bool
 
 
 class AssumptionsWrong(BaseModel):
     """Analysis of incorrect assumptions."""
-    details: str
-    why_assumed: str
-    user_contributed: str
+    details: str = Field(max_length=5000)
+    why_assumed: str = Field(max_length=5000)
+    user_contributed: str = Field(max_length=5000)
 
 
 class Pattern(BaseModel):
     """Pattern classification."""
-    category: str
-    insight: str
+    category: str = Field(max_length=500)
+    insight: str = Field(max_length=5000)
 
 
 class Coaching(BaseModel):
     """Coaching recommendations."""
-    context_that_would_have_helped: str
-    prompt_rewrite: str
-    habit_to_build: str
+    context_that_would_have_helped: str = Field(max_length=5000)
+    prompt_rewrite: str = Field(max_length=10000)
+    habit_to_build: str = Field(max_length=5000)
 
 
 class Confidence(BaseModel):
     """Confidence assessment."""
     score: int = Field(ge=1, le=10)
-    reasoning: str
+    reasoning: str = Field(max_length=5000)
 
 
 class Analysis(BaseModel):
     """Complete analysis result from Claude."""
-    topic: str
+    topic: str = Field(max_length=500)
     context_provided: ContextProvided
     context_added_later: ContextAddedLater
     assumptions_wrong: AssumptionsWrong

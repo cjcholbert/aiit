@@ -165,25 +165,25 @@ EXAMPLE_ENCOUNTERS = [
 class ZoneCreate(BaseModel):
     """Schema for creating a frontier zone."""
     name: str = Field(..., min_length=1, max_length=255)
-    category: str = "other"
-    reliability: str = "mixed"
+    category: str = Field("other", max_length=500)
+    reliability: str = Field("mixed", max_length=50)
     confidence: int = Field(50, ge=0, le=100)
     strengths: list[str] = []
     weaknesses: list[str] = []
-    verification_needs: Optional[str] = None
-    notes: Optional[str] = None
+    verification_needs: Optional[str] = Field(None, max_length=5000)
+    notes: Optional[str] = Field(None, max_length=5000)
 
 
 class ZoneUpdate(BaseModel):
     """Schema for updating a frontier zone."""
     name: Optional[str] = Field(None, min_length=1, max_length=255)
-    category: Optional[str] = None
-    reliability: Optional[str] = None
+    category: Optional[str] = Field(None, max_length=500)
+    reliability: Optional[str] = Field(None, max_length=50)
     confidence: Optional[int] = Field(None, ge=0, le=100)
     strengths: Optional[list[str]] = None
     weaknesses: Optional[list[str]] = None
-    verification_needs: Optional[str] = None
-    notes: Optional[str] = None
+    verification_needs: Optional[str] = Field(None, max_length=5000)
+    notes: Optional[str] = Field(None, max_length=5000)
 
 
 class ZoneSummary(BaseModel):
@@ -230,22 +230,22 @@ class ZoneResponse(BaseModel):
 class EncounterCreate(BaseModel):
     """Schema for creating an encounter."""
     zone_id: Optional[str] = None
-    encounter_type: str = "success"
-    task_description: str = Field(..., min_length=1)
-    outcome: str = Field(..., min_length=1)
-    expected_result: Optional[str] = None
-    lessons: Optional[str] = None
+    encounter_type: str = Field("success", max_length=50)
+    task_description: str = Field(..., min_length=1, max_length=5000)
+    outcome: str = Field(..., min_length=1, max_length=5000)
+    expected_result: Optional[str] = Field(None, max_length=5000)
+    lessons: Optional[str] = Field(None, max_length=5000)
     tags: list[str] = []
 
 
 class EncounterUpdate(BaseModel):
     """Schema for updating an encounter."""
     zone_id: Optional[str] = None
-    encounter_type: Optional[str] = None
-    task_description: Optional[str] = None
-    outcome: Optional[str] = None
-    expected_result: Optional[str] = None
-    lessons: Optional[str] = None
+    encounter_type: Optional[str] = Field(None, max_length=50)
+    task_description: Optional[str] = Field(None, max_length=5000)
+    outcome: Optional[str] = Field(None, max_length=5000)
+    expected_result: Optional[str] = Field(None, max_length=5000)
+    lessons: Optional[str] = Field(None, max_length=5000)
     tags: Optional[list[str]] = None
 
 

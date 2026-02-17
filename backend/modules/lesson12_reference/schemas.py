@@ -135,21 +135,21 @@ EXAMPLE_REFERENCE_CARD = {
 
 class PersonalRule(BaseModel):
     """A personal AI collaboration rule."""
-    rule: str
-    category: Optional[str] = None
+    rule: str = Field(max_length=5000)
+    category: Optional[str] = Field(None, max_length=500)
 
 
 class QuickPrompt(BaseModel):
     """A frequently used prompt trigger."""
-    trigger: str
-    prompt: str
-    category: Optional[str] = None
+    trigger: str = Field(max_length=500)
+    prompt: str = Field(max_length=10000)
+    category: Optional[str] = Field(None, max_length=500)
 
 
 class CustomSection(BaseModel):
     """A user-defined section on the reference card."""
-    title: str
-    content: str
+    title: str = Field(max_length=500)
+    content: str = Field(max_length=10000)
     order: int = 0
 
 
@@ -237,7 +237,7 @@ class GenerateRequest(BaseModel):
 
 class ExportRequest(BaseModel):
     """Request to export the reference card."""
-    format: str = "markdown"  # markdown, html, json
+    format: str = Field("markdown", max_length=50)  # markdown, html, json
     include_sections: list[str] = []  # Empty = all sections
 
 
@@ -248,8 +248,8 @@ class ExportRequest(BaseModel):
 class CurriculumProgress(BaseModel):
     """Progress through the 12-lesson curriculum."""
     week: int
-    name: str
-    status: str  # "completed", "in_progress", "not_started"
+    name: str = Field(max_length=500)
+    status: str = Field(max_length=50)  # "completed", "in_progress", "not_started"
     items_created: int
     last_activity: Optional[datetime]
 

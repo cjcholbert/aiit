@@ -7,9 +7,9 @@ from pydantic import BaseModel, Field
 class FeedbackCreate(BaseModel):
     """Schema for creating feedback."""
     lesson: Optional[int] = Field(None, ge=1, le=12)
-    page: str
+    page: str = Field(max_length=500)
     rating: int = Field(..., ge=1, le=5)
-    comment: Optional[str] = None
+    comment: Optional[str] = Field(None, max_length=5000)
 
 
 class FeedbackResponse(BaseModel):
@@ -28,7 +28,7 @@ class FeedbackResponse(BaseModel):
 
 class PageViewCreate(BaseModel):
     """Schema for tracking page views."""
-    page: str
+    page: str = Field(max_length=500)
     lesson: Optional[int] = None
 
 

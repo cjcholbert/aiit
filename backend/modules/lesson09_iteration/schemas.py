@@ -70,11 +70,11 @@ Specific areas to polish:
 class PassFeedback(BaseModel):
     """Feedback recorded for a single pass."""
     pass_number: int = Field(..., ge=1, le=3)
-    pass_label: str  # "70%", "85%", "95%"
-    focus: str  # "Structure & Approach", etc.
-    key_question: str  # "Right problem, right way?"
-    key_question_answer: str  # User's answer to the key question
-    feedback: str  # The actual iteration feedback given to AI
+    pass_label: str = Field(max_length=50)  # "70%", "85%", "95%"
+    focus: str = Field(max_length=500)  # "Structure & Approach", etc.
+    key_question: str = Field(max_length=500)  # "Right problem, right way?"
+    key_question_answer: str = Field(max_length=5000)  # User's answer to the key question
+    feedback: str = Field(max_length=10000)  # The actual iteration feedback given to AI
     completed_at: datetime
 
 

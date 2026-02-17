@@ -8,8 +8,8 @@ from pydantic import BaseModel, Field
 class CohortCreate(BaseModel):
     """Schema for creating a cohort."""
     name: str = Field(..., min_length=1, max_length=100)
-    description: Optional[str] = None
-    organization: Optional[str] = None
+    description: Optional[str] = Field(None, max_length=5000)
+    organization: Optional[str] = Field(None, max_length=500)
     start_date: Optional[datetime] = None
     end_date: Optional[datetime] = None
 
@@ -17,8 +17,8 @@ class CohortCreate(BaseModel):
 class CohortUpdate(BaseModel):
     """Schema for updating a cohort."""
     name: Optional[str] = Field(None, min_length=1, max_length=100)
-    description: Optional[str] = None
-    organization: Optional[str] = None
+    description: Optional[str] = Field(None, max_length=5000)
+    organization: Optional[str] = Field(None, max_length=500)
     start_date: Optional[datetime] = None
     end_date: Optional[datetime] = None
     is_active: Optional[bool] = None
@@ -60,7 +60,7 @@ class CohortStats(BaseModel):
 class ExperimentCreate(BaseModel):
     """Schema for creating an A/B test experiment."""
     name: str = Field(..., min_length=1, max_length=100)
-    description: Optional[str] = None
+    description: Optional[str] = Field(None, max_length=5000)
     feature_key: str = Field(..., min_length=1, max_length=50)  # e.g., "lesson_3_layout"
     variants: List[str] = Field(..., min_items=2)  # e.g., ["control", "variant_a"]
     traffic_percentage: int = Field(100, ge=1, le=100)  # % of users in experiment
@@ -69,10 +69,10 @@ class ExperimentCreate(BaseModel):
 class ExperimentUpdate(BaseModel):
     """Schema for updating an experiment."""
     name: Optional[str] = Field(None, min_length=1, max_length=100)
-    description: Optional[str] = None
+    description: Optional[str] = Field(None, max_length=5000)
     traffic_percentage: Optional[int] = Field(None, ge=1, le=100)
     is_active: Optional[bool] = None
-    winner: Optional[str] = None  # Winning variant when concluding
+    winner: Optional[str] = Field(None, max_length=500)  # Winning variant when concluding
 
 
 class ExperimentResponse(BaseModel):
@@ -101,8 +101,8 @@ class ExperimentAssignment(BaseModel):
 
 class ExperimentEvent(BaseModel):
     """Schema for tracking experiment events."""
-    feature_key: str
-    event_type: str  # e.g., "view", "click", "complete"
+    feature_key: str = Field(max_length=500)
+    event_type: str = Field(max_length=500)  # e.g., "view", "click", "complete"
     metadata: Optional[Dict[str, Any]] = None
 
 
