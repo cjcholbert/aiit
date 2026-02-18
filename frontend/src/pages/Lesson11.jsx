@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
 import ConnectionCallout from '../components/ConnectionCallout';
-import StatsPanel from '../components/StatsPanel';
+import { useLessonStats } from '../contexts/LessonStatsContext';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 import { AccordionSection } from '../components/Accordion';
 
@@ -31,6 +31,7 @@ const ENCOUNTER_ICONS = {
 
 export default function Lesson11() {
     const api = useApi();
+    const { setStats: setSidebarStats } = useLessonStats();
     const [activeTab, setActiveTab] = useState('concepts');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -88,6 +89,15 @@ export default function Lesson11() {
         if (activeTab === 'encounters') fetchEncounters();
     }, [activeTab]);
 
+    useEffect(() => {
+        setSidebarStats(stats ? [
+            { label: 'Zones', value: stats.total_zones, color: 'var(--accent-purple)' },
+            { label: 'Encounters', value: stats.total_encounters, color: 'var(--accent-green)' },
+            { label: 'This Week', value: stats.encounters_this_week, color: 'var(--accent-yellow)' },
+            { label: 'Avg Confidence', value: stats.avg_zone_confidence != null ? `${stats.avg_zone_confidence}%` : '-', color: 'var(--accent-purple)' },
+        ] : null);
+        return () => setSidebarStats(null);
+    }, [stats, setSidebarStats]);
 
     const fetchReferenceData = async () => {
         try {
@@ -293,15 +303,6 @@ export default function Lesson11() {
                     <div className="lesson-header-problem-skill">
                         <p>Map AI reliability zones and log frontier encounters to build your personal AI capability map.</p>
                     </div>
-
-                </div>
-                <div className="lesson-header-right">
-                    <StatsPanel stats={stats ? [
-                        { label: 'Zones', value: stats.total_zones, color: 'var(--accent-purple)' },
-                        { label: 'Encounters', value: stats.total_encounters, color: 'var(--accent-green)' },
-                        { label: 'This Week', value: stats.encounters_this_week, color: 'var(--accent-yellow)' },
-                        { label: 'Avg Confidence', value: stats.avg_zone_confidence != null ? `${stats.avg_zone_confidence}%` : '-', color: 'var(--accent-purple)' },
-                    ] : []} />
 
                 </div>
             </div>

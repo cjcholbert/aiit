@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
 import ConnectionCallout from '../components/ConnectionCallout';
-import StatsPanel from '../components/StatsPanel';
+import { useLessonStats } from '../contexts/LessonStatsContext';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 import { AccordionSection } from '../components/Accordion';
 
@@ -36,6 +36,8 @@ export default function Lesson02() {
   // Selected entry state
   const [selectedEntry, setSelectedEntry] = useState(null);
   const [rewriteInput, setRewriteInput] = useState('');
+
+  const { setStats: setSidebarStats } = useLessonStats();
 
   // Fetch data
   const fetchEntries = async () => {
@@ -73,6 +75,16 @@ export default function Lesson02() {
     };
     loadData();
   }, []);
+
+  useEffect(() => {
+    setSidebarStats([
+      { label: 'Total Entries', value: stats?.total_entries ?? '-', color: 'var(--accent-blue)' },
+      { label: 'Avg Score', value: stats?.avg_quality_score ?? '-', color: 'var(--accent-yellow)' },
+      { label: 'Examples Saved', value: stats?.examples_saved ?? '-', color: 'var(--accent-green)' },
+      { label: 'Rewrites Done', value: stats?.rewrites_completed ?? '-', color: 'var(--accent-purple)' },
+    ]);
+    return () => setSidebarStats(null);
+  }, [stats, setSidebarStats]);
 
 
   // Handlers
@@ -320,15 +332,6 @@ export default function Lesson02() {
             <p><strong>The Problem:</strong> Vague feedback like "make it better" or "this isn't right" wastes iteration cycles and frustrates both you and the AI. Without specific, actionable feedback, you'll keep going in circles.</p>
             <p><strong>The Skill:</strong> Write feedback that identifies specific locations, states clear actions, and explains reasoning. Learn to spot vague patterns in your own feedback and rewrite them.</p>
           </div>
-
-        </div>
-        <div className="lesson-header-right">
-          <StatsPanel stats={[
-              { label: 'Total Entries', value: stats?.total_entries ?? '-', color: 'var(--accent-blue)' },
-              { label: 'Avg Score', value: stats?.avg_quality_score ?? '-', color: 'var(--accent-yellow)' },
-              { label: 'Examples Saved', value: stats?.examples_saved ?? '-', color: 'var(--accent-green)' },
-              { label: 'Rewrites Done', value: stats?.rewrites_completed ?? '-', color: 'var(--accent-purple)' },
-          ]} />
 
         </div>
       </div>

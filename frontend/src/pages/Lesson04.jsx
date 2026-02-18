@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
 import ConnectionCallout from '../components/ConnectionCallout';
-import StatsPanel from '../components/StatsPanel';
+import { useLessonStats } from '../contexts/LessonStatsContext';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 import { AccordionSection } from '../components/Accordion';
 
@@ -28,6 +28,7 @@ export default function Lesson04() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { setStats: setSidebarStats } = useLessonStats();
 
   // Document editing state
   const [editingDoc, setEditingDoc] = useState(null);
@@ -105,6 +106,17 @@ export default function Lesson04() {
     };
     loadData();
   }, []);
+
+  useEffect(() => {
+    setSidebarStats(stats ? [
+      { label: 'Documents', value: stats.total_docs, color: 'var(--accent-blue)' },
+      { label: 'Sessions', value: stats.total_sessions, color: 'var(--accent-green)' },
+      { label: 'This Week', value: stats.sessions_this_week, color: 'var(--accent-yellow)' },
+      { label: 'Avg Quality', value: stats.avg_context_quality, color: 'var(--accent-purple)' },
+      { label: 'Avg Continuity', value: stats.avg_continuity_rating, color: 'var(--accent-blue)' },
+    ] : []);
+    return () => setSidebarStats(null);
+  }, [stats, setSidebarStats]);
 
 
   // Document form handlers
@@ -398,16 +410,6 @@ export default function Lesson04() {
             <p><strong>The Problem:</strong> You've been working with AI on a project for weeks, but every new conversation starts blank. You re-explain the same background, the AI suggests approaches you already rejected, and you lose 10 minutes before real work begins.</p>
             <p><strong>The Skill:</strong> Keep a living document for each project that captures what's done, what's decided, and what's next. Paste it at the start of any AI session so the conversation picks up where you left off -- no re-explaining needed.</p>
           </div>
-
-        </div>
-        <div className="lesson-header-right">
-          <StatsPanel stats={stats ? [
-              { label: 'Documents', value: stats.total_docs, color: 'var(--accent-blue)' },
-              { label: 'Sessions', value: stats.total_sessions, color: 'var(--accent-green)' },
-              { label: 'This Week', value: stats.sessions_this_week, color: 'var(--accent-yellow)' },
-              { label: 'Avg Quality', value: stats.avg_context_quality, color: 'var(--accent-purple)' },
-              { label: 'Avg Continuity', value: stats.avg_continuity_rating, color: 'var(--accent-blue)' },
-          ] : []} />
 
         </div>
       </div>

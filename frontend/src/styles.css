@@ -199,10 +199,15 @@ img, video, iframe {
 .content-header {
   padding: var(--space-md) var(--space-xl);
   border-bottom: 1px solid var(--border-color);
-  background: var(--bg-secondary);
+  background: #e0d8d1;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
+}
+
+.header-logo {
+  height: 128px;
+  width: 160px;
 }
 
 /* =============================================================================
@@ -229,6 +234,12 @@ img, video, iframe {
 .nav-header-link.active {
   color: var(--accent-blue);
   font-weight: 600;
+}
+
+.nav-header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
 }
 
 .nav-dropdown-container {
@@ -1281,6 +1292,18 @@ tr:hover td {
   }
 }
 
+/* Tablet header */
+@media (max-width: 768px) {
+  .header-logo {
+    height: 80px;
+    width: 100px;
+  }
+
+  .content-header {
+    padding: var(--space-sm) var(--space-md);
+  }
+}
+
 /* Small mobile */
 @media (max-width: 480px) {
   .stats-grid {
@@ -1291,13 +1314,27 @@ tr:hover td {
     font-size: 24px;
   }
 
-  /* Compact header on mobile */
+  /* Stack header: logo on top, nav below */
   .content-header {
+    flex-wrap: wrap;
+    justify-content: center;
     padding: var(--space-sm) var(--space-md);
     gap: var(--space-xs);
   }
 
-  /* Hide email in header, keep avatar + sign out */
+  .header-logo {
+    height: 64px;
+    width: 80px;
+  }
+
+  .nav-header-right {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+
+  /* Hide email in header, keep sign out */
   .nav-user-email {
     display: none;
   }

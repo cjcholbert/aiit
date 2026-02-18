@@ -6,7 +6,7 @@
     align-items: flex-start;
     padding: var(--space-sm) var(--space-xl);
     border-bottom: 1px solid var(--border-color);
-    background: var(--bg-secondary);
+    background: #e0d8d1;
 }
 
 .module-tab-group {

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useApi } from '../hooks/useApi';
-import StatsPanel from '../components/StatsPanel';
+import { useLessonStats } from '../contexts/LessonStatsContext';
 import ConnectionCallout from '../components/ConnectionCallout';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 import { AccordionSection } from '../components/Accordion';
@@ -25,6 +25,7 @@ export default function Lesson01() {
     const [converterError, setConverterError] = useState('');
 
     const api = useApi();
+    const { setStats: setSidebarStats } = useLessonStats();
 
     useEffect(() => {
         loadStats();
@@ -36,6 +37,16 @@ export default function Lesson01() {
             loadConversations();
         }
     }, [activeTab]);
+
+    useEffect(() => {
+        setSidebarStats([
+            { label: 'Conversations', value: stats?.total_conversations ?? '-', color: 'var(--accent-blue)' },
+            { label: 'Avg Confidence', value: stats?.avg_confidence_score != null ? stats.avg_confidence_score.toFixed(1) : '-', color: 'var(--accent-green)' },
+            { label: 'Recurring Gaps', value: insights?.context_gaps?.length ?? '-', color: 'var(--accent-yellow)' },
+            { label: 'Context Strengths', value: insights?.context_strengths?.length ?? '-', color: 'var(--accent-purple)' },
+        ]);
+        return () => setSidebarStats(null);
+    }, [stats, insights, setSidebarStats]);
 
 
     const loadConversations = async () => {
@@ -297,15 +308,6 @@ export default function Lesson01() {
                         <p><strong>The Problem:</strong> AI conversations fail when critical context is missing. You waste time on back-and-forth clarifications or get unusable outputs because you forgot to mention key constraints.</p>
                         <p><strong>The Skill:</strong> Identify your personal context gaps by analyzing past conversations. Discover what information you consistently forget to provide so you can fix it upfront.</p>
                     </div>
-
-                </div>
-                <div className="lesson-header-right">
-                    <StatsPanel stats={[
-                        { label: 'Conversations', value: stats?.total_conversations ?? '-', color: 'var(--accent-blue)' },
-                        { label: 'Avg Confidence', value: stats?.avg_confidence_score != null ? stats.avg_confidence_score.toFixed(1) : '-', color: 'var(--accent-green)' },
-                        { label: 'Recurring Gaps', value: insights?.context_gaps?.length ?? '-', color: 'var(--accent-yellow)' },
-                        { label: 'Context Strengths', value: insights?.context_strengths?.length ?? '-', color: 'var(--accent-purple)' },
-                    ]} />
 
                 </div>
             </div>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
 import ConnectionCallout from '../components/ConnectionCallout';
-import StatsPanel from '../components/StatsPanel';
+import { useLessonStats } from '../contexts/LessonStatsContext';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 import { AccordionSection } from '../components/Accordion';
 
@@ -56,6 +56,7 @@ const OUTPUT_TYPE_PROMPTS = [
 
 export default function Lesson05() {
   const api = useApi();
+  const { setStats: setSidebarStats } = useLessonStats();
   const [activeTab, setActiveTab] = useState('concepts');
   const [outputTypes, setOutputTypes] = useState([]);
   const [predictions, setPredictions] = useState([]);
@@ -149,6 +150,15 @@ export default function Lesson05() {
     loadData();
   }, []);
 
+  useEffect(() => {
+    setSidebarStats(stats ? [
+      { label: 'Predictions', value: stats.total_predictions, color: 'var(--accent-blue)' },
+      { label: 'Verified', value: stats.verified_predictions, color: 'var(--accent-green)' },
+      { label: 'AI Accuracy', value: stats.overall_accuracy != null ? `${stats.overall_accuracy}%` : '-', color: 'var(--accent-yellow)' },
+      { label: 'Calibration', value: stats.calibration_score ?? '-', color: 'var(--accent-purple)' },
+    ] : []);
+    return () => setSidebarStats(null);
+  }, [stats, setSidebarStats]);
 
   const handleSeedDefaults = async () => {
     try {
@@ -329,15 +339,6 @@ export default function Lesson05() {
             <p><strong>The Problem:</strong> You either over-verify everything (wasting time) or blindly trust AI output (introducing errors). Without calibrated judgment, you can't efficiently allocate your review effort.</p>
             <p><strong>The Skill:</strong> Build a personal trust matrix by tracking predictions about AI accuracy. Learn which output types you can trust and which require careful verification.</p>
           </div>
-
-        </div>
-        <div className="lesson-header-right">
-          <StatsPanel stats={stats ? [
-              { label: 'Predictions', value: stats.total_predictions, color: 'var(--accent-blue)' },
-              { label: 'Verified', value: stats.verified_predictions, color: 'var(--accent-green)' },
-              { label: 'AI Accuracy', value: stats.overall_accuracy != null ? `${stats.overall_accuracy}%` : '-', color: 'var(--accent-yellow)' },
-              { label: 'Calibration', value: stats.calibration_score ?? '-', color: 'var(--accent-purple)' },
-          ] : []} />
 
         </div>
       </div>

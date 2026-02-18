@@ -21,7 +21,6 @@ export default function StatsPanel({ stats }) {
 
   return (
     <div className="stats-panel">
-      <h3 className="stats-panel-heading">Your Progress</h3>
       <div className="stats-panel-grid">
         {stats.map((stat, i) => (
           <div key={i} className="stats-panel-card">

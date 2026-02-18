@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
 import ConnectionCallout from '../components/ConnectionCallout';
-import StatsPanel from '../components/StatsPanel';
+import { useLessonStats } from '../contexts/LessonStatsContext';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 import { AccordionSection } from '../components/Accordion';
 
@@ -14,6 +14,7 @@ const PASS_STYLES = {
 
 export default function Lesson09() {
   const api = useApi();
+  const { setStats: setSidebarStats } = useLessonStats();
   const [activeTab, setActiveTab] = useState('concepts');
   const [tasks, setTasks] = useState([]);
   const [passInfo, setPassInfo] = useState(null);
@@ -86,6 +87,15 @@ export default function Lesson09() {
     loadData();
   }, []);
 
+  useEffect(() => {
+    setSidebarStats(stats ? [
+      { label: 'Total Tasks', value: stats.total_tasks, color: 'var(--accent-blue)' },
+      { label: 'Completed', value: stats.completed_tasks, color: 'var(--accent-green)' },
+      { label: 'In Progress', value: stats.in_progress_tasks, color: 'var(--accent-yellow)' },
+      { label: 'Passes', value: stats.total_passes_recorded, color: 'var(--accent-purple)' },
+    ] : null);
+    return () => setSidebarStats(null);
+  }, [stats, setSidebarStats]);
 
   // Handlers
   const handleSeedExamples = async () => {
@@ -315,15 +325,6 @@ export default function Lesson09() {
             <p><strong>The Problem:</strong> Random iteration ("make it better") wastes cycles and leads to scope creep. Without structure, you'll keep tweaking without knowing when "done" is reached.</p>
             <p><strong>The Skill:</strong> Use the 70-85-95 framework to iterate with purpose. Each pass has a specific focus and key question, so you know exactly what to evaluate and when to move on.</p>
           </div>
-
-        </div>
-        <div className="lesson-header-right">
-          <StatsPanel stats={stats ? [
-              { label: 'Total Tasks', value: stats.total_tasks, color: 'var(--accent-blue)' },
-              { label: 'Completed', value: stats.completed_tasks, color: 'var(--accent-green)' },
-              { label: 'In Progress', value: stats.in_progress_tasks, color: 'var(--accent-yellow)' },
-              { label: 'Passes', value: stats.total_passes_recorded, color: 'var(--accent-purple)' },
-          ] : []} />
 
         </div>
       </div>

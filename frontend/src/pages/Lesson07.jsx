@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
 import ConnectionCallout from '../components/ConnectionCallout';
-import StatsPanel from '../components/StatsPanel';
+import { useLessonStats } from '../contexts/LessonStatsContext';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 import { AccordionSection } from '../components/Accordion';
 
@@ -32,6 +32,7 @@ const CATEGORIES = {
 
 export default function Lesson07() {
   const api = useApi();
+  const { setStats: setSidebarStats } = useLessonStats();
   const [activeTab, setActiveTab] = useState('concepts');
   const [decompositions, setDecompositions] = useState([]);
   const [categories, setCategories] = useState(null);
@@ -89,6 +90,15 @@ export default function Lesson07() {
     loadData();
   }, []);
 
+  useEffect(() => {
+    setSidebarStats(stats ? [
+      { label: 'Decomposed', value: stats.total_decompositions, color: 'var(--accent-blue)' },
+      { label: 'Total Tasks', value: stats.total_tasks, color: 'var(--accent-green)' },
+      { label: 'Avg Tasks/Project', value: stats.avg_tasks_per_decomposition, color: 'var(--accent-yellow)' },
+      { label: 'Decision Gates', value: stats.decision_gates_count, color: 'var(--accent-red)' },
+    ] : []);
+    return () => setSidebarStats(null);
+  }, [stats, setSidebarStats]);
 
   // Handlers
   const handleSeedExamples = async () => {
@@ -250,15 +260,6 @@ export default function Lesson07() {
             <p><strong>The Problem:</strong> Without decomposition skills, you either delegate tasks that need your judgment (getting poor results) or do everything yourself (wasting AI's potential). Learning to categorize tasks lets you optimize the human-AI division of labor.</p>
             <p><strong>The Skill:</strong> Break projects into subtasks and categorize each as AI-Optimal (delegate freely), Collaborative (work together), or Human-Primary (you lead). Sequence tasks with dependencies so you know what to hand off, what to co-create, and where to insert decision gates.</p>
           </div>
-
-        </div>
-        <div className="lesson-header-right">
-          <StatsPanel stats={stats ? [
-              { label: 'Decomposed', value: stats.total_decompositions, color: 'var(--accent-blue)' },
-              { label: 'Total Tasks', value: stats.total_tasks, color: 'var(--accent-green)' },
-              { label: 'Avg Tasks/Project', value: stats.avg_tasks_per_decomposition, color: 'var(--accent-yellow)' },
-              { label: 'Decision Gates', value: stats.decision_gates_count, color: 'var(--accent-red)' },
-          ] : []} />
 
         </div>
       </div>

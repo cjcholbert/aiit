@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
 import ConnectionCallout from '../components/ConnectionCallout';
-import StatsPanel from '../components/StatsPanel';
+import { useLessonStats } from '../contexts/LessonStatsContext';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 import { AccordionSection } from '../components/Accordion';
 
@@ -23,6 +23,7 @@ const TRUST_COLORS = {
 
 export default function Lesson06() {
   const api = useApi();
+  const { setStats: setSidebarStats } = useLessonStats();
   const [activeTab, setActiveTab] = useState('concepts');
   const [checklists, setChecklists] = useState([]);
   const [outputTypes, setOutputTypes] = useState([]);
@@ -99,6 +100,14 @@ export default function Lesson06() {
     loadData();
   }, []);
 
+  useEffect(() => {
+    setSidebarStats(stats ? [
+      { label: 'Checklists', value: stats.total_checklists, color: 'var(--accent-blue)' },
+      { label: 'Sessions', value: stats.total_sessions, color: 'var(--accent-green)' },
+      { label: 'Avg Time', value: formatTime(Math.round(stats.avg_verification_time || 0)), color: 'var(--accent-yellow)' },
+    ] : []);
+    return () => setSidebarStats(null);
+  }, [stats, setSidebarStats]);
 
   // Timer effect
   useEffect(() => {
@@ -347,14 +356,6 @@ export default function Lesson06() {
             <p><strong>The Problem:</strong> Without systematic verification, you either waste time over-checking outputs you could trust, or miss critical errors by under-checking outputs that needed scrutiny. Lesson 5 helped you calibrate <em>when</em> to verify -- now you build <em>how</em> to verify efficiently.</p>
             <p><strong>The Skill:</strong> Create reusable verification checklists tied to output types, so checking becomes quick and consistent rather than ad-hoc. Track which checks actually catch issues to refine your process over time. Define clear "skip criteria" so you can confidently trust appropriate outputs without guilt or risk.</p>
           </div>
-
-        </div>
-        <div className="lesson-header-right">
-          <StatsPanel stats={stats ? [
-              { label: 'Checklists', value: stats.total_checklists, color: 'var(--accent-blue)' },
-              { label: 'Sessions', value: stats.total_sessions, color: 'var(--accent-green)' },
-              { label: 'Avg Time', value: formatTime(Math.round(stats.avg_verification_time || 0)), color: 'var(--accent-yellow)' },
-          ] : []} />
 
         </div>
       </div>

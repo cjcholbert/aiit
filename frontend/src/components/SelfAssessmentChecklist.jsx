@@ -69,9 +69,6 @@ export default function SelfAssessmentChecklist({ lessonNumber, criteria }) {
   if (loading) {
     return (
       <div className="self-assessment-checklist">
-        <div className="self-assessment-header">
-          <h3 className="self-assessment-title">Lesson Progress Checklist</h3>
-        </div>
         <div className="self-assessment-loading">Checking progress...</div>
       </div>
     );
@@ -80,7 +77,6 @@ export default function SelfAssessmentChecklist({ lessonNumber, criteria }) {
   return (
     <div className="self-assessment-checklist">
       <div className="self-assessment-header">
-        <h3 className="self-assessment-title">Lesson Progress Checklist</h3>
         <span className={`self-assessment-count ${completedCount === totalCount ? 'complete' : ''}`}>
           {completedCount}/{totalCount}
         </span>

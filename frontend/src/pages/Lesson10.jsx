@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
 import ConnectionCallout from '../components/ConnectionCallout';
-import StatsPanel from '../components/StatsPanel';
+import { useLessonStats } from '../contexts/LessonStatsContext';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 import { AccordionSection } from '../components/Accordion';
 
@@ -15,6 +15,7 @@ const FREQUENCY_COLORS = {
 
 export default function Lesson10() {
   const api = useApi();
+  const { setStats: setSidebarStats } = useLessonStats();
   const [activeTab, setActiveTab] = useState('concepts');
   const [templates, setTemplates] = useState([]);
   const [reports, setReports] = useState([]);
@@ -112,6 +113,16 @@ export default function Lesson10() {
     loadData();
   }, []);
 
+  useEffect(() => {
+    setSidebarStats(stats ? [
+      { label: 'Templates', value: stats.total_templates, color: 'var(--accent-blue)' },
+      { label: 'Reports', value: stats.total_reports, color: 'var(--accent-blue)' },
+      { label: 'Min Saved', value: stats.total_time_saved_minutes, color: 'var(--accent-green)' },
+      { label: 'Avg Quality', value: stats.avg_quality_score, color: 'var(--accent-purple)' },
+      { label: 'This Week', value: stats.reports_this_week, color: 'var(--accent-yellow)' },
+    ] : null);
+    return () => setSidebarStats(null);
+  }, [stats, setSidebarStats]);
 
   // Template form handlers
   const resetTemplateForm = () => {
@@ -426,16 +437,6 @@ export default function Lesson10() {
             <p><strong>The Problem:</strong> Recurring tasks like status reports, meeting summaries, and client updates eat up valuable time when done manually each time. Without a systematic approach, you're reinventing the wheel with every iteration.</p>
             <p><strong>The Skill:</strong> Design AI-integrated workflows for recurring tasks. Create templates, track inputs, and measure time savings to build sustainable AI collaboration habits.</p>
           </div>
-
-        </div>
-        <div className="lesson-header-right">
-          <StatsPanel stats={stats ? [
-              { label: 'Templates', value: stats.total_templates, color: 'var(--accent-blue)' },
-              { label: 'Reports', value: stats.total_reports, color: 'var(--accent-blue)' },
-              { label: 'Min Saved', value: stats.total_time_saved_minutes, color: 'var(--accent-green)' },
-              { label: 'Avg Quality', value: stats.avg_quality_score, color: 'var(--accent-purple)' },
-              { label: 'This Week', value: stats.reports_this_week, color: 'var(--accent-yellow)' },
-          ] : []} />
 
         </div>
       </div>

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
 import { useAuth } from '../auth/AuthContext';
 import ConnectionCallout from '../components/ConnectionCallout';
-import StatsPanel from '../components/StatsPanel';
+import { useLessonStats } from '../contexts/LessonStatsContext';
 import { AccordionSection } from '../components/Accordion';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
@@ -21,6 +21,7 @@ const SECTION_ICONS = {
 export default function Lesson12() {
     const api = useApi();
     const { getAuthHeaders } = useAuth();
+    const { setStats: setSidebarStats } = useLessonStats();
     const [activeTab, setActiveTab] = useState('concepts');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -58,6 +59,16 @@ export default function Lesson12() {
         if (activeTab === 'card') fetchPrimaryCard();
         if (activeTab === 'challenge') fetchScenarios();
     }, [activeTab]);
+
+    useEffect(() => {
+        setSidebarStats(stats ? [
+            { label: 'Complete', value: `${stats.completion_percentage}%`, color: 'var(--accent-purple)' },
+            { label: 'Active Lessons', value: `${stats.weeks_with_data}/12`, color: 'var(--accent-green)' },
+            { label: 'Items Created', value: stats.total_items_created, color: 'var(--accent-yellow)' },
+            { label: 'Most Active', value: stats.most_active_week || 'N/A', color: 'var(--accent-purple)' },
+        ] : null);
+        return () => setSidebarStats(null);
+    }, [stats, setSidebarStats]);
 
     const fetchSections = async () => {
         try {
@@ -261,15 +272,6 @@ export default function Lesson12() {
                     <div className="lesson-header-problem-skill">
                         <p>Generate your personal AI collaboration quick reference card from your learnings across all lessons.</p>
                     </div>
-
-                </div>
-                <div className="lesson-header-right">
-                    <StatsPanel stats={stats ? [
-                        { label: 'Complete', value: `${stats.completion_percentage}%`, color: 'var(--accent-purple)' },
-                        { label: 'Active Lessons', value: `${stats.weeks_with_data}/12`, color: 'var(--accent-green)' },
-                        { label: 'Items Created', value: stats.total_items_created, color: 'var(--accent-yellow)' },
-                        { label: 'Most Active', value: stats.most_active_week || 'N/A', color: 'var(--accent-purple)' },
-                    ] : []} />
 
                 </div>
             </div>

@@ -46,7 +46,7 @@ export default function NavDropdown() {
     }, []);
 
     return (
-        <>
+        <div className="nav-header-right">
             <div className="nav-dropdown-container" ref={dropdownRef}>
                 <button
                     className="nav-dropdown-trigger"
@@ -80,7 +80,6 @@ export default function NavDropdown() {
                                 </NavLink>
                             )}
                         </div>
-
                     </div>
                 )}
             </div>
@@ -94,11 +93,7 @@ export default function NavDropdown() {
                 {theme === 'dark' ? '\u2600' : '\u263D'}
             </button>
 
-            {/* Always-visible user info and sign out */}
             <div className="nav-user-bar">
-                <div className="user-avatar-sm">
-                    {user?.email?.charAt(0).toUpperCase() || 'U'}
-                </div>
                 <span className="nav-user-email">{user?.email || 'User'}</span>
                 <button
                     className="nav-signout-btn"
@@ -108,6 +103,6 @@ export default function NavDropdown() {
                     Sign Out
                 </button>
             </div>
-        </>
+        </div>
     );
 }

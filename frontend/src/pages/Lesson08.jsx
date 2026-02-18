@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
 import ConnectionCallout from '../components/ConnectionCallout';
-import StatsPanel from '../components/StatsPanel';
+import { useLessonStats } from '../contexts/LessonStatsContext';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 import { AccordionSection } from '../components/Accordion';
 
@@ -31,6 +31,7 @@ const CATEGORY_INFO = {
 
 export default function Lesson08() {
   const api = useApi();
+  const { setStats: setSidebarStats } = useLessonStats();
   const [activeTab, setActiveTab] = useState('concepts');
   const [delegations, setDelegations] = useState([]);
   const [templateElements, setTemplateElements] = useState(null);
@@ -93,6 +94,15 @@ export default function Lesson08() {
     loadData();
   }, []);
 
+  useEffect(() => {
+    setSidebarStats(stats ? [
+      { label: 'Delegations', value: stats.total_delegations, color: 'var(--accent-blue)' },
+      { label: 'Total Tasks', value: stats.total_tasks, color: 'var(--accent-blue)' },
+      { label: 'Completed', value: stats.tasks_completed, color: 'var(--accent-green)' },
+      { label: 'Pending', value: stats.tasks_pending, color: 'var(--accent-yellow)' },
+    ] : []);
+    return () => setSidebarStats(null);
+  }, [stats, setSidebarStats]);
 
   // Handlers
   const handleSeedExamples = async () => {
@@ -424,15 +434,6 @@ export default function Lesson08() {
             <p><strong>The Problem:</strong> Knowing what to delegate is only half the battle. Without structured delegation practices, you'll give vague instructions and get disappointing results, or spend more time explaining than doing the work yourself.</p>
             <p><strong>The Skill:</strong> Create delegation templates with clear context, objectives, scope, deliverables, and success criteria. Then execute decomposed tasks in sequence, tracking what you delegated, what you received, and what decisions you made at each gate.</p>
           </div>
-
-        </div>
-        <div className="lesson-header-right">
-          <StatsPanel stats={stats ? [
-              { label: 'Delegations', value: stats.total_delegations, color: 'var(--accent-blue)' },
-              { label: 'Total Tasks', value: stats.total_tasks, color: 'var(--accent-blue)' },
-              { label: 'Completed', value: stats.tasks_completed, color: 'var(--accent-green)' },
-              { label: 'Pending', value: stats.tasks_pending, color: 'var(--accent-yellow)' },
-          ] : []} />
 
         </div>
       </div>

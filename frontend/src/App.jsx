@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from './auth/AuthContext';
 import { ProgressProvider } from './hooks/useProgress';
+import { LessonStatsProvider } from './contexts/LessonStatsContext';
 import NavDropdown from './components/NavDropdown';
 import ModuleTabNav from './components/ModuleTabNav';
 import ProgressSidebar from './components/ProgressSidebar';
@@ -109,11 +110,13 @@ function AppLayout({ children }) {
 
     return (
         <ProgressProvider>
+        <LessonStatsProvider>
             <div className="app-layout">
                 <SkipLink targetId="main-content" />
 
                 <div className="content-column">
                     <div className="content-header">
+                        <img src="/yai.png" alt="YAI" className="header-logo" />
                         <NavDropdown />
                     </div>
 
@@ -132,6 +135,7 @@ function AppLayout({ children }) {
 
                 <CelebrationToast />
             </div>
+        </LessonStatsProvider>
         </ProgressProvider>
     );
 }

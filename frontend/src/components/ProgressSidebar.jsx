@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useProgress } from '../hooks/useProgress';
+import { useLessonStats } from '../contexts/LessonStatsContext';
 import SelfAssessmentChecklist from './SelfAssessmentChecklist';
+import StatsPanel from './StatsPanel';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
 import './ProgressSidebar.css';
 
 function ProgressSidebar({ lessonNumber }) {
   const { progress, loading, isLessonComplete, completionPercentage } = useProgress();
+  const { stats: lessonStats } = useLessonStats();
 
   const [isOpen, setIsOpen] = useState(() => {
     const stored = localStorage.getItem('ams_sidebar_open');
@@ -52,9 +55,22 @@ function ProgressSidebar({ lessonNumber }) {
 
         {isOpen && (
           <div className="progress-sidebar__content">
+            <div className="progress-sidebar__checklist">
+              <SelfAssessmentChecklist
+                lessonNumber={lessonNumber}
+                criteria={LESSON_CRITERIA[lessonNumber]}
+              />
+            </div>
+
+            {lessonStats && (
+              <div className="progress-sidebar__stats">
+                <StatsPanel stats={lessonStats} />
+              </div>
+            )}
+
             <div className="progress-sidebar__progress-section">
               <div className="progress-sidebar__progress-header">
-                <span className="progress-sidebar__progress-label">Overall Progress</span>
+                <span className="progress-sidebar__progress-label">{completedCount}/12 lessons</span>
                 <span className="progress-sidebar__progress-value">{Math.round(percentage)}%</span>
               </div>
               <div className="progress-sidebar__progress-track">
@@ -63,17 +79,6 @@ function ProgressSidebar({ lessonNumber }) {
                   style={{ width: `${percentage}%` }}
                 />
               </div>
-            </div>
-
-            <div className="progress-sidebar__checklist">
-              <SelfAssessmentChecklist
-                lessonNumber={lessonNumber}
-                criteria={LESSON_CRITERIA[lessonNumber]}
-              />
-            </div>
-
-            <div className="progress-sidebar__summary">
-              Completed {completedCount} of 12 lessons
             </div>
           </div>
         )}
@@ -107,9 +112,22 @@ function ProgressSidebar({ lessonNumber }) {
             </div>
 
             <div className="progress-sidebar__content">
+              <div className="progress-sidebar__checklist">
+                <SelfAssessmentChecklist
+                  lessonNumber={lessonNumber}
+                  criteria={LESSON_CRITERIA[lessonNumber]}
+                />
+              </div>
+
+              {lessonStats && (
+                <div className="progress-sidebar__stats">
+                  <StatsPanel stats={lessonStats} />
+                </div>
+              )}
+
               <div className="progress-sidebar__progress-section">
                 <div className="progress-sidebar__progress-header">
-                  <span className="progress-sidebar__progress-label">Overall Progress</span>
+                  <span className="progress-sidebar__progress-label">{completedCount}/12 lessons</span>
                   <span className="progress-sidebar__progress-value">{Math.round(percentage)}%</span>
                 </div>
                 <div className="progress-sidebar__progress-track">
@@ -118,17 +136,6 @@ function ProgressSidebar({ lessonNumber }) {
                     style={{ width: `${percentage}%` }}
                   />
                 </div>
-              </div>
-
-              <div className="progress-sidebar__checklist">
-                <SelfAssessmentChecklist
-                  lessonNumber={lessonNumber}
-                  criteria={LESSON_CRITERIA[lessonNumber]}
-                />
-              </div>
-
-              <div className="progress-sidebar__summary">
-                Completed {completedCount} of 12 lessons
               </div>
             </div>
           </aside>
