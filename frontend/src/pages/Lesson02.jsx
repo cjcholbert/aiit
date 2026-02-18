@@ -735,74 +735,66 @@ export default function Lesson02() {
         </div>
       )}
 
-      {/* History Tab — two-column layout: entry list (left) + stats (right) */}
+      {/* History Tab — accordion layout */}
       {activeTab === 'history' && (
-        <div>
-          {/* Two-column grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
-            {/* Left column: Feedback History */}
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                <h2 style={{ margin: 0 }}>Feedback History</h2>
-                <div style={{ display: 'flex', gap: '8px' }}>
-                  {entries.length > 0 && (
-                    <button className="btn btn-danger" onClick={handleClearAll}>
-                      Clear All
-                    </button>
-                  )}
+        <div className="learn-section">
+          <AccordionSection title={`Feedback History (${entries.length})`} defaultOpen={true}>
+            {entries.length === 0 ? (
+              <div>
+                <p className="dashboard-section-description" style={{ marginBottom: '20px' }}>
+                  Analyze feedback in the Analysis tab and you'll receive the following for each entry:
+                </p>
+                <div className="analysis-grid">
+                  <div className="analysis-card" style={{ opacity: 0.7 }}>
+                    <h3>Quality Score</h3>
+                    <div className="field">
+                      <div className="field-label">Rating</div>
+                      <div className="field-value" style={{ color: 'var(--text-primary)' }}>A score from 1-10 measuring how specific and actionable your feedback is, rated as Specific, Adequate, or Vague.</div>
+                    </div>
+                    <div className="field">
+                      <div className="field-label">Summary</div>
+                      <div className="field-value" style={{ color: 'var(--text-primary)' }}>A plain-language assessment of what your feedback communicates and where it falls short.</div>
+                    </div>
+                  </div>
+                  <div className="analysis-card" style={{ opacity: 0.7 }}>
+                    <h3>Issues Found</h3>
+                    <div className="field">
+                      <div className="field-label">Pattern</div>
+                      <div className="field-value" style={{ color: 'var(--text-primary)' }}>The type of vagueness detected — such as judgment without direction ("this doesn't work") or missing location ("fix the formatting").</div>
+                    </div>
+                    <div className="field">
+                      <div className="field-label">Suggestion</div>
+                      <div className="field-value" style={{ color: 'var(--text-primary)' }}>A concrete rewrite showing how to make that specific piece of feedback actionable.</div>
+                    </div>
+                  </div>
+                  <div className="analysis-card" style={{ opacity: 0.7 }}>
+                    <h3>Strengths</h3>
+                    <div className="field">
+                      <div className="field-label">What Worked</div>
+                      <div className="field-value" style={{ color: 'var(--text-primary)' }}>Elements of your feedback that were already specific and useful — so you know what to keep doing.</div>
+                    </div>
+                  </div>
+                  <div className="analysis-card" style={{ opacity: 0.7 }}>
+                    <h3>Rewrite Suggestion</h3>
+                    <div className="field">
+                      <div className="field-label">Improved Version</div>
+                      <div className="field-value" style={{ color: 'var(--text-primary)' }}>A full rewrite of your original feedback that adds specificity, location, and clear next steps.</div>
+                    </div>
+                  </div>
+                </div>
+                <div className="learn-next-step" style={{ marginTop: '24px' }}>
+                  <h3>Ready to See Your Results?</h3>
+                  <p>Paste real feedback you've given to AI into the Analysis tab. Your scored entries will appear here, and patterns will emerge as you analyze more.</p>
+                  <button className="btn btn-primary" onClick={() => setActiveTab('analysis')}>Go to Analysis</button>
                 </div>
               </div>
-
-              {entries.length === 0 ? (
-                <div>
-                  <p className="dashboard-section-description" style={{ marginBottom: '20px' }}>
-                    Analyze feedback in the Analysis tab and you'll receive the following for each entry:
-                  </p>
-                  <div className="analysis-grid">
-                    <div className="analysis-card" style={{ opacity: 0.7 }}>
-                      <h3>Quality Score</h3>
-                      <div className="field">
-                        <div className="field-label">Rating</div>
-                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>A score from 1-10 measuring how specific and actionable your feedback is, rated as Specific, Adequate, or Vague.</div>
-                      </div>
-                      <div className="field">
-                        <div className="field-label">Summary</div>
-                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>A plain-language assessment of what your feedback communicates and where it falls short.</div>
-                      </div>
-                    </div>
-                    <div className="analysis-card" style={{ opacity: 0.7 }}>
-                      <h3>Issues Found</h3>
-                      <div className="field">
-                        <div className="field-label">Pattern</div>
-                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>The type of vagueness detected — such as judgment without direction ("this doesn't work") or missing location ("fix the formatting").</div>
-                      </div>
-                      <div className="field">
-                        <div className="field-label">Suggestion</div>
-                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>A concrete rewrite showing how to make that specific piece of feedback actionable.</div>
-                      </div>
-                    </div>
-                    <div className="analysis-card" style={{ opacity: 0.7 }}>
-                      <h3>Strengths</h3>
-                      <div className="field">
-                        <div className="field-label">What Worked</div>
-                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>Elements of your feedback that were already specific and useful — so you know what to keep doing.</div>
-                      </div>
-                    </div>
-                    <div className="analysis-card" style={{ opacity: 0.7 }}>
-                      <h3>Rewrite Suggestion</h3>
-                      <div className="field">
-                        <div className="field-label">Improved Version</div>
-                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>A full rewrite of your original feedback that adds specificity, location, and clear next steps.</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="learn-next-step" style={{ marginTop: '24px' }}>
-                    <h3>Ready to See Your Results?</h3>
-                    <p>Paste real feedback you've given to AI into the Analysis tab. Your scored entries will appear here, and patterns will emerge as you analyze more.</p>
-                    <button className="btn btn-primary" onClick={() => setActiveTab('analysis')}>Go to Analysis</button>
-                  </div>
+            ) : (
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '12px' }}>
+                  <button className="btn btn-danger" onClick={handleClearAll}>
+                    Clear All
+                  </button>
                 </div>
-              ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   {entries.map((entry) => {
                     const style = QUALITY_STYLES[entry.quality_level] || QUALITY_STYLES.vague;
@@ -850,100 +842,97 @@ export default function Lesson02() {
                     );
                   })}
                 </div>
-              )}
-            </div>
+              </div>
+            )}
+          </AccordionSection>
 
-            {/* Right column: Stats */}
-            <div>
-              <h2 style={{ margin: '0 0 16px' }}>Quality Statistics</h2>
-
-              {stats && stats.total_entries > 0 ? (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  {/* Quality distribution */}
-                  <div className="card" style={{ padding: '24px' }}>
-                    <h3 style={{ marginTop: 0 }}>Quality Distribution</h3>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '16px' }}>
-                      {Object.entries(stats.entries_by_level).map(([level, count]) => {
-                        const style = QUALITY_STYLES[level] || QUALITY_STYLES.vague;
-                        const percentage = Math.round((count / stats.total_entries) * 100);
-                        return (
-                          <div key={level}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                              <span style={{ color: style.color }}>{style.icon} {style.label}</span>
-                              <span style={{ fontWeight: 'bold' }}>{count} ({percentage}%)</span>
-                            </div>
-                            <div style={{ height: '8px', background: 'var(--border-color)', borderRadius: '4px', overflow: 'hidden' }}>
-                              <div style={{
-                                height: '100%',
-                                width: `${percentage}%`,
-                                background: style.color,
-                                borderRadius: '4px'
-                              }} />
-                            </div>
+          <AccordionSection title="Quality Statistics" defaultOpen={true}>
+            {stats && stats.total_entries > 0 ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {/* Quality distribution */}
+                <div className="card" style={{ padding: '24px' }}>
+                  <h3 style={{ marginTop: 0 }}>Quality Distribution</h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '16px' }}>
+                    {Object.entries(stats.entries_by_level).map(([level, count]) => {
+                      const style = QUALITY_STYLES[level] || QUALITY_STYLES.vague;
+                      const percentage = Math.round((count / stats.total_entries) * 100);
+                      return (
+                        <div key={level}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                            <span style={{ color: style.color }}>{style.icon} {style.label}</span>
+                            <span style={{ fontWeight: 'bold' }}>{count} ({percentage}%)</span>
                           </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Common issues */}
-                  {stats.common_issues && stats.common_issues.length > 0 && (
-                    <div className="card" style={{ padding: '24px' }}>
-                      <h3 style={{ marginTop: 0 }}>Your Common Issues</h3>
-                      <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
-                        These are the vague patterns you fall into most often.
-                      </p>
-                      {stats.common_issues.map((issue, idx) => (
-                        <div key={idx} style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          padding: '12px',
-                          background: 'var(--bg-tertiary)',
-                          borderRadius: '6px',
-                          marginBottom: '8px'
-                        }}>
-                          <div>
-                            <strong style={{ color: 'var(--accent-red)' }}>{issue.name}</strong>
-                            <span style={{ color: 'var(--text-secondary)', marginLeft: '8px' }}>
-                              {patterns?.[issue.pattern]?.description}
-                            </span>
+                          <div style={{ height: '8px', background: 'var(--border-color)', borderRadius: '4px', overflow: 'hidden' }}>
+                            <div style={{
+                              height: '100%',
+                              width: `${percentage}%`,
+                              background: style.color,
+                              borderRadius: '4px'
+                            }} />
                           </div>
-                          <span style={{ fontWeight: 'bold', color: 'var(--accent-red)' }}>{issue.count}x</span>
                         </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Improvement rate */}
-                  <div className="card" style={{ padding: '24px' }}>
-                    <h3 style={{ marginTop: 0 }}>Improvement Rate</h3>
-                    <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
-                      Percentage of vague feedback that you've rewritten to be more specific.
-                    </p>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                      <div style={{ flex: 1, height: '12px', background: 'var(--border-color)', borderRadius: '6px', overflow: 'hidden' }}>
-                        <div style={{
-                          height: '100%',
-                          width: `${stats.improvement_rate}%`,
-                          background: 'linear-gradient(90deg, var(--accent-green), var(--accent-green-hover))',
-                          borderRadius: '6px'
-                        }} />
-                      </div>
-                      <span style={{ fontWeight: 'bold', color: 'var(--accent-green)', minWidth: '60px' }}>
-                        {stats.improvement_rate}%
-                      </span>
-                    </div>
+                      );
+                    })}
                   </div>
                 </div>
-              ) : (
-                <div className="empty-state" style={{ textAlign: 'center', padding: '48px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
-                  <h3>No statistics yet</h3>
-                  <p>Analyze some feedback to see your patterns.</p>
+
+                {/* Common issues */}
+                {stats.common_issues && stats.common_issues.length > 0 && (
+                  <div className="card" style={{ padding: '24px' }}>
+                    <h3 style={{ marginTop: 0 }}>Your Common Issues</h3>
+                    <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+                      These are the vague patterns you fall into most often.
+                    </p>
+                    {stats.common_issues.map((issue, idx) => (
+                      <div key={idx} style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        padding: '12px',
+                        background: 'var(--bg-tertiary)',
+                        borderRadius: '6px',
+                        marginBottom: '8px'
+                      }}>
+                        <div>
+                          <strong style={{ color: 'var(--accent-red)' }}>{issue.name}</strong>
+                          <span style={{ color: 'var(--text-secondary)', marginLeft: '8px' }}>
+                            {patterns?.[issue.pattern]?.description}
+                          </span>
+                        </div>
+                        <span style={{ fontWeight: 'bold', color: 'var(--accent-red)' }}>{issue.count}x</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Improvement rate */}
+                <div className="card" style={{ padding: '24px' }}>
+                  <h3 style={{ marginTop: 0 }}>Improvement Rate</h3>
+                  <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+                    Percentage of vague feedback that you've rewritten to be more specific.
+                  </p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <div style={{ flex: 1, height: '12px', background: 'var(--border-color)', borderRadius: '6px', overflow: 'hidden' }}>
+                      <div style={{
+                        height: '100%',
+                        width: `${stats.improvement_rate}%`,
+                        background: 'linear-gradient(90deg, var(--accent-green), var(--accent-green-hover))',
+                        borderRadius: '6px'
+                      }} />
+                    </div>
+                    <span style={{ fontWeight: 'bold', color: 'var(--accent-green)', minWidth: '60px' }}>
+                      {stats.improvement_rate}%
+                    </span>
+                  </div>
                 </div>
-              )}
-            </div>
-          </div>
+              </div>
+            ) : (
+              <div className="empty-state" style={{ textAlign: 'center', padding: '48px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
+                <h3>No statistics yet</h3>
+                <p>Analyze some feedback to see your patterns.</p>
+              </div>
+            )}
+          </AccordionSection>
         </div>
       )}
     </div>
