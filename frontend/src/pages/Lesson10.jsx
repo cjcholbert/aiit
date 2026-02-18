@@ -649,14 +649,6 @@ export default function Lesson10() {
             </div>
           </AccordionSection>
 
-          <div className="learn-next-step">
-            <h3>Ready to Design Your First Workflow?</h3>
-            <p>Think of a report or update you write on a regular schedule. Start with one template
-            and run it twice before building more — you will learn what works best for your style.</p>
-            <button className="btn btn-primary" onClick={() => setActiveTab('design')}>
-              Go to Design
-            </button>
-          </div>
         </div>
       )}
 

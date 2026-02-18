@@ -507,14 +507,6 @@ export default function Lesson02() {
             </div>
           </AccordionSection>
 
-          <div className="learn-next-step">
-            <h3>Ready to Sharpen Your Feedback?</h3>
-            <p>Paste a piece of real feedback you've given to an AI — or are about to give. The analyzer
-            will score it, identify vague patterns, and show you how to rewrite it for faster results.</p>
-            <button className="btn btn-primary" onClick={() => setActiveTab('analysis')}>
-              Go to Analyze
-            </button>
-          </div>
         </div>
       )}
 
@@ -929,13 +921,6 @@ export default function Lesson02() {
             )}
           </AccordionSection>
 
-          {entries.length === 0 && (
-            <div className="learn-next-step">
-              <h3>Ready to See Your Results?</h3>
-              <p>Paste real feedback you've given to AI into the Analysis tab. Your scored entries will appear here, and patterns will emerge as you analyze more.</p>
-              <button className="btn btn-primary" onClick={() => setActiveTab('analysis')}>Go to Analysis</button>
-            </div>
-          )}
         </div>
       )}
     </div>

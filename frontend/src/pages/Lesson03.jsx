@@ -931,19 +931,6 @@ ${gapSections}
             </div>
           </AccordionSection>
 
-          <div className="learn-next-step">
-            <h3>Ready to Build Your First Template?</h3>
-            <p>Start with the guided Build workflow to turn your Lesson 1 context gaps into reusable templates,
-            or jump straight to the Template Library to customize the built-in starters.</p>
-            <button className="btn btn-primary" onClick={() => {
-              setActiveTab('build');
-              if (!module1Insights && !module1Patterns) {
-                fetchModule1Data();
-              }
-            }}>
-              Go to Build Templates
-            </button>
-          </div>
         </div>
       )}
 

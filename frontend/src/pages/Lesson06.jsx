@@ -539,15 +539,6 @@ export default function Lesson06() {
             </div>
           </AccordionSection>
 
-          <div className="learn-next-step">
-            <h3>Ready to Build Your First Checklist?</h3>
-            <p>Start with the output type from your Trust Matrix that you review most often.
-            Build a short checklist (4-6 items) focused on the mistakes that would matter most,
-            then test it in a practice session.</p>
-            <button className="btn btn-primary" onClick={() => setActiveTab('checklists')}>
-              Go to Checklists
-            </button>
-          </div>
         </div>
       )}
 

@@ -496,15 +496,6 @@ export default function Lesson11() {
                         </div>
                     </AccordionSection>
 
-                    <div className="learn-next-step">
-                        <h3>Ready to Start Mapping?</h3>
-                        <p>Begin with three zones for your most common AI tasks — one you trust, one you are
-                        unsure about, and one where AI has let you down. Then log your next few encounters
-                        to see if your ratings hold up.</p>
-                        <button className="btn btn-primary" onClick={() => setActiveTab('zones')}>
-                            Go to Zones
-                        </button>
-                    </div>
                 </div>
             )}
 

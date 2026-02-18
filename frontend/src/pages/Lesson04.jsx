@@ -618,14 +618,6 @@ export default function Lesson04() {
             </div>
           </div>
 
-          <div className="learn-next-step">
-            <h3>Ready to Create Your First Context Doc?</h3>
-            <p>Pick a real project you're actively using AI for. Start with Current State and Next Goals —
-            you can fill in the other sections as things come up.</p>
-            <button className="btn btn-primary" onClick={() => setActiveTab('documents')}>
-              Go to Docs
-            </button>
-          </div>
           </AccordionSection>
         </div>
       )}

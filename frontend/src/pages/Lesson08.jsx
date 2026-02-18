@@ -638,15 +638,6 @@ export default function Lesson08() {
             </div>
           </AccordionSection>
 
-          <div className="learn-next-step">
-            <h3>Ready to Delegate Your First Task?</h3>
-            <p>Start by importing a decomposition from Lesson 7, or create a new delegation from scratch.
-            Focus on writing clear success criteria — that single habit will improve your delegation results
-            more than anything else.</p>
-            <button className="btn btn-primary" onClick={() => setActiveTab('delegate')}>
-              Go to Delegate
-            </button>
-          </div>
         </div>
       )}
 

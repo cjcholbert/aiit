@@ -441,14 +441,6 @@ export default function Lesson07() {
             </div>
           </AccordionSection>
 
-          <div className="learn-next-step">
-            <h3>Ready to Decompose Your First Project?</h3>
-            <p>Pick a real project you are working on — an event, a report, a client deliverable, anything
-            with multiple steps. Break it into tasks and categorize each one.</p>
-            <button className="btn btn-primary" onClick={() => setActiveTab('decompose')}>
-              Go to Decompose
-            </button>
-          </div>
         </div>
       )}
 

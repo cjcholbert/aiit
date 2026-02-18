@@ -520,15 +520,6 @@ export default function Lesson05() {
             </div>
           </AccordionSection>
 
-          <div className="learn-next-step">
-            <h3>Ready to Build Your Trust Matrix?</h3>
-            <p>Start by listing the types of AI output you use most in your work. Assign your
-            best-guess trust levels, then use predictions to find out where your instincts
-            are right and where they need adjusting.</p>
-            <button className="btn btn-primary" onClick={() => setActiveTab('matrix')}>
-              Go to Build Matrix
-            </button>
-          </div>
         </div>
       )}
 

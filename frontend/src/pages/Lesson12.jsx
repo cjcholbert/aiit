@@ -425,15 +425,6 @@ export default function Lesson12() {
                         </div>
                     </AccordionSection>
 
-                    <div className="learn-next-step">
-                        <h3>Ready to Build Your Reference Card?</h3>
-                        <p>Head to the My Card tab to generate your personal reference from everything you
-                        have built across all twelve lessons. Add your own rules, save your go-to prompts,
-                        and export a card you can actually use at work.</p>
-                        <button className="btn btn-primary" onClick={() => setActiveTab('card')}>
-                            Go to My Card
-                        </button>
-                    </div>
                 </div>
             )}
 

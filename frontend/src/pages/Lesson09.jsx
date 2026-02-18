@@ -529,15 +529,6 @@ export default function Lesson09() {
             </div>
           </AccordionSection>
 
-          <div className="learn-next-step">
-            <h3>Ready to Iterate with Purpose?</h3>
-            <p>Pick a real task you're working on — a report, a proposal, a client email, a project
-            plan — and run it through all three passes. You'll feel the difference between "make it
-            better" and knowing exactly what to fix at each stage.</p>
-            <button className="btn btn-primary" onClick={() => setActiveTab('iterate')}>
-              Go to Practice
-            </button>
-          </div>
         </div>
       )}
 

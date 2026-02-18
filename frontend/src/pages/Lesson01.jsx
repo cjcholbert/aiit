@@ -498,17 +498,6 @@ export default function Lesson01() {
                         </div>
                     </AccordionSection>
 
-                    <div className="learn-next-step">
-                        <h3>Ready to Find Your Context Gaps?</h3>
-                        <p>Paste a real AI conversation into the Analyze tab. The tool will identify what context
-                        was missing, what worked well, and give you a specific coaching suggestion for next time.</p>
-                        <button
-                            className="btn btn-primary"
-                            onClick={() => { setActiveTab('analysis'); setAnalysis(null); }}
-                        >
-                            Go to Analyze
-                        </button>
-                    </div>
                 </div>
             )}
 
