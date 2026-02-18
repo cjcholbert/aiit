@@ -452,7 +452,7 @@ export default function Lesson04() {
       {/* Learn Tab */}
       {activeTab === 'concepts' && (
         <div className="learn-section">
-          <AccordionSection title="How This Lesson Works">
+          <AccordionSection title="🧭 How This Lesson Works">
           <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
             Two practice areas to build the context persistence habit:
           </p>
@@ -473,7 +473,7 @@ export default function Lesson04() {
           </div>
           </AccordionSection>
 
-          <AccordionSection title="Without a Context Doc vs. With One">
+          <AccordionSection title="⚖️ Without a Context Doc vs. With One">
           <div className="learn-comparison">
             <div className="learn-comparison-grid">
               <div className="learn-comparison-col">
@@ -505,7 +505,7 @@ export default function Lesson04() {
           </div>
           </AccordionSection>
 
-          <AccordionSection title="The Five Sections (and What to Put In Each)">
+          <AccordionSection title="📑 The Five Sections (and What to Put In Each)">
           <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
             Each section answers a specific question the AI would otherwise have to ask — or guess wrong about.
           </p>
@@ -562,7 +562,7 @@ export default function Lesson04() {
           </div>
           </AccordionSection>
 
-          <AccordionSection title="The 2-Minute Update Habit">
+          <AccordionSection title="⏱️ The 2-Minute Update Habit">
           <div className="learn-comparison">
             <div style={{ padding: '0 4px' }}>
               <p style={{ color: 'var(--text-secondary)', lineHeight: '1.7' }}>
@@ -584,7 +584,7 @@ export default function Lesson04() {
           </div>
           </AccordionSection>
 
-          <AccordionSection title="Common Mistakes">
+          <AccordionSection title="🚫 Common Mistakes">
           <div className="learn-patterns-grid" style={{ marginBottom: '24px' }}>
             <div className="learn-pattern-card">
               <div className="learn-pattern-label avoid">Mistake</div>

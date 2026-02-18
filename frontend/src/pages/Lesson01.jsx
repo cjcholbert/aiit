@@ -331,7 +331,7 @@ export default function Lesson01() {
             {/* Learn Tab */}
             {activeTab === 'concepts' && (
                 <div className="learn-section">
-                    <AccordionSection title="How This Lesson Works" defaultOpen={false}>
+                    <AccordionSection title="🧭 How This Lesson Works" defaultOpen={false}>
                         <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
                             Two practice areas to discover and track your context patterns:
                         </p>
@@ -354,7 +354,7 @@ export default function Lesson01() {
                         </div>
                     </AccordionSection>
 
-                    <AccordionSection title="Without Context vs. With Context">
+                    <AccordionSection title="⚖️ Without Context vs. With Context">
                         <div className="learn-comparison">
                             <div className="learn-comparison-grid">
                                 <div className="learn-comparison-col">
@@ -397,7 +397,7 @@ export default function Lesson01() {
                         </div>
                     </AccordionSection>
 
-                    <AccordionSection title="The Four Most Common Context Gaps">
+                    <AccordionSection title="🕳️ The Four Most Common Context Gaps">
                         <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
                             These are the patterns the Analyze tab looks for in your conversations. Learn to recognize
                             them so you can catch them before they waste your time.
@@ -462,7 +462,7 @@ export default function Lesson01() {
                         </div>
                     </AccordionSection>
 
-                    <AccordionSection title="Common Mistakes">
+                    <AccordionSection title="🚫 Common Mistakes">
                         <div className="learn-patterns-grid" style={{ marginBottom: '24px' }}>
                             <div className="learn-pattern-card">
                                 <div className="learn-pattern-label avoid">Mistake</div>

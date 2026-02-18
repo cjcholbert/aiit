@@ -351,7 +351,7 @@ export default function Lesson09() {
       {/* Learn Tab */}
       {activeTab === 'concepts' && (
         <div className="learn-section">
-          <AccordionSection title="How This Lesson Works">
+          <AccordionSection title="🧭 How This Lesson Works">
             <p className="text-secondary mb-md">
               Three areas that build your structured iteration skill:
             </p>
@@ -380,7 +380,7 @@ export default function Lesson09() {
             </div>
           </AccordionSection>
 
-          <AccordionSection title="Random Tweaking vs. Structured Passes">
+          <AccordionSection title="⚖️ Random Tweaking vs. Structured Passes">
             <div className="learn-comparison">
               <div className="learn-comparison-grid">
                 <div className="learn-comparison-col">
@@ -418,7 +418,7 @@ export default function Lesson09() {
             </div>
           </AccordionSection>
 
-          <AccordionSection title="The Three Passes — In Detail">
+          <AccordionSection title="🔬 The Three Passes — In Detail">
             <p className="text-secondary mb-md">
               Each pass targets a different layer of quality. Doing them in order prevents the
               "fix one thing, break another" cycle.
@@ -487,7 +487,7 @@ export default function Lesson09() {
             </div>
           </AccordionSection>
 
-          <AccordionSection title="Common Mistakes">
+          <AccordionSection title="🚫 Common Mistakes">
             <div className="learn-patterns-grid mb-lg">
               <div className="learn-pattern-card">
                 <div className="learn-pattern-label avoid">Mistake</div>

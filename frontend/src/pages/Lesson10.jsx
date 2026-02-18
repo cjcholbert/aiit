@@ -463,7 +463,7 @@ export default function Lesson10() {
       {/* Learn Tab */}
       {activeTab === 'concepts' && (
         <div className="learn-section">
-          <AccordionSection title="How This Lesson Works">
+          <AccordionSection title="🧭 How This Lesson Works">
             <p className="text-secondary mb-md">
               Two practice areas to build sustainable AI workflow habits:
             </p>
@@ -486,7 +486,7 @@ export default function Lesson10() {
             </div>
           </AccordionSection>
 
-          <AccordionSection title="Ad-Hoc AI Use vs. Designed Workflow">
+          <AccordionSection title="⚖️ Ad-Hoc AI Use vs. Designed Workflow">
             <div className="learn-comparison">
               <div className="learn-comparison-grid">
                 <div className="learn-comparison-col">
@@ -519,7 +519,7 @@ export default function Lesson10() {
             </div>
           </AccordionSection>
 
-          <AccordionSection title="What Makes a Task Worth Turning Into a Workflow">
+          <AccordionSection title="🎯 What Makes a Task Worth Turning Into a Workflow">
             <p className="text-secondary mb-md">
               Not every AI task needs a formal workflow. Focus on tasks that have these qualities:
             </p>
@@ -565,7 +565,7 @@ export default function Lesson10() {
             </div>
           </AccordionSection>
 
-          <AccordionSection title="Anatomy of a Good Workflow Template">
+          <AccordionSection title="🏗️ Anatomy of a Good Workflow Template">
             <p className="text-secondary mb-md">
               When you design your template in the Design tab, you will fill in four parts:
             </p>
@@ -613,7 +613,7 @@ export default function Lesson10() {
             </div>
           </AccordionSection>
 
-          <AccordionSection title="Common Mistakes">
+          <AccordionSection title="🚫 Common Mistakes">
             <div className="learn-patterns-grid mb-lg">
               <div className="learn-pattern-card">
                 <div className="learn-pattern-label avoid">Mistake</div>

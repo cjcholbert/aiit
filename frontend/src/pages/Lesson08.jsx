@@ -460,7 +460,7 @@ export default function Lesson08() {
       {/* Learn Tab */}
       {activeTab === 'concepts' && (
         <div className="learn-section">
-          <AccordionSection title="How This Lesson Works">
+          <AccordionSection title="🧭 How This Lesson Works">
             <p className="text-secondary mb-md">
               One practice area to build your delegation skill:
             </p>
@@ -476,7 +476,7 @@ export default function Lesson08() {
             </div>
           </AccordionSection>
 
-          <AccordionSection title="Vague Handoff vs. Structured Delegation">
+          <AccordionSection title="⚖️ Vague Handoff vs. Structured Delegation">
             <div className="learn-comparison">
               <div className="learn-comparison-grid">
                 <div className="learn-comparison-col">
@@ -512,7 +512,7 @@ export default function Lesson08() {
             </div>
           </AccordionSection>
 
-          <AccordionSection title="The Five Elements of a Good Delegation">
+          <AccordionSection title="📐 The Five Elements of a Good Delegation">
             <p className="text-secondary mb-md">
               Each element answers a question that, if left unanswered, leads to a bad result.
             </p>
@@ -571,7 +571,7 @@ export default function Lesson08() {
             </div>
           </AccordionSection>
 
-          <AccordionSection title="The Delegation Workflow">
+          <AccordionSection title="🔄 The Delegation Workflow">
             <p className="text-secondary mb-md">
               For each task in your sequence, follow this four-step loop:
             </p>
@@ -600,7 +600,7 @@ export default function Lesson08() {
             </div>
           </AccordionSection>
 
-          <AccordionSection title="Common Mistakes">
+          <AccordionSection title="🚫 Common Mistakes">
             <div className="learn-patterns-grid learn-patterns-grid-mb">
               <div className="learn-pattern-card">
                 <div className="learn-pattern-label avoid">Mistake</div>

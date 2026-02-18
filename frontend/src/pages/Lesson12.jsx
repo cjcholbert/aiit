@@ -284,7 +284,7 @@ export default function Lesson12() {
 
             {activeTab === 'concepts' && (
                 <div className="learn-section">
-                    <AccordionSection title="How This Lesson Works">
+                    <AccordionSection title="🧭 How This Lesson Works">
                         <p className="learn-subtitle">
                             Two practice areas to consolidate your AI collaboration skills:
                         </p>
@@ -309,7 +309,7 @@ export default function Lesson12() {
                         </div>
                     </AccordionSection>
 
-                    <AccordionSection title="Without a Reference vs. With One">
+                    <AccordionSection title="⚖️ Without a Reference vs. With One">
                         <div className="learn-comparison">
                             <div className="learn-comparison-grid">
                                 <div className="learn-comparison-col">
@@ -346,7 +346,7 @@ export default function Lesson12() {
                         </div>
                     </AccordionSection>
 
-                    <AccordionSection title="What Your Reference Card Covers">
+                    <AccordionSection title="🗂️ What Your Reference Card Covers">
                         <p className="learn-subtitle">
                             Your card draws from all six skill areas you have practiced throughout this course:
                         </p>
@@ -385,7 +385,7 @@ export default function Lesson12() {
                         </div>
                     </AccordionSection>
 
-                    <AccordionSection title="Common Mistakes">
+                    <AccordionSection title="🚫 Common Mistakes">
                         <div className="learn-patterns-grid mb-lg">
                             <div className="learn-pattern-card">
                                 <div className="learn-pattern-label avoid">Mistake</div>

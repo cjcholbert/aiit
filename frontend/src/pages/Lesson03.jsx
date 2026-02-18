@@ -820,7 +820,7 @@ ${gapSections}
       {/* Learn Tab */}
       {activeTab === 'concepts' && (
         <div className="learn-section">
-          <AccordionSection title="How This Lesson Works">
+          <AccordionSection title="🧭 How This Lesson Works">
             <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
               Four paths to building your template library:
             </p>
@@ -849,7 +849,7 @@ ${gapSections}
             </div>
           </AccordionSection>
 
-          <AccordionSection title="Without Templates vs. With Templates">
+          <AccordionSection title="⚖️ Without Templates vs. With Templates">
             <div className="learn-comparison">
               <div className="learn-comparison-grid">
                 <div className="learn-comparison-col">
@@ -895,7 +895,7 @@ ${gapSections}
             </div>
           </AccordionSection>
 
-          <AccordionSection title="Common Mistakes">
+          <AccordionSection title="🚫 Common Mistakes">
             <div className="learn-patterns-grid" style={{ marginBottom: '24px' }}>
               <div className="learn-pattern-card">
                 <div className="learn-pattern-label avoid">Mistake</div>

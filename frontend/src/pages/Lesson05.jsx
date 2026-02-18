@@ -374,7 +374,7 @@ export default function Lesson05() {
       {/* Learn Tab */}
       {activeTab === 'concepts' && (
         <div className="learn-section">
-          <AccordionSection title="How This Lesson Works">
+          <AccordionSection title="🧭 How This Lesson Works">
             <p className="text-secondary mb-md">
               Three practice areas that build your trust calibration skill:
             </p>
@@ -404,7 +404,7 @@ export default function Lesson05() {
             </div>
           </AccordionSection>
 
-          <AccordionSection title="Uncalibrated vs. Calibrated Trust">
+          <AccordionSection title="⚖️ Uncalibrated vs. Calibrated Trust">
             <div className="learn-comparison">
               <div className="learn-comparison-grid">
                 <div className="learn-comparison-col">
@@ -439,7 +439,7 @@ export default function Lesson05() {
             </div>
           </AccordionSection>
 
-          <AccordionSection title="What Trust Levels Actually Mean">
+          <AccordionSection title="🎚️ What Trust Levels Actually Mean">
             <p className="text-secondary mb-md">
               Trust levels aren't about whether AI is "good" or "bad." They're about how much review
               effort a particular output type needs from you, based on real experience.
@@ -481,7 +481,7 @@ export default function Lesson05() {
             </div>
           </AccordionSection>
 
-          <AccordionSection title="Common Mistakes">
+          <AccordionSection title="🚫 Common Mistakes">
             <div className="learn-patterns-grid learn-patterns-grid-mb">
               <div className="learn-pattern-card">
                 <div className="learn-pattern-label avoid">Mistake</div>

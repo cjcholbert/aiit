@@ -356,7 +356,7 @@ export default function Lesson02() {
       {/* Learn Tab */}
       {activeTab === 'concepts' && (
         <div className="learn-section">
-          <AccordionSection title="How This Lesson Works">
+          <AccordionSection title="🧭 How This Lesson Works">
             <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
               Two practice areas to sharpen your feedback skills:
             </p>
@@ -378,7 +378,7 @@ export default function Lesson02() {
             </div>
           </AccordionSection>
 
-          <AccordionSection title="Vague Feedback vs. Specific Feedback">
+          <AccordionSection title="⚖️ Vague Feedback vs. Specific Feedback">
             <div className="learn-comparison">
             <div className="learn-comparison-grid">
               <div className="learn-comparison-col">
@@ -422,7 +422,7 @@ export default function Lesson02() {
             </div>
           </AccordionSection>
 
-          <AccordionSection title="The Five Patterns of Vague Feedback">
+          <AccordionSection title="🔑 The Five Patterns of Vague Feedback">
           <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
             These are the patterns the Analyze tab identifies. Once you learn to spot them, you'll catch
             yourself before hitting send.
@@ -480,7 +480,7 @@ export default function Lesson02() {
           </div>
           </AccordionSection>
 
-          <AccordionSection title="Common Mistakes">
+          <AccordionSection title="🚫 Common Mistakes">
             <div className="learn-patterns-grid" style={{ marginBottom: '24px' }}>
               <div className="learn-pattern-card">
                 <div className="learn-pattern-label avoid">Mistake</div>
@@ -738,7 +738,7 @@ export default function Lesson02() {
       {/* History Tab — accordion layout */}
       {activeTab === 'history' && (
         <div className="learn-section">
-          <AccordionSection title={`Feedback History (${entries.length})`}>
+          <AccordionSection title={`📋 Feedback History (${entries.length})`}>
             {entries.length === 0 ? (
               <div>
                 <p className="dashboard-section-description" style={{ marginBottom: '20px' }}>
@@ -841,7 +841,7 @@ export default function Lesson02() {
             )}
           </AccordionSection>
 
-          <AccordionSection title="Quality Statistics">
+          <AccordionSection title="📊 Quality Statistics">
             {stats && stats.total_entries > 0 ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 {/* Quality distribution */}

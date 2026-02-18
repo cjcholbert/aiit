@@ -286,7 +286,7 @@ export default function Lesson07() {
       {/* Learn Tab */}
       {activeTab === 'concepts' && (
         <div className="learn-section">
-          <AccordionSection title="How This Lesson Works">
+          <AccordionSection title="🧭 How This Lesson Works">
             <p className="text-secondary mb-md">
               One practice area to build your decomposition muscle:
             </p>
@@ -302,7 +302,7 @@ export default function Lesson07() {
             </div>
           </AccordionSection>
 
-          <AccordionSection title="Dumping vs. Decomposing">
+          <AccordionSection title="⚖️ Dumping vs. Decomposing">
             <div className="learn-comparison">
               <div className="learn-comparison-grid">
                 <div className="learn-comparison-col">
@@ -335,7 +335,7 @@ export default function Lesson07() {
             </div>
           </AccordionSection>
 
-          <AccordionSection title="The Three Categories">
+          <AccordionSection title="🔑 The Three Categories">
             <p className="text-secondary mb-md">
               Every subtask falls into one of three categories. The key is knowing which signals to look for.
             </p>
@@ -380,7 +380,7 @@ export default function Lesson07() {
             </div>
           </AccordionSection>
 
-          <AccordionSection title="Decision Gates: Knowing When to Pause">
+          <AccordionSection title="🚦 Decision Gates: Knowing When to Pause">
             <p className="text-secondary mb-md">
               Not every task flows automatically into the next. A decision gate is a point where you need to
               review results and make a choice before continuing.
@@ -405,7 +405,7 @@ export default function Lesson07() {
             </div>
           </AccordionSection>
 
-          <AccordionSection title="Common Mistakes">
+          <AccordionSection title="🚫 Common Mistakes">
             <div className="learn-patterns-grid learn-patterns-grid-mb">
               <div className="learn-pattern-card">
                 <div className="learn-pattern-label avoid">Mistake</div>

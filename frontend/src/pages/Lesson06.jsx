@@ -382,7 +382,7 @@ export default function Lesson06() {
       {/* Learn Tab */}
       {activeTab === 'concepts' && (
         <div className="learn-section">
-          <AccordionSection title="How This Lesson Works">
+          <AccordionSection title="🧭 How This Lesson Works">
             <p className="text-secondary mb-md">
               Two practice areas to build the systematic verification habit:
             </p>
@@ -405,7 +405,7 @@ export default function Lesson06() {
             </div>
           </AccordionSection>
 
-          <AccordionSection title="Ad-Hoc Review vs. Checklist Verification">
+          <AccordionSection title="⚖️ Ad-Hoc Review vs. Checklist Verification">
             <div className="learn-comparison">
               <div className="learn-comparison-grid">
                 <div className="learn-comparison-col">
@@ -440,7 +440,7 @@ export default function Lesson06() {
             </div>
           </AccordionSection>
 
-          <AccordionSection title="What Makes a Good Verification Checklist">
+          <AccordionSection title="✅ What Makes a Good Verification Checklist">
             <p className="text-secondary mb-md">
               Not all checklists are equally useful. Here's what separates one that actually catches
               problems from one that just makes you feel like you checked.
@@ -499,7 +499,7 @@ export default function Lesson06() {
             </div>
           </AccordionSection>
 
-          <AccordionSection title="Common Mistakes">
+          <AccordionSection title="🚫 Common Mistakes">
             <div className="learn-patterns-grid learn-patterns-grid-mb">
               <div className="learn-pattern-card">
                 <div className="learn-pattern-label avoid">Mistake</div>

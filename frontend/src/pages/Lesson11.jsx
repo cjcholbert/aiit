@@ -316,7 +316,7 @@ export default function Lesson11() {
 
             {activeTab === 'concepts' && (
                 <div className="learn-section">
-                    <AccordionSection title="How This Lesson Works">
+                    <AccordionSection title="🧭 How This Lesson Works">
                         <p className="learn-subtitle">
                             Two practice areas to build your personal AI capability map:
                         </p>
@@ -339,7 +339,7 @@ export default function Lesson11() {
                         </div>
                     </AccordionSection>
 
-                    <AccordionSection title="Guessing vs. Mapping AI Reliability">
+                    <AccordionSection title="⚖️ Guessing vs. Mapping AI Reliability">
                         <div className="learn-comparison">
                             <div className="learn-comparison-grid">
                                 <div className="learn-comparison-col">
@@ -373,7 +373,7 @@ export default function Lesson11() {
                         </div>
                     </AccordionSection>
 
-                    <AccordionSection title="The Three Reliability Zones">
+                    <AccordionSection title="🔑 The Three Reliability Zones">
                         <p className="learn-subtitle">
                             Every type of AI task falls into one of three zones. The boundaries are personal —
                             they depend on your field, your tools, and your experience.
@@ -417,7 +417,7 @@ export default function Lesson11() {
                         </div>
                     </AccordionSection>
 
-                    <AccordionSection title="What to Log as an Encounter">
+                    <AccordionSection title="📝 What to Log as an Encounter">
                         <p className="learn-subtitle">
                             You do not need to log every single AI interaction. Focus on encounters that teach
                             you something about where a boundary is:
@@ -457,7 +457,7 @@ export default function Lesson11() {
                         </div>
                     </AccordionSection>
 
-                    <AccordionSection title="Common Mistakes">
+                    <AccordionSection title="🚫 Common Mistakes">
                         <div className="learn-patterns-grid mb-lg">
                             <div className="learn-pattern-card">
                                 <div className="learn-pattern-label avoid">Mistake</div>
