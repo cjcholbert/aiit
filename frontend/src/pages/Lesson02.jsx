@@ -738,7 +738,7 @@ export default function Lesson02() {
       {/* History Tab — accordion layout */}
       {activeTab === 'history' && (
         <div className="learn-section">
-          <AccordionSection title={`Feedback History (${entries.length})`} defaultOpen={true}>
+          <AccordionSection title={`Feedback History (${entries.length})`}>
             {entries.length === 0 ? (
               <div>
                 <p className="dashboard-section-description" style={{ marginBottom: '20px' }}>
@@ -781,11 +781,6 @@ export default function Lesson02() {
                       <div className="field-value" style={{ color: 'var(--text-primary)' }}>A full rewrite of your original feedback that adds specificity, location, and clear next steps.</div>
                     </div>
                   </div>
-                </div>
-                <div className="learn-next-step" style={{ marginTop: '24px' }}>
-                  <h3>Ready to See Your Results?</h3>
-                  <p>Paste real feedback you've given to AI into the Analysis tab. Your scored entries will appear here, and patterns will emerge as you analyze more.</p>
-                  <button className="btn btn-primary" onClick={() => setActiveTab('analysis')}>Go to Analysis</button>
                 </div>
               </div>
             ) : (
@@ -846,7 +841,7 @@ export default function Lesson02() {
             )}
           </AccordionSection>
 
-          <AccordionSection title="Quality Statistics" defaultOpen={true}>
+          <AccordionSection title="Quality Statistics">
             {stats && stats.total_entries > 0 ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 {/* Quality distribution */}
@@ -933,6 +928,14 @@ export default function Lesson02() {
               </div>
             )}
           </AccordionSection>
+
+          {entries.length === 0 && (
+            <div className="learn-next-step">
+              <h3>Ready to See Your Results?</h3>
+              <p>Paste real feedback you've given to AI into the Analysis tab. Your scored entries will appear here, and patterns will emerge as you analyze more.</p>
+              <button className="btn btn-primary" onClick={() => setActiveTab('analysis')}>Go to Analysis</button>
+            </div>
+          )}
         </div>
       )}
     </div>
