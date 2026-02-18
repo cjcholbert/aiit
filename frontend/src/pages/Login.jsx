@@ -32,7 +32,7 @@ export default function Login() {
         setGuestLoading(true);
         try {
             await autoGuestLogin();
-            navigate('/');
+            navigate('/welcome');
         } catch (err) {
             setError('Guest login failed. Please try again.');
         } finally {
@@ -46,7 +46,7 @@ export default function Login() {
                 <div className="auth-header">
                     <div className="brand" style={{ justifyContent: 'center', borderBottom: 'none', marginBottom: 0 }}>
                         <div className="brand-logo">AI</div>
-                        <div className="brand-name">The AI Collaborator</div>
+                        <div className="brand-name">Your AI Iteration</div>
                     </div>
                     <p className="auth-subtitle">Sign in to continue your learning journey</p>
                 </div>

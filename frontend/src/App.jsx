@@ -6,7 +6,6 @@ import NavDropdown from './components/NavDropdown';
 import ModuleTabNav from './components/ModuleTabNav';
 import ProgressSidebar from './components/ProgressSidebar';
 import ErrorBoundary from './components/ErrorBoundary';
-import FeedbackWidget from './components/FeedbackWidget';
 import CelebrationToast from './components/CelebrationToast';
 import SkipLink from './components/SkipLink';
 import Login from './pages/Login';
@@ -24,8 +23,6 @@ import Lesson09 from './pages/Lesson09';
 import Lesson10 from './pages/Lesson10';
 import Lesson11 from './pages/Lesson11';
 import Lesson12 from './pages/Lesson12';
-import CoreConcepts from './pages/CoreConcepts';
-import Curriculum from './pages/Curriculum';
 import Admin from './pages/Admin';
 import Landing from './pages/Landing';
 
@@ -120,7 +117,7 @@ function AppLayout({ children }) {
                         <NavDropdown />
                     </div>
 
-                    <ModuleTabNav />
+                    {lessonNumber && <ModuleTabNav />}
 
                     <div className={`content-body${lessonNumber ? ' content-body--with-sidebar' : ''}`}>
                         <main id="main-content" className="main-content" tabIndex="-1">
@@ -133,7 +130,6 @@ function AppLayout({ children }) {
                     </div>
                 </div>
 
-                <FeedbackWidget />
                 <CelebrationToast />
             </div>
         </ProgressProvider>
@@ -167,21 +163,16 @@ export default function App() {
                 </ProtectedRoute>
             } />
 
-            <Route path="/concepts" element={
+            <Route path="/welcome" element={
                 <ProtectedRoute>
                     <AppLayout>
-                        <CoreConcepts />
+                        <Landing />
                     </AppLayout>
                 </ProtectedRoute>
             } />
 
-            <Route path="/curriculum" element={
-                <ProtectedRoute>
-                    <AppLayout>
-                        <Curriculum />
-                    </AppLayout>
-                </ProtectedRoute>
-            } />
+            {/* Redirect old /curriculum to dashboard */}
+            <Route path="/curriculum" element={<Navigate to="/dashboard" replace />} />
 
             <Route path="/admin" element={
                 <ProtectedRoute>

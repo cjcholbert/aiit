@@ -3,6 +3,7 @@ import { useApi } from '../hooks/useApi';
 import ConnectionCallout from '../components/ConnectionCallout';
 import StatsPanel from '../components/StatsPanel';
 import ExamplesDropdown from '../components/ExamplesDropdown';
+import { AccordionSection } from '../components/Accordion';
 
 // Task status colors - mapped to CSS classes
 const STATUS_COLORS = {
@@ -30,7 +31,7 @@ const CATEGORY_INFO = {
 
 export default function Lesson08() {
   const api = useApi();
-  const [activeTab, setActiveTab] = useState('learn');
+  const [activeTab, setActiveTab] = useState('concepts');
   const [delegations, setDelegations] = useState([]);
   const [templateElements, setTemplateElements] = useState(null);
   const [stats, setStats] = useState(null);
@@ -445,7 +446,7 @@ export default function Lesson08() {
 
       {/* Tabs */}
       <div className="tabs">
-        {['learn', 'delegate'].map((tab) => (
+        {['concepts', 'delegate'].map((tab) => (
           <button
             key={tab}
             className={`tab ${activeTab === tab ? 'active' : ''}`}
@@ -457,202 +458,185 @@ export default function Lesson08() {
       </div>
 
       {/* Learn Tab */}
-      {activeTab === 'learn' && (
+      {activeTab === 'concepts' && (
         <div className="learn-section">
-          <div className="learn-intro">
-            <h2>Why "Just Handle This" Gets You Bad Results</h2>
-            <p>
-              You have decomposed your project into tasks and identified which ones are AI-Optimal. Great.
-              Now you open your AI tool and type: "Write a follow-up email to the client." The AI produces
-              something generic and slightly off-tone. You rewrite half of it yourself. Next task: "Summarize
-              these meeting notes." Another generic output that misses the action items your boss cares about.
+          <AccordionSection title="How This Lesson Works">
+            <p className="text-secondary mb-md">
+              One practice area to build your delegation skill:
             </p>
-            <p>
-              The problem is not your task selection — it is your handoff. Delegating to AI is like delegating
-              to a new team member: you get out what you put in. A vague instruction gets a vague result.
-              A structured delegation — with context, clear objectives, and success criteria — gets something
-              you can actually use.
+
+            <div className="learn-patterns-grid">
+              <div className="learn-pattern-card">
+                <h4 className="color-accent-blue">Delegate Tab — Create and Execute Delegations</h4>
+                <p>Build a delegation with a template (context, objectives, scope, deliverables, success
+                criteria), add your task sequence, then execute each task through the Delegate-Receive-Review-Decide
+                workflow. You can import tasks directly from Lesson 7.</p>
+                <button className="learn-tab-link" onClick={() => setActiveTab('delegate')}>Go to Delegate →</button>
+              </div>
+            </div>
+          </AccordionSection>
+
+          <AccordionSection title="Vague Handoff vs. Structured Delegation">
+            <div className="learn-comparison">
+              <div className="learn-comparison-grid">
+                <div className="learn-comparison-col">
+                  <h4 className="poor">Tossing Tasks Over the Wall</h4>
+                  <div className="learn-comparison-item poor">
+                    <div className="learn-comparison-scenario">Writing Client Follow-up Emails</div>
+                    <p>"Write a follow-up email to the client about the project."</p>
+                  </div>
+                  <div className="learn-comparison-item poor">
+                    <p>AI writes a generic "Thanks for meeting!" email. It misses that the client raised
+                    concerns about the timeline, uses the wrong tone (too casual for this account), and
+                    does not include the next steps you promised. You end up rewriting the entire thing.</p>
+                  </div>
+                </div>
+                <div className="learn-comparison-col">
+                  <h4 className="good">Structured Delegation</h4>
+                  <div className="learn-comparison-item good">
+                    <div className="learn-comparison-scenario">Same Task — With a Delegation Template</div>
+                    <p><strong>Context:</strong> Post-meeting follow-up for Acme Corp, a formal enterprise client.
+                    They expressed concern about our March 15 deadline during yesterday's call.<br/>
+                    <strong>Objective:</strong> Reassure the client while confirming next steps.<br/>
+                    <strong>Scope:</strong> One email, 150-200 words, professional tone.<br/>
+                    <strong>Deliverables:</strong> Email draft with subject line.<br/>
+                    <strong>Success criteria:</strong> Acknowledges their timeline concern, confirms we will
+                    deliver the first milestone by Feb 28, includes meeting link for next check-in.</p>
+                  </div>
+                  <div className="learn-comparison-item good">
+                    <p>AI produces a usable email on the first try. Minor tweaks only — you adjust one phrase
+                    and send it in under a minute.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </AccordionSection>
+
+          <AccordionSection title="The Five Elements of a Good Delegation">
+            <p className="text-secondary mb-md">
+              Each element answers a question that, if left unanswered, leads to a bad result.
             </p>
-          </div>
 
-          <div className="learn-key-insight">
-            <strong>Key Insight:</strong> A delegation template is not bureaucratic overhead — it is the
-            difference between getting usable output on the first try and burning three rounds of revision.
-            Spending 2 minutes writing a clear handoff saves 15 minutes of rework.
-          </div>
-
-          <h3>How This Lesson Works</h3>
-          <p className="text-secondary mb-md">
-            One practice area to build your delegation skill:
-          </p>
-
-          <div className="learn-patterns-grid">
-            <div className="learn-pattern-card">
-              <h4 className="color-accent-blue">Delegate Tab — Create and Execute Delegations</h4>
-              <p>Build a delegation with a template (context, objectives, scope, deliverables, success
-              criteria), add your task sequence, then execute each task through the Delegate-Receive-Review-Decide
-              workflow. You can import tasks directly from Lesson 7.</p>
-              <button className="learn-tab-link" onClick={() => setActiveTab('delegate')}>Go to Delegate →</button>
-            </div>
-          </div>
-
-          <div className="learn-comparison">
-            <h3>Vague Handoff vs. Structured Delegation</h3>
-            <div className="learn-comparison-grid">
-              <div className="learn-comparison-col">
-                <h4 className="poor">Tossing Tasks Over the Wall</h4>
-                <div className="learn-comparison-item poor">
-                  <div className="learn-comparison-scenario">Writing Client Follow-up Emails</div>
-                  <p>"Write a follow-up email to the client about the project."</p>
-                </div>
-                <div className="learn-comparison-item poor">
-                  <p>AI writes a generic "Thanks for meeting!" email. It misses that the client raised
-                  concerns about the timeline, uses the wrong tone (too casual for this account), and
-                  does not include the next steps you promised. You end up rewriting the entire thing.</p>
+            <div className="learn-patterns-grid">
+              <div className="learn-pattern-card">
+                <h4 className="color-accent-blue">1. Context</h4>
+                <p>What does AI need to know about the situation? Background, audience, constraints, relevant history.</p>
+                <div className="learn-pattern-label better">Example</div>
+                <div className="learn-example-good">
+                  "We are a 50-person consulting firm preparing for an annual client dinner. Budget is $15,000.
+                  The venue must be within 20 minutes of downtown Portland. Last year we used a steakhouse and
+                  received feedback that we should offer more dietary options."
                 </div>
               </div>
-              <div className="learn-comparison-col">
-                <h4 className="good">Structured Delegation</h4>
-                <div className="learn-comparison-item good">
-                  <div className="learn-comparison-scenario">Same Task — With a Delegation Template</div>
-                  <p><strong>Context:</strong> Post-meeting follow-up for Acme Corp, a formal enterprise client.
-                  They expressed concern about our March 15 deadline during yesterday's call.<br/>
-                  <strong>Objective:</strong> Reassure the client while confirming next steps.<br/>
-                  <strong>Scope:</strong> One email, 150-200 words, professional tone.<br/>
-                  <strong>Deliverables:</strong> Email draft with subject line.<br/>
-                  <strong>Success criteria:</strong> Acknowledges their timeline concern, confirms we will
-                  deliver the first milestone by Feb 28, includes meeting link for next check-in.</p>
+              <div className="learn-pattern-card">
+                <h4 className="color-accent-purple">2. Objective</h4>
+                <p>What should the output accomplish? Not just what it <em>is</em>, but what it is <em>for</em>.</p>
+                <div className="learn-pattern-label better">Example</div>
+                <div className="learn-example-good">
+                  "Create a comparison table of 5 venue options that I can present to my manager for a final
+                  decision. The table should make it easy to compare on price, capacity, menu flexibility, and
+                  distance from downtown."
                 </div>
-                <div className="learn-comparison-item good">
-                  <p>AI produces a usable email on the first try. Minor tweaks only — you adjust one phrase
-                  and send it in under a minute.</p>
+              </div>
+              <div className="learn-pattern-card">
+                <h4 className="color-accent-yellow">3. Scope</h4>
+                <p>What is included and what is explicitly out of bounds? Prevents AI from going too broad or too narrow.</p>
+                <div className="learn-pattern-label better">Example</div>
+                <div className="learn-example-good">
+                  "Include: venue name, address, estimated cost for 50 guests, menu style, and one
+                  notable feature. Exclude: detailed menu pricing, availability dates (I will call
+                  to check), and entertainment options."
+                </div>
+              </div>
+              <div className="learn-pattern-card">
+                <h4 className="color-accent-green">4. Deliverables</h4>
+                <p>What is the specific output format? A table, an email draft, a bullet list, a slide outline?</p>
+                <div className="learn-pattern-label better">Example</div>
+                <div className="learn-example-good">
+                  "A markdown table with columns: Venue Name | Location | Est. Cost (50 guests) | Menu Style |
+                  Key Feature. Plus a one-paragraph recommendation at the bottom explaining which venue
+                  best fits our constraints."
+                </div>
+              </div>
+              <div className="learn-pattern-card">
+                <h4 className="color-accent-red">5. Success Criteria</h4>
+                <p>How will you judge whether the output is done? These should be specific enough to check in under a minute.</p>
+                <div className="learn-pattern-label better">Example</div>
+                <div className="learn-example-good">
+                  "All 5 venues must be real restaurants in the Portland metro area. All prices must be
+                  within the $15,000 budget. At least 2 venues must offer vegetarian/vegan entrees. The
+                  recommendation must reference at least two of our stated constraints."
                 </div>
               </div>
             </div>
-          </div>
+          </AccordionSection>
 
-          <h3>The Five Elements of a Good Delegation</h3>
-          <p className="text-secondary mb-md">
-            Each element answers a question that, if left unanswered, leads to a bad result.
-          </p>
+          <AccordionSection title="The Delegation Workflow">
+            <p className="text-secondary mb-md">
+              For each task in your sequence, follow this four-step loop:
+            </p>
 
-          <div className="learn-patterns-grid">
-            <div className="learn-pattern-card">
-              <h4 className="color-accent-blue">1. Context</h4>
-              <p>What does AI need to know about the situation? Background, audience, constraints, relevant history.</p>
-              <div className="learn-pattern-label better">Example</div>
-              <div className="learn-example-good">
-                "We are a 50-person consulting firm preparing for an annual client dinner. Budget is $15,000.
-                The venue must be within 20 minutes of downtown Portland. Last year we used a steakhouse and
-                received feedback that we should offer more dietary options."
+            <div className="learn-patterns-grid">
+              <div className="learn-pattern-card">
+                <h4 className="color-accent-blue">1. Delegate</h4>
+                <p>Hand off the task with your structured prompt. Include the relevant parts of your delegation
+                template plus any task-specific instructions.</p>
+              </div>
+              <div className="learn-pattern-card">
+                <h4 className="color-accent-yellow">2. Receive</h4>
+                <p>Capture the AI's output. Do not start editing yet — just read it through once to understand
+                what you got back.</p>
+              </div>
+              <div className="learn-pattern-card">
+                <h4 className="color-accent-purple">3. Review</h4>
+                <p>Check the output against your success criteria. Does it meet each one? Note what passed and
+                what fell short.</p>
+              </div>
+              <div className="learn-pattern-card">
+                <h4 className="color-accent-green">4. Decide</h4>
+                <p>Three options: Approve (meets criteria, move on), Revise (send back with specific feedback),
+                or Escalate (this task needs a different approach or human judgment).</p>
               </div>
             </div>
-            <div className="learn-pattern-card">
-              <h4 className="color-accent-purple">2. Objective</h4>
-              <p>What should the output accomplish? Not just what it <em>is</em>, but what it is <em>for</em>.</p>
-              <div className="learn-pattern-label better">Example</div>
-              <div className="learn-example-good">
-                "Create a comparison table of 5 venue options that I can present to my manager for a final
-                decision. The table should make it easy to compare on price, capacity, menu flexibility, and
-                distance from downtown."
-              </div>
-            </div>
-            <div className="learn-pattern-card">
-              <h4 className="color-accent-yellow">3. Scope</h4>
-              <p>What is included and what is explicitly out of bounds? Prevents AI from going too broad or too narrow.</p>
-              <div className="learn-pattern-label better">Example</div>
-              <div className="learn-example-good">
-                "Include: venue name, address, estimated cost for 50 guests, menu style, and one
-                notable feature. Exclude: detailed menu pricing, availability dates (I will call
-                to check), and entertainment options."
-              </div>
-            </div>
-            <div className="learn-pattern-card">
-              <h4 className="color-accent-green">4. Deliverables</h4>
-              <p>What is the specific output format? A table, an email draft, a bullet list, a slide outline?</p>
-              <div className="learn-pattern-label better">Example</div>
-              <div className="learn-example-good">
-                "A markdown table with columns: Venue Name | Location | Est. Cost (50 guests) | Menu Style |
-                Key Feature. Plus a one-paragraph recommendation at the bottom explaining which venue
-                best fits our constraints."
-              </div>
-            </div>
-            <div className="learn-pattern-card">
-              <h4 className="color-accent-red">5. Success Criteria</h4>
-              <p>How will you judge whether the output is done? These should be specific enough to check in under a minute.</p>
-              <div className="learn-pattern-label better">Example</div>
-              <div className="learn-example-good">
-                "All 5 venues must be real restaurants in the Portland metro area. All prices must be
-                within the $15,000 budget. At least 2 venues must offer vegetarian/vegan entrees. The
-                recommendation must reference at least two of our stated constraints."
-              </div>
-            </div>
-          </div>
+          </AccordionSection>
 
-          <h3>The Delegation Workflow</h3>
-          <p className="text-secondary mb-md">
-            For each task in your sequence, follow this four-step loop:
-          </p>
-
-          <div className="learn-patterns-grid">
-            <div className="learn-pattern-card">
-              <h4 className="color-accent-blue">1. Delegate</h4>
-              <p>Hand off the task with your structured prompt. Include the relevant parts of your delegation
-              template plus any task-specific instructions.</p>
-            </div>
-            <div className="learn-pattern-card">
-              <h4 className="color-accent-yellow">2. Receive</h4>
-              <p>Capture the AI's output. Do not start editing yet — just read it through once to understand
-              what you got back.</p>
-            </div>
-            <div className="learn-pattern-card">
-              <h4 className="color-accent-purple">3. Review</h4>
-              <p>Check the output against your success criteria. Does it meet each one? Note what passed and
-              what fell short.</p>
-            </div>
-            <div className="learn-pattern-card">
-              <h4 className="color-accent-green">4. Decide</h4>
-              <p>Three options: Approve (meets criteria, move on), Revise (send back with specific feedback),
-              or Escalate (this task needs a different approach or human judgment).</p>
-            </div>
-          </div>
-
-          <h3>Common Mistakes</h3>
-          <div className="learn-patterns-grid learn-patterns-grid-mb">
-            <div className="learn-pattern-card">
-              <div className="learn-pattern-label avoid">Mistake</div>
-              <p>Skipping success criteria because "I'll know good output when I see it." Without criteria,
-              you end up in endless revision loops because you keep noticing new things to fix.</p>
-              <div className="learn-pattern-label better">Instead</div>
-              <div className="learn-example-good">
-                Write 2-3 specific, checkable criteria before you delegate. "Includes all five budget
-                line items" is checkable. "Looks professional" is not.
+          <AccordionSection title="Common Mistakes">
+            <div className="learn-patterns-grid learn-patterns-grid-mb">
+              <div className="learn-pattern-card">
+                <div className="learn-pattern-label avoid">Mistake</div>
+                <p>Skipping success criteria because "I'll know good output when I see it." Without criteria,
+                you end up in endless revision loops because you keep noticing new things to fix.</p>
+                <div className="learn-pattern-label better">Instead</div>
+                <div className="learn-example-good">
+                  Write 2-3 specific, checkable criteria before you delegate. "Includes all five budget
+                  line items" is checkable. "Looks professional" is not.
+                </div>
+              </div>
+              <div className="learn-pattern-card">
+                <div className="learn-pattern-label avoid">Mistake</div>
+                <p>Writing a perfect template but reusing it without updating the context. Last month's
+                delegation for the Q4 report does not work for Q1 — the numbers, priorities, and audience
+                reactions have all changed.</p>
+                <div className="learn-pattern-label better">Instead</div>
+                <div className="learn-example-good">
+                  Treat templates as starting points, not copy-paste solutions. Update the context and
+                  success criteria each time, even if the structure stays the same.
+                </div>
+              </div>
+              <div className="learn-pattern-card">
+                <div className="learn-pattern-label avoid">Mistake</div>
+                <p>Delegating Human-Primary tasks and wondering why the results are bad. Asking AI to "decide
+                which vendor to go with" when the decision involves internal politics and budget tradeoffs
+                only you understand.</p>
+                <div className="learn-pattern-label better">Instead</div>
+                <div className="learn-example-good">
+                  Revisit your Lesson 7 decomposition. If a task keeps failing, it may be miscategorized.
+                  Move it to Collaborative (you provide judgment, AI helps structure) or Human-Primary
+                  (you do it, AI assists at the edges).
+                </div>
               </div>
             </div>
-            <div className="learn-pattern-card">
-              <div className="learn-pattern-label avoid">Mistake</div>
-              <p>Writing a perfect template but reusing it without updating the context. Last month's
-              delegation for the Q4 report does not work for Q1 — the numbers, priorities, and audience
-              reactions have all changed.</p>
-              <div className="learn-pattern-label better">Instead</div>
-              <div className="learn-example-good">
-                Treat templates as starting points, not copy-paste solutions. Update the context and
-                success criteria each time, even if the structure stays the same.
-              </div>
-            </div>
-            <div className="learn-pattern-card">
-              <div className="learn-pattern-label avoid">Mistake</div>
-              <p>Delegating Human-Primary tasks and wondering why the results are bad. Asking AI to "decide
-              which vendor to go with" when the decision involves internal politics and budget tradeoffs
-              only you understand.</p>
-              <div className="learn-pattern-label better">Instead</div>
-              <div className="learn-example-good">
-                Revisit your Lesson 7 decomposition. If a task keeps failing, it may be miscategorized.
-                Move it to Collaborative (you provide judgment, AI helps structure) or Human-Primary
-                (you do it, AI assists at the edges).
-              </div>
-            </div>
-          </div>
+          </AccordionSection>
 
           <div className="learn-next-step">
             <h3>Ready to Delegate Your First Task?</h3>
@@ -986,9 +970,34 @@ export default function Lesson08() {
               </div>
 
               {delegations.length === 0 ? (
-                <div className="empty-state">
-                  <h3>No delegations yet</h3>
-                  <p>Create a delegation to practice structured AI task handoffs.</p>
+                <div>
+                  <p className="dashboard-section-description" style={{ marginBottom: '20px' }}>
+                    Create a delegation above and you'll build a structured handoff brief with:
+                  </p>
+                  <div className="analysis-grid">
+                    <div className="analysis-card" style={{ opacity: 0.7 }}>
+                      <h3>Delegation Brief</h3>
+                      <div className="field">
+                        <div className="field-label">Context &amp; Objective</div>
+                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>The background information and clear goal for the task — the difference between "handle this" and giving AI enough to actually succeed on the first attempt.</div>
+                      </div>
+                      <div className="field">
+                        <div className="field-label">Scope &amp; Deliverables</div>
+                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>Explicit boundaries on what's included, what's not, and what the finished output should look like — preventing scope drift and misaligned expectations.</div>
+                      </div>
+                    </div>
+                    <div className="analysis-card" style={{ opacity: 0.7 }}>
+                      <h3>Execution Tracking</h3>
+                      <div className="field">
+                        <div className="field-label">Task Sequence</div>
+                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>Tasks from your decomposition executed in order, with progress tracked per task so you can see where in the workflow you are.</div>
+                      </div>
+                      <div className="field">
+                        <div className="field-label">Success Criteria</div>
+                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>Measurable conditions that define "done" — so both you and the AI know when the task meets the bar without subjective guesswork.</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <div className="grid-auto-fill">

@@ -4,27 +4,27 @@ import './Landing.css';
 const CONCEPTS = [
   {
     title: 'Context Assembly',
-    description: 'Know what information to provide, from what sources, and why. Make the unstated explicit.'
+    description: 'Ever get a generic AI response and think "that\'s not what I meant"? You probably left out details you didn\'t realize mattered. Learn to spot your blind spots before they cost you another round of back-and-forth.'
   },
   {
     title: 'Quality Judgment',
-    description: 'Calibrate when to trust AI output and when to verify. Distinguish "looks right" from "is right."'
+    description: 'AI output can look polished even when it\'s wrong. Build your instinct for when to hit "use this" and when to pause and double-check — so you catch the mistakes that matter without wasting time on the ones that don\'t.'
   },
   {
     title: 'Task Decomposition',
-    description: 'Break work into AI-appropriate chunks. Identify which subtasks to delegate vs. own.'
+    description: 'Some tasks AI nails in seconds. Others it butchers no matter how you ask. Get better at splitting your work so the right pieces go to AI and the right pieces stay with you.'
   },
   {
     title: 'Iterative Refinement',
-    description: 'Move from 70% to 95% through structured feedback loops. First outputs are drafts, not products.'
+    description: 'The first draft is never the final answer — and that\'s the point. Learn to give feedback that actually moves the needle, so you go from "close enough" to "exactly right" in fewer rounds.'
   },
   {
     title: 'Workflow Integration',
-    description: 'Embed AI into existing processes effectively. Build sustainable habits, not one-off experiments.'
+    description: 'One great AI experiment doesn\'t change how you work. Build repeatable habits that make AI a natural part of your day — not something you remember to try when you\'re already behind.'
   },
   {
     title: 'Frontier Recognition',
-    description: 'Know when you\'re outside AI\'s reliable boundaries. "Can attempt" differs from "can do well."'
+    description: 'AI is confidently wrong more often than you\'d think. Develop a feel for where the guardrails end, so you know when to push forward and when to take the wheel yourself.'
   }
 ];
 
@@ -32,7 +32,7 @@ export default function Landing() {
   return (
     <div className="landing-page">
       <nav className="landing-nav">
-        <div className="landing-nav-brand">AI Manager Skills</div>
+        <div className="landing-nav-brand">Your AI Iteration</div>
         <div className="landing-nav-links">
           <Link to="/login">Sign In</Link>
           <Link to="/register" className="btn-landing-primary">Get Started</Link>
@@ -58,8 +58,8 @@ export default function Landing() {
           <div className="landing-problem-col">
             <h3>Typical AI training</h3>
             <ul className="problem-list">
-              <li>Prompt engineering tricks</li>
-              <li>Tool-specific tutorials</li>
+              <li>Prompt tricks without the judgment to apply them</li>
+              <li>Tool training that expires when the UI changes</li>
               <li>One-shot demos that don't stick</li>
               <li>No framework for when AI fails</li>
             </ul>

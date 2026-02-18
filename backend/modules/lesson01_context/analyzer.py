@@ -462,16 +462,32 @@ async def analyze_transcript(
         total_turns = len(transcript.turns)
         if first_msg_len < 30:
             conf_score = 4
-            conf_reasoning = "Very short first message limits analysis depth."
+            conf_reasoning = (
+                "Your opening message was very short, which limits what the analysis can detect. "
+                "For a stronger read, paste a conversation where your first message is at least "
+                "2-3 sentences with real task context."
+            )
         elif total_turns >= 5:
             conf_score = 8
-            conf_reasoning = "Multiple turns provide rich signal for pattern detection."
+            conf_reasoning = (
+                "Multiple back-and-forth turns give strong signal for pattern detection. "
+                "To reach 9-10, include conversations where you provided detailed upfront "
+                "context so the tool can identify what you do well, not just what's missing."
+            )
         elif total_turns >= 3:
             conf_score = 7
-            conf_reasoning = "Enough turns for reasonable analysis."
+            conf_reasoning = (
+                "Three or more turns provide a reasonable basis for analysis. "
+                "Longer conversations (5+ turns) give richer signal — especially ones "
+                "where you had to clarify or re-explain, since those reveal context gaps."
+            )
         else:
             conf_score = 5
-            conf_reasoning = "Limited turns reduce analysis certainty."
+            conf_reasoning = (
+                "Only 1-2 turns limits what the analysis can surface. "
+                "Try pasting a conversation with more back-and-forth — the corrections "
+                "and follow-ups are where your context patterns become visible."
+            )
 
         # Clamp to valid range
         conf_score = max(1, min(10, conf_score))

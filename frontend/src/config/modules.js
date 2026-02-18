@@ -1,7 +1,7 @@
 // Shared configuration for modules and concepts
 // Used by Dashboard.jsx and Sidebar.jsx
 
-export const APP_NAME = 'The AI Collaborator';
+export const APP_NAME = 'Your AI Iteration';
 
 // The Six Core Managerial Concepts
 export const CONCEPTS = {

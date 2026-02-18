@@ -3,6 +3,7 @@ import { useApi } from '../hooks/useApi';
 import ConnectionCallout from '../components/ConnectionCallout';
 import StatsPanel from '../components/StatsPanel';
 import ExamplesDropdown from '../components/ExamplesDropdown';
+import { AccordionSection } from '../components/Accordion';
 
 // Priority colors
 const PRIORITY_COLORS = {
@@ -20,7 +21,7 @@ const STATUS_COLORS = {
 
 export default function Lesson04() {
   const api = useApi();
-  const [activeTab, setActiveTab] = useState('learn');
+  const [activeTab, setActiveTab] = useState('concepts');
   const [docs, setDocs] = useState([]);
   const [sessions, setSessions] = useState([]);
   const [activeSession, setActiveSession] = useState(null);
@@ -142,7 +143,7 @@ export default function Lesson04() {
         content: doc.content || ''
       });
       setEditingDoc(doc);
-      setActiveTab('docs');
+      setActiveTab('documents');
     } catch (err) {
       setError(err.message);
     }
@@ -437,7 +438,7 @@ export default function Lesson04() {
 
       {/* Tabs */}
       <div className="tabs">
-        {['learn', 'docs', 'sessions'].map((tab) => (
+        {['concepts', 'documents', 'sessions'].map((tab) => (
           <button
             key={tab}
             className={`tab ${activeTab === tab ? 'active' : ''}`}
@@ -449,29 +450,9 @@ export default function Lesson04() {
       </div>
 
       {/* Learn Tab */}
-      {activeTab === 'learn' && (
+      {activeTab === 'concepts' && (
         <div className="learn-section">
-          <div className="learn-intro">
-            <h2>Why Every Ongoing Project Needs a Context Doc</h2>
-            <p>
-              Think about a project you've discussed with AI more than once — a report series, a client
-              engagement, a home renovation, a product launch. Each new session, you probably spend the
-              first few exchanges re-explaining background the AI should already "know." Worse, it may
-              suggest things you already tried and rejected.
-            </p>
-            <p>
-              A context document is a single, living summary you paste at the start of any AI session.
-              It takes 2 minutes to maintain and saves 10+ minutes of re-explaining every time.
-            </p>
-          </div>
-
-          <div className="learn-key-insight">
-            <strong>Key Insight:</strong> Context docs aren't notes for you — they're briefing documents
-            for AI. Write them the way you'd brief a new colleague joining your project mid-stream:
-            what's done, what's decided, what went wrong, and what's next.
-          </div>
-
-          <h3>How This Lesson Works</h3>
+          <AccordionSection title="How This Lesson Works">
           <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
             Two practice areas to build the context persistence habit:
           </p>
@@ -481,7 +462,7 @@ export default function Lesson04() {
               <h4 style={{ color: 'var(--accent-blue)' }}>Docs Tab — Build Your Context Documents</h4>
               <p>Create a context doc for a real project. Fill in the five sections (state, decisions,
               issues, lessons, goals) and generate a ready-to-paste prompt for your next AI session.</p>
-              <button className="learn-tab-link" onClick={() => setActiveTab('docs')}>Go to Docs →</button>
+              <button className="learn-tab-link" onClick={() => setActiveTab('documents')}>Go to Documents →</button>
             </div>
             <div className="learn-pattern-card">
               <h4 style={{ color: 'var(--accent-green)' }}>Sessions Tab — Track Your AI Work Sessions</h4>
@@ -490,9 +471,10 @@ export default function Lesson04() {
               <button className="learn-tab-link" onClick={() => setActiveTab('sessions')}>Go to Sessions →</button>
             </div>
           </div>
+          </AccordionSection>
 
+          <AccordionSection title="Without a Context Doc vs. With One">
           <div className="learn-comparison">
-            <h3>Without a Context Doc vs. With One</h3>
             <div className="learn-comparison-grid">
               <div className="learn-comparison-col">
                 <h4 className="poor">Starting Every Session Cold</h4>
@@ -521,8 +503,9 @@ export default function Lesson04() {
               </div>
             </div>
           </div>
+          </AccordionSection>
 
-          <h3>The Five Sections (and What to Put In Each)</h3>
+          <AccordionSection title="The Five Sections (and What to Put In Each)">
           <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
             Each section answers a specific question the AI would otherwise have to ask — or guess wrong about.
           </p>
@@ -577,9 +560,10 @@ export default function Lesson04() {
               </div>
             </div>
           </div>
+          </AccordionSection>
 
+          <AccordionSection title="The 2-Minute Update Habit">
           <div className="learn-comparison">
-            <h3>The 2-Minute Update Habit</h3>
             <div style={{ padding: '0 4px' }}>
               <p style={{ color: 'var(--text-secondary)', lineHeight: '1.7' }}>
                 The biggest risk with context docs is letting them go stale. After each AI session, spend
@@ -598,8 +582,9 @@ export default function Lesson04() {
               </p>
             </div>
           </div>
+          </AccordionSection>
 
-          <h3>Common Mistakes</h3>
+          <AccordionSection title="Common Mistakes">
           <div className="learn-patterns-grid" style={{ marginBottom: '24px' }}>
             <div className="learn-pattern-card">
               <div className="learn-pattern-label avoid">Mistake</div>
@@ -637,15 +622,16 @@ export default function Lesson04() {
             <h3>Ready to Create Your First Context Doc?</h3>
             <p>Pick a real project you're actively using AI for. Start with Current State and Next Goals —
             you can fill in the other sections as things come up.</p>
-            <button className="btn btn-primary" onClick={() => setActiveTab('docs')}>
+            <button className="btn btn-primary" onClick={() => setActiveTab('documents')}>
               Go to Docs
             </button>
           </div>
+          </AccordionSection>
         </div>
       )}
 
       {/* Docs Tab */}
-      {activeTab === 'docs' && (
+      {activeTab === 'documents' && (
         <div className="docs-section">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <h2>{editingDoc ? 'Edit Document' : 'Create Document'}</h2>
@@ -1017,8 +1003,41 @@ export default function Lesson04() {
           {/* Session History */}
           <h3>Session History</h3>
           {sessions.length === 0 ? (
-            <div className="card" style={{ padding: '24px', textAlign: 'center' }}>
-              <p style={{ color: 'var(--text-secondary)' }}>No sessions yet. Start one above!</p>
+            <div>
+              <p className="dashboard-section-description" style={{ marginBottom: '20px' }}>
+                Start a work session above and you'll track the following for each one:
+              </p>
+              <div className="analysis-grid">
+                <div className="analysis-card" style={{ opacity: 0.7 }}>
+                  <h3>Session Details</h3>
+                  <div className="field">
+                    <div className="field-label">Project</div>
+                    <div className="field-value" style={{ color: 'var(--text-primary)' }}>Which project or context doc the session is tied to, so you can see how context quality varies across projects.</div>
+                  </div>
+                  <div className="field">
+                    <div className="field-label">Duration</div>
+                    <div className="field-value" style={{ color: 'var(--text-primary)' }}>Start and end time for each session, giving you a record of when and how long you collaborated with AI on each project.</div>
+                  </div>
+                </div>
+                <div className="analysis-card" style={{ opacity: 0.7 }}>
+                  <h3>Quality Ratings</h3>
+                  <div className="field">
+                    <div className="field-label">Context Quality</div>
+                    <div className="field-value" style={{ color: 'var(--text-primary)' }}>Your self-assessment (1-10) of how well your context doc prepared the AI for the session — did it have what was needed, or were there gaps?</div>
+                  </div>
+                  <div className="field">
+                    <div className="field-label">Continuity Rating</div>
+                    <div className="field-value" style={{ color: 'var(--text-primary)' }}>How seamlessly the session picked up from where the last one left off — a measure of whether your living document is actually working.</div>
+                  </div>
+                </div>
+                <div className="analysis-card" style={{ opacity: 0.7 }}>
+                  <h3>Accomplishments</h3>
+                  <div className="field">
+                    <div className="field-label">What Got Done</div>
+                    <div className="field-value" style={{ color: 'var(--text-primary)' }}>A log of what you accomplished during the session, creating a history that feeds back into your context doc for next time.</div>
+                  </div>
+                </div>
+              </div>
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>

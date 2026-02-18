@@ -3,6 +3,7 @@ import { useApi } from '../hooks/useApi';
 import ConnectionCallout from '../components/ConnectionCallout';
 import StatsPanel from '../components/StatsPanel';
 import ExamplesDropdown from '../components/ExamplesDropdown';
+import { AccordionSection } from '../components/Accordion';
 
 // Category badge colors
 const CATEGORY_COLORS = {
@@ -22,7 +23,7 @@ const TRUST_COLORS = {
 
 export default function Lesson06() {
   const api = useApi();
-  const [activeTab, setActiveTab] = useState('learn');
+  const [activeTab, setActiveTab] = useState('concepts');
   const [checklists, setChecklists] = useState([]);
   const [outputTypes, setOutputTypes] = useState([]);
   const [stats, setStats] = useState(null);
@@ -267,7 +268,7 @@ export default function Lesson06() {
       setCheckedItems({});
       setIssuesFound({});
       setSessionNotes('');
-      setActiveTab('practice');  // Switch to practice tab
+      setActiveTab('iterate');  // Switch to iterate tab
     } catch (err) {
       setError(err.message);
     }
@@ -367,7 +368,7 @@ export default function Lesson06() {
 
       {/* Tabs */}
       <div className="tabs">
-        {['learn', 'checklists', 'practice'].map((tab) => (
+        {['concepts', 'checklists', 'iterate'].map((tab) => (
           <button
             key={tab}
             className={`tab ${activeTab === tab ? 'active' : ''}`}
@@ -379,184 +380,164 @@ export default function Lesson06() {
       </div>
 
       {/* Learn Tab */}
-      {activeTab === 'learn' && (
+      {activeTab === 'concepts' && (
         <div className="learn-section">
-          <div className="learn-intro">
-            <h2>Checking AI Output Shouldn't Be Guesswork</h2>
-            <p>
-              You've just asked AI to draft a client proposal for a $50,000 project. The
-              proposal comes back well-structured and professional. You know from your trust
-              matrix that client proposals need careful review — but what exactly do you check?
-              You read through it once, fix a couple of awkward phrases, and send it.
+          <AccordionSection title="How This Lesson Works">
+            <p className="text-secondary mb-md">
+              Two practice areas to build the systematic verification habit:
             </p>
-            <p>
-              Two days later, the client calls. The proposal references a "30-day delivery
-              timeline" when your team actually needs 45 days. It also quotes your standard
-              rate from last year, not the updated one. You caught the phrasing issues but
-              missed the facts that actually mattered — because you didn't have a system for
-              knowing what to check.
+
+            <div className="learn-patterns-grid">
+              <div className="learn-pattern-card">
+                <h4 className="color-accent-blue">Checklists Tab — Build Your Verification Checklists</h4>
+                <p>Create a reusable checklist for each output type that needs review. Each checklist
+                has specific items to check, organized by priority — critical items first, cosmetic
+                items last. You can import output types directly from your Lesson 5 Trust Matrix.</p>
+                <button className="learn-tab-link" onClick={() => setActiveTab('checklists')}>Go to Checklists →</button>
+              </div>
+              <div className="learn-pattern-card">
+                <h4 className="color-accent-green">Practice Tab — Run Timed Verification Sessions</h4>
+                <p>Use your checklists in timed practice sessions. Track which items actually catch
+                issues and which never flag anything. Over time, your checklists get leaner and
+                more effective.</p>
+                <button className="learn-tab-link" onClick={() => setActiveTab('iterate')}>Go to Iterate →</button>
+              </div>
+            </div>
+          </AccordionSection>
+
+          <AccordionSection title="Ad-Hoc Review vs. Checklist Verification">
+            <div className="learn-comparison">
+              <div className="learn-comparison-grid">
+                <div className="learn-comparison-col">
+                  <h4 className="poor">Reviewing by Feel</h4>
+                  <div className="learn-comparison-item poor">
+                    <div className="learn-comparison-scenario">Reviewing an AI-Drafted Job Description</div>
+                    <p>You read through the job description. It sounds good. The qualifications seem
+                    reasonable. You forward it to HR for posting.</p>
+                  </div>
+                  <div className="learn-comparison-item poor">
+                    <p>HR flags it a week later: the description includes "must have 10+ years of
+                    experience" for a mid-level role, uses language that could be considered age
+                    discriminatory, and lists a salary range that doesn't match the approved band.
+                    You checked the tone but missed the compliance issues.</p>
+                  </div>
+                </div>
+                <div className="learn-comparison-col">
+                  <h4 className="good">Running a Verification Checklist</h4>
+                  <div className="learn-comparison-item good">
+                    <div className="learn-comparison-scenario">Same Task — With a Checklist</div>
+                    <p>You run your "Job Description" checklist: (1) Does experience requirement
+                    match the role level? (2) Any language that could be discriminatory? (3) Does
+                    salary range match approved band? (4) Are required vs. preferred qualifications
+                    clearly separated? (5) Does the role title match HR's approved list?</p>
+                  </div>
+                  <div className="learn-comparison-item good">
+                    <p>You catch all three issues in 4 minutes. The checklist didn't require expertise
+                    in employment law — just a specific list of things to look for.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </AccordionSection>
+
+          <AccordionSection title="What Makes a Good Verification Checklist">
+            <p className="text-secondary mb-md">
+              Not all checklists are equally useful. Here's what separates one that actually catches
+              problems from one that just makes you feel like you checked.
             </p>
-          </div>
 
-          <div className="learn-key-insight">
-            <strong>Key Insight:</strong> "Does this look right?" is not a verification method.
-            A good verification checklist tells you exactly what to check for each type of output,
-            in priority order, so you catch the costly mistakes first — even when you're rushed.
-            It turns a 20-minute anxious re-read into a focused 3-minute check.
-          </div>
-
-          <h3>How This Lesson Works</h3>
-          <p className="text-secondary mb-md">
-            Two practice areas to build the systematic verification habit:
-          </p>
-
-          <div className="learn-patterns-grid">
-            <div className="learn-pattern-card">
-              <h4 className="color-accent-blue">Checklists Tab — Build Your Verification Checklists</h4>
-              <p>Create a reusable checklist for each output type that needs review. Each checklist
-              has specific items to check, organized by priority — critical items first, cosmetic
-              items last. You can import output types directly from your Lesson 5 Trust Matrix.</p>
-              <button className="learn-tab-link" onClick={() => setActiveTab('checklists')}>Go to Checklists →</button>
-            </div>
-            <div className="learn-pattern-card">
-              <h4 className="color-accent-green">Practice Tab — Run Timed Verification Sessions</h4>
-              <p>Use your checklists in timed practice sessions. Track which items actually catch
-              issues and which never flag anything. Over time, your checklists get leaner and
-              more effective.</p>
-              <button className="learn-tab-link" onClick={() => setActiveTab('practice')}>Go to Practice →</button>
-            </div>
-          </div>
-
-          <div className="learn-comparison">
-            <h3>Ad-Hoc Review vs. Checklist Verification</h3>
-            <div className="learn-comparison-grid">
-              <div className="learn-comparison-col">
-                <h4 className="poor">Reviewing by Feel</h4>
-                <div className="learn-comparison-item poor">
-                  <div className="learn-comparison-scenario">Reviewing an AI-Drafted Job Description</div>
-                  <p>You read through the job description. It sounds good. The qualifications seem
-                  reasonable. You forward it to HR for posting.</p>
-                </div>
-                <div className="learn-comparison-item poor">
-                  <p>HR flags it a week later: the description includes "must have 10+ years of
-                  experience" for a mid-level role, uses language that could be considered age
-                  discriminatory, and lists a salary range that doesn't match the approved band.
-                  You checked the tone but missed the compliance issues.</p>
+            <div className="learn-patterns-grid">
+              <div className="learn-pattern-card">
+                <h4 className="color-accent-red">1. Critical Items Come First</h4>
+                <p>If you only have 60 seconds, you should still catch the most important issues.
+                Put factual accuracy, compliance, and costly mistakes at the top. Formatting and
+                style go at the bottom.</p>
+                <div className="learn-pattern-label better">Example</div>
+                <div className="learn-example-good">
+                  For a client email: (1) Are all dollar amounts correct? (2) Are dates and
+                  deadlines accurate? (3) Is the client's name and company spelled right?
+                  ... then later: (5) Is the tone appropriately formal?
                 </div>
               </div>
-              <div className="learn-comparison-col">
-                <h4 className="good">Running a Verification Checklist</h4>
-                <div className="learn-comparison-item good">
-                  <div className="learn-comparison-scenario">Same Task — With a Checklist</div>
-                  <p>You run your "Job Description" checklist: (1) Does experience requirement
-                  match the role level? (2) Any language that could be discriminatory? (3) Does
-                  salary range match approved band? (4) Are required vs. preferred qualifications
-                  clearly separated? (5) Does the role title match HR's approved list?</p>
+              <div className="learn-pattern-card">
+                <h4 className="color-accent-blue">2. Each Item Checks One Specific Thing</h4>
+                <p>Vague items like "check for accuracy" don't work under time pressure. Specific
+                items like "verify the quarterly revenue figure against the source spreadsheet"
+                tell you exactly what to do.</p>
+                <div className="learn-pattern-label avoid">Mistake</div>
+                <div className="learn-example-bad">
+                  "Make sure the numbers are right"
                 </div>
-                <div className="learn-comparison-item good">
-                  <p>You catch all three issues in 4 minutes. The checklist didn't require expertise
-                  in employment law — just a specific list of things to look for.</p>
+                <div className="learn-pattern-label better">Instead</div>
+                <div className="learn-example-good">
+                  "Cross-check all financial figures against the approved budget spreadsheet"
+                </div>
+              </div>
+              <div className="learn-pattern-card">
+                <h4 className="color-accent-green">3. Tailored to the Output Type</h4>
+                <p>A checklist for a meeting summary needs different items than one for a project
+                budget. Your Trust Matrix output types map directly to the checklists you need.</p>
+                <div className="learn-pattern-label better">Example</div>
+                <div className="learn-example-good">
+                  <strong>Meeting Summary:</strong> Are action items attributed to the right people?
+                  Are the dates of next steps correct?<br/>
+                  <strong>Budget Estimate:</strong> Do line items add up to the total? Are hourly
+                  rates current? Is tax calculated correctly?
+                </div>
+              </div>
+              <div className="learn-pattern-card">
+                <h4 className="color-accent-purple">4. Updated Based on What You Find</h4>
+                <p>A good checklist evolves. If an item never catches anything after 20 uses, drop
+                it. If you keep finding a new type of mistake, add an item for it.</p>
+                <div className="learn-pattern-label better">Example</div>
+                <div className="learn-example-good">
+                  After three months, you notice AI consistently gets your company's founding year
+                  wrong in "About Us" content. You add "Verify company history facts" to your
+                  marketing content checklist.
                 </div>
               </div>
             </div>
-          </div>
+          </AccordionSection>
 
-          <h3>What Makes a Good Verification Checklist</h3>
-          <p className="text-secondary mb-md">
-            Not all checklists are equally useful. Here's what separates one that actually catches
-            problems from one that just makes you feel like you checked.
-          </p>
-
-          <div className="learn-patterns-grid">
-            <div className="learn-pattern-card">
-              <h4 className="color-accent-red">1. Critical Items Come First</h4>
-              <p>If you only have 60 seconds, you should still catch the most important issues.
-              Put factual accuracy, compliance, and costly mistakes at the top. Formatting and
-              style go at the bottom.</p>
-              <div className="learn-pattern-label better">Example</div>
-              <div className="learn-example-good">
-                For a client email: (1) Are all dollar amounts correct? (2) Are dates and
-                deadlines accurate? (3) Is the client's name and company spelled right?
-                ... then later: (5) Is the tone appropriately formal?
+          <AccordionSection title="Common Mistakes">
+            <div className="learn-patterns-grid learn-patterns-grid-mb">
+              <div className="learn-pattern-card">
+                <div className="learn-pattern-label avoid">Mistake</div>
+                <p>Making one giant checklist for all AI output. A 30-item checklist is so
+                overwhelming that you'll skip it when you're busy — which is exactly when you
+                need it most.</p>
+                <div className="learn-pattern-label better">Instead</div>
+                <div className="learn-example-good">
+                  Create separate 4-6 item checklists per output type. A focused checklist you
+                  actually use beats a comprehensive one you skip.
+                </div>
+              </div>
+              <div className="learn-pattern-card">
+                <div className="learn-pattern-label avoid">Mistake</div>
+                <p>Checking everything with equal effort. Spending the same time verifying an
+                internal team update as you do a client-facing financial report wastes your most
+                limited resource: attention.</p>
+                <div className="learn-pattern-label better">Instead</div>
+                <div className="learn-example-good">
+                  Use your Lesson 5 trust levels to decide effort. High-trust outputs get a quick
+                  scan. Low-trust outputs get the full checklist. Medium-trust outputs get the
+                  critical items only.
+                </div>
+              </div>
+              <div className="learn-pattern-card">
+                <div className="learn-pattern-label avoid">Mistake</div>
+                <p>Only checking whether the output "sounds right." AI is excellent at producing
+                text that reads well — confident, well-structured, professional. That says nothing
+                about whether the content is accurate.</p>
+                <div className="learn-pattern-label better">Instead</div>
+                <div className="learn-example-good">
+                  Focus checklist items on verifiable facts: numbers, dates, names, policy references,
+                  calculations. These are where AI makes mistakes that matter, regardless of how
+                  polished the prose sounds.
+                </div>
               </div>
             </div>
-            <div className="learn-pattern-card">
-              <h4 className="color-accent-blue">2. Each Item Checks One Specific Thing</h4>
-              <p>Vague items like "check for accuracy" don't work under time pressure. Specific
-              items like "verify the quarterly revenue figure against the source spreadsheet"
-              tell you exactly what to do.</p>
-              <div className="learn-pattern-label avoid">Mistake</div>
-              <div className="learn-example-bad">
-                "Make sure the numbers are right"
-              </div>
-              <div className="learn-pattern-label better">Instead</div>
-              <div className="learn-example-good">
-                "Cross-check all financial figures against the approved budget spreadsheet"
-              </div>
-            </div>
-            <div className="learn-pattern-card">
-              <h4 className="color-accent-green">3. Tailored to the Output Type</h4>
-              <p>A checklist for a meeting summary needs different items than one for a project
-              budget. Your Trust Matrix output types map directly to the checklists you need.</p>
-              <div className="learn-pattern-label better">Example</div>
-              <div className="learn-example-good">
-                <strong>Meeting Summary:</strong> Are action items attributed to the right people?
-                Are the dates of next steps correct?<br/>
-                <strong>Budget Estimate:</strong> Do line items add up to the total? Are hourly
-                rates current? Is tax calculated correctly?
-              </div>
-            </div>
-            <div className="learn-pattern-card">
-              <h4 className="color-accent-purple">4. Updated Based on What You Find</h4>
-              <p>A good checklist evolves. If an item never catches anything after 20 uses, drop
-              it. If you keep finding a new type of mistake, add an item for it.</p>
-              <div className="learn-pattern-label better">Example</div>
-              <div className="learn-example-good">
-                After three months, you notice AI consistently gets your company's founding year
-                wrong in "About Us" content. You add "Verify company history facts" to your
-                marketing content checklist.
-              </div>
-            </div>
-          </div>
-
-          <h3>Common Mistakes</h3>
-          <div className="learn-patterns-grid learn-patterns-grid-mb">
-            <div className="learn-pattern-card">
-              <div className="learn-pattern-label avoid">Mistake</div>
-              <p>Making one giant checklist for all AI output. A 30-item checklist is so
-              overwhelming that you'll skip it when you're busy — which is exactly when you
-              need it most.</p>
-              <div className="learn-pattern-label better">Instead</div>
-              <div className="learn-example-good">
-                Create separate 4-6 item checklists per output type. A focused checklist you
-                actually use beats a comprehensive one you skip.
-              </div>
-            </div>
-            <div className="learn-pattern-card">
-              <div className="learn-pattern-label avoid">Mistake</div>
-              <p>Checking everything with equal effort. Spending the same time verifying an
-              internal team update as you do a client-facing financial report wastes your most
-              limited resource: attention.</p>
-              <div className="learn-pattern-label better">Instead</div>
-              <div className="learn-example-good">
-                Use your Lesson 5 trust levels to decide effort. High-trust outputs get a quick
-                scan. Low-trust outputs get the full checklist. Medium-trust outputs get the
-                critical items only.
-              </div>
-            </div>
-            <div className="learn-pattern-card">
-              <div className="learn-pattern-label avoid">Mistake</div>
-              <p>Only checking whether the output "sounds right." AI is excellent at producing
-              text that reads well — confident, well-structured, professional. That says nothing
-              about whether the content is accurate.</p>
-              <div className="learn-pattern-label better">Instead</div>
-              <div className="learn-example-good">
-                Focus checklist items on verifiable facts: numbers, dates, names, policy references,
-                calculations. These are where AI makes mistakes that matter, regardless of how
-                polished the prose sounds.
-              </div>
-            </div>
-          </div>
+          </AccordionSection>
 
           <div className="learn-next-step">
             <h3>Ready to Build Your First Checklist?</h3>
@@ -853,7 +834,7 @@ export default function Lesson06() {
       )}
 
       {/* Practice Tab */}
-      {activeTab === 'practice' && (
+      {activeTab === 'iterate' && (
         <div className="practice-section">
           {activeSession ? (
             <div className="active-session">
@@ -935,9 +916,39 @@ export default function Lesson06() {
               </p>
 
               {checklists.length === 0 ? (
-                <div className="empty-state">
-                  <h3>No checklists available</h3>
-                  <p>Create checklists in the Checklists tab first.</p>
+                <div>
+                  <p className="dashboard-section-description" style={{ marginBottom: '20px' }}>
+                    Create checklists in the Checklists tab, then practice here. Each verification session tracks:
+                  </p>
+                  <div className="analysis-grid">
+                    <div className="analysis-card" style={{ opacity: 0.7 }}>
+                      <h3>Checklist Selection</h3>
+                      <div className="field">
+                        <div className="field-label">Output Type</div>
+                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>Each checklist is tied to an output type (e.g., code, marketing copy, data analysis) with items tailored to what matters for that specific kind of output.</div>
+                      </div>
+                      <div className="field">
+                        <div className="field-label">Critical Items</div>
+                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>Items flagged as critical — must-check items that catch the highest-impact errors for that output type.</div>
+                      </div>
+                    </div>
+                    <div className="analysis-card" style={{ opacity: 0.7 }}>
+                      <h3>Timed Practice</h3>
+                      <div className="field">
+                        <div className="field-label">Session Timer</div>
+                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>A running timer that tracks how long verification takes, helping you find the right balance between thoroughness and efficiency.</div>
+                      </div>
+                      <div className="field">
+                        <div className="field-label">Issue Tracking</div>
+                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>Mark which checklist items actually caught a real issue. Over time, this reveals which checks earn their keep and which can be streamlined.</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="learn-next-step" style={{ marginTop: '24px' }}>
+                    <h3>Create Your First Checklist</h3>
+                    <p>Go to the Checklists tab to build a verification checklist for an output type you work with regularly.</p>
+                    <button className="btn btn-primary" onClick={() => setActiveTab('checklists')}>Go to Checklists</button>
+                  </div>
                 </div>
               ) : (
                 <div className="checklist-grid">

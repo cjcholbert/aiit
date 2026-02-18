@@ -3,6 +3,7 @@ import { useApi } from '../hooks/useApi';
 import ConnectionCallout from '../components/ConnectionCallout';
 import StatsPanel from '../components/StatsPanel';
 import ExamplesDropdown from '../components/ExamplesDropdown';
+import { AccordionSection } from '../components/Accordion';
 
 // Frequency colors
 const FREQUENCY_COLORS = {
@@ -14,7 +15,7 @@ const FREQUENCY_COLORS = {
 
 export default function Lesson10() {
   const api = useApi();
-  const [activeTab, setActiveTab] = useState('learn');
+  const [activeTab, setActiveTab] = useState('concepts');
   const [templates, setTemplates] = useState([]);
   const [reports, setReports] = useState([]);
   const [stats, setStats] = useState(null);
@@ -448,7 +449,7 @@ export default function Lesson10() {
 
       {/* Tabs */}
       <div className="tabs">
-        {['learn', 'design', 'run'].map((tab) => (
+        {['concepts', 'design', 'run'].map((tab) => (
           <button
             key={tab}
             className={`tab ${activeTab === tab ? 'active' : ''}`}
@@ -460,210 +461,193 @@ export default function Lesson10() {
       </div>
 
       {/* Learn Tab */}
-      {activeTab === 'learn' && (
+      {activeTab === 'concepts' && (
         <div className="learn-section">
-          <div className="learn-intro">
-            <h2>Why Recurring Tasks Deserve Their Own Workflow</h2>
-            <p>
-              Every Friday you write the same team status email. Every month you pull together the same
-              client report. Every quarter you compile the same business review slides. Each time, you
-              start from scratch — opening old emails for the format, hunting down the right data,
-              and spending 45 minutes on something that should take 15.
+          <AccordionSection title="How This Lesson Works">
+            <p className="text-secondary mb-md">
+              Two practice areas to build sustainable AI workflow habits:
             </p>
-            <p>
-              The real power of AI is not in one-off tasks. It is in the tasks you do repeatedly.
-              When you build a workflow template once, every future run becomes faster, more consistent,
-              and easier to hand off to a colleague.
+
+            <div className="learn-patterns-grid">
+              <div className="learn-pattern-card">
+                <h4 className="learn-pattern-card-heading-blue">Design Tab — Build Your Workflow Templates</h4>
+                <p>Create a template for a recurring task. Define what information you need to gather
+                each time, write the prompt with placeholders, and choose quality checks to run before
+                you use the output.</p>
+                <button className="learn-tab-link" onClick={() => setActiveTab('design')}>Go to Design →</button>
+              </div>
+              <div className="learn-pattern-card">
+                <h4 className="learn-pattern-card-heading-green">Run Tab — Execute and Track Results</h4>
+                <p>Run your workflow by filling in the inputs, generating the prompt, and recording how
+                long it took and how good the output was. Over time, you will see your time savings
+                add up and spot which templates need improvement.</p>
+                <button className="learn-tab-link" onClick={() => setActiveTab('run')}>Go to Run →</button>
+              </div>
+            </div>
+          </AccordionSection>
+
+          <AccordionSection title="Ad-Hoc AI Use vs. Designed Workflow">
+            <div className="learn-comparison">
+              <div className="learn-comparison-grid">
+                <div className="learn-comparison-col">
+                  <h4 className="poor">Starting from Scratch Every Time</h4>
+                  <div className="learn-comparison-item poor">
+                    <div className="learn-comparison-scenario">Monthly Client Report</div>
+                    <p>"Hey AI, can you write a report for my client about what we did this month?
+                    Oh wait, I need to include the metrics too. And format it like last time. Actually,
+                    let me find last month's email to see what I included..."</p>
+                  </div>
+                  <div className="learn-comparison-item poor">
+                    <p>Takes 40 minutes. Forgets to include the budget section. Client asks why the
+                    format changed from last month. You spend another 15 minutes fixing it.</p>
+                  </div>
+                </div>
+                <div className="learn-comparison-col">
+                  <h4 className="good">Running a Designed Workflow</h4>
+                  <div className="learn-comparison-item good">
+                    <div className="learn-comparison-scenario">Same Report — With a Workflow Template</div>
+                    <p>Open your "Monthly Client Report" template. Fill in this month's accomplishments,
+                    metrics, and next steps. Click generate. The prompt already includes the format,
+                    tone, and sections the client expects.</p>
+                  </div>
+                  <div className="learn-comparison-item good">
+                    <p>Takes 15 minutes. Same format every time. Quality checks remind you to verify
+                    the numbers before sending. You track that you are saving 25 minutes per report.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </AccordionSection>
+
+          <AccordionSection title="What Makes a Task Worth Turning Into a Workflow">
+            <p className="text-secondary mb-md">
+              Not every AI task needs a formal workflow. Focus on tasks that have these qualities:
             </p>
-          </div>
 
-          <div className="learn-key-insight">
-            <strong>Key Insight:</strong> A repeatable AI workflow has three parts: defined inputs
-            (what changes each time), a prompt template (the instructions that stay the same), and
-            quality checks (how you verify the output before sending). Design all three once, then
-            just fill in the blanks each time you run it.
-          </div>
-
-          <h3>How This Lesson Works</h3>
-          <p className="text-secondary mb-md">
-            Two practice areas to build sustainable AI workflow habits:
-          </p>
-
-          <div className="learn-patterns-grid">
-            <div className="learn-pattern-card">
-              <h4 className="learn-pattern-card-heading-blue">Design Tab — Build Your Workflow Templates</h4>
-              <p>Create a template for a recurring task. Define what information you need to gather
-              each time, write the prompt with placeholders, and choose quality checks to run before
-              you use the output.</p>
-              <button className="learn-tab-link" onClick={() => setActiveTab('design')}>Go to Design →</button>
-            </div>
-            <div className="learn-pattern-card">
-              <h4 className="learn-pattern-card-heading-green">Run Tab — Execute and Track Results</h4>
-              <p>Run your workflow by filling in the inputs, generating the prompt, and recording how
-              long it took and how good the output was. Over time, you will see your time savings
-              add up and spot which templates need improvement.</p>
-              <button className="learn-tab-link" onClick={() => setActiveTab('run')}>Go to Run →</button>
-            </div>
-          </div>
-
-          <div className="learn-comparison">
-            <h3>Ad-Hoc AI Use vs. Designed Workflow</h3>
-            <div className="learn-comparison-grid">
-              <div className="learn-comparison-col">
-                <h4 className="poor">Starting from Scratch Every Time</h4>
-                <div className="learn-comparison-item poor">
-                  <div className="learn-comparison-scenario">Monthly Client Report</div>
-                  <p>"Hey AI, can you write a report for my client about what we did this month?
-                  Oh wait, I need to include the metrics too. And format it like last time. Actually,
-                  let me find last month's email to see what I included..."</p>
-                </div>
-                <div className="learn-comparison-item poor">
-                  <p>Takes 40 minutes. Forgets to include the budget section. Client asks why the
-                  format changed from last month. You spend another 15 minutes fixing it.</p>
+            <div className="learn-patterns-grid">
+              <div className="learn-pattern-card">
+                <h4 className="learn-pattern-card-heading-blue">It Recurs on a Schedule</h4>
+                <p>Weekly team updates, monthly reports, quarterly reviews. If you do it more than
+                twice, it is worth templating.</p>
+                <div className="learn-pattern-label better">Good Candidate</div>
+                <div className="learn-example-good">
+                  Weekly team status email — same format, different data each week.
                 </div>
               </div>
-              <div className="learn-comparison-col">
-                <h4 className="good">Running a Designed Workflow</h4>
-                <div className="learn-comparison-item good">
-                  <div className="learn-comparison-scenario">Same Report — With a Workflow Template</div>
-                  <p>Open your "Monthly Client Report" template. Fill in this month's accomplishments,
-                  metrics, and next steps. Click generate. The prompt already includes the format,
-                  tone, and sections the client expects.</p>
+              <div className="learn-pattern-card">
+                <h4 className="learn-pattern-card-heading-purple">The Structure Stays the Same</h4>
+                <p>The sections, format, and tone are consistent. Only the specific content changes.
+                If every instance is wildly different, a template will not help much.</p>
+                <div className="learn-pattern-label better">Good Candidate</div>
+                <div className="learn-example-good">
+                  Meeting follow-up emails — always include decisions made, action items, next meeting date.
                 </div>
-                <div className="learn-comparison-item good">
-                  <p>Takes 15 minutes. Same format every time. Quality checks remind you to verify
-                  the numbers before sending. You track that you are saving 25 minutes per report.</p>
+              </div>
+              <div className="learn-pattern-card">
+                <h4 className="learn-pattern-card-heading-green">You Can Identify the Inputs</h4>
+                <p>You know what changes each time and can name those variables. The rest is boilerplate
+                that AI can handle consistently.</p>
+                <div className="learn-pattern-label better">Good Candidate</div>
+                <div className="learn-example-good">
+                  New hire welcome email — inputs are name, role, start date, manager, and team. Everything
+                  else is standard.
+                </div>
+              </div>
+              <div className="learn-pattern-card">
+                <h4 className="learn-pattern-card-heading-yellow">Quality Is Verifiable</h4>
+                <p>You can check the output against clear criteria before using it. "Does it include
+                all required sections? Are the numbers accurate? Is the tone right for this audience?"</p>
+                <div className="learn-pattern-label better">Good Candidate</div>
+                <div className="learn-example-good">
+                  Expense report summary — you can verify totals match receipts and categories are correct.
                 </div>
               </div>
             </div>
-          </div>
+          </AccordionSection>
 
-          <h3>What Makes a Task Worth Turning Into a Workflow</h3>
-          <p className="text-secondary mb-md">
-            Not every AI task needs a formal workflow. Focus on tasks that have these qualities:
-          </p>
+          <AccordionSection title="Anatomy of a Good Workflow Template">
+            <p className="text-secondary mb-md">
+              When you design your template in the Design tab, you will fill in four parts:
+            </p>
 
-          <div className="learn-patterns-grid">
-            <div className="learn-pattern-card">
-              <h4 className="learn-pattern-card-heading-blue">It Recurs on a Schedule</h4>
-              <p>Weekly team updates, monthly reports, quarterly reviews. If you do it more than
-              twice, it is worth templating.</p>
-              <div className="learn-pattern-label better">Good Candidate</div>
-              <div className="learn-example-good">
-                Weekly team status email — same format, different data each week.
+            <div className="learn-patterns-grid">
+              <div className="learn-pattern-card">
+                <h4 className="learn-pattern-card-heading-blue">1. Inputs</h4>
+                <p>The variables that change each time you run the workflow. Name them clearly so
+                anyone could fill them in.</p>
+                <div className="learn-example-good">
+                  <strong>Input:</strong> accomplishments (What the team completed this week)<br/>
+                  <strong>Input:</strong> blockers (Any issues preventing progress)<br/>
+                  <strong>Input:</strong> next_week_priorities (Top 3 goals for next week)
+                </div>
+              </div>
+              <div className="learn-pattern-card">
+                <h4 className="learn-pattern-card-heading-purple">2. Steps</h4>
+                <p>The sequence of actions: gather data, run the AI prompt, review, send. Mark which
+                steps involve AI and which are human tasks.</p>
+                <div className="learn-example-good">
+                  <strong>Step 1 (Human):</strong> Collect team updates from Slack<br/>
+                  <strong>Step 2 (AI):</strong> Draft status email from inputs<br/>
+                  <strong>Step 3 (Human):</strong> Verify accuracy and send
+                </div>
+              </div>
+              <div className="learn-pattern-card">
+                <h4 className="learn-pattern-card-heading-green">3. Prompt Template</h4>
+                <p>The AI instructions with {'{{placeholders}}'} where your inputs go. This is the
+                part that stays the same every run.</p>
+                <div className="learn-example-good">
+                  "Write a team status email for this week. Accomplishments: {'{{accomplishments}}'}.
+                  Blockers: {'{{blockers}}'}. Use a professional but friendly tone. Keep it under 200 words."
+                </div>
+              </div>
+              <div className="learn-pattern-card">
+                <h4 className="learn-pattern-card-heading-yellow">4. Quality Checks</h4>
+                <p>What to verify before using the output. These act as your checklist so you catch
+                issues before they reach the recipient.</p>
+                <div className="learn-example-good">
+                  <strong>Check:</strong> All team members' contributions are mentioned<br/>
+                  <strong>Check:</strong> No confidential project details are included<br/>
+                  <strong>Check:</strong> Tone matches previous emails
+                </div>
               </div>
             </div>
-            <div className="learn-pattern-card">
-              <h4 className="learn-pattern-card-heading-purple">The Structure Stays the Same</h4>
-              <p>The sections, format, and tone are consistent. Only the specific content changes.
-              If every instance is wildly different, a template will not help much.</p>
-              <div className="learn-pattern-label better">Good Candidate</div>
-              <div className="learn-example-good">
-                Meeting follow-up emails — always include decisions made, action items, next meeting date.
-              </div>
-            </div>
-            <div className="learn-pattern-card">
-              <h4 className="learn-pattern-card-heading-green">You Can Identify the Inputs</h4>
-              <p>You know what changes each time and can name those variables. The rest is boilerplate
-              that AI can handle consistently.</p>
-              <div className="learn-pattern-label better">Good Candidate</div>
-              <div className="learn-example-good">
-                New hire welcome email — inputs are name, role, start date, manager, and team. Everything
-                else is standard.
-              </div>
-            </div>
-            <div className="learn-pattern-card">
-              <h4 className="learn-pattern-card-heading-yellow">Quality Is Verifiable</h4>
-              <p>You can check the output against clear criteria before using it. "Does it include
-              all required sections? Are the numbers accurate? Is the tone right for this audience?"</p>
-              <div className="learn-pattern-label better">Good Candidate</div>
-              <div className="learn-example-good">
-                Expense report summary — you can verify totals match receipts and categories are correct.
-              </div>
-            </div>
-          </div>
+          </AccordionSection>
 
-          <h3>Anatomy of a Good Workflow Template</h3>
-          <p className="text-secondary mb-md">
-            When you design your template in the Design tab, you will fill in four parts:
-          </p>
-
-          <div className="learn-patterns-grid">
-            <div className="learn-pattern-card">
-              <h4 className="learn-pattern-card-heading-blue">1. Inputs</h4>
-              <p>The variables that change each time you run the workflow. Name them clearly so
-              anyone could fill them in.</p>
-              <div className="learn-example-good">
-                <strong>Input:</strong> accomplishments (What the team completed this week)<br/>
-                <strong>Input:</strong> blockers (Any issues preventing progress)<br/>
-                <strong>Input:</strong> next_week_priorities (Top 3 goals for next week)
+          <AccordionSection title="Common Mistakes">
+            <div className="learn-patterns-grid mb-lg">
+              <div className="learn-pattern-card">
+                <div className="learn-pattern-label avoid">Mistake</div>
+                <p>Creating a template for a task you do once. The setup time is not worth it for
+                one-off work. Save templates for tasks you repeat at least monthly.</p>
+                <div className="learn-pattern-label better">Instead</div>
+                <div className="learn-example-good">
+                  Start with your most frequent recurring task — the one you dread every week. Once
+                  that workflow is running smoothly, add more.
+                </div>
+              </div>
+              <div className="learn-pattern-card">
+                <div className="learn-pattern-label avoid">Mistake</div>
+                <p>Skipping the quality checks. You generate the output, glance at it, and send it.
+                Two months later you realize the AI has been including outdated information in every
+                report.</p>
+                <div className="learn-pattern-label better">Instead</div>
+                <div className="learn-example-good">
+                  Add at least two quality checks to every template. Make them specific: "Verify all
+                  dollar amounts match the source spreadsheet" is better than "Check for accuracy."
+                </div>
+              </div>
+              <div className="learn-pattern-card">
+                <div className="learn-pattern-label avoid">Mistake</div>
+                <p>Never tracking time. You assume the workflow saves time, but you have no data to
+                prove it — or to notice when a template is actually slower than doing it manually.</p>
+                <div className="learn-pattern-label better">Instead</div>
+                <div className="learn-example-good">
+                  Record actual time for every run. After 4-5 runs, compare against your estimate. If
+                  you are not saving at least 20% of the time, the template needs rework.
+                </div>
               </div>
             </div>
-            <div className="learn-pattern-card">
-              <h4 className="learn-pattern-card-heading-purple">2. Steps</h4>
-              <p>The sequence of actions: gather data, run the AI prompt, review, send. Mark which
-              steps involve AI and which are human tasks.</p>
-              <div className="learn-example-good">
-                <strong>Step 1 (Human):</strong> Collect team updates from Slack<br/>
-                <strong>Step 2 (AI):</strong> Draft status email from inputs<br/>
-                <strong>Step 3 (Human):</strong> Verify accuracy and send
-              </div>
-            </div>
-            <div className="learn-pattern-card">
-              <h4 className="learn-pattern-card-heading-green">3. Prompt Template</h4>
-              <p>The AI instructions with {'{{placeholders}}'} where your inputs go. This is the
-              part that stays the same every run.</p>
-              <div className="learn-example-good">
-                "Write a team status email for this week. Accomplishments: {'{{accomplishments}}'}.
-                Blockers: {'{{blockers}}'}. Use a professional but friendly tone. Keep it under 200 words."
-              </div>
-            </div>
-            <div className="learn-pattern-card">
-              <h4 className="learn-pattern-card-heading-yellow">4. Quality Checks</h4>
-              <p>What to verify before using the output. These act as your checklist so you catch
-              issues before they reach the recipient.</p>
-              <div className="learn-example-good">
-                <strong>Check:</strong> All team members' contributions are mentioned<br/>
-                <strong>Check:</strong> No confidential project details are included<br/>
-                <strong>Check:</strong> Tone matches previous emails
-              </div>
-            </div>
-          </div>
-
-          <h3>Common Mistakes</h3>
-          <div className="learn-patterns-grid mb-lg">
-            <div className="learn-pattern-card">
-              <div className="learn-pattern-label avoid">Mistake</div>
-              <p>Creating a template for a task you do once. The setup time is not worth it for
-              one-off work. Save templates for tasks you repeat at least monthly.</p>
-              <div className="learn-pattern-label better">Instead</div>
-              <div className="learn-example-good">
-                Start with your most frequent recurring task — the one you dread every week. Once
-                that workflow is running smoothly, add more.
-              </div>
-            </div>
-            <div className="learn-pattern-card">
-              <div className="learn-pattern-label avoid">Mistake</div>
-              <p>Skipping the quality checks. You generate the output, glance at it, and send it.
-              Two months later you realize the AI has been including outdated information in every
-              report.</p>
-              <div className="learn-pattern-label better">Instead</div>
-              <div className="learn-example-good">
-                Add at least two quality checks to every template. Make them specific: "Verify all
-                dollar amounts match the source spreadsheet" is better than "Check for accuracy."
-              </div>
-            </div>
-            <div className="learn-pattern-card">
-              <div className="learn-pattern-label avoid">Mistake</div>
-              <p>Never tracking time. You assume the workflow saves time, but you have no data to
-              prove it — or to notice when a template is actually slower than doing it manually.</p>
-              <div className="learn-pattern-label better">Instead</div>
-              <div className="learn-example-good">
-                Record actual time for every run. After 4-5 runs, compare against your estimate. If
-                you are not saving at least 20% of the time, the template needs rework.
-              </div>
-            </div>
-          </div>
+          </AccordionSection>
 
           <div className="learn-next-step">
             <h3>Ready to Design Your First Workflow?</h3>
@@ -1217,8 +1201,38 @@ export default function Lesson10() {
             <div>
               <h2>Select a Workflow to Run</h2>
               {templates.length === 0 ? (
-                <div className="card empty-state">
-                  <p className="text-secondary">Create a workflow template in the Design tab to start running workflows.</p>
+                <div>
+                  <p className="dashboard-section-description" style={{ marginBottom: '20px' }}>
+                    Design a workflow in the Design tab, then run it here. Each workflow run produces:
+                  </p>
+                  <div className="analysis-grid">
+                    <div className="analysis-card" style={{ opacity: 0.7 }}>
+                      <h3>Generated Report</h3>
+                      <div className="field">
+                        <div className="field-label">Structured Output</div>
+                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>A formatted report generated from your workflow template and inputs — status updates, meeting summaries, or client reports produced consistently every time.</div>
+                      </div>
+                    </div>
+                    <div className="analysis-card" style={{ opacity: 0.7 }}>
+                      <h3>Time Savings</h3>
+                      <div className="field">
+                        <div className="field-label">Minutes Saved</div>
+                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>How much time the AI-assisted workflow saved compared to doing it manually — tracked per run so you can see the cumulative ROI of your workflow investment.</div>
+                      </div>
+                    </div>
+                    <div className="analysis-card" style={{ opacity: 0.7 }}>
+                      <h3>Quality Score</h3>
+                      <div className="field">
+                        <div className="field-label">Output Rating</div>
+                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>Your assessment of the report quality (1-10) after each run, helping you identify which workflows are mature and which still need template refinement.</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="learn-next-step" style={{ marginTop: '24px' }}>
+                    <h3>Design Your First Workflow</h3>
+                    <p>Go to the Design tab to create a workflow template for a recurring task like status reports or meeting summaries.</p>
+                    <button className="btn btn-primary" onClick={() => setActiveTab('design')}>Go to Design</button>
+                  </div>
                 </div>
               ) : (
                 <div className="grid-auto-fit mb-xl">

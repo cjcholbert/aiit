@@ -3,6 +3,7 @@ import { useApi } from '../hooks/useApi';
 import ConnectionCallout from '../components/ConnectionCallout';
 import StatsPanel from '../components/StatsPanel';
 import ExamplesDropdown from '../components/ExamplesDropdown';
+import { AccordionSection } from '../components/Accordion';
 
 // Quality level styles
 const QUALITY_STYLES = {
@@ -13,7 +14,7 @@ const QUALITY_STYLES = {
 
 export default function Lesson02() {
   const api = useApi();
-  const [activeTab, setActiveTab] = useState('learn');
+  const [activeTab, setActiveTab] = useState('concepts');
   const [entries, setEntries] = useState([]);
   const [patterns, setPatterns] = useState(null);
   const [stats, setStats] = useState(null);
@@ -341,7 +342,7 @@ export default function Lesson02() {
 
       {/* Tabs */}
       <div className="tabs">
-        {['learn', 'analyze', 'history'].map((tab) => (
+        {['concepts', 'analysis', 'history'].map((tab) => (
           <button
             key={tab}
             className={`tab ${activeTab === tab ? 'active' : ''}`}
@@ -353,52 +354,32 @@ export default function Lesson02() {
       </div>
 
       {/* Learn Tab */}
-      {activeTab === 'learn' && (
+      {activeTab === 'concepts' && (
         <div className="learn-section">
-          <div className="learn-intro">
-            <h2>Why Your Feedback Is the Bottleneck</h2>
-            <p>
-              You ask AI to draft talking points for a client meeting. The result is too formal and misses
-              two key topics. So you type: "This isn't quite right. Make it better." The AI makes changes, but
-              they're random — it shortened the intro when you wanted it to add the missing topics and loosen
-              the tone. Another round wasted.
+          <AccordionSection title="How This Lesson Works">
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+              Two practice areas to sharpen your feedback skills:
             </p>
-            <p>
-              The problem isn't that you gave feedback — it's that the feedback didn't tell AI <em>where</em> the
-              problem was, <em>what</em> to change, or <em>why</em>. This lesson trains you to spot vague patterns
-              in your own feedback and rewrite them into instructions the AI can act on in one pass.
-            </p>
-          </div>
 
-          <div className="learn-key-insight">
-            <strong>Key Insight:</strong> Good feedback has three parts: <strong>location</strong> (where is
-            the problem), <strong>action</strong> (what specifically to change), and <strong>reasoning</strong> (why
-            this change matters). Missing any one of these forces AI to guess — and guessing wastes iterations.
-          </div>
-
-          <h3>How This Lesson Works</h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
-            Two practice areas to sharpen your feedback skills:
-          </p>
-
-          <div className="learn-patterns-grid">
-            <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-blue)' }}>Analyze Tab — Score Your Feedback</h4>
-              <p>Paste feedback you've given (or are about to give) to an AI. The tool scores it for
-              specificity, identifies vague patterns, and shows you exactly how to rewrite it. You
-              can save entries to track improvement over time.</p>
-              <button className="learn-tab-link" onClick={() => setActiveTab('analyze')}>Go to Analyze →</button>
+            <div className="learn-patterns-grid">
+              <div className="learn-pattern-card">
+                <h4 style={{ color: 'var(--accent-blue)' }}>Analyze Tab — Score Your Feedback</h4>
+                <p>Paste feedback you've given (or are about to give) to an AI. The tool scores it for
+                specificity, identifies vague patterns, and shows you exactly how to rewrite it. You
+                can save entries to track improvement over time.</p>
+                <button className="learn-tab-link" onClick={() => setActiveTab('analysis')}>Go to Analyze →</button>
+              </div>
+              <div className="learn-pattern-card">
+                <h4 style={{ color: 'var(--accent-green)' }}>History Tab — Track Your Patterns</h4>
+                <p>See all your analyzed feedback entries, quality scores, and most common vague patterns.
+                Practice rewriting your weakest entries and save your best rewrites as reference examples.</p>
+                <button className="learn-tab-link" onClick={() => setActiveTab('history')}>Go to History →</button>
+              </div>
             </div>
-            <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-green)' }}>History Tab — Track Your Patterns</h4>
-              <p>See all your analyzed feedback entries, quality scores, and most common vague patterns.
-              Practice rewriting your weakest entries and save your best rewrites as reference examples.</p>
-              <button className="learn-tab-link" onClick={() => setActiveTab('history')}>Go to History →</button>
-            </div>
-          </div>
+          </AccordionSection>
 
-          <div className="learn-comparison">
-            <h3>Vague Feedback vs. Specific Feedback</h3>
+          <AccordionSection title="Vague Feedback vs. Specific Feedback">
+            <div className="learn-comparison">
             <div className="learn-comparison-grid">
               <div className="learn-comparison-col">
                 <h4 className="poor">Vague (AI Has to Guess)</h4>
@@ -438,9 +419,10 @@ export default function Lesson02() {
                 </div>
               </div>
             </div>
-          </div>
+            </div>
+          </AccordionSection>
 
-          <h3>The Five Patterns of Vague Feedback</h3>
+          <AccordionSection title="The Five Patterns of Vague Feedback">
           <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
             These are the patterns the Analyze tab identifies. Once you learn to spot them, you'll catch
             yourself before hitting send.
@@ -496,38 +478,40 @@ export default function Lesson02() {
               about next steps."</div>
             </div>
           </div>
+          </AccordionSection>
 
-          <h3>Common Mistakes</h3>
-          <div className="learn-patterns-grid" style={{ marginBottom: '24px' }}>
-            <div className="learn-pattern-card">
-              <div className="learn-pattern-label avoid">Mistake</div>
-              <p>Stacking multiple pieces of vague feedback in one message, hoping AI will figure out
-              which matters most. "Fix the formatting, improve the flow, and make it shorter."</p>
-              <div className="learn-pattern-label better">Instead</div>
-              <div className="learn-example-good">
-                Give one specific instruction at a time, or number them in priority order: "1. Reduce to
-                under 300 words by cutting the background section. 2. Move the recommendation to the first
-                paragraph. 3. Bold the three action items."
+          <AccordionSection title="Common Mistakes">
+            <div className="learn-patterns-grid" style={{ marginBottom: '24px' }}>
+              <div className="learn-pattern-card">
+                <div className="learn-pattern-label avoid">Mistake</div>
+                <p>Stacking multiple pieces of vague feedback in one message, hoping AI will figure out
+                which matters most. "Fix the formatting, improve the flow, and make it shorter."</p>
+                <div className="learn-pattern-label better">Instead</div>
+                <div className="learn-example-good">
+                  Give one specific instruction at a time, or number them in priority order: "1. Reduce to
+                  under 300 words by cutting the background section. 2. Move the recommendation to the first
+                  paragraph. 3. Bold the three action items."
+                </div>
+              </div>
+              <div className="learn-pattern-card">
+                <div className="learn-pattern-label avoid">Mistake</div>
+                <p>Starting fresh instead of iterating. When the output is 70% right, some people throw
+                it away and re-prompt from scratch rather than giving targeted fixes.</p>
+                <div className="learn-pattern-label better">Instead</div>
+                <div className="learn-example-good">
+                  Name what's working and what's not: "The structure and key points are good. Change the
+                  opening paragraph to lead with the cost savings data instead of the project background, and
+                  cut the last two bullets — they're nice-to-haves, not essentials."
+                </div>
               </div>
             </div>
-            <div className="learn-pattern-card">
-              <div className="learn-pattern-label avoid">Mistake</div>
-              <p>Starting fresh instead of iterating. When the output is 70% right, some people throw
-              it away and re-prompt from scratch rather than giving targeted fixes.</p>
-              <div className="learn-pattern-label better">Instead</div>
-              <div className="learn-example-good">
-                Name what's working and what's not: "The structure and key points are good. Change the
-                opening paragraph to lead with the cost savings data instead of the project background, and
-                cut the last two bullets — they're nice-to-haves, not essentials."
-              </div>
-            </div>
-          </div>
+          </AccordionSection>
 
           <div className="learn-next-step">
             <h3>Ready to Sharpen Your Feedback?</h3>
             <p>Paste a piece of real feedback you've given to an AI — or are about to give. The analyzer
             will score it, identify vague patterns, and show you how to rewrite it for faster results.</p>
-            <button className="btn btn-primary" onClick={() => setActiveTab('analyze')}>
+            <button className="btn btn-primary" onClick={() => setActiveTab('analysis')}>
               Go to Analyze
             </button>
           </div>
@@ -535,7 +519,7 @@ export default function Lesson02() {
       )}
 
       {/* Analyze Tab */}
-      {activeTab === 'analyze' && (
+      {activeTab === 'analysis' && (
         <div className="analyze-section">
           {selectedEntry ? (
             // View/Edit Entry
@@ -770,9 +754,53 @@ export default function Lesson02() {
               </div>
 
               {entries.length === 0 ? (
-                <div className="empty-state" style={{ textAlign: 'center', padding: '48px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
-                  <h3>No feedback entries yet</h3>
-                  <p>Analyze some feedback to start tracking your patterns.</p>
+                <div>
+                  <p className="dashboard-section-description" style={{ marginBottom: '20px' }}>
+                    Analyze feedback in the Analysis tab and you'll receive the following for each entry:
+                  </p>
+                  <div className="analysis-grid">
+                    <div className="analysis-card" style={{ opacity: 0.7 }}>
+                      <h3>Quality Score</h3>
+                      <div className="field">
+                        <div className="field-label">Rating</div>
+                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>A score from 1-10 measuring how specific and actionable your feedback is, rated as Specific, Adequate, or Vague.</div>
+                      </div>
+                      <div className="field">
+                        <div className="field-label">Summary</div>
+                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>A plain-language assessment of what your feedback communicates and where it falls short.</div>
+                      </div>
+                    </div>
+                    <div className="analysis-card" style={{ opacity: 0.7 }}>
+                      <h3>Issues Found</h3>
+                      <div className="field">
+                        <div className="field-label">Pattern</div>
+                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>The type of vagueness detected — such as judgment without direction ("this doesn't work") or missing location ("fix the formatting").</div>
+                      </div>
+                      <div className="field">
+                        <div className="field-label">Suggestion</div>
+                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>A concrete rewrite showing how to make that specific piece of feedback actionable.</div>
+                      </div>
+                    </div>
+                    <div className="analysis-card" style={{ opacity: 0.7 }}>
+                      <h3>Strengths</h3>
+                      <div className="field">
+                        <div className="field-label">What Worked</div>
+                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>Elements of your feedback that were already specific and useful — so you know what to keep doing.</div>
+                      </div>
+                    </div>
+                    <div className="analysis-card" style={{ opacity: 0.7 }}>
+                      <h3>Rewrite Suggestion</h3>
+                      <div className="field">
+                        <div className="field-label">Improved Version</div>
+                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>A full rewrite of your original feedback that adds specificity, location, and clear next steps.</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="learn-next-step" style={{ marginTop: '24px' }}>
+                    <h3>Ready to See Your Results?</h3>
+                    <p>Paste real feedback you've given to AI into the Analysis tab. Your scored entries will appear here, and patterns will emerge as you analyze more.</p>
+                    <button className="btn btn-primary" onClick={() => setActiveTab('analysis')}>Go to Analysis</button>
+                  </div>
                 </div>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -788,7 +816,7 @@ export default function Lesson02() {
                           borderLeft: `4px solid ${style.color}`,
                           background: entry.is_example ? 'var(--success-bg)' : 'var(--bg-secondary)'
                         }}
-                        onClick={() => { handleSelectEntry(entry.id); setActiveTab('analyze'); }}
+                        onClick={() => { handleSelectEntry(entry.id); setActiveTab('analysis'); }}
                       >
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                           <div style={{ flex: 1 }}>

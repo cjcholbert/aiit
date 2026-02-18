@@ -14,8 +14,7 @@ export default function NavDropdown() {
     const getCurrentPageName = () => {
         const path = location.pathname;
         if (path === '/') return 'Dashboard';
-        if (path === '/concepts') return 'Core Concepts';
-        if (path === '/curriculum') return 'Curriculum';
+        if (path === '/dashboard') return 'Dashboard';
         if (path === '/admin') return 'Admin';
         if (path.startsWith('/lesson/')) return `Lesson ${path.split('/')[2]}`;
         return 'Navigate';
@@ -70,20 +69,6 @@ export default function NavDropdown() {
                                 end
                             >
                                 Dashboard
-                            </NavLink>
-                            <NavLink
-                                to="/concepts"
-                                className={({ isActive }) => `nav-dropdown-item ${isActive ? 'active' : ''}`}
-                                role="menuitem"
-                            >
-                                Core Concepts
-                            </NavLink>
-                            <NavLink
-                                to="/curriculum"
-                                className={({ isActive }) => `nav-dropdown-item ${isActive ? 'active' : ''}`}
-                                role="menuitem"
-                            >
-                                Curriculum
                             </NavLink>
                             {user?.is_admin && (
                                 <NavLink

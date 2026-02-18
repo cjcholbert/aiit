@@ -44,7 +44,7 @@ export default function Register() {
                 <div className="auth-header">
                     <div className="brand" style={{ justifyContent: 'center', borderBottom: 'none', marginBottom: 0 }}>
                         <div className="brand-logo">AI</div>
-                        <div className="brand-name">The AI Collaborator</div>
+                        <div className="brand-name">Your AI Iteration</div>
                     </div>
                     <p className="auth-subtitle">Create your account to start learning</p>
                 </div>

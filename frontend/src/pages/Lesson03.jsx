@@ -3,6 +3,7 @@ import { useApi } from '../hooks/useApi';
 import ConnectionCallout from '../components/ConnectionCallout';
 import StatsPanel from '../components/StatsPanel';
 import ExamplesDropdown from '../components/ExamplesDropdown';
+import { AccordionSection } from '../components/Accordion';
 
 const DEFAULT_CATEGORIES = [
   { value: 'general', label: 'General', color: 'var(--accent-purple)', icon: '📋' },
@@ -173,7 +174,7 @@ function saveBuildTasks(tasks) {
 
 export default function Lesson03() {
   const api = useApi();
-  const [activeTab, setActiveTab] = useState('learn');
+  const [activeTab, setActiveTab] = useState('concepts');
   const [templates, setTemplates] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -765,10 +766,10 @@ ${gapSections}
 
       <div className="tabs">
         <button
-          className={`tab ${activeTab === 'learn' ? 'active' : ''}`}
-          onClick={() => setActiveTab('learn')}
+          className={`tab ${activeTab === 'concepts' ? 'active' : ''}`}
+          onClick={() => setActiveTab('concepts')}
         >
-          Learn
+          Concepts
         </button>
         <button
           className={`tab ${activeTab === 'build' ? 'active' : ''}`}
@@ -779,13 +780,13 @@ ${gapSections}
             }
           }}
         >
-          Build Templates
+          Builder
         </button>
         <button
           className={`tab ${activeTab === 'templates' ? 'active' : ''}`}
           onClick={() => setActiveTab('templates')}
         >
-          Template Library ({templates.length})
+          Library ({templates.length})
         </button>
         <button
           className={`tab ${activeTab === 'suggestions' ? 'active' : ''}`}
@@ -817,142 +818,122 @@ ${gapSections}
       </div>
 
       {/* Learn Tab */}
-      {activeTab === 'learn' && (
+      {activeTab === 'concepts' && (
         <div className="learn-section">
-          <div className="learn-intro">
-            <h2>Why Templates Transform Your AI Workflow</h2>
-            <p>
-              You ask AI to help plan a client meeting agenda. It comes back with something generic because
-              you forgot to mention the client's industry, the meeting goal, and who'll be in the room. Next
-              week, same task, same problem — you forgot the same details again. Templates fix this by turning
-              your best prompts into fill-in-the-blanks frameworks that capture the right context every time.
+          <AccordionSection title="How This Lesson Works">
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+              Four paths to building your template library:
             </p>
-            <p>
-              Instead of starting from a blank text box and hoping you remember what to include, you open a
-              template that already has slots for the information AI needs. A 5-minute setup becomes a 30-second
-              fill-in. And because templates are reusable, the quality of your prompts stays consistent even on
-              busy days.
-            </p>
-          </div>
 
-          <div className="learn-key-insight">
-            <strong>Key Insight:</strong> The best templates aren't rigid scripts — they're structured frameworks with
-            variables (like <code>{'{{audience}}'}</code> or <code>{'{{deadline}}'}</code>) that you fill in
-            for each use. This gives you consistency <em>and</em> flexibility. One meeting-prep template can
-            serve dozens of different meetings.
-          </div>
-
-          <h3>How This Lesson Works</h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
-            Four paths to building your template library:
-          </p>
-
-          <div className="learn-patterns-grid">
-            <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-green)' }}>Build Templates (Guided)</h4>
-              <p>Use the 3-step workflow to generate templates based on your Lesson 1 context gaps and common
-              task types. Best for getting started quickly.</p>
-              <button className="learn-tab-link" onClick={() => setActiveTab('build')}>Go to Build →</button>
-            </div>
-            <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-blue)' }}>Template Library</h4>
-              <p>View, edit, and organize your saved templates. Start with the built-in starters and
-              customize them for your specific work patterns.</p>
-              <button className="learn-tab-link" onClick={() => setActiveTab('templates')}>Go to Library →</button>
-            </div>
-            <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-yellow)' }}>Suggestions</h4>
-              <p>Get AI-powered template suggestions based on context gaps identified in Lesson 1. Turns
-              your diagnosed problems into preventive solutions.</p>
-              <button className="learn-tab-link" onClick={() => setActiveTab('suggestions')}>Go to Suggestions →</button>
-            </div>
-            <div className="learn-pattern-card">
-              <h4 style={{ color: 'var(--accent-purple)' }}>Test & Refine</h4>
-              <p>Try your templates with real prompts. Rate the results to track which templates produce
-              the best output and which need adjustments.</p>
-              <button className="learn-tab-link" onClick={() => setActiveTab('test')}>Go to Test →</button>
-            </div>
-          </div>
-
-          <div className="learn-comparison">
-            <h3>Without Templates vs. With Templates</h3>
-            <div className="learn-comparison-grid">
-              <div className="learn-comparison-col">
-                <h4 className="poor">Starting From Scratch Every Time</h4>
-                <div className="learn-comparison-item poor">
-                  <div className="learn-comparison-scenario">Meeting Prep</div>
-                  <p>"Help me prepare for a client meeting." — Missing: who the client is, what was discussed
-                  last time, what decisions need to be made, who else is attending.</p>
-                </div>
-                <div className="learn-comparison-item poor">
-                  <div className="learn-comparison-scenario">Status Report</div>
-                  <p>"Write a project status update." — Missing: audience, format preference, which project,
-                  what period, what level of detail.</p>
-                </div>
-                <div className="learn-comparison-item poor">
-                  <div className="learn-comparison-scenario">Interview Prep</div>
-                  <p>"Help me prepare interview questions." — Missing: role level, department, key skills
-                  to assess, team culture, legal constraints.</p>
-                </div>
+            <div className="learn-patterns-grid">
+              <div className="learn-pattern-card">
+                <h4 style={{ color: 'var(--accent-green)' }}>Build Templates (Guided)</h4>
+                <p>Use the 3-step workflow to generate templates based on your Lesson 1 context gaps and common
+                task types. Best for getting started quickly.</p>
+                <button className="learn-tab-link" onClick={() => setActiveTab('build')}>Go to Build →</button>
               </div>
-              <div className="learn-comparison-col">
-                <h4 className="good">Using a Template (Consistent, Fast)</h4>
-                <div className="learn-comparison-item good">
-                  <div className="learn-comparison-scenario">Meeting Prep</div>
-                  <p>Meeting Prep template prompts for: client name, last meeting summary, open items,
-                  attendees, decisions needed, and time limit. Fill in 6 fields, get a tailored agenda
-                  in seconds.</p>
+              <div className="learn-pattern-card">
+                <h4 style={{ color: 'var(--accent-blue)' }}>Template Library</h4>
+                <p>View, edit, and organize your saved templates. Start with the built-in starters and
+                customize them for your specific work patterns.</p>
+                <button className="learn-tab-link" onClick={() => setActiveTab('templates')}>Go to Library →</button>
+              </div>
+              <div className="learn-pattern-card">
+                <h4 style={{ color: 'var(--accent-yellow)' }}>Suggestions</h4>
+                <p>Get AI-powered template suggestions based on context gaps identified in Lesson 1. Turns
+                your diagnosed problems into preventive solutions.</p>
+                <button className="learn-tab-link" onClick={() => setActiveTab('suggestions')}>Go to Suggestions →</button>
+              </div>
+              <div className="learn-pattern-card">
+                <h4 style={{ color: 'var(--accent-purple)' }}>Test & Refine</h4>
+                <p>Try your templates with real prompts. Rate the results to track which templates produce
+                the best output and which need adjustments.</p>
+                <button className="learn-tab-link" onClick={() => setActiveTab('test')}>Go to Test →</button>
+              </div>
+            </div>
+          </AccordionSection>
+
+          <AccordionSection title="Without Templates vs. With Templates">
+            <div className="learn-comparison">
+              <div className="learn-comparison-grid">
+                <div className="learn-comparison-col">
+                  <h4 className="poor">Starting From Scratch Every Time</h4>
+                  <div className="learn-comparison-item poor">
+                    <div className="learn-comparison-scenario">Meeting Prep</div>
+                    <p>"Help me prepare for a client meeting." — Missing: who the client is, what was discussed
+                    last time, what decisions need to be made, who else is attending.</p>
+                  </div>
+                  <div className="learn-comparison-item poor">
+                    <div className="learn-comparison-scenario">Status Report</div>
+                    <p>"Write a project status update." — Missing: audience, format preference, which project,
+                    what period, what level of detail.</p>
+                  </div>
+                  <div className="learn-comparison-item poor">
+                    <div className="learn-comparison-scenario">Interview Prep</div>
+                    <p>"Help me prepare interview questions." — Missing: role level, department, key skills
+                    to assess, team culture, legal constraints.</p>
+                  </div>
                 </div>
-                <div className="learn-comparison-item good">
-                  <div className="learn-comparison-scenario">Status Report</div>
-                  <p>Status Report template includes slots for: audience, project name, reporting period,
-                  accomplishments, blockers, next steps, and format (bullets vs. narrative). Same quality
-                  every week.</p>
-                </div>
-                <div className="learn-comparison-item good">
-                  <div className="learn-comparison-scenario">Interview Prep</div>
-                  <p>Interview template captures: role title, seniority level, must-have skills, team
-                  dynamics, and evaluation criteria. Produces consistent, fair questions across all
-                  candidates.</p>
+                <div className="learn-comparison-col">
+                  <h4 className="good">Using a Template (Consistent, Fast)</h4>
+                  <div className="learn-comparison-item good">
+                    <div className="learn-comparison-scenario">Meeting Prep</div>
+                    <p>Meeting Prep template prompts for: client name, last meeting summary, open items,
+                    attendees, decisions needed, and time limit. Fill in 6 fields, get a tailored agenda
+                    in seconds.</p>
+                  </div>
+                  <div className="learn-comparison-item good">
+                    <div className="learn-comparison-scenario">Status Report</div>
+                    <p>Status Report template includes slots for: audience, project name, reporting period,
+                    accomplishments, blockers, next steps, and format (bullets vs. narrative). Same quality
+                    every week.</p>
+                  </div>
+                  <div className="learn-comparison-item good">
+                    <div className="learn-comparison-scenario">Interview Prep</div>
+                    <p>Interview template captures: role title, seniority level, must-have skills, team
+                    dynamics, and evaluation criteria. Produces consistent, fair questions across all
+                    candidates.</p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </AccordionSection>
 
-          <h3>Common Mistakes</h3>
-          <div className="learn-patterns-grid" style={{ marginBottom: '24px' }}>
-            <div className="learn-pattern-card">
-              <div className="learn-pattern-label avoid">Mistake</div>
-              <p>Building templates that are too specific. A template for "Q3 board meeting agenda" only
-              works once. A template for "meeting agenda" with a variable for meeting type works forever.</p>
-              <div className="learn-pattern-label better">Instead</div>
-              <div className="learn-example-good">
-                Use variables for anything that changes between uses. The template structure stays the
-                same; only the fill-in values change. Aim for templates you'll use at least 3-4 times.
+          <AccordionSection title="Common Mistakes">
+            <div className="learn-patterns-grid" style={{ marginBottom: '24px' }}>
+              <div className="learn-pattern-card">
+                <div className="learn-pattern-label avoid">Mistake</div>
+                <p>Building templates that are too specific. A template for "Q3 board meeting agenda" only
+                works once. A template for "meeting agenda" with a variable for meeting type works forever.</p>
+                <div className="learn-pattern-label better">Instead</div>
+                <div className="learn-example-good">
+                  Use variables for anything that changes between uses. The template structure stays the
+                  same; only the fill-in values change. Aim for templates you'll use at least 3-4 times.
+                </div>
+              </div>
+              <div className="learn-pattern-card">
+                <div className="learn-pattern-label avoid">Mistake</div>
+                <p>Creating templates with 15+ variables. If filling in the template takes longer than
+                writing the prompt from scratch, nobody will use it.</p>
+                <div className="learn-pattern-label better">Instead</div>
+                <div className="learn-example-good">
+                  Keep templates to 4-6 variables. Mark some as optional. Focus on the variables that
+                  address your most common context gaps from Lesson 1 — those are the ones you actually forget.
+                </div>
+              </div>
+              <div className="learn-pattern-card">
+                <div className="learn-pattern-label avoid">Mistake</div>
+                <p>Never updating templates after using them. Your first version is a draft — you'll
+                learn what's missing or unnecessary after a few real uses.</p>
+                <div className="learn-pattern-label better">Instead</div>
+                <div className="learn-example-good">
+                  After using a template 3 times, review it. Did you keep adding the same detail manually?
+                  Add it as a variable. Was a variable always the same value? Make it a default. Templates
+                  should evolve with your workflow.
+                </div>
               </div>
             </div>
-            <div className="learn-pattern-card">
-              <div className="learn-pattern-label avoid">Mistake</div>
-              <p>Creating templates with 15+ variables. If filling in the template takes longer than
-              writing the prompt from scratch, nobody will use it.</p>
-              <div className="learn-pattern-label better">Instead</div>
-              <div className="learn-example-good">
-                Keep templates to 4-6 variables. Mark some as optional. Focus on the variables that
-                address your most common context gaps from Lesson 1 — those are the ones you actually forget.
-              </div>
-            </div>
-            <div className="learn-pattern-card">
-              <div className="learn-pattern-label avoid">Mistake</div>
-              <p>Never updating templates after using them. Your first version is a draft — you'll
-              learn what's missing or unnecessary after a few real uses.</p>
-              <div className="learn-pattern-label better">Instead</div>
-              <div className="learn-example-good">
-                After using a template 3 times, review it. Did you keep adding the same detail manually?
-                Add it as a variable. Was a variable always the same value? Make it a default. Templates
-                should evolve with your workflow.
-              </div>
-            </div>
-          </div>
+          </AccordionSection>
 
           <div className="learn-next-step">
             <h3>Ready to Build Your First Template?</h3>
@@ -1064,9 +1045,50 @@ ${gapSections}
           </div>
 
           {templates.length === 0 ? (
-            <p style={{ color: 'var(--text-muted)' }}>
-              No templates yet. Create your first context template or add a starter template below.
-            </p>
+            <div>
+              <p className="dashboard-section-description" style={{ marginBottom: '20px' }}>
+                Build templates in the Builder tab and they'll appear here. Each template includes:
+              </p>
+              <div className="analysis-grid">
+                <div className="analysis-card" style={{ opacity: 0.7 }}>
+                  <h3>Template Content</h3>
+                  <div className="field">
+                    <div className="field-label">Name &amp; Category</div>
+                    <div className="field-value" style={{ color: 'var(--text-primary)' }}>A descriptive name and category (e.g., Code Review, Email Draft, Analysis) so you can quickly find the right template for each task type.</div>
+                  </div>
+                  <div className="field">
+                    <div className="field-label">Prompt Template</div>
+                    <div className="field-value" style={{ color: 'var(--text-primary)' }}>The reusable prompt text with placeholder variables you fill in each time — ensuring you never forget key context.</div>
+                  </div>
+                </div>
+                <div className="analysis-card" style={{ opacity: 0.7 }}>
+                  <h3>Variables</h3>
+                  <div className="field">
+                    <div className="field-label">Dynamic Fields</div>
+                    <div className="field-value" style={{ color: 'var(--text-primary)' }}>Named placeholders (like project name, audience, or deadline) that you swap in for each use. Each variable can have a description, default value, and required flag.</div>
+                  </div>
+                </div>
+                <div className="analysis-card" style={{ opacity: 0.7 }}>
+                  <h3>Usage Tracking</h3>
+                  <div className="field">
+                    <div className="field-label">Metrics</div>
+                    <div className="field-value" style={{ color: 'var(--text-primary)' }}>How many times you've used each template and when it was last used — helping you identify which templates are actually earning their keep.</div>
+                  </div>
+                </div>
+                <div className="analysis-card" style={{ opacity: 0.7 }}>
+                  <h3>Organization</h3>
+                  <div className="field">
+                    <div className="field-label">Tags &amp; Favorites</div>
+                    <div className="field-value" style={{ color: 'var(--text-primary)' }}>Tag templates for easy filtering and star your most-used ones. Export to Markdown or JSON for use in other tools.</div>
+                  </div>
+                </div>
+              </div>
+              <div className="learn-next-step" style={{ marginTop: '24px' }}>
+                <h3>Ready to Build Your First Template?</h3>
+                <p>Head to the Builder tab to create a context template from scratch, or start from one of the suggested templates.</p>
+                <button className="btn btn-primary" onClick={() => setActiveTab('builder')}>Go to Builder</button>
+              </div>
+            </div>
           ) : getFilteredAndSortedTemplates().length === 0 ? (
             <p style={{ color: 'var(--text-muted)' }}>
               No templates match your filters.
