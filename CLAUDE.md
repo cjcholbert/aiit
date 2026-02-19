@@ -107,6 +107,17 @@ Knowing when you're operating outside AI's reliable boundaries
 - Admin panel for user management (separate container)
 - Templates and progress persist per-user
 
+### Styling Rule: Theme Compatibility
+
+**All CSS changes must work in light, dark, and high-contrast modes.** Never hardcode colors directly in component CSS. Use CSS custom properties defined in `:root`, `[data-theme="dark"]`, and `[data-theme="high-contrast"]` blocks in `styles.css`. Key variables:
+
+- `--bg-header`, `--bg-sidebar` — component backgrounds that differ from `--bg-primary`
+- `--text-primary`, `--text-secondary`, `--text-muted` — text colors
+- `--border-color`, `--bg-tertiary`, `--bg-hover` — surfaces and borders
+- `--accent-blue`, `--accent-purple`, etc. — accent colors (already theme-aware)
+
+If a new background or color is needed, add a CSS variable to all three theme blocks before using it.
+
 ### Terminology
 
 - **Module**: A category grouping (Foundation, Documentation & Trust, Workflow, Advanced)
