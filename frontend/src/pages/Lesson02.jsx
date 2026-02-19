@@ -649,9 +649,9 @@ export default function Lesson02() {
                     <ExamplesDropdown
                       endpoint="/lesson2/examples"
                       onSelect={(example) => {
-                        setFeedbackInput(example.feedback || '');
+                        setFeedbackInput(example.original_feedback || '');
                         setContextInput(example.context || '');
-                        setCategoryInput(example.category || 'code');
+                        setCategoryInput(example.feedback_category || 'other');
                       }}
                     />
                   </div>
