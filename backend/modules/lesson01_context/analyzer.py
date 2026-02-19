@@ -500,38 +500,69 @@ async def analyze_transcript(
         )
 
         # ----- Confidence -----
+        # Base confidence from conversation length
         total_turns = len(transcript.turns)
-        if first_msg_len < 30:
-            conf_score = 4
-            conf_reasoning = (
-                "Your opening message was very short, which limits what the analysis can detect. "
-                "For a stronger read, paste a conversation where your first message is at least "
-                "2-3 sentences with real task context."
-            )
-        elif total_turns >= 5:
-            conf_score = 8
-            conf_reasoning = (
-                "Multiple back-and-forth turns give strong signal for pattern detection. "
-                "To reach 9-10, include conversations where you provided detailed upfront "
-                "context so the tool can identify what you do well, not just what's missing."
-            )
+        if total_turns >= 5:
+            base_conf = 7
         elif total_turns >= 3:
-            conf_score = 7
-            conf_reasoning = (
-                "Three or more turns provide a reasonable basis for analysis. "
-                "Longer conversations (5+ turns) give richer signal — especially ones "
-                "where you had to clarify or re-explain, since those reveal context gaps."
+            base_conf = 6
+        else:
+            base_conf = 4
+
+        # Adjust based on signal quality — not just quantity of turns
+        present_count = len(present_elements)
+        missing_count = len(missing_elements)
+
+        # Penalize when the first message is very short (less signal)
+        if first_msg_len < 30:
+            base_conf -= 2
+
+        # Penalize when most context elements are missing — the analysis
+        # is mostly inferring gaps rather than detecting real patterns
+        if missing_count >= 6:
+            base_conf -= 1
+        # Bonus when there's real context to analyze (not just gaps)
+        if present_count >= 4:
+            base_conf += 1
+
+        conf_score = max(1, min(10, base_conf))
+
+        # Build reasoning that reflects actual signal quality
+        conf_parts = []
+        if total_turns < 3:
+            conf_parts.append(
+                f"Only {total_turns} turn{'s' if total_turns != 1 else ''} "
+                f"limits what the analysis can surface."
+            )
+        elif total_turns < 5:
+            conf_parts.append(
+                f"{total_turns} turns provide a baseline for pattern detection."
             )
         else:
-            conf_score = 5
-            conf_reasoning = (
-                "Only 1-2 turns limits what the analysis can surface. "
-                "Try pasting a conversation with more back-and-forth — the corrections "
-                "and follow-ups are where your context patterns become visible."
+            conf_parts.append(
+                f"{total_turns} turns give good signal for pattern detection."
             )
 
-        # Clamp to valid range
-        conf_score = max(1, min(10, conf_score))
+        if missing_count >= 6:
+            conf_parts.append(
+                f"However, {missing_count} of 8 context elements were missing, "
+                f"so the analysis is largely identifying gaps rather than "
+                f"confirming what you did well."
+            )
+        elif present_count <= 1:
+            conf_parts.append(
+                "The opening message had very little structured context, "
+                "which limits the analysis to gap detection."
+            )
+
+        if first_msg_len < 30:
+            conf_parts.append(
+                "The very short opening message reduces confidence — "
+                "paste conversations with more substantive first messages "
+                "for a stronger read."
+            )
+
+        conf_reasoning = " ".join(conf_parts)
 
         confidence = Confidence(score=conf_score, reasoning=conf_reasoning)
 
