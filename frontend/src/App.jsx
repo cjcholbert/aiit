@@ -116,7 +116,7 @@ function AppLayout({ children }) {
 
                 <div className="content-column">
                     <div className="content-header">
-                        <img src="/yai.png" alt="YAI" className="header-logo" />
+                        <img src="/yai-extended.png" alt="YAI" className="header-logo" />
                         <NavDropdown />
                     </div>
 

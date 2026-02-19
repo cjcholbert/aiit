@@ -32,7 +32,7 @@ export default function Login() {
         setGuestLoading(true);
         try {
             await autoGuestLogin();
-            navigate('/welcome');
+            navigate('/');
         } catch (err) {
             setError('Guest login failed. Please try again.');
         } finally {

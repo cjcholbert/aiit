@@ -206,8 +206,8 @@ img, video, iframe {
 }
 
 .header-logo {
-  height: 128px;
-  width: 160px;
+  height: auto;
+  width: 180px;
 }
 
 /* =============================================================================
@@ -1281,8 +1281,8 @@ tr:hover td {
 /* Tablet header */
 @media (max-width: 768px) {
   .header-logo {
-    height: 80px;
-    width: 100px;
+    height: auto;
+    width: 140px;
   }
 
   .content-header {
@@ -1309,8 +1309,8 @@ tr:hover td {
   }
 
   .header-logo {
-    height: 64px;
-    width: 80px;
+    height: auto;
+    width: 110px;
   }
 
   .nav-header-right {
