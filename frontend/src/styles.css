@@ -1200,6 +1200,24 @@ tr:hover td {
   margin-bottom: var(--space-sm);
 }
 
+.auth-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--space-xs);
+  letter-spacing: -0.5px;
+}
+
+.auth-brought-by {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin: 0 0 var(--space-md);
+}
+
+.auth-brought-by strong {
+  color: var(--text-primary);
+}
+
 .auth-subtitle {
   color: var(--text-secondary);
   font-size: 14px;

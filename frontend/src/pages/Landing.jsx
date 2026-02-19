@@ -32,7 +32,10 @@ export default function Landing() {
   return (
     <div className="landing-page">
       <nav className="landing-nav">
-        <div className="landing-nav-brand">Your AI Iteration</div>
+        <div className="landing-nav-brand">
+          <span className="landing-nav-title">The AI Collaborator</span>
+          <span className="landing-nav-byline">brought to you by <strong>Your AI Iteration</strong></span>
+        </div>
         <div className="landing-nav-links">
           <Link to="/login">Sign In</Link>
           <Link to="/register" className="btn-landing-primary">Get Started</Link>

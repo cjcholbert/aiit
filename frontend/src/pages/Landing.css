@@ -17,8 +17,24 @@
 }
 
 .landing-nav-brand {
-  font-size: 1.1rem;
-  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.landing-nav-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+}
+
+.landing-nav-byline {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.landing-nav-byline strong {
   color: var(--text-primary);
 }
 

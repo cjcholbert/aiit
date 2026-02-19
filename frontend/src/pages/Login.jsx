@@ -44,10 +44,8 @@ export default function Login() {
         <div className="auth-container">
             <div className="auth-card">
                 <div className="auth-header">
-                    <div className="brand" style={{ justifyContent: 'center', borderBottom: 'none', marginBottom: 0 }}>
-                        <div className="brand-logo">AI</div>
-                        <div className="brand-name">Your AI Iteration</div>
-                    </div>
+                    <h1 className="auth-title">The AI Collaborator</h1>
+                    <p className="auth-brought-by">brought to you by <strong>Your AI Iteration</strong></p>
                     <p className="auth-subtitle">Sign in to continue your learning journey</p>
                 </div>
 
