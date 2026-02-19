@@ -8,8 +8,11 @@ import { MODULES } from '../config/modules';
 import { useTheme } from '../contexts/ThemeContext';
 import './ProgressSidebar.css';
 
-const BRAND_TEAL = '#3a9080';
-const BRAND_TEAL_DARK = '#2a8898';
+const TEAL_BY_THEME = {
+  light: { main: '#3a9080', dark: '#2a8898' },
+  dark: { main: '#4aaa98', dark: '#3aaab8' },
+  'high-contrast': { main: '#5cc8b4', dark: '#4ac8d8' },
+};
 
 function getModuleForLesson(lessonNumber) {
   return MODULES.find(m => m.lessons.some(l => l.lesson === lessonNumber));
@@ -48,12 +51,14 @@ function ProgressSidebar({ lessonNumber }) {
 
   const percentage = completionPercentage ?? 0;
 
+  const teal = TEAL_BY_THEME[theme] || TEAL_BY_THEME.light;
+
   const currentModule = getModuleForLesson(lessonNumber);
   const titleColor = currentModule
     ? (theme === 'dark' ? currentModule.darkTextColor : currentModule.textColor)
-    : BRAND_TEAL;
+    : teal.main;
 
-  const barGradient = `linear-gradient(90deg, ${BRAND_TEAL}, ${BRAND_TEAL_DARK})`;
+  const barGradient = `linear-gradient(90deg, ${teal.main}, ${teal.dark})`;
 
   const renderSidebarContent = () => (
     <div className="progress-sidebar__content">
@@ -61,20 +66,20 @@ function ProgressSidebar({ lessonNumber }) {
         <SelfAssessmentChecklist
           lessonNumber={lessonNumber}
           criteria={LESSON_CRITERIA[lessonNumber]}
-          accentColor={BRAND_TEAL}
+          accentColor={teal.main}
         />
       </div>
 
       {lessonStats && (
         <div className="progress-sidebar__stats">
-          <StatsPanel stats={lessonStats} accentColor={BRAND_TEAL} />
+          <StatsPanel stats={lessonStats} accentColor={teal.main} />
         </div>
       )}
 
       <div className="progress-sidebar__progress-section">
         <div className="progress-sidebar__progress-header">
           <span className="progress-sidebar__progress-label">{completedCount}/12 lessons</span>
-          <span className={`progress-sidebar__progress-value gradient-accent`}>{Math.round(percentage)}%</span>
+          <span className="progress-sidebar__progress-value">{Math.round(percentage)}%</span>
         </div>
         <div className="progress-sidebar__progress-track">
           <div

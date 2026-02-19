@@ -75,10 +75,10 @@ export const MODULES = [
         name: 'Documentation & Trust',
         color: '#e0f0f8',
         textColor: '#1a6d8a',
-        darkColor: '#2a2540',
-        darkTextColor: '#b8a8d8',
+        darkColor: '#1c2e3a',
+        darkTextColor: '#7fbcd0',
         borderColor: '#a0cfe0',
-        darkBorderColor: '#4a3d6a',
+        darkBorderColor: '#2a5a6e',
         lessons: [
             {
                 lesson: 4,
@@ -146,10 +146,10 @@ export const MODULES = [
         name: 'Advanced',
         color: '#fde8e8',
         textColor: '#b32d2d',
-        darkColor: '#1c2e3a',
-        darkTextColor: '#8fb8d0',
+        darkColor: '#3a1c1c',
+        darkTextColor: '#d08f8f',
         borderColor: '#e0a0a0',
-        darkBorderColor: '#2a4a5e',
+        darkBorderColor: '#6a2a2a',
         lessons: [
             {
                 lesson: 11,

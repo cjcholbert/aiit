@@ -259,6 +259,34 @@ img, video, iframe {
   background-clip: text;
 }
 
+[data-theme="dark"] .header-brand-accent,
+[data-theme="dark"] .gradient-accent,
+[data-theme="dark"] .gradient-context-assembly,
+[data-theme="dark"] .gradient-quality-judgment,
+[data-theme="dark"] .gradient-task-decomposition,
+[data-theme="dark"] .gradient-iterative-refinement,
+[data-theme="dark"] .gradient-workflow-integration,
+[data-theme="dark"] .gradient-frontier-recognition {
+  background: linear-gradient(90deg, #4acea8, #3aaab8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-theme="high-contrast"] .header-brand-accent,
+[data-theme="high-contrast"] .gradient-accent,
+[data-theme="high-contrast"] .gradient-context-assembly,
+[data-theme="high-contrast"] .gradient-quality-judgment,
+[data-theme="high-contrast"] .gradient-task-decomposition,
+[data-theme="high-contrast"] .gradient-iterative-refinement,
+[data-theme="high-contrast"] .gradient-workflow-integration,
+[data-theme="high-contrast"] .gradient-frontier-recognition {
+  background: linear-gradient(90deg, #5ce8c4, #4ac8d8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 .header-brand-byline {
   font-size: 0.7rem;
   color: var(--text-muted);
