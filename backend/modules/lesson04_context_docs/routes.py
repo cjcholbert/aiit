@@ -505,6 +505,49 @@ async def end_session(
     return session_to_response(session, project_name)
 
 
+@router.post("/sessions/{session_id}/reopen", response_model=SessionResponse)
+async def reopen_session(
+    session_id: str,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Reopen a previously ended session."""
+    session = await _get_user_session(session_id, current_user.id, db)
+
+    if not session.ended_at:
+        raise HTTPException(status_code=400, detail="Session is already open")
+
+    # Check for existing open sessions on the same doc
+    open_result = await db.execute(
+        select(ContextSession).where(
+            ContextSession.context_doc_id == session.context_doc_id,
+            ContextSession.user_id == current_user.id,
+            ContextSession.ended_at.is_(None)
+        )
+    )
+    open_session = open_result.scalar_one_or_none()
+
+    if open_session:
+        raise HTTPException(
+            status_code=400,
+            detail="You have an open session on this project. End it before reopening another."
+        )
+
+    session.ended_at = None
+    await db.commit()
+    await db.refresh(session)
+
+    logger.info("Reopened session %s", session_id)
+
+    # Get project name
+    doc_result = await db.execute(
+        select(ContextDoc.project_name).where(ContextDoc.id == session.context_doc_id)
+    )
+    project_name = doc_result.scalar_one_or_none() or "Unknown"
+
+    return session_to_response(session, project_name)
+
+
 @router.delete("/sessions/{session_id}")
 async def delete_session(
     session_id: str,

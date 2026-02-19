@@ -74,7 +74,8 @@ def task_to_summary(task: IterationTask) -> IterationTaskSummary:
         current_pass_label=current_pass_info['label'],
         passes_completed=len(passes),
         is_complete=task.is_complete,
-        created_at=task.created_at
+        created_at=task.created_at,
+        updated_at=task.updated_at
     )
 
 

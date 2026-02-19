@@ -4,6 +4,7 @@ import ConnectionCallout from '../components/ConnectionCallout';
 import { useLessonStats } from '../contexts/LessonStatsContext';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 import { AccordionSection } from '../components/Accordion';
+import { copyToClipboard } from '../utils/exportUtils';
 
 const DEFAULT_CATEGORIES = [
   { value: 'general', label: 'General', color: 'var(--accent-purple)', icon: '📋' },
@@ -458,9 +459,7 @@ export default function Lesson03() {
     saveCustomCategories(updated);
   };
 
-  const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text);
-  };
+  // copyToClipboard imported from exportUtils
 
   // Build templates workflow functions
   const generateBuildTemplates = () => {

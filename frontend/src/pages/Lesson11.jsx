@@ -86,7 +86,10 @@ export default function Lesson11() {
 
     useEffect(() => {
         if (activeTab === 'zones') fetchZones();
-        if (activeTab === 'encounters') fetchEncounters();
+        if (activeTab === 'encounters') {
+            fetchZones();
+            fetchEncounters();
+        }
     }, [activeTab]);
 
     useEffect(() => {
@@ -221,6 +224,7 @@ export default function Lesson11() {
             await api.post(`/lesson11/${type}/seed-examples`, {});
             if (type === 'zones') fetchZones();
             else fetchEncounters();
+            fetchStats();
         } catch (err) {
             setError('Failed to seed examples');
         } finally {
@@ -328,14 +332,12 @@ export default function Lesson11() {
                                 <p>Create zones for the types of work you do with AI. Rate each one as Safe,
                                 Caution, or Frontier. Over time, your map becomes a quick-reference guide for
                                 how much verification any task needs.</p>
-                                <button className="learn-tab-link" onClick={() => setActiveTab('zones')}>Go to Zones →</button>
                             </div>
                             <div className="learn-pattern-card">
                                 <h4 className="accent-green">Encounters Tab — Log What Actually Happened</h4>
                                 <p>Each time you use AI for something notable — a success, a failure, or a
                                 surprise — log it. These real-world data points are what make your zones accurate
                                 instead of just guesswork.</p>
-                                <button className="learn-tab-link" onClick={() => setActiveTab('encounters')}>Go to Encounters →</button>
                             </div>
                         </div>
                     </AccordionSection>

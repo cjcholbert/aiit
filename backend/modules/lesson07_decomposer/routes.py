@@ -6,6 +6,7 @@ import uuid
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
+from sqlalchemy.orm import attributes
 
 from backend.database import get_db
 from backend.rate_limit import limiter
@@ -307,7 +308,7 @@ async def update_task(
     """Update a task within a decomposition."""
     decomp = await _get_user_decomposition(decomposition_id, current_user.id, db)
 
-    tasks = decomp.tasks or []
+    tasks = list(decomp.tasks or [])
     task_found = False
 
     for task in tasks:
@@ -323,6 +324,8 @@ async def update_task(
 
     decomp.tasks = tasks
     decomp.categories = calculate_categories(tasks)
+    attributes.flag_modified(decomp, 'tasks')
+    attributes.flag_modified(decomp, 'categories')
 
     await db.commit()
     await db.refresh(decomp)

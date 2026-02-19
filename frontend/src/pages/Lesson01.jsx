@@ -4,6 +4,7 @@ import { useLessonStats } from '../contexts/LessonStatsContext';
 import ConnectionCallout from '../components/ConnectionCallout';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 import { AccordionSection } from '../components/Accordion';
+import { copyToClipboard } from '../utils/exportUtils';
 
 export default function Lesson01() {
     const [activeTab, setActiveTab] = useState('concepts');
@@ -268,7 +269,7 @@ export default function Lesson01() {
 
     const copyConverterJSON = () => {
         if (!converterOutput) return;
-        navigator.clipboard.writeText(converterOutput);
+        copyToClipboard(converterOutput);
     };
 
     const analyzeConverted = async () => {
@@ -344,14 +345,12 @@ export default function Lesson01() {
                                 <p>Paste a real AI conversation (or upload a JSON export). The tool analyzes what context
                                 you provided, what was missing, and what the AI had to guess. You'll get a specific coaching
                                 suggestion and an improved version of your opening prompt.</p>
-                                <button className="learn-tab-link" onClick={() => setActiveTab('analysis')}>Go to Analyze →</button>
                             </div>
                             <div className="learn-pattern-card">
                                 <h4 style={{ color: 'var(--accent-green)' }}>History Tab — Track Your Patterns</h4>
                                 <p>See all your analyzed conversations in one place. Over time, recurring gaps and
                                 strengths emerge — showing you exactly which context habits to build and which
                                 ones you've already mastered.</p>
-                                <button className="learn-tab-link" onClick={() => setActiveTab('history')}>Go to History →</button>
                             </div>
                         </div>
                     </AccordionSection>

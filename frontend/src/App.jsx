@@ -175,8 +175,6 @@ export default function App() {
                 </ProtectedRoute>
             } />
 
-            {/* Redirect old /curriculum to dashboard */}
-            <Route path="/curriculum" element={<Navigate to="/dashboard" replace />} />
 
             <Route path="/admin" element={
                 <ProtectedRoute>

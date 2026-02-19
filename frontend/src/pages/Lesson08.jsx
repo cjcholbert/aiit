@@ -472,7 +472,6 @@ export default function Lesson08() {
                 <p>Build a delegation with a template (context, objectives, scope, deliverables, success
                 criteria), add your task sequence, then execute each task through the Delegate-Receive-Review-Decide
                 workflow. You can import tasks directly from Lesson 7.</p>
-                <button className="learn-tab-link" onClick={() => setActiveTab('delegate')}>Go to Delegate →</button>
               </div>
             </div>
           </AccordionSection>
@@ -801,19 +800,17 @@ export default function Lesson08() {
                                 {decomp.task_count || 0} tasks
                               </span>
                             </div>
-                            {decomp.categories && (
-                              <div className="l8-import-item-categories">
-                                {decomp.categories.ai_optimal > 0 && (
-                                  <span className="color-accent-green">{decomp.categories.ai_optimal} AI-Optimal</span>
+                            <div className="l8-import-item-categories">
+                                {decomp.ai_optimal_count > 0 && (
+                                  <span className="color-accent-green">{decomp.ai_optimal_count} AI-Optimal</span>
                                 )}
-                                {decomp.categories.collaborative > 0 && (
-                                  <span className="color-accent-yellow">{decomp.categories.collaborative} Collaborative</span>
+                                {decomp.collaborative_count > 0 && (
+                                  <span className="color-accent-yellow">{decomp.collaborative_count} Collaborative</span>
                                 )}
-                                {decomp.categories.human_primary > 0 && (
-                                  <span className="color-accent-red">{decomp.categories.human_primary} Human</span>
+                                {decomp.human_primary_count > 0 && (
+                                  <span className="color-accent-red">{decomp.human_primary_count} Human</span>
                                 )}
                               </div>
-                            )}
                           </div>
                         ))}
                       </div>

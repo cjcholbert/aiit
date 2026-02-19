@@ -52,6 +52,9 @@ class OutputTypeSummary(BaseModel):
     name: str
     category: str
     trust_level: str
+    reasoning: str = ""
+    verification_approach: str = ""
+    examples: list[str] = []
     prediction_count: int = 0
     accuracy_rate: float = 0.0
 
@@ -72,7 +75,7 @@ class PredictionVerify(BaseModel):
     """Request model for verifying a prediction."""
     was_correct: bool
     actual_issues: str = Field("", max_length=5000)
-    verification_method: str = Field("", max_length=500)
+    verification_method: str = Field("", max_length=100)
     verification_time_seconds: Optional[int] = None
     calibration_note: str = Field("", max_length=5000)
 

@@ -111,6 +111,7 @@ class IterationTaskSummary(BaseModel):
     passes_completed: int
     is_complete: bool
     created_at: datetime
+    updated_at: Optional[datetime] = None
 
     class Config:
         from_attributes = True

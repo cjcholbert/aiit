@@ -4,6 +4,7 @@ import ConnectionCallout from '../components/ConnectionCallout';
 import { useLessonStats } from '../contexts/LessonStatsContext';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 import { AccordionSection } from '../components/Accordion';
+import { copyToClipboard } from '../utils/exportUtils';
 
 // Frequency colors
 const FREQUENCY_COLORS = {
@@ -276,8 +277,8 @@ export default function Lesson10() {
         if (state.in_progress?.length) parts.push(`In Progress: ${state.in_progress.join(', ')}`);
         if (state.blocked?.length) parts.push(`Blocked: ${state.blocked.join(', ')}`);
       }
-      if (doc.key_decisions?.length) parts.push(`Key Decisions: ${doc.key_decisions.join('; ')}`);
-      if (doc.known_issues?.length) parts.push(`Known Issues: ${doc.known_issues.join('; ')}`);
+      if (doc.key_decisions?.length) parts.push(`Key Decisions: ${doc.key_decisions.map(d => d.decision).join('; ')}`);
+      if (doc.known_issues?.length) parts.push(`Known Issues: ${doc.known_issues.map(i => i.issue).join('; ')}`);
 
       const summary = parts.join('\n');
       const newValues = { ...inputValues };
@@ -289,9 +290,9 @@ export default function Lesson10() {
         } else if (lowerKey.includes('accomplishment') || lowerKey.includes('complete')) {
           newValues[key] = (doc.current_state?.complete || []).join('\n');
         } else if (lowerKey.includes('blocker') || lowerKey.includes('block') || lowerKey.includes('issue')) {
-          newValues[key] = [...(doc.current_state?.blocked || []), ...(doc.known_issues || [])].join('\n');
+          newValues[key] = [...(doc.current_state?.blocked || []), ...(doc.known_issues || []).map(i => i.issue)].join('\n');
         } else if (lowerKey.includes('goal') || lowerKey.includes('next') || lowerKey.includes('plan')) {
-          newValues[key] = (doc.next_goals || []).join('\n');
+          newValues[key] = (doc.next_goals || []).map(g => g.goal).join('\n');
         }
       });
 
@@ -475,14 +476,12 @@ export default function Lesson10() {
                 <p>Create a template for a recurring task. Define what information you need to gather
                 each time, write the prompt with placeholders, and choose quality checks to run before
                 you use the output.</p>
-                <button className="learn-tab-link" onClick={() => setActiveTab('design')}>Go to Design →</button>
               </div>
               <div className="learn-pattern-card">
                 <h4 className="learn-pattern-card-heading-green">Run Tab — Execute and Track Results</h4>
                 <p>Run your workflow by filling in the inputs, generating the prompt, and recording how
                 long it took and how good the output was. Over time, you will see your time savings
                 add up and spot which templates need improvement.</p>
-                <button className="learn-tab-link" onClick={() => setActiveTab('run')}>Go to Run →</button>
               </div>
             </div>
           </AccordionSection>
@@ -1134,7 +1133,7 @@ export default function Lesson10() {
                     {generatedContent && (
                       <button
                         className="btn btn-secondary mt-sm"
-                        onClick={() => { navigator.clipboard.writeText(generatedContent); }}
+                        onClick={() => { copyToClipboard(generatedContent); }}
                       >
                         Copy to Clipboard
                       </button>

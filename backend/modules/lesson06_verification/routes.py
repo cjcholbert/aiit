@@ -7,6 +7,7 @@ import uuid
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
+from sqlalchemy.orm import attributes
 
 from backend.database import get_db
 from backend.database.models import User, Checklist, VerificationSession
@@ -371,7 +372,8 @@ async def complete_verification_session(
                     item['times_caught_issue'] = item.get('times_caught_issue', 0) + 1
                 break
 
-    checklist.items = items
+    checklist.items = list(items)
+    attributes.flag_modified(checklist, 'items')
     await db.commit()
     await db.refresh(db_session)
 

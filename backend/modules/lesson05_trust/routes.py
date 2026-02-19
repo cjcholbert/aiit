@@ -119,6 +119,9 @@ async def list_output_types(
             name=ot.name,
             category=ot.category,
             trust_level=ot.trust_level,
+            reasoning=ot.reasoning or "",
+            verification_approach=ot.verification_approach or "",
+            examples=ot.examples or [],
             prediction_count=pred_count,
             accuracy_rate=accuracy
         ))

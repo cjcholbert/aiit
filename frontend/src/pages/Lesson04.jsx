@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
 import ConnectionCallout from '../components/ConnectionCallout';
 import { useLessonStats } from '../contexts/LessonStatsContext';
+import { copyToClipboard } from '../utils/exportUtils';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 import { AccordionSection } from '../components/Accordion';
 
@@ -84,6 +85,19 @@ export default function Lesson04() {
     try {
       const data = await api.get('/lesson4/sessions/active');
       setActiveSession(data);
+      // If there's an active session, regenerate the prompt so it persists across tab switches
+      if (data && data.context_doc_id) {
+        try {
+          const promptResult = await api.post('/lesson4/generate-prompt', {
+            context_doc_id: data.context_doc_id
+          });
+          setGeneratedPrompt(promptResult.prompt);
+        } catch (promptErr) {
+          console.error('Failed to regenerate prompt:', promptErr);
+        }
+      } else {
+        setGeneratedPrompt('');
+      }
     } catch (err) {
       console.error('Failed to fetch active session:', err);
     }
@@ -311,14 +325,8 @@ export default function Lesson04() {
         goals: goals
       });
       await fetchSessions();
-      await fetchActiveSession();
+      await fetchActiveSession(); // This now also generates the prompt
       setSessionGoals('');
-
-      // Generate prompt
-      const promptResult = await api.post('/lesson4/generate-prompt', {
-        context_doc_id: selectedDoc.id
-      });
-      setGeneratedPrompt(promptResult.prompt);
     } catch (err) {
       setError(err.message);
     }
@@ -333,6 +341,23 @@ export default function Lesson04() {
       await fetchActiveSession();
       await fetchStats();
       setGeneratedPrompt('');
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleReopenSession = async (sessionId, docId) => {
+    try {
+      setError(null);
+      await api.post(`/lesson4/sessions/${sessionId}/reopen`);
+      await fetchSessions();
+      await fetchActiveSession();
+
+      // Generate prompt for the reopened session's doc
+      const result = await api.post('/lesson4/generate-prompt', {
+        context_doc_id: docId
+      });
+      setGeneratedPrompt(result.prompt);
     } catch (err) {
       setError(err.message);
     }
@@ -421,23 +446,6 @@ export default function Lesson04() {
         </div>
       )}
 
-      {/* Active Session Banner */}
-      {activeSession && (
-        <div style={{ background: 'var(--success-bg)', padding: '16px', borderRadius: '8px', marginBottom: '16px', borderLeft: '4px solid var(--accent-green)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div>
-              <strong style={{ color: 'var(--accent-green)' }}>Active Session:</strong> {activeSession.project_name}
-              <span style={{ color: 'var(--text-secondary)', marginLeft: '16px' }}>
-                Started {new Date(activeSession.started_at).toLocaleTimeString()}
-              </span>
-            </div>
-            <button className="btn btn-primary" onClick={handleEndSession}>
-              End Session
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Tabs */}
       <div className="tabs">
         {['concepts', 'documents', 'sessions'].map((tab) => (
@@ -464,13 +472,11 @@ export default function Lesson04() {
               <h4 style={{ color: 'var(--accent-blue)' }}>Docs Tab — Build Your Context Documents</h4>
               <p>Create a context doc for a real project. Fill in the five sections (state, decisions,
               issues, lessons, goals) and generate a ready-to-paste prompt for your next AI session.</p>
-              <button className="learn-tab-link" onClick={() => setActiveTab('documents')}>Go to Documents →</button>
             </div>
             <div className="learn-pattern-card">
               <h4 style={{ color: 'var(--accent-green)' }}>Sessions Tab — Track Your AI Work Sessions</h4>
               <p>Log when you start and end AI sessions on a project. Over time, you'll see how
               context quality improves and how much less re-explaining you need.</p>
-              <button className="learn-tab-link" onClick={() => setActiveTab('sessions')}>Go to Sessions →</button>
             </div>
           </div>
           </AccordionSection>
@@ -924,19 +930,30 @@ export default function Lesson04() {
         <div className="sessions-section">
           <h2>Work Sessions</h2>
 
-          {/* Start New Session */}
-          {!activeSession && (
-            <div className="card" style={{ padding: '24px', marginBottom: '24px' }}>
-              <h3 style={{ marginTop: 0 }}>Start New Session</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+          {/* Start New Session — always visible */}
+          <div className="card" style={{ padding: '20px', marginBottom: '20px' }}>
+            <h3 style={{ marginTop: 0, marginBottom: '12px' }}>Start New Session</h3>
+
+            {activeSession ? (
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'var(--success-bg)', borderRadius: '8px', borderLeft: '4px solid var(--accent-green)' }}>
                 <div>
-                  <label style={{ display: 'block', marginBottom: '8px' }}>Select Project</label>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '200px', overflowY: 'auto' }}>
+                  <strong style={{ color: 'var(--accent-green)' }}>Active:</strong> {activeSession.project_name}
+                  <span style={{ color: 'var(--text-secondary)', marginLeft: '12px', fontSize: '0.85rem' }}>
+                    Started {new Date(activeSession.started_at).toLocaleTimeString()}
+                  </span>
+                </div>
+                <button className="btn btn-primary" onClick={handleEndSession}>End Session</button>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <div>
+                  <label style={{ display: 'block', marginBottom: '6px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Select Project</label>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '200px', overflowY: 'auto' }}>
                     {docs.filter(d => d.is_active).map((doc) => (
                       <div
                         key={doc.id}
                         style={{
-                          padding: '12px',
+                          padding: '10px',
                           background: selectedDoc?.id === doc.id ? 'var(--bg-hover)' : 'var(--bg-secondary)',
                           borderRadius: '8px',
                           cursor: 'pointer',
@@ -948,39 +965,41 @@ export default function Lesson04() {
                         <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{doc.session_count} previous sessions</div>
                       </div>
                     ))}
+                    {docs.filter(d => d.is_active).length === 0 && (
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', margin: 0 }}>Create a project in the Documents tab first.</p>
+                    )}
                   </div>
                 </div>
                 <div>
-                  <label style={{ display: 'block', marginBottom: '8px' }}>Session Goals (one per line)</label>
+                  <label style={{ display: 'block', marginBottom: '6px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Session Goals (one per line)</label>
                   <textarea
                     value={sessionGoals}
                     onChange={(e) => setSessionGoals(e.target.value)}
                     placeholder="What do you want to accomplish?"
                     className="input"
-                    rows={5}
-                    style={{ width: '100%', marginBottom: '12px' }}
+                    rows={3}
+                    style={{ width: '100%', marginBottom: '10px' }}
                   />
                   <button
                     className="btn btn-primary"
                     onClick={handleStartSession}
                     disabled={!selectedDoc}
-                    style={{ width: '100%' }}
                   >
                     Start Session & Generate Prompt
                   </button>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* Generated Prompt */}
           {generatedPrompt && (
-            <div className="card" style={{ padding: '24px', marginBottom: '24px', background: 'var(--bg-tertiary)', borderLeft: '4px solid var(--accent-blue)' }}>
+            <div className="card" style={{ padding: '20px', marginBottom: '20px', background: 'var(--bg-tertiary)', borderLeft: '4px solid var(--accent-blue)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
                 <h3 style={{ margin: 0 }}>Context Prompt</h3>
                 <button
                   className="btn btn-secondary"
-                  onClick={() => navigator.clipboard.writeText(generatedPrompt)}
+                  onClick={() => copyToClipboard(generatedPrompt)}
                 >
                   Copy to Clipboard
                 </button>
@@ -994,45 +1013,10 @@ export default function Lesson04() {
             </div>
           )}
 
-          {/* Session History */}
+          {/* Session History — always visible */}
           <h3>Session History</h3>
           {sessions.length === 0 ? (
-            <div>
-              <p className="dashboard-section-description" style={{ marginBottom: '20px' }}>
-                Start a work session above and you'll track the following for each one:
-              </p>
-              <div className="analysis-grid">
-                <div className="analysis-card" style={{ opacity: 0.7 }}>
-                  <h3>Session Details</h3>
-                  <div className="field">
-                    <div className="field-label">Project</div>
-                    <div className="field-value" style={{ color: 'var(--text-primary)' }}>Which project or context doc the session is tied to, so you can see how context quality varies across projects.</div>
-                  </div>
-                  <div className="field">
-                    <div className="field-label">Duration</div>
-                    <div className="field-value" style={{ color: 'var(--text-primary)' }}>Start and end time for each session, giving you a record of when and how long you collaborated with AI on each project.</div>
-                  </div>
-                </div>
-                <div className="analysis-card" style={{ opacity: 0.7 }}>
-                  <h3>Quality Ratings</h3>
-                  <div className="field">
-                    <div className="field-label">Context Quality</div>
-                    <div className="field-value" style={{ color: 'var(--text-primary)' }}>Your self-assessment (1-10) of how well your context doc prepared the AI for the session — did it have what was needed, or were there gaps?</div>
-                  </div>
-                  <div className="field">
-                    <div className="field-label">Continuity Rating</div>
-                    <div className="field-value" style={{ color: 'var(--text-primary)' }}>How seamlessly the session picked up from where the last one left off — a measure of whether your living document is actually working.</div>
-                  </div>
-                </div>
-                <div className="analysis-card" style={{ opacity: 0.7 }}>
-                  <h3>Accomplishments</h3>
-                  <div className="field">
-                    <div className="field-label">What Got Done</div>
-                    <div className="field-value" style={{ color: 'var(--text-primary)' }}>A log of what you accomplished during the session, creating a history that feeds back into your context doc for next time.</div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <p style={{ color: 'var(--text-muted)' }}>No sessions yet. Start one above to begin tracking.</p>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {sessions.map((session) => (
@@ -1061,6 +1045,15 @@ export default function Lesson04() {
                     )}
                     {session.continuity_rating && (
                       <span style={{ color: 'var(--accent-blue)' }}>Continuity: {session.continuity_rating}/10</span>
+                    )}
+                    {session.ended_at && !activeSession && (
+                      <button
+                        className="btn btn-secondary"
+                        style={{ padding: '4px 12px', fontSize: '0.8rem' }}
+                        onClick={() => handleReopenSession(session.id, session.context_doc_id)}
+                      >
+                        Reopen
+                      </button>
                     )}
                   </div>
                 </div>

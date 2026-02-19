@@ -298,7 +298,6 @@ export default function Lesson12() {
                                 lessons. It pulls in your top templates, trust zones, frontier map, feedback
                                 principles, and workflow highlights. Then add your own personal rules and
                                 quick prompts, and export the finished card to keep at your desk.</p>
-                                <button className="learn-tab-link" onClick={() => setActiveTab('card')}>Go to My Card →</button>
                             </div>
                             <div className="learn-pattern-card">
                                 <h4 className="accent-green">Challenge Tab — Test All Six Skills at Once</h4>
@@ -306,7 +305,6 @@ export default function Lesson12() {
                                 of the six AI collaboration concepts. This is the integration test: can you
                                 use context assembly, quality judgment, task decomposition, iterative
                                 refinement, workflow integration, and frontier recognition together?</p>
-                                <button className="learn-tab-link" onClick={() => setActiveTab('challenge')}>Go to Challenge →</button>
                             </div>
                         </div>
                     </AccordionSection>

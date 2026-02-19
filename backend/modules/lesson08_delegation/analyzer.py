@@ -267,12 +267,22 @@ async def review_against_criteria(
         effective_criteria = [f"Output matches expected: {expected_output}"]
 
     if not effective_criteria:
-        # Nothing to evaluate against -- pass with a note
+        # Nothing to evaluate against — this is a gap, not a pass
         return DelegationReview(
-            overall_pass=True,
+            overall_pass=False,
             criteria_results=[],
-            summary="No success criteria provided. Output accepted as-is.",
-            suggestions=["Define explicit success criteria for more rigorous evaluation."],
+            summary=(
+                "No success criteria defined. Without criteria, there is no way "
+                "to evaluate whether the output meets your needs. This is a "
+                "delegation gap — effective delegation requires defining what "
+                "'done' looks like before reviewing output."
+            ),
+            suggestions=[
+                "Define explicit success criteria before delegating to AI.",
+                "Include at least 2-3 measurable criteria (e.g., 'includes X', "
+                "'formatted as Y', 'covers topics A, B, C').",
+                "Add a Success Criteria section to your delegation template.",
+            ],
             ai_extracted_output=output,
         )
 

@@ -415,7 +415,7 @@ async def get_insights(
             gaps.append(coaching["context_that_would_have_helped"])
 
         context_added = analysis.get("context_added_later", {})
-        if context_added.get("details") and context_added["details"] not in ("None", "N/A", "None needed"):
+        if context_added.get("details") and context_added["details"] not in ("None", "N/A", "None needed", "Context was thorough from the start — nothing needed to be added."):
             gaps.append(context_added["details"])
 
         context_provided = analysis.get("context_provided", {})

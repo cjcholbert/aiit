@@ -92,9 +92,16 @@ def _classify_task(task: dict) -> dict:
         recommended = assigned if assigned in CATEGORIES else "collaborative"
         is_correct = assigned == recommended
         confidence = 0.5
-        reasoning_text = "No strong category signals detected in task text; defaulting to assigned category."
+        reasoning_text = (
+            "No category signals detected in the task description. "
+            "Cannot verify whether the assigned category is correct. "
+            "Add action verbs and specifics so the categorization can be validated."
+        )
         is_borderline = True
-        borderline_note = "Task description lacks strong category signals -- consider adding more detail."
+        borderline_note = (
+            "Task description lacks recognizable signals for any category. "
+            "This makes it impossible to confirm the categorization is correct."
+        )
     else:
         recommended = top_cat
         is_correct = (assigned == recommended)
@@ -206,7 +213,17 @@ def _assess_dependency_analysis(tasks: list[dict], reviews: list[dict]) -> dict:
                 )
 
     if not issues:
-        suggestions.append("Task sequencing looks reasonable for this project.")
+        # Check if there are actually dependencies defined
+        has_any_deps = any(t.get("dependencies") for t in tasks)
+        has_any_gates = any(t.get("is_decision_gate") for t in tasks)
+        if not has_any_deps and not has_any_gates and len(tasks) > 2:
+            suggestions.append(
+                "No dependencies or decision gates defined between tasks. "
+                "Real projects usually have sequencing constraints — consider "
+                "which tasks depend on others and where review checkpoints belong."
+            )
+        else:
+            suggestions.append("Task sequencing looks reasonable for this project.")
 
     # Determine overall quality
     if len(issues) == 0:
@@ -343,15 +360,37 @@ def _generate_coaching(reviews: list[dict], tasks: list[dict]) -> dict:
             "category. If you struggle to articulate it, reconsider the placement."
         )
     else:
-        common_mistake = "No significant categorization errors detected."
-        biggest_insight = (
-            "Strong categorization instincts. The decomposition reflects a "
-            "clear understanding of what AI handles well vs. what needs human judgment."
+        # Check if correctness is genuine or just the analyzer defaulting
+        all_defaulted = all(
+            r.get("confidence", 1.0) <= 0.5 for r in reviews
         )
-        next_step = (
-            "Challenge yourself with more complex projects that blur the "
-            "boundaries between categories to refine your edge-case intuition."
-        )
+        if all_defaulted:
+            common_mistake = (
+                "Task descriptions lack strong category signals. The analyzer "
+                "couldn't independently verify categorizations because the "
+                "descriptions don't contain enough detail."
+            )
+            biggest_insight = (
+                "Add specific verbs and context to task descriptions. "
+                "Words like 'generate', 'approve', 'design', or 'deploy' "
+                "help clarify whether a task is AI-optimal, collaborative, "
+                "or human-primary."
+            )
+            next_step = (
+                "Rewrite each task description to include what action is being "
+                "performed, who owns the outcome, and what tools or judgment "
+                "are required."
+            )
+        else:
+            common_mistake = "No significant categorization errors detected."
+            biggest_insight = (
+                "Strong categorization instincts. The decomposition reflects a "
+                "clear understanding of what AI handles well vs. what needs human judgment."
+            )
+            next_step = (
+                "Challenge yourself with more complex projects that blur the "
+                "boundaries between categories to refine your edge-case intuition."
+            )
 
     return {
         "biggest_insight": biggest_insight,
@@ -427,8 +466,9 @@ async def analyze_decomposition(
         is_balanced = not all_same
 
         # ----- Strengths -----
+        all_defaulted = all(r.get("confidence", 1.0) <= 0.5 for r in reviews)
         strengths: list[str] = []
-        if correct_count == len(reviews):
+        if correct_count == len(reviews) and not all_defaulted:
             strengths.append("All tasks correctly categorized.")
         elif correct_count > incorrect_count:
             strengths.append(
@@ -442,7 +482,10 @@ async def analyze_decomposition(
         if any(t.get("is_decision_gate") for t in tasks):
             strengths.append("Decision gates included in the decomposition.")
         if not strengths:
-            strengths.append("Task decomposition attempted for the project.")
+            strengths.append(
+                "Tasks were identified, but descriptions need more detail "
+                "for meaningful categorization analysis."
+            )
 
         summary = (
             f"{'Strong' if score >= 8 else 'Decent' if score >= 5 else 'Needs work'} "

@@ -363,7 +363,6 @@ export default function Lesson09() {
                 <p>Create a real task (or import one from Context Tracker), then work through each
                 pass. For every pass you answer its key question and record the specific feedback
                 you gave the AI. This builds the muscle of focusing on one thing at a time.</p>
-                <button className="learn-tab-link" onClick={() => setActiveTab('iterate')}>Go to Practice →</button>
               </div>
               <div className="learn-pattern-card">
                 <h4 className="learn-pattern-card-heading-green">Feedback Quality Check — Sharpen Your Requests</h4>
@@ -376,7 +375,6 @@ export default function Lesson09() {
                 <p>Review completed tasks to see how your iteration approach evolves. Over time you'll
                 notice your Pass 1 feedback getting sharper and your total passes-to-done shrinking.
                 That's the skill developing.</p>
-                <button className="learn-tab-link" onClick={() => setActiveTab('history')}>Go to History →</button>
               </div>
             </div>
           </AccordionSection>
@@ -916,7 +914,7 @@ export default function Lesson09() {
                   {renderPassProgress(task.current_pass, task.is_complete)}
                   <div className="flex-between mt-md">
                     <span className="text-xs text-secondary">
-                      Completed {new Date(task.created_at).toLocaleDateString()}
+                      Completed {new Date(task.updated_at || task.created_at).toLocaleDateString()}
                     </span>
                     <div className="flex-center gap-sm">
                       <button

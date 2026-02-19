@@ -177,7 +177,11 @@ def _score_concept(concept: str, response_text: str) -> dict:
     if word_count > 150:
         strengths.append("Detailed response with good depth.")
     if not strengths:
-        strengths.append("Response provided for this concept.")
+        strengths.append(
+            f"Response attempts to address {CONCEPT_LABELS[concept]}, "
+            f"but lacks the key vocabulary that signals understanding. "
+            f"Try incorporating: {', '.join(kw['strong'][:3])}."
+        )
 
     # Build gaps list
     gaps: list[str] = []
@@ -194,7 +198,14 @@ def _score_concept(concept: str, response_text: str) -> dict:
     if word_count < 50:
         gaps.append("Response is very brief -- more detail would demonstrate deeper understanding.")
     if not gaps:
-        gaps.append("No significant gaps identified.")
+        if score < 70:
+            gaps.append(
+                f"Response lacks depth on {CONCEPT_LABELS[concept]} concepts. "
+                f"Try addressing specific elements like: "
+                f"{', '.join(missing_strong[:3])}."
+            )
+        else:
+            gaps.append("Solid coverage of key concepts.")
 
     # Build suggestion
     if score < 40:

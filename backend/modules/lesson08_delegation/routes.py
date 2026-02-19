@@ -280,13 +280,14 @@ async def add_task(
     """Add a task to a delegation sequence."""
     deleg = await _get_user_delegation(delegation_id, current_user.id, db)
 
-    tasks = deleg.task_sequence or []
+    tasks = list(deleg.task_sequence or [])
     new_task = task.model_dump()
     new_task['id'] = generate_task_id()
     new_task['order'] = len(tasks)
     tasks.append(new_task)
 
     deleg.task_sequence = tasks
+    attributes.flag_modified(deleg, 'task_sequence')
 
     await db.commit()
     await db.refresh(deleg)

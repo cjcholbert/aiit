@@ -350,11 +350,25 @@ async def analyze_transcript(
         elif trigger_phrases:
             later_details = "Clarifications were provided in follow-up messages."
             could_upfront = True
+        elif missing_elements:
+            # Context was missing and never added — that's a gap, not "none needed"
+            missing_labels = [ELEMENT_LABELS[e] for e in missing_elements[:4]]
+            later_details = (
+                "Missing context was never provided: "
+                + ", ".join(missing_labels)
+                + ". These gaps persisted through the entire conversation."
+            )
+            could_upfront = True
         else:
-            later_details = "None needed."
+            later_details = "Context was thorough from the start — nothing needed to be added."
             could_upfront = False
 
-        triggers_text = ", ".join(trigger_phrases[:3]) if trigger_phrases else "No explicit correction signals detected."
+        if trigger_phrases:
+            triggers_text = ", ".join(trigger_phrases[:3])
+        elif missing_elements and not later_elements_found:
+            triggers_text = "No corrections were made because the missing context was never addressed."
+        else:
+            triggers_text = "No correction signals detected — context was adequate from the start."
 
         context_added_later = ContextAddedLater(
             details=later_details,
@@ -372,8 +386,18 @@ async def analyze_transcript(
                     end = min(len(t.content), match.end() + 50)
                     assumption_phrases.append(t.content[start:end].strip())
 
+        # Infer implicit assumptions: if the user omitted key context elements
+        # but the assistant produced a substantive response, the assistant had
+        # to silently fill in gaps — those are implicit assumptions even when
+        # the assistant doesn't flag them with phrases like "I'm assuming".
+        implicit_gaps: list[str] = []
+        assistant_responded = len(all_assistant_text.strip()) > 50
+        if assistant_responded and not assumption_phrases:
+            for element in missing_elements:
+                implicit_gaps.append(ELEMENT_LABELS[element])
+
         if assumption_phrases:
-            wrong_details = "Assistant made assumptions: " + "; ".join(
+            wrong_details = "Assistant made explicit assumptions: " + "; ".join(
                 f'"{p}"' for p in assumption_phrases[:3]
             ) + "."
             why_assumed = (
@@ -385,9 +409,26 @@ async def analyze_transcript(
                 + ", ".join(ELEMENT_LABELS[e] for e in missing_elements[:3])
                 + ", which left room for assumptions."
             ) if missing_elements else "User provided sufficient context; assumptions were minor."
+        elif implicit_gaps:
+            wrong_details = (
+                "The assistant had to silently fill in gaps for: "
+                + ", ".join(implicit_gaps[:4])
+                + ". These are implicit assumptions — the AI proceeded without "
+                "asking, which means it guessed."
+            )
+            why_assumed = (
+                "The initial prompt didn't specify these elements, so the AI "
+                "used generic defaults rather than asking for clarification."
+            )
+            user_contributed = (
+                "The user's message omitted "
+                + ", ".join(implicit_gaps[:3])
+                + ", leaving the AI to guess. Providing these upfront would "
+                "have eliminated the need for assumptions."
+            )
         else:
-            wrong_details = "None -- context was sufficient or no assumptions were visible."
-            why_assumed = "No visible assumptions required."
+            wrong_details = "None — context was sufficient and no assumptions were needed."
+            why_assumed = "No assumptions required."
             user_contributed = "N/A"
 
         assumptions_wrong = AssumptionsWrong(
