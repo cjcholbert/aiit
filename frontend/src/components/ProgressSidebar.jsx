@@ -59,7 +59,6 @@ function ProgressSidebar({ lessonNumber }) {
   const gradientCls = LESSON_GRADIENT[lessonNumber] || 'gradient-accent';
   const [gFrom, gTo] = LESSON_GRADIENT_COLORS[lessonNumber] || ['var(--accent-blue)', 'var(--accent-purple)'];
   const barGradient = `linear-gradient(90deg, ${gFrom}, ${gTo})`;
-  const bgGradient = `linear-gradient(180deg, ${gFrom}18 0%, ${gTo}10 100%)`;
 
   const renderSidebarContent = () => (
     <div className="progress-sidebar__content">
@@ -95,7 +94,7 @@ function ProgressSidebar({ lessonNumber }) {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className={`progress-sidebar ${isOpen ? 'progress-sidebar--open' : 'progress-sidebar--collapsed'}`} style={{ background: bgGradient }}>
+      <aside className={`progress-sidebar ${isOpen ? 'progress-sidebar--open' : 'progress-sidebar--collapsed'}`}>
         <div className="progress-sidebar__toggle-bar">
           {isOpen && <span className={`progress-sidebar__title ${gradientCls}`}>Lesson Progress</span>}
           <button
@@ -126,8 +125,7 @@ function ProgressSidebar({ lessonNumber }) {
           <aside
             className="progress-sidebar__mobile-panel"
             onClick={e => e.stopPropagation()}
-            style={{ background: bgGradient }}
-          >
+                     >
             <div className="progress-sidebar__toggle-bar">
               <span className={`progress-sidebar__title ${gradientCls}`}>Lesson Progress</span>
               <button
