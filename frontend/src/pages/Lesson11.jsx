@@ -508,12 +508,12 @@ export default function Lesson11() {
                         <div className="card-header">
                             <h2 className="card-title">Create Zone</h2>
                             <ExamplesDropdown
-                                endpoint="/lesson11/examples"
+                                endpoint="/lesson11/examples/zones"
                                 onSelect={(example) => {
                                     setZoneForm({
                                         ...zoneForm,
                                         name: example.name || '',
-                                        category: example.category || categories[0]?.id || '',
+                                        category: example.zone_category || example.category || categories[0]?.id || '',
                                         reliability: example.reliability || 'moderate',
                                         confidence: example.confidence || 50,
                                         strengths: example.strengths || [],
@@ -736,6 +736,20 @@ export default function Lesson11() {
                     <div className="card">
                         <div className="card-header">
                             <h2 className="card-title">Log Encounter</h2>
+                            <ExamplesDropdown
+                                endpoint="/lesson11/examples/encounters"
+                                onSelect={(example) => {
+                                    setEncounterForm({
+                                        ...encounterForm,
+                                        encounter_type: example.encounter_type || 'success',
+                                        task_description: example.task_description || '',
+                                        outcome: example.outcome || '',
+                                        expected_result: example.expected_result || '',
+                                        lessons: example.lessons || '',
+                                        tags: example.tags || [],
+                                    });
+                                }}
+                            />
                         </div>
 
                         <form onSubmit={createEncounter}>

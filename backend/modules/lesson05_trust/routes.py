@@ -471,10 +471,10 @@ async def trigger_calibration_analysis(
     )
     verified_count = result.scalar()
 
-    if verified_count < 10:
+    if verified_count < 5:
         raise HTTPException(
             status_code=400,
-            detail=f"Need at least 10 verified predictions for analysis. You have {verified_count}."
+            detail=f"Need at least 5 verified predictions for analysis. You have {verified_count}."
         )
 
     # Run analysis

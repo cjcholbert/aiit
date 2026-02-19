@@ -1236,21 +1236,20 @@ export default function Lesson05() {
             <button
               className="btn btn-primary"
               onClick={handleAnalyze}
-              disabled={analyzing || (stats?.verified_predictions || 0) < 10}
+              disabled={analyzing || (stats?.verified_predictions || 0) < 5}
             >
               {analyzing ? 'Analyzing...' : 'Analyze Patterns'}
             </button>
           </div>
 
           <p className="text-muted mb-lg">
-            Calibration means your confidence matches reality. Over-trust means you were confident but wrong.
-            Over-verify means you doubted yourself but were right.
+            Calibration is how well your gut matches what actually happens. Over-trust means you felt sure and missed something. Over-verify means you spent time checking when you didn't need to.
           </p>
 
-          {(stats?.verified_predictions || 0) < 10 && (
+          {(stats?.verified_predictions || 0) < 5 && (
             <div className="alert alert-info mb-lg">
-              You need at least 10 verified predictions to generate AI insights.
-              Current: {stats?.verified_predictions || 0}/10
+              You need at least 5 verified predictions to generate AI insights.
+              Current: {stats?.verified_predictions || 0}/5
             </div>
           )}
 
