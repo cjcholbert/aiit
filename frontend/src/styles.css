@@ -38,9 +38,15 @@
   --btn-text-on-warning: #000000;
   --accent-yellow-hover: #b87a00;
 
+  /* Brand accent */
+  --brand-teal: #3a9080;
+  --brand-teal-light: #e8f4f1;
+  --brand-teal-bg: rgba(58, 144, 128, 0.10);
+  --brand-teal-border: rgba(58, 144, 128, 0.25);
+
   /* Component backgrounds */
   --bg-header: #e0d8d1;
-  --bg-sidebar: #ebe6e1;
+  --bg-sidebar: #f5f5f7;
 
   /* Spacing */
   --space-xs: 4px;
@@ -110,6 +116,11 @@
 
   --bg-header: #1c2128;
   --bg-sidebar: #242a32;
+
+  --brand-teal: #4aaa98;
+  --brand-teal-light: rgba(74, 170, 152, 0.12);
+  --brand-teal-bg: rgba(74, 170, 152, 0.10);
+  --brand-teal-border: rgba(74, 170, 152, 0.25);
 }
 
 /* High contrast theme */
@@ -155,6 +166,11 @@
 
   --bg-header: #0a0a0a;
   --bg-sidebar: #111111;
+
+  --brand-teal: #5cc8b4;
+  --brand-teal-light: rgba(92, 200, 180, 0.15);
+  --brand-teal-bg: rgba(92, 200, 180, 0.12);
+  --brand-teal-border: rgba(92, 200, 180, 0.3);
 }
 
 * {
@@ -230,51 +246,14 @@ img, video, iframe {
 }
 
 .header-brand-accent,
-.gradient-accent {
-  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Concept-colored title gradients */
-.gradient-context-assembly {
-  background: linear-gradient(90deg, #3ab088, #2878a8);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.gradient-quality-judgment {
-  background: linear-gradient(90deg, #a07cc0, #6040c8);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.gradient-task-decomposition {
-  background: linear-gradient(90deg, #c89040, #c05030);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.gradient-iterative-refinement {
-  background: linear-gradient(90deg, #40a0c8, #5060d0);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.gradient-workflow-integration {
-  background: linear-gradient(90deg, #c87848, #c04068);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
+.gradient-accent,
+.gradient-context-assembly,
+.gradient-quality-judgment,
+.gradient-task-decomposition,
+.gradient-iterative-refinement,
+.gradient-workflow-integration,
 .gradient-frontier-recognition {
-  background: linear-gradient(90deg, #7088a8, #4858b0);
+  background: linear-gradient(90deg, #3ab088, #2a8898);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -590,12 +569,12 @@ button:active:not(:disabled), .btn:active:not(:disabled) {
 }
 
 .btn-primary {
-  background: var(--accent-green);
+  background: var(--brand-teal);
   color: white;
 }
 
 .btn-primary:hover {
-  background: var(--accent-green-hover);
+  background: #328070;
 }
 
 .btn-secondary {
@@ -1061,7 +1040,7 @@ tr:hover td {
 .core-concept-card {
   background: var(--bg-tertiary);
   border: 1px solid var(--border-color);
-  border-top: 3px solid var(--concept-accent);
+  border-top: 3px solid var(--brand-teal);
   border-radius: var(--radius-lg);
   padding: var(--space-md);
   display: flex;
@@ -1078,7 +1057,7 @@ tr:hover td {
 .core-concept-name {
   font-size: 14px;
   font-weight: 600;
-  color: var(--concept-accent);
+  color: var(--brand-teal);
   margin: 0;
 }
 
@@ -1106,12 +1085,12 @@ tr:hover td {
 
 .core-concept-lesson-tag {
   padding: 2px 8px;
-  background: color-mix(in srgb, var(--concept-accent) 15%, transparent);
-  border: 1px solid color-mix(in srgb, var(--concept-accent) 30%, transparent);
+  background: var(--brand-teal-bg);
+  border: 1px solid var(--brand-teal-border);
   border-radius: var(--radius-sm);
   font-size: 11px;
   font-weight: 500;
-  color: var(--concept-accent);
+  color: var(--brand-teal);
 }
 
 @media (max-width: 900px) {
@@ -6088,11 +6067,11 @@ tr:hover td {
 .concept-tag {
   margin-top: 12px;
   padding: 4px 8px;
-  background: var(--concept-color-bg);
-  border-left: 3px solid var(--concept-color);
+  background: var(--brand-teal-bg);
+  border-left: 3px solid var(--brand-teal);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   font-size: 0.7rem;
-  color: var(--concept-color);
+  color: var(--brand-teal);
   font-weight: 500;
 }
 

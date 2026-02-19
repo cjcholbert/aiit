@@ -8,11 +8,13 @@ import { useApi } from '../hooks/useApi';
 const LESSON_TITLES = {};
 MODULES.forEach(m => m.lessons.forEach(l => { LESSON_TITLES[l.lesson] = l.title; }));
 
+const BRAND_TEAL = '#3a9080';
+
 const CORE_CONCEPTS = [
     {
         id: 'contextAssembly',
         name: 'Context Assembly',
-        color: '#4a9079',
+        color: BRAND_TEAL,
         tagline: 'Curating the briefing that shapes AI output quality',
         description: 'Gathering and presenting relevant background information to enable effective AI collaboration. Identifying what information is needed, organizing it coherently, and providing sufficient detail without overwhelming noise.',
         lessons: [1, 3, 4]
@@ -20,7 +22,7 @@ const CORE_CONCEPTS = [
     {
         id: 'qualityJudgment',
         name: 'Quality Judgment',
-        color: '#9079b0',
+        color: BRAND_TEAL,
         tagline: 'Distinguishing "looks right" from "is right"',
         description: 'Critically evaluating AI-generated outputs for accuracy, completeness, and fitness for purpose. Recognizing errors, identifying gaps, and determining whether the output genuinely meets the intended need.',
         lessons: [5, 6]
@@ -28,7 +30,7 @@ const CORE_CONCEPTS = [
     {
         id: 'taskDecomposition',
         name: 'Task Decomposition',
-        color: '#b08050',
+        color: BRAND_TEAL,
         tagline: 'Breaking complex problems into AI-appropriate chunks',
         description: 'Breaking complex problems into smaller components that can be addressed sequentially or in parallel. Understanding which subtasks are AI-appropriate and where human judgment is required.',
         lessons: [7, 8]
@@ -36,7 +38,7 @@ const CORE_CONCEPTS = [
     {
         id: 'iterativeRefinement',
         name: 'Iterative Refinement',
-        color: '#5090b0',
+        color: BRAND_TEAL,
         tagline: 'Steering toward outcomes through successive approximations',
         description: 'Progressively improving outputs through cycles of feedback, adjustment, and revision. Knowing what to ask for, how to redirect, and when "good enough" has been reached.',
         lessons: [2, 9]
@@ -44,7 +46,7 @@ const CORE_CONCEPTS = [
     {
         id: 'workflowIntegration',
         name: 'Workflow Integration',
-        color: '#b07050',
+        color: BRAND_TEAL,
         tagline: 'Embedding AI into sustainable work patterns',
         description: 'Embedding AI collaboration into existing work processes in sustainable, practical ways. Identifying where AI adds genuine value and creating repeatable patterns.',
         lessons: [10, 12]
@@ -52,7 +54,7 @@ const CORE_CONCEPTS = [
     {
         id: 'frontierRecognition',
         name: 'Frontier Recognition',
-        color: '#607090',
+        color: BRAND_TEAL,
         tagline: 'Knowing the boundaries of AI capability',
         description: 'Understanding the current boundaries of AI capability—what it can and cannot do reliably, where it excels versus struggles, and how those boundaries are shifting.',
         lessons: [11]
@@ -113,7 +115,6 @@ export default function Dashboard() {
                             <div
                                 key={concept.id}
                                 className="core-concept-card"
-                                style={{ '--concept-accent': concept.color }}
                             >
                                 <div className="core-concept-header">
                                     <h3 className="core-concept-name">{concept.name}</h3>
@@ -184,13 +185,7 @@ export default function Dashboard() {
                                                 </div>
                                             )}
                                             {concept && (
-                                                <div
-                                                    className="concept-tag"
-                                                    style={{
-                                                        '--concept-color': concept.color,
-                                                        '--concept-color-bg': concept.color + '30'
-                                                    }}
-                                                >
+                                                <div className="concept-tag">
                                                     {concept.name}
                                                 </div>
                                             )}

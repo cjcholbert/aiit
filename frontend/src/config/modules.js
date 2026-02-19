@@ -7,32 +7,32 @@ export const APP_NAME = 'Your AI Iteration';
 export const CONCEPTS = {
     contextAssembly: {
         name: 'Context Assembly',
-        color: '#4a9079',
+        color: '#3a9080',
         description: 'Gathering and presenting relevant background information for AI collaboration'
     },
     qualityJudgment: {
         name: 'Quality Judgment',
-        color: '#9079b0',
+        color: '#3a9080',
         description: 'Critically evaluating AI outputs for accuracy and fitness for purpose'
     },
     taskDecomposition: {
         name: 'Task Decomposition',
-        color: '#b08050',
+        color: '#3a9080',
         description: 'Breaking complex problems into manageable, AI-appropriate components'
     },
     iterativeRefinement: {
         name: 'Iterative Refinement',
-        color: '#5090b0',
+        color: '#3a9080',
         description: 'Progressively improving outputs through feedback cycles'
     },
     workflowIntegration: {
         name: 'Workflow Integration',
-        color: '#b07050',
+        color: '#3a9080',
         description: 'Embedding AI collaboration into existing work processes'
     },
     frontierRecognition: {
         name: 'Frontier Recognition',
-        color: '#607090',
+        color: '#3a9080',
         description: 'Understanding the current boundaries of AI capability'
     }
 };
@@ -41,11 +41,11 @@ export const CONCEPTS = {
 export const MODULES = [
     {
         name: 'Foundation',
-        color: '#e6f4ea',
-        textColor: '#1a7f37',
+        color: '#e8f5f2',
+        textColor: '#2d7a6c',
         darkColor: '#1c3a2a',
         darkTextColor: '#7fbfaa',
-        borderColor: '#a7d5b8',
+        borderColor: '#b0ddd4',
         darkBorderColor: '#2a5a42',
         lessons: [
             {
@@ -73,11 +73,11 @@ export const MODULES = [
     },
     {
         name: 'Documentation & Trust',
-        color: '#ede8f5',
-        textColor: '#6e40c9',
+        color: '#dff0ec',
+        textColor: '#2a7065',
         darkColor: '#2a2540',
         darkTextColor: '#b8a8d8',
-        borderColor: '#c4b5e3',
+        borderColor: '#9dd0c6',
         darkBorderColor: '#4a3d6a',
         lessons: [
             {
@@ -105,11 +105,11 @@ export const MODULES = [
     },
     {
         name: 'Workflow',
-        color: '#fdf0e2',
-        textColor: '#9a6700',
+        color: '#d6ebe6',
+        textColor: '#26665a',
         darkColor: '#3a2e1c',
         darkTextColor: '#d4b070',
-        borderColor: '#dfc088',
+        borderColor: '#8ac4b8',
         darkBorderColor: '#6a5030',
         lessons: [
             {
@@ -144,11 +144,11 @@ export const MODULES = [
     },
     {
         name: 'Advanced',
-        color: '#ddf4ff',
-        textColor: '#0969da',
+        color: '#cde6e0',
+        textColor: '#225c52',
         darkColor: '#1c2e3a',
         darkTextColor: '#8fb8d0',
-        borderColor: '#a4d3ee',
+        borderColor: '#78b8aa',
         darkBorderColor: '#2a4a5e',
         lessons: [
             {
