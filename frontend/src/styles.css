@@ -108,8 +108,8 @@
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
 
-  --bg-header: #161b22;
-  --bg-sidebar: #1c2128;
+  --bg-header: #1c2128;
+  --bg-sidebar: #242a32;
 }
 
 /* High contrast theme */
