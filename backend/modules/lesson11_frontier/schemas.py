@@ -27,15 +27,15 @@ RELIABILITY_LEVELS = {
 }
 
 ZONE_CATEGORIES = [
-    {"id": "coding", "name": "Coding & Development"},
     {"id": "writing", "name": "Writing & Content"},
     {"id": "analysis", "name": "Analysis & Research"},
     {"id": "data", "name": "Data & Calculations"},
     {"id": "creative", "name": "Creative & Design"},
     {"id": "planning", "name": "Planning & Strategy"},
     {"id": "communication", "name": "Communication & Email"},
-    {"id": "documentation", "name": "Documentation"},
-    {"id": "troubleshooting", "name": "Troubleshooting"},
+    {"id": "documentation", "name": "Documentation & Reports"},
+    {"id": "brainstorming", "name": "Brainstorming & Ideation"},
+    {"id": "summarization", "name": "Summarization & Review"},
     {"id": "other", "name": "Other"}
 ]
 
@@ -59,101 +59,99 @@ ENCOUNTER_TYPES = {
 
 EXAMPLE_ZONES = [
     {
-        "name": "Python Scripting",
-        "category": "coding",
+        "name": "Internal Email Drafting",
+        "category": "communication",
         "reliability": "reliable",
         "confidence": 85,
         "strengths": [
-            "Standard library usage",
-            "Common patterns and idioms",
-            "Error handling structure",
-            "Code documentation"
+            "Professional tone and structure",
+            "Appropriate formality for different audiences",
+            "Clear calls to action"
         ],
         "weaknesses": [
-            "Complex async patterns",
-            "Performance optimization",
-            "Platform-specific code"
+            "Company-specific terminology and acronyms",
+            "Relationship nuances between individuals",
+            "Cultural context within your organization"
         ],
-        "verification_needs": "Test execution, edge cases, security review for user input"
+        "verification_needs": "Quick read-through for tone and accuracy of facts before sending"
     },
     {
-        "name": "Legal Document Analysis",
+        "name": "Meeting Summary Notes",
+        "category": "summarization",
+        "reliability": "reliable",
+        "confidence": 80,
+        "strengths": [
+            "Captures key discussion points clearly",
+            "Organizes action items with owners",
+            "Structures notes in a professional format"
+        ],
+        "weaknesses": [
+            "May miss nuance or subtext in discussions",
+            "Cannot distinguish tentative ideas from firm decisions",
+            "Struggles with ambiguous or overlapping topics"
+        ],
+        "verification_needs": "Compare against your own recollection of key decisions and confirm action items with attendees"
+    },
+    {
+        "name": "Policy and Compliance Guidance",
         "category": "analysis",
         "reliability": "unreliable",
-        "confidence": 70,
+        "confidence": 30,
         "strengths": [
-            "Summarizing key points",
-            "Identifying document sections",
-            "Comparing document structures"
+            "Provides general frameworks for thinking about compliance",
+            "Explains common regulatory concepts in plain language",
+            "Good starting point for structuring checklists"
         ],
         "weaknesses": [
-            "Jurisdiction-specific interpretation",
-            "Contractual implications",
-            "Regulatory compliance details"
+            "May cite outdated regulations or incorrect effective dates",
+            "Misses jurisdiction-specific requirements",
+            "Presents incorrect information with full confidence"
         ],
-        "verification_needs": "Always verify with legal professional - AI cannot provide legal advice"
+        "verification_needs": "ALWAYS verify with appropriate professional before acting on any guidance. Never use as sole basis for compliance decisions."
     },
     {
-        "name": "Email Drafting",
-        "category": "communication",
-        "reliability": "reliable",
-        "confidence": 90,
-        "strengths": [
-            "Professional tone",
-            "Clear structure",
-            "Appropriate formality levels",
-            "Call-to-action clarity"
-        ],
-        "weaknesses": [
-            "Company-specific terminology",
-            "Relationship nuances",
-            "Cultural context"
-        ],
-        "verification_needs": "Quick read-through for tone and accuracy of facts"
-    },
-    {
-        "name": "Financial Calculations",
+        "name": "Budget Variance Explanations",
         "category": "data",
         "reliability": "mixed",
-        "confidence": 60,
+        "confidence": 50,
         "strengths": [
-            "Simple arithmetic",
-            "Standard formulas",
-            "Explaining concepts"
+            "Structures financial narratives clearly",
+            "Identifies obvious trends from clean data",
+            "Explains numbers in accessible language"
         ],
         "weaknesses": [
-            "Complex calculations",
-            "Multi-step analysis",
-            "Real-time data assumptions"
+            "Confuses correlation with causation",
+            "Cannot know the business context behind numbers",
+            "Misses one-time events or unusual items unless told"
         ],
-        "verification_needs": "Always verify calculations independently - use calculator/spreadsheet"
+        "verification_needs": "Verify every causal claim against actual business knowledge. Add context for any unusual line items."
     }
 ]
 
 EXAMPLE_ENCOUNTERS = [
     {
         "encounter_type": "success",
-        "task_description": "Generate a Python script to parse CSV files and extract specific columns",
-        "outcome": "Working script on first try, handled edge cases well",
-        "expected_result": "Expected to need 1-2 iterations",
-        "lessons": "AI excels at straightforward data processing tasks with clear requirements",
-        "tags": ["python", "csv", "data-processing"]
+        "task_description": "Asked AI to draft a risk register for a facilities relocation project across timeline, budget, and personnel categories",
+        "outcome": "Identified 12 risk categories — 10 were directly relevant and useful, 2 were easily refined with a follow-up prompt",
+        "expected_result": "Expected significant manual rework, but it was a strong starting point",
+        "lessons": "AI is effective for generating risk checklists when given a specific project type. Best used as a brainstorming accelerator, not a final product.",
+        "tags": ["risk-management", "project-planning", "brainstorming"]
     },
     {
         "encounter_type": "failure",
-        "task_description": "Analyze this legal contract for potential liability issues",
-        "outcome": "AI provided general observations but missed jurisdiction-specific clauses that were critical",
-        "expected_result": "Hoped for detailed liability analysis",
-        "lessons": "AI cannot replace domain expertise for legal analysis - use only for summarization",
-        "tags": ["legal", "contracts", "analysis"]
+        "task_description": "Asked AI to summarize new state paid leave requirements including eligible employees, accrual rates, and employer obligations",
+        "outcome": "Provided a detailed summary with confident specifics, but effective dates were wrong, two exemptions were missing, and the accrual rate was from a draft version of the law",
+        "expected_result": "Expected a reliable summary of publicly available law for an internal memo",
+        "lessons": "AI is unreliable for current legal and regulatory information. It presents outdated details with full confidence. Always verify against official sources.",
+        "tags": ["compliance", "workplace-policy", "verification-critical"]
     },
     {
         "encounter_type": "surprise",
-        "task_description": "Write a regex to validate complex date formats",
-        "outcome": "AI suggested a much simpler approach using dateutil.parser instead of regex",
-        "expected_result": "Expected a complex regex pattern",
-        "lessons": "AI sometimes suggests better approaches than what I asked for",
-        "tags": ["regex", "dates", "alternative-approach"]
+        "task_description": "Asked AI to rewrite a formal internal announcement about a wellness program into a conversational tone for the company newsletter",
+        "outcome": "Not only shifted the tone effectively but reorganized the content to lead with employee benefits rather than program logistics — better structure than expected",
+        "expected_result": "Expected mediocre results needing heavy rewriting",
+        "lessons": "AI handles tone shifts well when given clear examples of source and target voice. Providing audience details produces dramatically better results.",
+        "tags": ["internal-communications", "tone-adaptation", "content-rewriting"]
     }
 ]
 

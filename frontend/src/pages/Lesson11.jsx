@@ -7,11 +7,15 @@ import { AccordionSection } from '../components/Accordion';
 
 // Icon mappings for categories and reliability
 const CATEGORY_ICONS = {
-  coding: '💻',
   writing: '✍️',
   analysis: '📊',
-  research: '🔬',
+  data: '🔢',
   creative: '🎨',
+  planning: '📐',
+  communication: '✉️',
+  documentation: '📄',
+  brainstorming: '💡',
+  summarization: '📋',
   default: '📋'
 };
 
@@ -47,7 +51,7 @@ export default function Lesson11() {
     // Forms
     const [zoneForm, setZoneForm] = useState({
         name: '',
-        category: 'coding',
+        category: 'writing',
         reliability: 'mixed',
         confidence: 50,
         strengths: [],
@@ -172,7 +176,7 @@ export default function Lesson11() {
         try {
             await api.post('/lesson11/zones', zoneForm);
             setZoneForm({
-                name: '', category: 'coding', reliability: 'mixed',
+                name: '', category: 'writing', reliability: 'mixed',
                 confidence: 50, strengths: [], weaknesses: [],
                 verification_needs: '', notes: ''
             });
@@ -272,7 +276,7 @@ export default function Lesson11() {
         setZoneForm({
             ...zoneForm,
             name: outputType.name,
-            category: outputType.category || 'coding',
+            category: outputType.category || 'other',
             reliability: reliabilityMap[outputType.trust_level] || 'mixed',
             verification_needs: outputType.verification_approach || '',
             notes: outputType.reasoning || ''
@@ -580,7 +584,7 @@ export default function Lesson11() {
                                         type="text"
                                         value={zoneForm.name}
                                         onChange={(e) => setZoneForm({ ...zoneForm, name: e.target.value })}
-                                        placeholder="e.g., Python Scripting"
+                                        placeholder="e.g., Meeting Summary Notes"
                                         required
                                     />
                                 </div>

@@ -64,13 +64,13 @@ async def get_category_examples():
 @router.get("/examples/zones")
 async def get_example_zones():
     """Get example zones for inspiration."""
-    return EXAMPLE_ZONES
+    return CATEGORY_ZONES
 
 
 @router.get("/examples/encounters")
 async def get_example_encounters():
     """Get example encounters for inspiration."""
-    return EXAMPLE_ENCOUNTERS
+    return CATEGORY_ENCOUNTERS
 
 
 # =============================================================================
