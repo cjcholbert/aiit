@@ -6,7 +6,7 @@ function hasRealData(value) {
   return /[1-9]/.test(str);
 }
 
-export default function StatsPanel({ stats }) {
+export default function StatsPanel({ stats, accentColor }) {
   if (!stats || stats.length === 0) return null;
 
   const showStats = stats.some(stat => hasRealData(stat.value));
@@ -24,7 +24,7 @@ export default function StatsPanel({ stats }) {
       <div className="stats-panel-grid">
         {stats.map((stat, i) => (
           <div key={i} className="stats-panel-card">
-            <span className="stats-panel-value" style={{ color: stat.color || 'var(--accent-blue)' }}>
+            <span className="stats-panel-value" style={{ color: stat.color || accentColor || 'var(--accent-blue)' }}>
               {stat.value ?? '-'}
             </span>
             <span className="stats-panel-label">{stat.label}</span>

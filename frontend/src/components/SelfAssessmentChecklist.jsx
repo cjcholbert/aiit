@@ -9,7 +9,7 @@ import { useApi } from '../hooks/useApi';
  *   lessonNumber: number (1-12)
  *   criteria: Array<{ id: string, label: string, endpoint: string, check: (data) => boolean, progressLabel?: (data) => string }>
  */
-export default function SelfAssessmentChecklist({ lessonNumber, criteria }) {
+export default function SelfAssessmentChecklist({ lessonNumber, criteria, accentColor }) {
   const api = useApi();
   const [results, setResults] = useState({});
   const [loading, setLoading] = useState(true);
@@ -89,7 +89,10 @@ export default function SelfAssessmentChecklist({ lessonNumber, criteria }) {
               key={criterion.id}
               className={`self-assessment-item ${result.met ? 'met' : 'unmet'}`}
             >
-              <span className={`self-assessment-check ${result.met ? 'checked' : ''}`}>
+              <span
+                className={`self-assessment-check ${result.met ? 'checked' : ''}`}
+                style={result.met && accentColor ? { color: accentColor } : undefined}
+              >
                 {result.met ? '\u2713' : ''}
               </span>
               <span className="self-assessment-label">
