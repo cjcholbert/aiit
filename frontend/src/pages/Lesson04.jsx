@@ -429,7 +429,7 @@ export default function Lesson04() {
     <div className="page-container">
       <div className="lesson-header">
         <div className="lesson-header-left">
-          <h1>Context Docs</h1>
+          <h1>Context <span className="gradient-context-assembly">Documents</span></h1>
           <ConnectionCallout lessonNumber={3} lessonTitle="Template Builder" message="Keep AI informed about ongoing projects across sessions, so it never loses track of where you are." />
           <div className="lesson-header-problem-skill">
             <p><strong>The Problem:</strong> You've been working with AI on a project for weeks, but every new conversation starts blank. You re-explain the same background, the AI suggests approaches you already rejected, and you lose 10 minutes before real work begins.</p>

@@ -84,7 +84,7 @@ export default function Dashboard() {
         <div>
             <div className="page-header">
                 <div className="page-header-row">
-                    <h1 className="page-title">{APP_NAME}</h1>
+                    <h1 className="page-title">Your AI <span className="gradient-accent">Collaboration</span></h1>
                     <Link to="/lesson/1" className="btn btn-primary">Begin Course</Link>
                 </div>
                 <p className="page-description">

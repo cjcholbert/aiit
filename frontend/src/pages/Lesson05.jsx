@@ -333,7 +333,7 @@ export default function Lesson05() {
     <div>
       <div className="lesson-header">
         <div className="lesson-header-left">
-          <h1 className="page-title">Trust Matrix</h1>
+          <h1 className="page-title">Trust <span className="gradient-quality-judgment">Matrix</span></h1>
           <ConnectionCallout lessonNumber={2} lessonTitle="Feedback Analyzer" message="Predict which outputs will need review so you spend your effort where it matters most." />
           <div className="lesson-header-problem-skill">
             <p><strong>The Problem:</strong> You either over-verify everything (wasting time) or blindly trust AI output (introducing errors). Without calibrated judgment, you can't efficiently allocate your review effort.</p>

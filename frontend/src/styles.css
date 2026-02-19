@@ -205,9 +205,79 @@ img, video, iframe {
   justify-content: space-between;
 }
 
-.header-logo {
-  height: auto;
-  width: 180px;
+.header-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.header-brand-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.4px;
+  line-height: 1.2;
+}
+
+.header-brand-accent,
+.gradient-accent {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Concept-colored title gradients */
+.gradient-context-assembly {
+  background: linear-gradient(90deg, #3ab088, #2878a8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-quality-judgment {
+  background: linear-gradient(90deg, #a07cc0, #6040c8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-task-decomposition {
+  background: linear-gradient(90deg, #c89040, #c05030);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-iterative-refinement {
+  background: linear-gradient(90deg, #40a0c8, #5060d0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-workflow-integration {
+  background: linear-gradient(90deg, #c87848, #c04068);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-frontier-recognition {
+  background: linear-gradient(90deg, #7088a8, #4858b0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header-brand-byline {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+.header-brand-byline strong {
+  color: var(--text-secondary);
 }
 
 /* =============================================================================
@@ -1298,9 +1368,8 @@ tr:hover td {
 
 /* Tablet header */
 @media (max-width: 768px) {
-  .header-logo {
-    height: auto;
-    width: 140px;
+  .header-brand-title {
+    font-size: 1.1rem;
   }
 
   .content-header {
@@ -1326,9 +1395,12 @@ tr:hover td {
     gap: var(--space-xs);
   }
 
-  .header-logo {
-    height: auto;
-    width: 110px;
+  .header-brand-title {
+    font-size: 0.95rem;
+  }
+
+  .header-brand-byline {
+    font-size: 0.6rem;
   }
 
   .nav-header-right {

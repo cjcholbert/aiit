@@ -319,7 +319,7 @@ export default function Lesson09() {
     <div className="page-container">
       <div className="lesson-header">
         <div className="lesson-header-left">
-          <h1>Iteration Passes</h1>
+          <h1>Iteration <span className="gradient-iterative-refinement">Passes</span></h1>
           <ConnectionCallout lessonNumber={2} lessonTitle="Feedback Analyzer" message="Apply specific feedback systematically using structured passes with clear purpose." />
           <div className="lesson-header-problem-skill">
             <p><strong>The Problem:</strong> Random iteration ("make it better") wastes cycles and leads to scope creep. Without structure, you'll keep tweaking without knowing when "done" is reached.</p>

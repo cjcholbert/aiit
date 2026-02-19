@@ -254,7 +254,7 @@ export default function Lesson07() {
     <div className="page-container">
       <div className="lesson-header">
         <div className="lesson-header-left">
-          <h1>Task Decomposer</h1>
+          <h1>Task <span className="gradient-task-decomposition">Decomposer</span></h1>
           <ConnectionCallout lessonNumber={1} lessonTitle="Context Tracker" message="The better you understand a project's details, the better you can break it into the right pieces." />
           <div className="lesson-header-problem-skill">
             <p><strong>The Problem:</strong> Without decomposition skills, you either delegate tasks that need your judgment (getting poor results) or do everything yourself (wasting AI's potential). Learning to categorize tasks lets you optimize the human-AI division of labor.</p>

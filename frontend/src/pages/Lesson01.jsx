@@ -304,7 +304,7 @@ export default function Lesson01() {
         <div>
             <div className="lesson-header">
                 <div className="lesson-header-left">
-                    <h1 className="page-title">Context Pattern Tracker</h1>
+                    <h1 className="page-title">Context Pattern <span className="gradient-context-assembly">Tracker</span></h1>
                     <div className="lesson-header-problem-skill">
                         <p><strong>The Problem:</strong> AI conversations fail when critical context is missing. You waste time on back-and-forth clarifications or get unusable outputs because you forgot to mention key constraints.</p>
                         <p><strong>The Skill:</strong> Identify your personal context gaps by analyzing past conversations. Discover what information you consistently forget to provide so you can fix it upfront.</p>

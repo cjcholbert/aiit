@@ -116,7 +116,10 @@ function AppLayout({ children }) {
 
                 <div className="content-column">
                     <div className="content-header">
-                        <img src="/yai-extended.png" alt="YAI" className="header-logo" />
+                        <div className="header-brand">
+                            <span className="header-brand-title">The AI <span className="header-brand-accent">Collaborator</span></span>
+                            <span className="header-brand-byline">brought to you by <strong>Your AI Iteration</strong></span>
+                        </div>
                         <NavDropdown />
                     </div>
 
