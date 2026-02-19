@@ -41,11 +41,11 @@ export const CONCEPTS = {
 export const MODULES = [
     {
         name: 'Foundation',
-        color: '#e8f5f2',
-        textColor: '#2d7a6c',
+        color: '#e6f4ea',
+        textColor: '#1a7f37',
         darkColor: '#1c3a2a',
         darkTextColor: '#7fbfaa',
-        borderColor: '#b0ddd4',
+        borderColor: '#a7d5b8',
         darkBorderColor: '#2a5a42',
         lessons: [
             {
@@ -73,11 +73,11 @@ export const MODULES = [
     },
     {
         name: 'Documentation & Trust',
-        color: '#dff0ec',
-        textColor: '#2a7065',
+        color: '#e0f0f8',
+        textColor: '#1a6d8a',
         darkColor: '#2a2540',
         darkTextColor: '#b8a8d8',
-        borderColor: '#9dd0c6',
+        borderColor: '#a0cfe0',
         darkBorderColor: '#4a3d6a',
         lessons: [
             {
@@ -105,11 +105,11 @@ export const MODULES = [
     },
     {
         name: 'Workflow',
-        color: '#d6ebe6',
-        textColor: '#26665a',
+        color: '#fdf0e2',
+        textColor: '#9a6700',
         darkColor: '#3a2e1c',
         darkTextColor: '#d4b070',
-        borderColor: '#8ac4b8',
+        borderColor: '#dfc088',
         darkBorderColor: '#6a5030',
         lessons: [
             {
@@ -144,11 +144,11 @@ export const MODULES = [
     },
     {
         name: 'Advanced',
-        color: '#cde6e0',
-        textColor: '#225c52',
+        color: '#fde8e8',
+        textColor: '#b32d2d',
         darkColor: '#1c2e3a',
         darkTextColor: '#8fb8d0',
-        borderColor: '#78b8aa',
+        borderColor: '#e0a0a0',
         darkBorderColor: '#2a4a5e',
         lessons: [
             {
