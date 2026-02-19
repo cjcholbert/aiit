@@ -350,7 +350,7 @@ export default function Lesson06() {
     <div className="page-container">
       <div className="lesson-header">
         <div className="lesson-header-left">
-          <h1>Verification <span className="gradient-quality-judgment">Tools</span></h1>
+          <h1>Verification Tools</h1>
           <ConnectionCallout lessonNumber={5} lessonTitle="Trust Matrix" message="Systematically verify the outputs your trust matrix flags for review." />
           <div className="lesson-header-problem-skill">
             <p><strong>The Problem:</strong> Without systematic verification, you either waste time over-checking outputs you could trust, or miss critical errors by under-checking outputs that needed scrutiny. Lesson 5 helped you calibrate <em>when</em> to verify -- now you build <em>how</em> to verify efficiently.</p>

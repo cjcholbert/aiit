@@ -5,7 +5,7 @@
     gap: var(--space-lg);
     align-items: flex-start;
     padding: var(--space-sm) var(--space-xl);
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 3px solid var(--border-color);
     background: var(--bg-header);
 }
 

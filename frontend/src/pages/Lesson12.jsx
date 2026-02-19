@@ -267,7 +267,7 @@ export default function Lesson12() {
         <div>
             <div className="lesson-header">
                 <div className="lesson-header-left">
-                    <h1>Reference <span className="gradient-workflow-integration">Card</span></h1>
+                    <h1>Reference Card</h1>
                     <ConnectionCallout lessonNumber={1} lessonTitle="Context Tracker" message="Pull together everything you've learned across all six skill areas into one personal reference." />
                     <div className="lesson-header-problem-skill">
                         <p>Generate your personal AI collaboration quick reference card from your learnings across all lessons.</p>

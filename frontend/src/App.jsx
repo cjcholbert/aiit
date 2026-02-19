@@ -6,6 +6,8 @@ import { LessonStatsProvider } from './contexts/LessonStatsContext';
 import NavDropdown from './components/NavDropdown';
 import ModuleTabNav from './components/ModuleTabNav';
 import ProgressSidebar from './components/ProgressSidebar';
+import { MODULES } from './config/modules';
+import { useTheme } from './contexts/ThemeContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import CelebrationToast from './components/CelebrationToast';
 import SkipLink from './components/SkipLink';
@@ -96,10 +98,19 @@ function PublicOrDashboard() {
 
 function AppLayout({ children }) {
     const location = useLocation();
+    const { theme } = useTheme();
 
     // Parse lesson number from route for sidebar
     const lessonMatch = location.pathname.match(/^\/lesson\/(\d+)$/);
     const lessonNumber = lessonMatch ? parseInt(lessonMatch[1], 10) : null;
+
+    // Find current module's border color for tab accent
+    const currentModule = lessonNumber
+        ? MODULES.find(m => m.lessons.some(l => l.lesson === lessonNumber))
+        : null;
+    const moduleBorderColor = currentModule
+        ? (theme === 'dark' ? currentModule.darkBorderColor : currentModule.borderColor)
+        : undefined;
 
     // Track last-visited lesson for "Continue where you left off"
     useEffect(() => {
@@ -114,7 +125,7 @@ function AppLayout({ children }) {
             <div className="app-layout">
                 <SkipLink targetId="main-content" />
 
-                <div className="content-column">
+                <div className="content-column" style={moduleBorderColor ? { '--module-accent-border': moduleBorderColor } : undefined}>
                     <div className="content-header">
                         <div className="header-brand">
                             <span className="header-brand-title">The AI <span className="header-brand-accent">Collaborator</span></span>

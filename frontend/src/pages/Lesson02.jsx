@@ -293,7 +293,7 @@ export default function Lesson02() {
     <div className="page-container">
       <div className="lesson-header">
         <div className="lesson-header-left">
-          <h1>Feedback <span className="gradient-iterative-refinement">Analyzer</span></h1>
+          <h1>Feedback Analyzer</h1>
           <ConnectionCallout lessonNumber={1} lessonTitle="Context Tracker" message="Spot vague feedback patterns and rewrite them into specific, actionable directions that get better results faster." />
           <div className="lesson-header-problem-skill">
             <p><strong>The Problem:</strong> Vague feedback like "make it better" or "this isn't right" wastes iteration cycles and frustrates both you and the AI. Without specific, actionable feedback, you'll keep going in circles.</p>

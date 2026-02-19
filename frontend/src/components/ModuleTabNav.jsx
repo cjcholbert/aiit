@@ -25,8 +25,13 @@ export default function ModuleTabNav() {
         setExpandedModule(prev => prev === index ? -1 : index);
     }, []);
 
+    const currentModule = MODULES[currentModuleIndex];
+    const activeBorder = currentModule
+        ? (theme === 'dark' ? currentModule.darkBorderColor : currentModule.borderColor)
+        : 'var(--border-color)';
+
     return (
-        <nav className="module-tab-nav" aria-label="Module navigation">
+        <nav className="module-tab-nav" aria-label="Module navigation" style={{ borderBottomColor: activeBorder }}>
             {MODULES.map((module, moduleIndex) => {
                 const moduleColor = theme === 'dark' ? module.darkColor : module.color;
                 const moduleText = theme === 'dark' ? module.darkTextColor : module.textColor;

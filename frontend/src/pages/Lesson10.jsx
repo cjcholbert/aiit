@@ -432,7 +432,7 @@ export default function Lesson10() {
     <div className="page-container">
       <div className="lesson-header">
         <div className="lesson-header-left">
-          <h1>Status <span className="gradient-workflow-integration">Reporter</span></h1>
+          <h1>Status Reporter</h1>
           <ConnectionCallout lessonNumber={4} lessonTitle="Context Documents" message="Turn recurring reports and updates into repeatable AI workflows you can run on a schedule." />
           <div className="lesson-header-problem-skill">
             <p><strong>The Problem:</strong> Recurring tasks like status reports, meeting summaries, and client updates eat up valuable time when done manually each time. Without a systematic approach, you're reinventing the wheel with every iteration.</p>

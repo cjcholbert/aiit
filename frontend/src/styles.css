@@ -805,7 +805,7 @@ label {
   display: flex;
   gap: var(--space-xs);
   margin-bottom: var(--space-lg);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 3px solid var(--module-accent-border, var(--border-color));
   padding-bottom: var(--space-sm);
 }
 

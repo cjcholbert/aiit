@@ -428,7 +428,7 @@ export default function Lesson08() {
     <div className="page-container">
       <div className="lesson-header">
         <div className="lesson-header-left">
-          <h1>Delegation <span className="gradient-task-decomposition">Tracker</span></h1>
+          <h1>Delegation Tracker</h1>
           <ConnectionCallout lessonNumber={7} lessonTitle="Task Decomposer" message="Delegate decomposed tasks effectively so AI delivers what you need on the first try." />
           <div className="lesson-header-problem-skill">
             <p><strong>The Problem:</strong> Knowing what to delegate is only half the battle. Without structured delegation practices, you'll give vague instructions and get disappointing results, or spend more time explaining than doing the work yourself.</p>

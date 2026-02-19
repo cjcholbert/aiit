@@ -302,7 +302,7 @@ export default function Lesson11() {
         <div>
             <div className="lesson-header">
                 <div className="lesson-header-left">
-                    <h1>Frontier <span className="gradient-frontier-recognition">Mapper</span></h1>
+                    <h1>Frontier Mapper</h1>
                     <ConnectionCallout lessonNumber={5} lessonTitle="Trust Matrix" message="Map broader patterns of where AI is safe, risky, or unreliable for your specific work." />
                     <div className="lesson-header-problem-skill">
                         <p>Map AI reliability zones and log frontier encounters to build your personal AI capability map.</p>

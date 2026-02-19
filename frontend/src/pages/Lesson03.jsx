@@ -753,7 +753,7 @@ ${gapSections}
     <div>
       <div className="lesson-header">
         <div className="lesson-header-left">
-          <h1 className="page-title">Context Template <span className="gradient-context-assembly">Builder</span></h1>
+          <h1 className="page-title">Context Template Builder</h1>
           <ConnectionCallout lessonNumber={1} lessonTitle="Context Tracker" message="Turn your context patterns into reusable templates so you never start from scratch." />
           <div className="lesson-header-problem-skill">
             <p><strong>The Problem:</strong> You keep forgetting to provide the same context over and over. Each conversation starts from scratch, and you waste time re-explaining your project, constraints, and preferences.</p>
