@@ -4,12 +4,19 @@ import { useLessonStats } from '../contexts/LessonStatsContext';
 import SelfAssessmentChecklist from './SelfAssessmentChecklist';
 import StatsPanel from './StatsPanel';
 import { LESSON_CRITERIA } from '../config/assessmentCriteria';
+import { MODULES } from '../config/modules';
+import { useTheme } from '../contexts/ThemeContext';
 import './ProgressSidebar.css';
 
 const BRAND_TEAL = '#3a9080';
 const BRAND_TEAL_DARK = '#2a8898';
 
+function getModuleForLesson(lessonNumber) {
+  return MODULES.find(m => m.lessons.some(l => l.lesson === lessonNumber));
+}
+
 function ProgressSidebar({ lessonNumber }) {
+  const { theme } = useTheme();
   const { progress, loading, isLessonComplete, completionPercentage } = useProgress();
   const { stats: lessonStats } = useLessonStats();
 
@@ -40,6 +47,11 @@ function ProgressSidebar({ lessonNumber }) {
     : 0;
 
   const percentage = completionPercentage ?? 0;
+
+  const currentModule = getModuleForLesson(lessonNumber);
+  const titleColor = currentModule
+    ? (theme === 'dark' ? currentModule.darkTextColor : currentModule.textColor)
+    : BRAND_TEAL;
 
   const barGradient = `linear-gradient(90deg, ${BRAND_TEAL}, ${BRAND_TEAL_DARK})`;
 
@@ -79,7 +91,7 @@ function ProgressSidebar({ lessonNumber }) {
       {/* Desktop sidebar */}
       <aside className={`progress-sidebar ${isOpen ? 'progress-sidebar--open' : 'progress-sidebar--collapsed'}`}>
         <div className="progress-sidebar__toggle-bar">
-          {isOpen && <span className={`progress-sidebar__title gradient-accent`}>Lesson Progress</span>}
+          {isOpen && <span className="progress-sidebar__title" style={{ color: titleColor }}>Lesson Progress</span>}
           <button
             className="progress-sidebar__toggle-btn"
             onClick={() => setIsOpen(prev => !prev)}
@@ -110,7 +122,7 @@ function ProgressSidebar({ lessonNumber }) {
             onClick={e => e.stopPropagation()}
                      >
             <div className="progress-sidebar__toggle-bar">
-              <span className={`progress-sidebar__title gradient-accent`}>Lesson Progress</span>
+              <span className="progress-sidebar__title" style={{ color: titleColor }}>Lesson Progress</span>
               <button
                 className="progress-sidebar__toggle-btn"
                 onClick={() => setMobileOpen(false)}
