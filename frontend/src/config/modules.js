@@ -82,7 +82,7 @@ export const MODULES = [
         lessons: [
             {
                 lesson: 4,
-                title: 'Context Docs',
+                title: 'Context Documents',
                 description: 'Manage project context documents for consistent AI collaboration.',
                 concept: 'contextAssembly',
                 status: 'active'

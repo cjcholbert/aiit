@@ -49,7 +49,7 @@ export default function Lesson10() {
   const [reportNotes, setReportNotes] = useState('');
   const [saving, setSaving] = useState(false);
 
-  // Import from Context Docs state
+  // Import from Context Documents state
   const [contextDocs, setContextDocs] = useState([]);
   const [showDocImport, setShowDocImport] = useState(false);
   const [loadingDocs, setLoadingDocs] = useState(false);
@@ -260,7 +260,7 @@ export default function Lesson10() {
       setContextDocs(data);
       setShowDocImport(true);
     } catch (err) {
-      setError('Could not load context docs from Context Docs: ' + err.message);
+      setError('Could not load context docs from Context Documents: ' + err.message);
     } finally {
       setLoadingDocs(false);
     }
@@ -433,7 +433,7 @@ export default function Lesson10() {
       <div className="lesson-header">
         <div className="lesson-header-left">
           <h1>Status <span className="gradient-workflow-integration">Reporter</span></h1>
-          <ConnectionCallout lessonNumber={4} lessonTitle="Context Docs" message="Turn recurring reports and updates into repeatable AI workflows you can run on a schedule." />
+          <ConnectionCallout lessonNumber={4} lessonTitle="Context Documents" message="Turn recurring reports and updates into repeatable AI workflows you can run on a schedule." />
           <div className="lesson-header-problem-skill">
             <p><strong>The Problem:</strong> Recurring tasks like status reports, meeting summaries, and client updates eat up valuable time when done manually each time. Without a systematic approach, you're reinventing the wheel with every iteration.</p>
             <p><strong>The Skill:</strong> Design AI-integrated workflows for recurring tasks. Create templates, track inputs, and measure time savings to build sustainable AI collaboration habits.</p>
@@ -1036,7 +1036,7 @@ export default function Lesson10() {
                   <div className="card card-compact">
                     <h3 className="no-margin mb-sm">Provide Inputs</h3>
 
-                    {/* Import from Context Docs */}
+                    {/* Import from Context Documents */}
                     {(selectedTemplate.inputs || []).length > 0 && (
                       <div className="mb-md">
                         <button
@@ -1044,7 +1044,7 @@ export default function Lesson10() {
                           onClick={handleOpenDocImport}
                           disabled={loadingDocs}
                         >
-                          {loadingDocs ? 'Loading...' : showDocImport ? 'Hide Import' : 'Import from Context Docs'}
+                          {loadingDocs ? 'Loading...' : showDocImport ? 'Hide Import' : 'Import from Context Documents'}
                         </button>
 
                         {showDocImport && (
@@ -1054,7 +1054,7 @@ export default function Lesson10() {
                               <div className="empty-state">
                                 <p>No context docs saved yet.</p>
                                 <p className="empty-state-hint">
-                                  Go to <a href="/lesson/4" className="import-empty">Lesson 4 — Context Docs</a> to create a project document first.
+                                  Go to <a href="/lesson/4" className="import-empty">Lesson 4 — Context Documents</a> to create a project document first.
                                 </p>
                               </div>
                             ) : (
