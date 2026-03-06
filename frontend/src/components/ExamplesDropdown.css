@@ -1,7 +1,7 @@
 .examples-dropdown {
   position: relative;
   display: inline-block;
-  margin-left: auto;
+  flex-shrink: 0;
 }
 
 .examples-dropdown__trigger {

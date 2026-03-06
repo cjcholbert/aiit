@@ -514,15 +514,20 @@ export default function Lesson01() {
             {activeTab === 'analysis' && !analysis && (
                 <div className="card">
                     <h2 style={{marginBottom: '16px'}}>Analyze Conversation</h2>
-                    <ExamplesDropdown
-                        endpoint="/lesson1/examples"
-                        onSelect={(example) => setConverterInput(example.raw_transcript)}
-                    />
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                        <p style={{ margin: 0, fontSize: '13px', color: 'var(--text-muted)' }}>
+                            Paste your AI conversation below, or load an example to try it out.
+                        </p>
+                        <ExamplesDropdown
+                            endpoint="/lesson1/examples"
+                            onSelect={(example) => setConverterInput(example.raw_transcript)}
+                        />
+                    </div>
                     <textarea
                         value={converterInput}
                         onChange={(e) => setConverterInput(e.target.value)}
                         placeholder={`Paste your AI conversation here — or load an example above.\n\nCommon formats are auto-detected:\nYou: ...\nAI: ...\n\nHuman: ...\nAssistant: ...`}
-                        style={{ minHeight: '280px', fontFamily: 'monospace', fontSize: '12px', marginTop: '12px' }}
+                        style={{ minHeight: '280px', fontFamily: 'monospace', fontSize: '12px' }}
                     />
                     <div style={{ display: 'flex', gap: '10px', marginTop: '12px', alignItems: 'center' }}>
                         <button
