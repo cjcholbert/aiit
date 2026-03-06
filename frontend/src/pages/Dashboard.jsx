@@ -134,9 +134,20 @@ export default function Dashboard() {
                 <>
                     <p className="dashboard-section-description">12 lessons organized into 4 progressive modules.</p>
 
-                    {MODULES.map((module) => (
+                    {MODULES.map((module) => {
+                        const moduleColor = theme === 'dark' ? module.darkColor : module.color;
+                        const moduleText = theme === 'dark' ? module.darkTextColor : module.textColor;
+                        const moduleBorder = theme === 'dark' ? module.darkBorderColor : module.borderColor;
+                        return (
                         <div key={module.name} className="module-section">
-                            <div className="module-section-header">
+                            <div
+                                className="module-section-header"
+                                style={{
+                                    '--module-color': moduleColor,
+                                    '--module-text': moduleText,
+                                    '--module-border': moduleBorder,
+                                }}
+                            >
                                 <h2 className="module-section-title">
                                     {module.name}
                                 </h2>
@@ -182,7 +193,7 @@ export default function Dashboard() {
                                 })}
                             </div>
                         </div>
-                    ))}
+                    );})}
                 </>
             )}
 
