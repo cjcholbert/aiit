@@ -235,7 +235,8 @@ async def list_conversations(
             created_at=conv.created_at,
             topic=analysis.get("topic", "Unknown"),
             pattern_category=analysis.get("pattern", {}).get("category", "Unknown"),
-            confidence_score=analysis.get("confidence", {}).get("score", 0)
+            confidence_score=analysis.get("confidence", {}).get("score", 0),
+            context_score=analysis.get("context_score", {}).get("score") if analysis.get("context_score") else None,
         ))
 
     return summaries

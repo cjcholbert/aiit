@@ -6376,3 +6376,79 @@ tr:hover td {
     max-height: none;
   }
 }
+
+/* ---- Context Score ---- */
+
+.context-score-chip {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.context-score-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.context-score-fraction {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  min-width: 40px;
+}
+
+.context-score-bar {
+  flex: 1;
+  height: 8px;
+  background: var(--bg-tertiary);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.context-score-bar-fill {
+  height: 100%;
+  background: var(--accent-blue);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+.context-score-list {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.context-score-list li {
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+}
+
+.context-score-list--present li {
+  color: var(--accent-green);
+  background: color-mix(in srgb, var(--accent-green) 8%, transparent);
+}
+
+.context-score-list--present li::before {
+  content: '✓ ';
+}
+
+.context-score-list--missing li {
+  color: var(--text-muted);
+  background: var(--bg-tertiary);
+}
+
+.context-score-list--missing li::before {
+  content: '– ';
+}

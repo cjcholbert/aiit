@@ -54,6 +54,13 @@ class Confidence(BaseModel):
     reasoning: str = Field(max_length=5000)
 
 
+class ContextScore(BaseModel):
+    """How many of the 8 context elements were present in the first message."""
+    score: int = Field(ge=0, le=8)
+    elements_present: List[str]
+    elements_missing: List[str]
+
+
 class Analysis(BaseModel):
     """Complete analysis result from Claude."""
     topic: str = Field(max_length=500)
@@ -63,6 +70,7 @@ class Analysis(BaseModel):
     pattern: Pattern
     coaching: Coaching
     confidence: Confidence
+    context_score: Optional[ContextScore] = None
 
 
 class UserEdits(BaseModel):
@@ -102,6 +110,7 @@ class ConversationSummary(BaseModel):
     topic: str
     pattern_category: str
     confidence_score: int
+    context_score: Optional[int] = None
 
 
 class HabitCount(BaseModel):

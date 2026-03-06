@@ -621,6 +621,36 @@ export default function Lesson01() {
                             </div>
                         </div>
 
+                        {analysis.analysis.context_score && (
+                            <div className="analysis-card">
+                                <h3>Context Score</h3>
+                                <div className="field">
+                                    <div className="context-score-bar-wrap">
+                                        <span className="context-score-fraction">{analysis.analysis.context_score.score}/8</span>
+                                        <div className="context-score-bar">
+                                            <div className="context-score-bar-fill" style={{ width: `${(analysis.analysis.context_score.score / 8) * 100}%` }} />
+                                        </div>
+                                    </div>
+                                </div>
+                                {analysis.analysis.context_score.elements_present.length > 0 && (
+                                    <div className="field">
+                                        <div className="field-label">Provided upfront ✓</div>
+                                        <ul className="context-score-list context-score-list--present">
+                                            {analysis.analysis.context_score.elements_present.map((el, i) => <li key={i}>{el}</li>)}
+                                        </ul>
+                                    </div>
+                                )}
+                                {analysis.analysis.context_score.elements_missing.length > 0 && (
+                                    <div className="field">
+                                        <div className="field-label">Missing from first message</div>
+                                        <ul className="context-score-list context-score-list--missing">
+                                            {analysis.analysis.context_score.elements_missing.map((el, i) => <li key={i}>{el}</li>)}
+                                        </ul>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
                         <div className="analysis-card">
                             <h3>Confidence</h3>
                             <div className="field">
@@ -707,7 +737,10 @@ export default function Lesson01() {
                                     >
                                         <div className="history-list-item-header">
                                             <span className="history-list-item-topic">{conv.topic}</span>
-                                            <span className={`score ${getScoreClass(conv.confidence_score)}`}>{conv.confidence_score}</span>
+                                            {conv.context_score != null
+                                                ? <span className="context-score-chip">{conv.context_score}/8</span>
+                                                : <span className={`score ${getScoreClass(conv.confidence_score)}`}>{conv.confidence_score}</span>
+                                            }
                                         </div>
                                         <div className="history-list-item-meta">
                                             <span>{conv.pattern_category}</span>
@@ -839,6 +872,36 @@ export default function Lesson01() {
                                                 <div className="field-value">{selectedConversation.analysis.assumptions_wrong.why_assumed}</div>
                                             </div>
                                         </div>
+
+                                        {selectedConversation.analysis.context_score && (
+                                            <div className="analysis-card">
+                                                <h3>Context Score</h3>
+                                                <div className="field">
+                                                    <div className="context-score-bar-wrap">
+                                                        <span className="context-score-fraction">{selectedConversation.analysis.context_score.score}/8</span>
+                                                        <div className="context-score-bar">
+                                                            <div className="context-score-bar-fill" style={{ width: `${(selectedConversation.analysis.context_score.score / 8) * 100}%` }} />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {selectedConversation.analysis.context_score.elements_present.length > 0 && (
+                                                    <div className="field">
+                                                        <div className="field-label">Provided upfront ✓</div>
+                                                        <ul className="context-score-list context-score-list--present">
+                                                            {selectedConversation.analysis.context_score.elements_present.map((el, i) => <li key={i}>{el}</li>)}
+                                                        </ul>
+                                                    </div>
+                                                )}
+                                                {selectedConversation.analysis.context_score.elements_missing.length > 0 && (
+                                                    <div className="field">
+                                                        <div className="field-label">Missing from first message</div>
+                                                        <ul className="context-score-list context-score-list--missing">
+                                                            {selectedConversation.analysis.context_score.elements_missing.map((el, i) => <li key={i}>{el}</li>)}
+                                                        </ul>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
 
                                         <div className="analysis-card">
                                             <h3>Confidence</h3>

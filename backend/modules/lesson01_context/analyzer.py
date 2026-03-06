@@ -19,6 +19,7 @@ from .schemas import (
     Pattern,
     Coaching,
     Confidence,
+    ContextScore,
 )
 
 logger = logging.getLogger(__name__)
@@ -566,6 +567,13 @@ async def analyze_transcript(
 
         confidence = Confidence(score=conf_score, reasoning=conf_reasoning)
 
+        # ----- Context Score -----
+        context_score = ContextScore(
+            score=len(present_elements),
+            elements_present=[ELEMENT_LABELS[e] for e in present_elements],
+            elements_missing=[ELEMENT_LABELS[e] for e in missing_elements],
+        )
+
         # ----- Assemble Analysis -----
         analysis = Analysis(
             topic=topic,
@@ -575,6 +583,7 @@ async def analyze_transcript(
             pattern=pattern,
             coaching=coaching,
             confidence=confidence,
+            context_score=context_score,
         )
 
         logger.info(
