@@ -1246,34 +1246,34 @@ tr:hover td {
 .module-card {
   background: var(--bg-tertiary);
   border: 1px solid var(--border-color);
+  border-top: 3px solid var(--accent-blue);
   border-radius: var(--radius-lg);
-  padding: var(--space-lg);
-  display: block;
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
 }
 
 .module-card-header {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: var(--space-md);
-}
-
-.module-card-number {
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: var(--text-muted);
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 20px;
 }
 
 .module-card-title {
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 600;
-  margin-bottom: var(--space-sm);
+  color: var(--accent-blue);
+  margin: 0;
 }
 
 .module-card-description {
   color: var(--text-secondary);
-  font-size: 14px;
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 0;
+  flex: 1;
 }
 
 /* Analysis Grid (for Week 1) */
@@ -2406,7 +2406,7 @@ tr:hover td {
 
 /* Lesson card completion state */
 .module-card-complete {
-  border-color: var(--accent-green);
+  border-top-color: var(--accent-green);
 }
 
 
@@ -6204,14 +6204,21 @@ tr:hover td {
 }
 
 .concept-tag {
-  margin-top: 12px;
-  padding: 4px 8px;
-  background: var(--brand-teal-bg);
-  border-left: 3px solid var(--brand-teal);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  font-size: 0.7rem;
-  color: var(--brand-teal);
+  padding: 2px 8px;
+  background: var(--accent-blue-bg-subtle);
+  border: 1px solid var(--accent-blue-border-subtle);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
   font-weight: 500;
+  color: var(--accent-blue);
+  margin-top: auto;
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border-color);
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  border-radius: 0;
+  background: none;
 }
 
 /* ---- Responsive overrides for L5/L6 ---- */
