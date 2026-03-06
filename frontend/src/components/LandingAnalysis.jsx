@@ -102,7 +102,10 @@ export default function LandingAnalysis() {
       .then(data => {
         setExamples(data.examples || []);
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.error('Failed to load examples:', API_BASE, err);
+        setError('Could not load examples. Please refresh and try again.');
+      });
   }, []);
 
   const handleSelectExample = (title) => {
@@ -144,12 +147,17 @@ export default function LandingAnalysis() {
 
         {/* Left column — input */}
         <div className="landing-analysis-left">
+          {error && !analyzing && (
+            <div style={{ padding: '10px 12px', background: 'var(--error-bg)', borderRadius: '6px', color: 'var(--accent-red)', fontSize: '13px' }}>
+              {error}
+            </div>
+          )}
           <select
             className="landing-analysis-select"
             value=""
             onChange={e => handleSelectExample(e.target.value)}
           >
-            <option value="" disabled>Load an example…</option>
+            <option value="" disabled>{examples.length === 0 ? 'Loading examples…' : 'Load an example…'}</option>
             {examples.map(ex => (
               <option key={ex.title} value={ex.title}>{ex.category}: {ex.title}</option>
             ))}
