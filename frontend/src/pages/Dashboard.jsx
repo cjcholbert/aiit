@@ -151,7 +151,6 @@ export default function Dashboard() {
                                             className={`module-card ${complete ? 'module-card-complete' : ''} ${lesson.status === 'coming' ? 'module-card--coming' : ''}`}
                                         >
                                             <div className="module-card-header">
-                                                <span className="module-card-number">{lesson.lesson}</span>
                                                 {complete && (
                                                     <span className="lesson-complete-badge" title="Lesson complete">
                                                         &#x2713;
