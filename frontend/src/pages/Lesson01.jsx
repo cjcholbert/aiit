@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
 import { useLessonStats } from '../contexts/LessonStatsContext';
 import ConnectionCallout from '../components/ConnectionCallout';
@@ -17,8 +17,7 @@ export default function Lesson01() {
     const [stats, setStats] = useState(null);
     const [insights, setInsights] = useState(null);
     const [userEdits, setUserEdits] = useState({ topic: '', pattern_category: '', habit_to_build: '', notes: '' });
-    const [inputMethod, setInputMethod] = useState('paste'); // 'paste' or 'upload'
-    const fileInputRef = useRef(null);
+
 
     // Converter state
     const [converterInput, setConverterInput] = useState('');
@@ -94,30 +93,6 @@ export default function Lesson01() {
         }
     };
 
-    const handleFileUpload = async (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
-
-        setLoading(true);
-        setError('');
-        setAnalysis(null);
-
-        try {
-            const data = await api.uploadFile('/lesson1/upload', file);
-            setAnalysis(data);
-            setUserEdits({
-                topic: data.analysis.topic,
-                pattern_category: data.analysis.pattern.category,
-                habit_to_build: data.analysis.coaching.habit_to_build,
-                notes: ''
-            });
-        } catch (err) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-            if (fileInputRef.current) fileInputRef.current.value = '';
-        }
-    };
 
     const loadConversation = async (id) => {
         try {
@@ -539,84 +514,26 @@ export default function Lesson01() {
             {activeTab === 'analysis' && !analysis && (
                 <div className="card">
                     <h2 style={{marginBottom: '16px'}}>Analyze Conversation</h2>
-
-                    {/* Input method toggle */}
-                    <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+                    <ExamplesDropdown
+                        endpoint="/lesson1/examples"
+                        onSelect={(example) => setConverterInput(example.raw_transcript)}
+                    />
+                    <textarea
+                        value={converterInput}
+                        onChange={(e) => setConverterInput(e.target.value)}
+                        placeholder={`Paste your AI conversation here — or load an example above.\n\nCommon formats are auto-detected:\nYou: ...\nAI: ...\n\nHuman: ...\nAssistant: ...`}
+                        style={{ minHeight: '280px', fontFamily: 'monospace', fontSize: '12px', marginTop: '12px' }}
+                    />
+                    <div style={{ display: 'flex', gap: '10px', marginTop: '12px', alignItems: 'center' }}>
                         <button
-                            className={`btn ${inputMethod === 'paste' ? 'btn-primary' : 'btn-secondary'}`}
-                            onClick={() => setInputMethod('paste')}
-                            style={{ padding: '6px 16px', fontSize: '13px' }}
+                            className="btn btn-primary"
+                            onClick={analyzeConverted}
+                            disabled={!converterInput.trim() || loading}
                         >
-                            Paste Text
+                            {loading ? 'Analyzing...' : 'Analyze'}
                         </button>
-                        <button
-                            className={`btn ${inputMethod === 'upload' ? 'btn-primary' : 'btn-secondary'}`}
-                            onClick={() => setInputMethod('upload')}
-                            style={{ padding: '6px 16px', fontSize: '13px' }}
-                        >
-                            Upload JSON
-                        </button>
+                        {loading && <div className="loading"><div className="spinner"></div>Analyzing with Claude...</div>}
                     </div>
-
-                    {inputMethod === 'paste' && (
-                        <>
-                            <ExamplesDropdown
-                                endpoint="/lesson1/examples"
-                                onSelect={(example) => setConverterInput(example.raw_transcript)}
-                            />
-                            <textarea
-                                value={converterInput}
-                                onChange={(e) => setConverterInput(e.target.value)}
-                                placeholder={`Paste your AI conversation here — or load an example above.\n\nCommon formats are auto-detected:\nYou: ...\nAI: ...\n\nHuman: ...\nAssistant: ...`}
-                                style={{ minHeight: '280px', fontFamily: 'monospace', fontSize: '12px', marginTop: '12px' }}
-                            />
-                            <div style={{ display: 'flex', gap: '10px', marginTop: '12px', alignItems: 'center' }}>
-                                <button
-                                    className="btn btn-primary"
-                                    onClick={analyzeConverted}
-                                    disabled={!converterInput.trim() || loading}
-                                >
-                                    {loading ? 'Analyzing...' : 'Analyze'}
-                                </button>
-                                {loading && <div className="loading"><div className="spinner"></div>Analyzing with Claude...</div>}
-                            </div>
-                        </>
-                    )}
-
-                    {inputMethod === 'upload' && (
-                        <>
-                            <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '16px' }}>
-                                Upload a JSON file with conversation messages. Expected format: <code style={{ background: 'var(--bg-tertiary)', padding: '2px 6px', borderRadius: '3px' }}>{"{ messages: [{role, content}, ...] }"}</code>
-                            </p>
-
-                            <div style={{ border: '2px dashed var(--border-color)', borderRadius: '8px', padding: '32px', textAlign: 'center' }}>
-                                <input
-                                    type="file"
-                                    ref={fileInputRef}
-                                    onChange={handleFileUpload}
-                                    accept=".json"
-                                    style={{ display: 'none' }}
-                                />
-                                <button
-                                    className="btn btn-secondary"
-                                    onClick={() => fileInputRef.current?.click()}
-                                    disabled={loading}
-                                    style={{ padding: '12px 24px' }}
-                                >
-                                    {loading ? 'Uploading...' : 'Choose JSON File'}
-                                </button>
-                                <p style={{ marginTop: '12px', fontSize: '12px', color: 'var(--text-muted)' }}>
-                                    or drag and drop a .json file here
-                                </p>
-                            </div>
-
-                            {loading && (
-                                <div className="loading" style={{ marginTop: '16px' }}>
-                                    <div className="spinner"></div>Uploading and analyzing with Claude...
-                                </div>
-                            )}
-                        </>
-                    )}
                 </div>
             )}
 
