@@ -68,7 +68,7 @@ const DASHBOARD_TABS = [
 
 export default function Dashboard() {
     const { theme } = useTheme();
-    const { isLessonComplete } = useProgress();
+    const { isLessonComplete, completionPercentage, progress } = useProgress();
     const api = useApi();
     const [activeTab, setActiveTab] = useState('concepts');
     const [lessonStats, setLessonStats] = useState({});
@@ -132,6 +132,18 @@ export default function Dashboard() {
 
             {activeTab === 'modules' && (
                 <>
+                    <div className="dashboard-progress-bar-wrap">
+                        <div className="dashboard-progress-bar-header">
+                            <span>{progress?.completed_count ?? 0} of 12 lessons complete</span>
+                            <span>{Math.round(completionPercentage ?? 0)}%</span>
+                        </div>
+                        <div className="dashboard-progress-bar-track">
+                            <div
+                                className="dashboard-progress-bar-fill"
+                                style={{ width: `${completionPercentage ?? 0}%` }}
+                            />
+                        </div>
+                    </div>
                     <p className="dashboard-section-description">12 lessons organized into 4 progressive modules.</p>
 
                     {MODULES.map((module) => {

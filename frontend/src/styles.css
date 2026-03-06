@@ -6507,3 +6507,32 @@ tr:hover td {
   font-size: 14px;
   font-weight: 600;
 }
+
+/* ---- Dashboard progress bar (#16) ---- */
+
+.dashboard-progress-bar-wrap {
+  margin-bottom: var(--space-lg);
+}
+
+.dashboard-progress-bar-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.dashboard-progress-bar-track {
+  height: 8px;
+  background: var(--bg-tertiary);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.dashboard-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
