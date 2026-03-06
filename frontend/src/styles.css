@@ -6259,3 +6259,120 @@ tr:hover td {
     width: 100%;
   }
 }
+
+/* ---- Lesson 1 History — list/detail split layout ---- */
+
+.history-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: var(--space-xl);
+  align-items: start;
+}
+
+.history-left {
+  position: sticky;
+  top: var(--space-lg);
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.history-list-item {
+  position: relative;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.history-list-item:hover {
+  border-color: var(--accent-blue);
+  background: var(--bg-hover);
+}
+
+.history-list-item--active {
+  border-color: var(--accent-blue);
+  background: var(--accent-blue-bg-subtle);
+}
+
+.history-list-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: 4px;
+}
+
+.history-list-item-topic {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-list-item-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.history-list-item-delete {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: var(--radius-sm);
+  opacity: 0;
+  transition: opacity var(--transition-fast), color var(--transition-fast);
+}
+
+.history-list-item:hover .history-list-item-delete {
+  opacity: 1;
+}
+
+.history-list-item-delete:hover {
+  color: var(--accent-red);
+}
+
+.history-right {
+  min-width: 0;
+}
+
+.history-empty-detail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+  color: var(--text-muted);
+  font-size: 14px;
+  text-align: center;
+  padding: var(--space-xl);
+}
+
+@media (max-width: 768px) {
+  .history-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .history-left {
+    position: static;
+    max-height: none;
+  }
+}

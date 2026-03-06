@@ -675,364 +675,192 @@ export default function Lesson01() {
                 </div>
             )}
 
-            {activeTab === 'history' && !selectedConversation && (
-                <div>
-                    {conversations.length === 0 ? (
-                        <div>
-                            <p className="dashboard-section-description" style={{ marginBottom: '20px' }}>
-                                Analyze a conversation in the Analysis tab and you'll receive the following feedback for each chat:
-                            </p>
+            {activeTab === 'history' && (
+                conversations.length === 0 ? (
+                    <div className="learn-next-step">
+                        <h3>No conversations analyzed yet</h3>
+                        <p>Paste a real AI conversation into the Analysis tab. Your results will appear here as you build up a history, and patterns will emerge over time.</p>
+                        <button
+                            className="btn btn-primary"
+                            onClick={() => { setActiveTab('analysis'); setAnalysis(null); }}
+                        >
+                            Go to Analysis
+                        </button>
+                    </div>
+                ) : (
+                    <div className="history-layout">
 
-                            <div className="analysis-grid">
-                                <div className="analysis-card" style={{ opacity: 0.7 }}>
-                                    <h3>Coaching</h3>
-                                    <div className="field">
-                                        <div className="field-label">Context That Would Have Helped</div>
-                                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>Specific details you could have included upfront to get a better first response.</div>
-                                    </div>
-                                    <div className="field">
-                                        <div className="field-label">Habit to Build</div>
-                                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>A concrete habit recommendation based on the gaps found in your conversation.</div>
-                                    </div>
-                                    <div className="field">
-                                        <div className="field-label">Improved Prompt</div>
-                                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>A rewritten version of your opening prompt with the missing context included.</div>
-                                    </div>
-                                </div>
+                        {/* Left column — list + summary */}
+                        <div className="history-left">
 
-                                <div className="analysis-card" style={{ opacity: 0.7 }}>
-                                    <h3>Pattern</h3>
-                                    <div className="field">
-                                        <div className="field-label">Category</div>
-                                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>Which context gap type appeared in your conversation. The four types are: Missing Constraints (you left out boundaries like budget, timeline, or format), Assumed Knowledge (you referenced details the AI doesn't have, like project history or internal acronyms), Vague Goals (no clear success criteria for the output), and Missing Audience (didn't specify who the output is for).</div>
+                            <div className="history-list">
+                                {conversations.map(conv => (
+                                    <div
+                                        key={conv.id}
+                                        className={`history-list-item ${selectedConversation?.id === conv.id ? 'history-list-item--active' : ''}`}
+                                        onClick={() => loadConversation(conv.id)}
+                                    >
+                                        <div className="history-list-item-header">
+                                            <span className="history-list-item-topic">{conv.topic}</span>
+                                            <span className={`score ${getScoreClass(conv.confidence_score)}`}>{conv.confidence_score}</span>
+                                        </div>
+                                        <div className="history-list-item-meta">
+                                            <span>{conv.pattern_category}</span>
+                                            <span>{formatDate(conv.created_at)}</span>
+                                        </div>
+                                        <button
+                                            className="history-list-item-delete"
+                                            onClick={(e) => deleteConversation(conv.id, e)}
+                                            title="Delete"
+                                        >✕</button>
                                     </div>
-                                    <div className="field">
-                                        <div className="field-label">Insight</div>
-                                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>Why this pattern matters and how it affected the conversation outcome.</div>
-                                    </div>
-                                </div>
-
-                                <div className="analysis-card" style={{ opacity: 0.7 }}>
-                                    <h3>Context Provided</h3>
-                                    <div className="field">
-                                        <div className="field-label">Details</div>
-                                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>What background information you did include in your messages.</div>
-                                    </div>
-                                    <div className="field">
-                                        <div className="field-label">What Worked</div>
-                                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>Context elements that were effective and worth repeating in future conversations.</div>
-                                    </div>
-                                </div>
-
-                                <div className="analysis-card" style={{ opacity: 0.7 }}>
-                                    <h3>Context Added Later</h3>
-                                    <div className="field">
-                                        <div className="field-label">Details</div>
-                                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>Information you provided mid-conversation that could have been given upfront.</div>
-                                    </div>
-                                    <div className="field">
-                                        <div className="field-label">Triggers</div>
-                                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>What prompted you to add the extra context (bad output, follow-up question, etc.).</div>
-                                    </div>
-                                </div>
-
-                                <div className="analysis-card" style={{ opacity: 0.7 }}>
-                                    <h3>Assumptions Made</h3>
-                                    <div className="field">
-                                        <div className="field-label">Details</div>
-                                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>Assumptions the AI made because context was missing from your prompt.</div>
-                                    </div>
-                                    <div className="field">
-                                        <div className="field-label">Why Assumed</div>
-                                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>Why the AI filled in the blanks the way it did.</div>
-                                    </div>
-                                </div>
-
-                                <div className="analysis-card" style={{ opacity: 0.7 }}>
-                                    <h3>Confidence</h3>
-                                    <div className="field">
-                                        <div className="field-label">Score</div>
-                                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>A 1-10 rating of analysis confidence based on conversation length and complexity.</div>
-                                    </div>
-                                    <div className="field">
-                                        <div className="field-label">Reasoning</div>
-                                        <div className="field-value" style={{ color: 'var(--text-primary)' }}>Actionable guidance on how to get richer analysis results.</div>
-                                    </div>
-                                </div>
+                                ))}
                             </div>
 
-                            <div className="learn-next-step" style={{ marginTop: '24px' }}>
-                                <h3>Ready to See Your Results?</h3>
-                                <p>Paste a real AI conversation into the Analysis tab. Your results will appear here as you analyze more chats, and patterns will emerge over time.</p>
-                                <button
-                                    className="btn btn-primary"
-                                    onClick={() => { setActiveTab('analysis'); setAnalysis(null); }}
-                                >
-                                    Go to Analysis
-                                </button>
-                            </div>
-                        </div>
-                    ) : (
-                        <>
-                            {/* Conversation History table */}
-                            <div className="card" style={{ marginBottom: '24px' }}>
-                                <h2 style={{marginBottom: '16px'}}>Conversation History</h2>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Topic</th>
-                                            <th>Date</th>
-                                            <th>Pattern</th>
-                                            <th>Confidence</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {conversations.map(conv => (
-                                            <tr key={conv.id} onClick={() => loadConversation(conv.id)} style={{cursor: 'pointer'}}>
-                                                <td>{conv.topic}</td>
-                                                <td>{formatDate(conv.created_at)}</td>
-                                                <td>{conv.pattern_category}</td>
-                                                <td><span className={`score ${getScoreClass(conv.confidence_score)}`}>{conv.confidence_score}</span></td>
-                                                <td>
-                                                    <button className="btn btn-danger" onClick={(e) => deleteConversation(conv.id, e)}>
-                                                        Delete
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            {/* Two-column grid: Patterns (left) + Insights (right) */}
-                            <div className="analysis-grid" style={{ marginBottom: '24px' }}>
-                                <div>
-                                    <div className="card" style={{ marginBottom: '16px' }}>
-                                        <h3 style={{marginBottom: '12px'}}>Patterns by Category</h3>
-                                        {!stats || Object.keys(stats.count_by_category).length === 0 ? (
-                                            <p style={{color: 'var(--text-muted)'}}>No patterns recorded yet.</p>
-                                        ) : (
-                                            <ul style={{ listStyle: 'disc', paddingLeft: '20px', margin: 0 }}>
-                                                {Object.entries(stats.count_by_category)
-                                                    .sort((a, b) => b[1] - a[1])
-                                                    .map(([category, count]) => (
-                                                        <li key={category} style={{ padding: '2px 0', color: 'var(--text-secondary)', fontSize: '14px' }}>
-                                                            {category} <span style={{ color: 'var(--text-muted)' }}>({count})</span>
-                                                        </li>
-                                                    ))}
-                                            </ul>
-                                        )}
-                                    </div>
-
-                                    <div className="card">
-                                        <h3 style={{marginBottom: '12px'}}>Common Habits to Build</h3>
-                                        {!stats || stats.common_habits.length === 0 ? (
-                                            <p style={{color: 'var(--text-muted)'}}>No habits recorded yet.</p>
-                                        ) : (
-                                            stats.common_habits.map((item, i) => (
-                                                <div key={i} style={{display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--border-color)'}}>
-                                                    <span>{item.habit}</span>
-                                                    <span className="badge badge-green">{item.count}x</span>
-                                                </div>
-                                            ))
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <div className="card" style={{ marginBottom: '16px' }}>
-                                        <h3 style={{ color: 'var(--accent-red)', marginBottom: '12px' }}>Context Gaps</h3>
-                                        <p style={{ color: 'var(--text-muted)', marginBottom: '16px', fontSize: '13px' }}>
-                                            Things you frequently forget to mention upfront.
-                                        </p>
-                                        {!insights || insights.context_gaps?.length === 0 ? (
-                                            <p style={{ color: 'var(--text-muted)' }}>No recurring gaps identified yet.</p>
-                                        ) : (
-                                            insights.context_gaps?.map((item, i) => (
-                                                <div
-                                                    key={i}
-                                                    style={{
-                                                        padding: '12px',
-                                                        background: 'var(--bg-tertiary)',
-                                                        borderRadius: '6px',
-                                                        marginBottom: '8px',
-                                                        borderLeft: '3px solid var(--accent-red)',
-                                                    }}
-                                                >
-                                                    <div style={{ fontWeight: '500', marginBottom: '4px' }}>{item.gap}</div>
-                                                    <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                                                        {item.count}x ({item.percentage}%)
-                                                    </div>
-                                                </div>
-                                            ))
-                                        )}
-                                    </div>
-
-                                    <div className="card">
-                                        <h3 style={{ color: 'var(--accent-green)', marginBottom: '12px' }}>Context Strengths</h3>
-                                        <p style={{ color: 'var(--text-muted)', marginBottom: '16px', fontSize: '13px' }}>
-                                            Things you consistently provide well.
-                                        </p>
-                                        {!insights || insights.context_strengths?.length === 0 ? (
-                                            <p style={{ color: 'var(--text-muted)' }}>No recurring strengths identified yet.</p>
-                                        ) : (
-                                            insights.context_strengths?.map((item, i) => (
-                                                <div
-                                                    key={i}
-                                                    style={{
-                                                        padding: '12px',
-                                                        background: 'var(--bg-tertiary)',
-                                                        borderRadius: '6px',
-                                                        marginBottom: '8px',
-                                                        borderLeft: '3px solid var(--accent-green)',
-                                                    }}
-                                                >
-                                                    <div style={{ fontWeight: '500', marginBottom: '4px' }}>{item.strength}</div>
-                                                    <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                                                        {item.count}x ({item.percentage}%)
-                                                    </div>
-                                                </div>
-                                            ))
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Audit Summary table */}
-                            <div className="card">
-                                <h3 style={{ marginBottom: '16px' }}>Recent Audit Summary</h3>
-                                {!insights || insights.audit_summary?.length === 0 ? (
-                                    <p style={{ color: 'var(--text-muted)' }}>No conversations analyzed yet.</p>
-                                ) : (
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Topic</th>
-                                                <th>Pattern</th>
-                                                <th>Gap Found</th>
-                                                <th>Strength Found</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {insights.audit_summary?.map((entry) => (
-                                                <tr key={entry.id}>
-                                                    <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                                        {entry.topic}
-                                                    </td>
-                                                    <td>{entry.pattern}</td>
-                                                    <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'var(--accent-red)' }}>
-                                                        {entry.gap || '-'}
-                                                    </td>
-                                                    <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'var(--accent-green)' }}>
-                                                        {entry.strength || '-'}
-                                                    </td>
-                                                </tr>
+                            {stats && Object.keys(stats.count_by_category).length > 0 && (
+                                <div className="card" style={{ marginTop: 'var(--space-lg)' }}>
+                                    <h3 style={{ marginBottom: '12px', fontSize: '13px' }}>Patterns by Category</h3>
+                                    <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                                        {Object.entries(stats.count_by_category)
+                                            .sort((a, b) => b[1] - a[1])
+                                            .map(([category, count]) => (
+                                                <li key={category} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', borderBottom: '1px solid var(--border-color)', fontSize: '13px', color: 'var(--text-secondary)' }}>
+                                                    <span>{category}</span>
+                                                    <span className="badge badge-blue">{count}</span>
+                                                </li>
                                             ))}
-                                        </tbody>
-                                    </table>
-                                )}
-                            </div>
-                        </>
-                    )}
-                </div>
-            )}
+                                    </ul>
+                                </div>
+                            )}
 
-            {activeTab === 'history' && selectedConversation && (
-                <div>
-                    <button className="btn btn-secondary" onClick={() => setSelectedConversation(null)} style={{marginBottom: '16px'}}>
-                        Back to History
-                    </button>
-                    <div className="badge badge-purple" style={{marginBottom: '20px', fontSize: '14px', padding: '8px 16px'}}>
-                        {selectedConversation.analysis.topic}
+                            {insights?.context_gaps?.length > 0 && (
+                                <div className="card" style={{ marginTop: 'var(--space-md)' }}>
+                                    <h3 style={{ color: 'var(--accent-red)', marginBottom: '10px', fontSize: '13px' }}>Recurring Gaps</h3>
+                                    {insights.context_gaps.map((item, i) => (
+                                        <div key={i} style={{ padding: '6px 0', borderBottom: '1px solid var(--border-color)', fontSize: '12px' }}>
+                                            <div style={{ fontWeight: '500', color: 'var(--text-primary)' }}>{item.gap}</div>
+                                            <div style={{ color: 'var(--text-muted)' }}>{item.count}x · {item.percentage}%</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
+                            {insights?.context_strengths?.length > 0 && (
+                                <div className="card" style={{ marginTop: 'var(--space-md)' }}>
+                                    <h3 style={{ color: 'var(--accent-green)', marginBottom: '10px', fontSize: '13px' }}>Recurring Strengths</h3>
+                                    {insights.context_strengths.map((item, i) => (
+                                        <div key={i} style={{ padding: '6px 0', borderBottom: '1px solid var(--border-color)', fontSize: '12px' }}>
+                                            <div style={{ fontWeight: '500', color: 'var(--text-primary)' }}>{item.strength}</div>
+                                            <div style={{ color: 'var(--text-muted)' }}>{item.count}x · {item.percentage}%</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Right column — detail */}
+                        <div className="history-right">
+                            {!selectedConversation ? (
+                                <div className="history-empty-detail">
+                                    <p>Select a conversation from the list to see its full analysis.</p>
+                                </div>
+                            ) : (
+                                <>
+                                    <div className="badge badge-purple" style={{ marginBottom: '16px', fontSize: '13px', padding: '6px 14px' }}>
+                                        {selectedConversation.analysis.topic}
+                                    </div>
+
+                                    <div className="analysis-grid">
+                                        <div className="analysis-card">
+                                            <h3>Coaching</h3>
+                                            <div className="field">
+                                                <div className="field-label">Context That Would Have Helped</div>
+                                                <div className="field-value">{selectedConversation.analysis.coaching.context_that_would_have_helped}</div>
+                                            </div>
+                                            <div className="field">
+                                                <div className="field-label">Habit to Build</div>
+                                                <div className="field-value">{selectedConversation.analysis.coaching.habit_to_build}</div>
+                                            </div>
+                                            <div className="field">
+                                                <div className="field-label">Improved Prompt</div>
+                                                <div className="prompt-rewrite">{selectedConversation.analysis.coaching.prompt_rewrite}</div>
+                                            </div>
+                                        </div>
+
+                                        <div className="analysis-card">
+                                            <h3>Pattern</h3>
+                                            <div className="field">
+                                                <div className="field-label">Category</div>
+                                                <div className="field-value">{selectedConversation.analysis.pattern.category}</div>
+                                            </div>
+                                            <div className="field">
+                                                <div className="field-label">Insight</div>
+                                                <div className="field-value">{selectedConversation.analysis.pattern.insight}</div>
+                                            </div>
+                                        </div>
+
+                                        <div className="analysis-card">
+                                            <h3>Context Provided</h3>
+                                            <div className="field">
+                                                <div className="field-label">Details</div>
+                                                <div className="field-value">{selectedConversation.analysis.context_provided.details}</div>
+                                            </div>
+                                            <div className="field">
+                                                <div className="field-label">What Worked</div>
+                                                <div className="field-value">{selectedConversation.analysis.context_provided.what_worked}</div>
+                                            </div>
+                                        </div>
+
+                                        <div className="analysis-card">
+                                            <h3>Context Added Later</h3>
+                                            <div className="field">
+                                                <div className="field-label">Details</div>
+                                                <div className="field-value">{selectedConversation.analysis.context_added_later.details}</div>
+                                            </div>
+                                            <div className="field">
+                                                <div className="field-label">Triggers</div>
+                                                <div className="field-value">{selectedConversation.analysis.context_added_later.triggers}</div>
+                                            </div>
+                                        </div>
+
+                                        <div className="analysis-card">
+                                            <h3>Assumptions Made</h3>
+                                            <div className="field">
+                                                <div className="field-label">Details</div>
+                                                <div className="field-value">{selectedConversation.analysis.assumptions_wrong.details}</div>
+                                            </div>
+                                            <div className="field">
+                                                <div className="field-label">Why Assumed</div>
+                                                <div className="field-value">{selectedConversation.analysis.assumptions_wrong.why_assumed}</div>
+                                            </div>
+                                        </div>
+
+                                        <div className="analysis-card">
+                                            <h3>Confidence</h3>
+                                            <div className="field">
+                                                <span className={`score ${getScoreClass(selectedConversation.analysis.confidence.score)}`}>
+                                                    {selectedConversation.analysis.confidence.score}/10
+                                                </span>
+                                            </div>
+                                            <div className="field">
+                                                <div className="field-label">Reasoning</div>
+                                                <div className="field-value">{selectedConversation.analysis.confidence.reasoning}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="card" style={{ marginTop: '16px' }}>
+                                        <h3 style={{ marginBottom: '12px' }}>Original Transcript</h3>
+                                        <pre style={{ whiteSpace: 'pre-wrap', color: 'var(--text-muted)', fontSize: '12px', background: 'var(--bg-tertiary)', padding: '16px', borderRadius: '6px' }}>
+                                            {selectedConversation.raw_transcript}
+                                        </pre>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+
                     </div>
-
-                    <div className="analysis-grid">
-                        <div className="analysis-card">
-                            <h3>Coaching</h3>
-                            <div className="field">
-                                <div className="field-label">Context That Would Have Helped</div>
-                                <div className="field-value">{selectedConversation.analysis.coaching.context_that_would_have_helped}</div>
-                            </div>
-                            <div className="field">
-                                <div className="field-label">Habit to Build</div>
-                                <div className="field-value">{selectedConversation.analysis.coaching.habit_to_build}</div>
-                            </div>
-                            <div className="field">
-                                <div className="field-label">Improved Prompt</div>
-                                <div className="prompt-rewrite">{selectedConversation.analysis.coaching.prompt_rewrite}</div>
-                            </div>
-                        </div>
-
-                        <div className="analysis-card">
-                            <h3>Pattern</h3>
-                            <div className="field">
-                                <div className="field-label">Category</div>
-                                <div className="field-value">{selectedConversation.analysis.pattern.category}</div>
-                            </div>
-                            <div className="field">
-                                <div className="field-label">Insight</div>
-                                <div className="field-value">{selectedConversation.analysis.pattern.insight}</div>
-                            </div>
-                        </div>
-
-                        <div className="analysis-card">
-                            <h3>Context Provided</h3>
-                            <div className="field">
-                                <div className="field-label">Details</div>
-                                <div className="field-value">{selectedConversation.analysis.context_provided.details}</div>
-                            </div>
-                            <div className="field">
-                                <div className="field-label">What Worked</div>
-                                <div className="field-value">{selectedConversation.analysis.context_provided.what_worked}</div>
-                            </div>
-                        </div>
-
-                        <div className="analysis-card">
-                            <h3>Context Added Later</h3>
-                            <div className="field">
-                                <div className="field-label">Details</div>
-                                <div className="field-value">{selectedConversation.analysis.context_added_later.details}</div>
-                            </div>
-                            <div className="field">
-                                <div className="field-label">Triggers</div>
-                                <div className="field-value">{selectedConversation.analysis.context_added_later.triggers}</div>
-                            </div>
-                        </div>
-
-                        <div className="analysis-card">
-                            <h3>Assumptions Made</h3>
-                            <div className="field">
-                                <div className="field-label">Details</div>
-                                <div className="field-value">{selectedConversation.analysis.assumptions_wrong.details}</div>
-                            </div>
-                            <div className="field">
-                                <div className="field-label">Why Assumed</div>
-                                <div className="field-value">{selectedConversation.analysis.assumptions_wrong.why_assumed}</div>
-                            </div>
-                        </div>
-
-                        <div className="analysis-card">
-                            <h3>Confidence</h3>
-                            <div className="field">
-                                <span className={`score ${getScoreClass(selectedConversation.analysis.confidence.score)}`}>
-                                    {selectedConversation.analysis.confidence.score}/10
-                                </span>
-                            </div>
-                            <div className="field">
-                                <div className="field-label">Reasoning</div>
-                                <div className="field-value">{selectedConversation.analysis.confidence.reasoning}</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="card" style={{marginTop: '24px'}}>
-                        <h3 style={{marginBottom: '12px'}}>Original Transcript</h3>
-                        <pre style={{whiteSpace: 'pre-wrap', color: 'var(--text-muted)', fontSize: '12px', background: 'var(--bg-tertiary)', padding: '16px', borderRadius: '6px'}}>
-                            {selectedConversation.raw_transcript}
-                        </pre>
-                    </div>
-                </div>
+                )
             )}
 
         </div>
