@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useApi } from '../hooks/useApi';
 import { useLessonStats } from '../contexts/LessonStatsContext';
 import ConnectionCallout from '../components/ConnectionCallout';
@@ -17,6 +17,8 @@ export default function Lesson01() {
     const [stats, setStats] = useState(null);
     const [insights, setInsights] = useState(null);
     const [userEdits, setUserEdits] = useState({ topic: '', pattern_category: '', habit_to_build: '', notes: '' });
+    const [editSaveStatus, setEditSaveStatus] = useState('idle'); // 'idle' | 'saving' | 'saved'
+    const editSaveTimer = useRef(null);
 
 
     // Converter state
@@ -77,21 +79,27 @@ export default function Lesson01() {
         }
     };
 
-    const saveEdits = async () => {
+    const saveEdits = async (edits) => {
         if (!analysis) return;
-
+        setEditSaveStatus('saving');
         try {
-            await api.put(`/lesson1/conversations/${analysis.id}`, { user_edits: userEdits });
-            setAnalysis(null);
-            setConverterInput('');
-            setConverterOutput('');
-            setConverterStats(null);
-            setActiveTab('history');
-            loadConversations();
+            await api.put(`/lesson1/conversations/${analysis.id}`, { user_edits: edits });
+            setEditSaveStatus('saved');
         } catch (err) {
-            setError('Failed to save');
+            setEditSaveStatus('idle');
         }
     };
+
+    // Auto-save user edits 500ms after last keystroke
+    useEffect(() => {
+        if (!analysis) return;
+        const hasContent = Object.values(userEdits).some(v => v.trim());
+        if (!hasContent) return;
+        clearTimeout(editSaveTimer.current);
+        setEditSaveStatus('saving');
+        editSaveTimer.current = setTimeout(() => saveEdits(userEdits), 500);
+        return () => clearTimeout(editSaveTimer.current);
+    }, [userEdits]);
 
 
     const loadConversation = async (id) => {
@@ -544,6 +552,9 @@ export default function Lesson01() {
 
             {activeTab === 'analysis' && analysis && (
                 <div>
+                    <div className="autosave-banner">
+                        ✓ Saved to History — you can close this or keep editing below
+                    </div>
                     <div className="badge badge-purple" style={{marginBottom: '20px', fontSize: '14px', padding: '8px 16px'}}>
                         {analysis.analysis.topic}
                     </div>
@@ -666,7 +677,13 @@ export default function Lesson01() {
                     </div>
 
                     <div className="card" style={{marginTop: '24px'}}>
-                        <h2 style={{marginBottom: '16px'}}>Your Edits (Optional)</h2>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                            <h2 style={{ margin: 0 }}>Your Notes (Optional)</h2>
+                            <span className="autosave-status">
+                                {editSaveStatus === 'saving' && '⏳ Saving…'}
+                                {editSaveStatus === 'saved' && '✓ Saved'}
+                            </span>
+                        </div>
                         <div className="form-group">
                             <label>Topic</label>
                             <input
@@ -696,14 +713,22 @@ export default function Lesson01() {
                             <textarea
                                 value={userEdits.notes}
                                 onChange={(e) => setUserEdits({...userEdits, notes: e.target.value})}
-                                placeholder="Any additional notes..."
+                                placeholder="Any additional notes about this conversation…"
                                 style={{minHeight: '80px'}}
                             />
                         </div>
-                        <div style={{display: 'flex', gap: '12px'}}>
-                            <button className="btn btn-primary" onClick={saveEdits}>Confirm & Save</button>
-                            <button className="btn btn-secondary" onClick={() => { setAnalysis(null); setConverterInput(''); setConverterOutput(''); setConverterStats(null); }}>
+                        <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
+                            <button
+                                className="btn btn-secondary"
+                                onClick={() => { setAnalysis(null); setConverterInput(''); setConverterOutput(''); setConverterStats(null); setEditSaveStatus('idle'); setUserEdits({ topic: '', pattern_category: '', habit_to_build: '', notes: '' }); }}
+                            >
                                 Analyze Another
+                            </button>
+                            <button
+                                className="btn btn-ghost"
+                                onClick={() => { setAnalysis(null); setConverterInput(''); setConverterOutput(''); setConverterStats(null); setEditSaveStatus('idle'); setUserEdits({ topic: '', pattern_category: '', habit_to_build: '', notes: '' }); setActiveTab('history'); loadConversations(); }}
+                            >
+                                View in History →
                             </button>
                         </div>
                     </div>

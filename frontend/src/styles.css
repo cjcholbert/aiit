@@ -6452,3 +6452,42 @@ tr:hover td {
 .context-score-list--missing li::before {
   content: '– ';
 }
+
+/* ---- Auto-save UI ---- */
+
+.autosave-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 10px var(--space-md);
+  margin-bottom: var(--space-lg);
+  background: color-mix(in srgb, var(--accent-green) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-green) 30%, transparent);
+  border-radius: var(--radius-md);
+  color: var(--accent-green);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.autosave-status {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.btn-ghost {
+  background: none;
+  border: none;
+  color: var(--accent-blue);
+  font-size: 0.875rem;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 6px 4px;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: text-decoration-color var(--transition-fast);
+}
+
+.btn-ghost:hover {
+  text-decoration-color: var(--accent-blue);
+}
