@@ -274,18 +274,44 @@ export default function Lesson01() {
     };
 
     const analyzeConverted = async () => {
-        if (!converterOutput) return;
+        if (!converterInput.trim()) return;
+
+        // Parse silently before analyzing
+        convertToJSON();
+
+        let formatted = '';
+        try {
+            let messages = [];
+            const labelPatterns = [
+                { user: 'You:', assistant: 'AI:' },
+                { user: 'Human:', assistant: 'Assistant:' },
+                { user: 'User:', assistant: 'Assistant:' },
+                { user: 'User:', assistant: 'Claude:' },
+                { user: 'You:', assistant: 'Claude:' },
+            ];
+            let parsed = false;
+            for (const pattern of labelPatterns) {
+                if (converterInput.includes(pattern.user) && converterInput.includes(pattern.assistant)) {
+                    messages = parseWithLabels(converterInput, pattern.user, pattern.assistant);
+                    parsed = true;
+                    break;
+                }
+            }
+            if (!parsed) messages = parseAlternating(converterInput);
+            if (messages.length === 0) throw new Error('Could not parse conversation. Try a different format.');
+            formatted = messages.map(m =>
+                `${m.role === 'user' ? 'User' : 'Assistant'}: ${m.content}`
+            ).join('\n\n');
+        } catch (err) {
+            setError(err.message);
+            return;
+        }
 
         setLoading(true);
         setError('');
         setAnalysis(null);
 
         try {
-            const data = JSON.parse(converterOutput);
-            const formatted = data.messages.map(m =>
-                `${m.role === 'user' ? 'User' : 'Assistant'}: ${m.content}`
-            ).join('\n\n');
-
             const result = await api.post('/lesson1/analyze', { raw_transcript: formatted });
             setAnalysis(result);
             setUserEdits({
@@ -318,17 +344,21 @@ export default function Lesson01() {
             </div>
 
             <div className="tabs">
-                {['concepts', 'analysis', 'history'].map((tab) => (
+                {[
+                    { key: 'concepts', label: 'Concepts' },
+                    { key: 'analysis', label: 'Analysis' },
+                    { key: 'history', label: 'History' },
+                ].map(({ key, label }) => (
                     <button
-                        key={tab}
-                        className={`tab ${activeTab === tab ? 'active' : ''}`}
+                        key={key}
+                        className={`tab ${activeTab === key ? 'active' : ''}`}
                         onClick={() => {
-                            setActiveTab(tab);
-                            if (tab === 'analysis') { setAnalysis(null); setSelectedConversation(null); }
-                            if (tab === 'history') { setSelectedConversation(null); }
+                            setActiveTab(key);
+                            if (key === 'analysis') { setAnalysis(null); setSelectedConversation(null); }
+                            if (key === 'history') { setSelectedConversation(null); }
                         }}
                     >
-                        {tab}
+                        {label}
                     </button>
                 ))}
             </div>
@@ -530,56 +560,21 @@ export default function Lesson01() {
 
                     {inputMethod === 'paste' && (
                         <>
-                            <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '16px' }}>
-                                Paste your AI conversation below. Common formats like You:/AI:, Human:/Assistant: are auto-detected.
-                            </p>
-
-                            <div className="analyze-paste-grid">
-                                <div>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                                        <label style={{ fontWeight: '500', margin: 0 }}>Paste Conversation</label>
-                                        <ExamplesDropdown
-                                            endpoint="/lesson1/examples"
-                                            onSelect={(example) => setConverterInput(example.raw_transcript)}
-                                        />
-                                    </div>
-                                    <textarea
-                                        value={converterInput}
-                                        onChange={(e) => setConverterInput(e.target.value)}
-                                        placeholder={`Paste your AI chat here...\n\nExample:\nYou: What is the capital of France?\nAI: The capital of France is Paris.`}
-                                        style={{ minHeight: '250px', fontFamily: 'monospace', fontSize: '12px' }}
-                                    />
-                                </div>
-                                <div>
-                                    <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Parsed Preview</label>
-                                    <textarea
-                                        value={converterOutput}
-                                        readOnly
-                                        placeholder="Parsed Message will appear here..."
-                                        style={{ minHeight: '250px', fontFamily: 'monospace', fontSize: '12px', background: 'var(--bg-tertiary)' }}
-                                    />
-                                </div>
-                            </div>
-
-                            {converterStats && (
-                                <div style={{ marginTop: '8px', padding: '8px 12px', background: 'var(--success-bg)', borderRadius: '4px', fontSize: '12px', color: 'var(--accent-green)' }}>
-                                    Parsed {converterStats.total} messages ({converterStats.user} user, {converterStats.assistant} assistant)
-                                </div>
-                            )}
-                            {converterError && (
-                                <div style={{ marginTop: '8px', padding: '8px 12px', background: 'var(--error-bg)', borderRadius: '4px', fontSize: '12px', color: 'var(--accent-red)' }}>
-                                    {converterError}
-                                </div>
-                            )}
-
-                            <div style={{ display: 'flex', gap: '10px', marginTop: '16px', alignItems: 'center' }}>
-                                <button className="btn btn-secondary" onClick={convertToJSON} disabled={!converterInput.trim()}>
-                                    Parse
-                                </button>
+                            <ExamplesDropdown
+                                endpoint="/lesson1/examples"
+                                onSelect={(example) => setConverterInput(example.raw_transcript)}
+                            />
+                            <textarea
+                                value={converterInput}
+                                onChange={(e) => setConverterInput(e.target.value)}
+                                placeholder={`Paste your AI conversation here — or load an example above.\n\nCommon formats are auto-detected:\nYou: ...\nAI: ...\n\nHuman: ...\nAssistant: ...`}
+                                style={{ minHeight: '280px', fontFamily: 'monospace', fontSize: '12px', marginTop: '12px' }}
+                            />
+                            <div style={{ display: 'flex', gap: '10px', marginTop: '12px', alignItems: 'center' }}>
                                 <button
                                     className="btn btn-primary"
                                     onClick={analyzeConverted}
-                                    disabled={!converterOutput || loading}
+                                    disabled={!converterInput.trim() || loading}
                                 >
                                     {loading ? 'Analyzing...' : 'Analyze'}
                                 </button>
