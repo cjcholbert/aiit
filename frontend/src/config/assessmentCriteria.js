@@ -18,17 +18,8 @@ export const LESSON_CRITERIA = {
       progressLabel: (data) => `${Array.isArray(data) ? data.length : 0}/1`,
     },
     {
-      id: 'l1_pattern',
-      label: 'Identified at least 1 context pattern',
-      endpoint: '/lesson1/patterns',
-      check: (data) => {
-        if (!data || !data.patterns) return false;
-        return Object.values(data.patterns).some((v) => v > 0);
-      },
-    },
-    {
       id: 'l1_reviewed',
-      label: 'Reviewed coaching suggestions',
+      label: 'Reviewed your coaching & context score',
       endpoint: '/lesson1/conversations',
       check: (data) => {
         if (!Array.isArray(data)) return false;
@@ -36,13 +27,11 @@ export const LESSON_CRITERIA = {
       },
     },
     {
-      id: 'l1_edited',
-      label: 'Edited notes on at least 1 conversation',
+      id: 'l1_three',
+      label: 'Analyzed 3+ conversations (builds pattern)',
       endpoint: '/lesson1/conversations',
-      check: (data) => {
-        if (!Array.isArray(data)) return false;
-        return data.some((c) => c.user_edits);
-      },
+      check: (data) => Array.isArray(data) && data.length >= 3,
+      progressLabel: (data) => `${Math.min(Array.isArray(data) ? data.length : 0, 3)}/3`,
     },
   ],
 

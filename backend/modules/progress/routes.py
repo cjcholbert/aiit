@@ -29,24 +29,17 @@ async def _count(db: AsyncSession, model, user_id: str, extra_filter=None):
 
 
 async def _check_lesson1(db: AsyncSession, user_id: str) -> dict:
-    """L1: analyzed 1+ conversation, identified 1+ pattern, reviewed coaching, edited notes."""
+    """L1: analyzed 1+ conversation and reviewed the coaching output."""
     conv_count = await _count(db, Conversation, user_id)
-    # Pattern = conversation with analysis containing a pattern
-    pattern_q = select(func.count()).select_from(Conversation).where(
-        Conversation.user_id == user_id,
-        Conversation.analysis.isnot(None),
-    )
-    pattern_result = await db.execute(pattern_q)
-    has_analysis = (pattern_result.scalar() or 0) >= 1
-    # Check for user edits on conversations
-    edits_count = await _count(db, Conversation, user_id, Conversation.user_edits.isnot(None))
-    has_edits = edits_count >= 1
-    criteria_met = min(conv_count, 1) + (1 if has_analysis else 0) + (1 if has_analysis else 0) + (1 if has_edits else 0)
+    has_analysis = conv_count >= 1
+    # Bonus criteria: 3+ conversations for deeper pattern recognition
+    has_three = conv_count >= 3
+    criteria_met = (1 if conv_count >= 1 else 0) + (1 if has_analysis else 0) + (1 if has_three else 0)
     return {
         "lesson": 1,
         "criteria_met": criteria_met,
-        "criteria_total": 4,
-        "complete": conv_count >= 1 and has_analysis and has_edits,
+        "criteria_total": 3,
+        "complete": conv_count >= 1,
     }
 
 

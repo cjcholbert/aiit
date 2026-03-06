@@ -279,11 +279,11 @@ export default function Lesson07() {
       <div className="tabs">
         {['concepts', 'decompose'].map((tab) => (
           <button
-            key={tab}
+            key={tab.charAt(0).toUpperCase() + tab.slice(1)}
             className={`tab ${activeTab === tab ? 'active' : ''}`}
             onClick={() => setActiveTab(tab)}
           >
-            {tab}
+            {tab.charAt(0).toUpperCase() + tab.slice(1)}
           </button>
         ))}
       </div>

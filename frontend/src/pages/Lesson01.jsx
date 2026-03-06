@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useApi } from '../hooks/useApi';
 import { useLessonStats } from '../contexts/LessonStatsContext';
+import { useProgress } from '../hooks/useProgress';
 import ConnectionCallout from '../components/ConnectionCallout';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 import { AccordionSection } from '../components/Accordion';
@@ -29,6 +30,7 @@ export default function Lesson01() {
 
     const api = useApi();
     const { setStats: setSidebarStats } = useLessonStats();
+    const { isLessonComplete, refresh: refreshProgress } = useProgress();
 
     useEffect(() => {
         loadStats();
@@ -297,6 +299,8 @@ export default function Lesson01() {
         try {
             const result = await api.post('/lesson1/analyze', { raw_transcript: formatted });
             setAnalysis(result);
+            refreshProgress();
+            loadStats();
             setUserEdits({
                 topic: result.analysis.topic,
                 pattern_category: result.analysis.pattern.category,
@@ -552,9 +556,15 @@ export default function Lesson01() {
 
             {activeTab === 'analysis' && analysis && (
                 <div>
-                    <div className="autosave-banner">
-                        ✓ Saved to History — you can close this or keep editing below
-                    </div>
+                    {isLessonComplete(1) ? (
+                        <div className="lesson-complete-banner">
+                            🎉 Lesson 1 Complete! — Check the sidebar for your next lesson.
+                        </div>
+                    ) : (
+                        <div className="autosave-banner">
+                            ✓ Saved to History — you can close this or keep editing below
+                        </div>
+                    )}
                     <div className="badge badge-purple" style={{marginBottom: '20px', fontSize: '14px', padding: '8px 16px'}}>
                         {analysis.analysis.topic}
                     </div>
