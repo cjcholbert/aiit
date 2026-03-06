@@ -4,6 +4,7 @@ import ConnectionCallout from '../components/ConnectionCallout';
 import { useLessonStats } from '../contexts/LessonStatsContext';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 import { AccordionSection } from '../components/Accordion';
+import LessonNav from '../components/LessonNav';
 
 // Category badge colors
 const CATEGORY_COLORS = {
@@ -357,6 +358,9 @@ export default function Lesson06() {
             <p><strong>The Skill:</strong> Create reusable verification checklists tied to output types, so checking becomes quick and consistent rather than ad-hoc. Track which checks actually catch issues to refine your process over time. Define clear "skip criteria" so you can confidently trust appropriate outputs without guilt or risk.</p>
           </div>
 
+        </div>
+        <div className="lesson-header-right">
+          <LessonNav lessonNumber={6} />
         </div>
       </div>
 

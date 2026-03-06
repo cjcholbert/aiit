@@ -4,6 +4,7 @@ import ConnectionCallout from '../components/ConnectionCallout';
 import { useLessonStats } from '../contexts/LessonStatsContext';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 import { AccordionSection } from '../components/Accordion';
+import LessonNav from '../components/LessonNav';
 
 // Quality level styles
 const QUALITY_STYLES = {
@@ -300,6 +301,9 @@ export default function Lesson02() {
             <p><strong>The Skill:</strong> Write feedback that identifies specific locations, states clear actions, and explains reasoning. Learn to spot vague patterns in your own feedback and rewrite them.</p>
           </div>
 
+        </div>
+        <div className="lesson-header-right">
+          <LessonNav lessonNumber={2} />
         </div>
       </div>
 

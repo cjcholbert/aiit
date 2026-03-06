@@ -4,6 +4,7 @@ import ConnectionCallout from '../components/ConnectionCallout';
 import { useLessonStats } from '../contexts/LessonStatsContext';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 import { AccordionSection } from '../components/Accordion';
+import LessonNav from '../components/LessonNav';
 
 // Trust level colors and guidelines
 const TRUST_LEVELS = {
@@ -340,6 +341,9 @@ export default function Lesson05() {
             <p><strong>The Skill:</strong> Build a personal trust matrix by tracking predictions about AI accuracy. Learn which output types you can trust and which require careful verification.</p>
           </div>
 
+        </div>
+        <div className="lesson-header-right">
+          <LessonNav lessonNumber={5} />
         </div>
       </div>
 

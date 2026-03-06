@@ -84,7 +84,7 @@
 
   --text-primary: #c9d1d9;
   --text-secondary: #8b949e;
-  --text-muted: #6e7681;
+  --text-muted: #7d8590;
 
   --accent-blue: #6e9abb;
   --accent-green: #238636;
@@ -772,6 +772,7 @@ label {
   display: flex;
   gap: var(--space-lg);
   margin-bottom: var(--space-lg);
+  align-items: flex-start;
 }
 
 .lesson-header-left {
@@ -825,6 +826,39 @@ label {
   }
   .lesson-header-right {
     flex: none;
+  }
+}
+
+/* Lesson Previous / Next navigation */
+.lesson-nav {
+  display: flex;
+  gap: var(--space-xs);
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.lesson-nav-btn {
+  padding: 6px var(--space-md);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+  white-space: nowrap;
+}
+
+.lesson-nav-btn:hover {
+  color: var(--brand-teal, #3a9080);
+  border-color: var(--brand-teal, #3a9080);
+  background: var(--bg-hover);
+}
+
+@media (max-width: 768px) {
+  .lesson-nav {
+    flex-wrap: wrap;
   }
 }
 
@@ -6071,8 +6105,8 @@ tr:hover td {
 }
 
 .module-section-header {
-  background-color: var(--module-bg);
-  border-left: 4px solid var(--module-border);
+  background-color: var(--brand-teal-bg);
+  border-left: 4px solid var(--brand-teal);
   padding: 12px 16px;
   border-radius: var(--radius-sm);
   margin-bottom: var(--space-md);
@@ -6082,7 +6116,7 @@ tr:hover td {
   margin: 0;
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--module-text);
+  color: var(--brand-teal);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }

@@ -4,6 +4,7 @@ import ConnectionCallout from '../components/ConnectionCallout';
 import { useLessonStats } from '../contexts/LessonStatsContext';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 import { AccordionSection } from '../components/Accordion';
+import LessonNav from '../components/LessonNav';
 
 // Task status colors - mapped to CSS classes
 const STATUS_COLORS = {
@@ -435,6 +436,9 @@ export default function Lesson08() {
             <p><strong>The Skill:</strong> Create delegation templates with clear context, objectives, scope, deliverables, and success criteria. Then execute decomposed tasks in sequence, tracking what you delegated, what you received, and what decisions you made at each gate.</p>
           </div>
 
+        </div>
+        <div className="lesson-header-right">
+          <LessonNav lessonNumber={8} />
         </div>
       </div>
 

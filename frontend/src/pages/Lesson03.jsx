@@ -5,6 +5,7 @@ import { useLessonStats } from '../contexts/LessonStatsContext';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 import { AccordionSection } from '../components/Accordion';
 import { copyToClipboard } from '../utils/exportUtils';
+import LessonNav from '../components/LessonNav';
 
 const DEFAULT_CATEGORIES = [
   { value: 'general', label: 'General', color: 'var(--accent-purple)', icon: '📋' },
@@ -760,6 +761,9 @@ ${gapSections}
             <p><strong>The Skill:</strong> Build reusable templates that capture the context AI needs upfront. Turn your Lesson 1 insights into structured prompts you can use consistently.</p>
           </div>
 
+        </div>
+        <div className="lesson-header-right">
+          <LessonNav lessonNumber={3} />
         </div>
       </div>
 

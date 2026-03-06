@@ -4,6 +4,7 @@ import ConnectionCallout from '../components/ConnectionCallout';
 import { useLessonStats } from '../contexts/LessonStatsContext';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 import { AccordionSection } from '../components/Accordion';
+import LessonNav from '../components/LessonNav';
 
 // Icon mappings for categories and reliability
 const CATEGORY_ICONS = {
@@ -312,6 +313,9 @@ export default function Lesson11() {
                         <p>Map AI reliability zones and log frontier encounters to build your personal AI capability map.</p>
                     </div>
 
+                </div>
+                <div className="lesson-header-right">
+                    <LessonNav lessonNumber={11} />
                 </div>
             </div>
 

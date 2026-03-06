@@ -4,6 +4,7 @@ import ConnectionCallout from '../components/ConnectionCallout';
 import { useLessonStats } from '../contexts/LessonStatsContext';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 import { AccordionSection } from '../components/Accordion';
+import LessonNav from '../components/LessonNav';
 
 // Category colors and info - using CSS custom properties for theme support
 const CATEGORIES = {
@@ -261,6 +262,9 @@ export default function Lesson07() {
             <p><strong>The Skill:</strong> Break projects into subtasks and categorize each as AI-Optimal (delegate freely), Collaborative (work together), or Human-Primary (you lead). Sequence tasks with dependencies so you know what to hand off, what to co-create, and where to insert decision gates.</p>
           </div>
 
+        </div>
+        <div className="lesson-header-right">
+          <LessonNav lessonNumber={7} />
         </div>
       </div>
 

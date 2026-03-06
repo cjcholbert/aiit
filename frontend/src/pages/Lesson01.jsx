@@ -5,6 +5,7 @@ import ConnectionCallout from '../components/ConnectionCallout';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 import { AccordionSection } from '../components/Accordion';
 import { copyToClipboard } from '../utils/exportUtils';
+import LessonNav from '../components/LessonNav';
 
 export default function Lesson01() {
     const [activeTab, setActiveTab] = useState('concepts');
@@ -310,6 +311,9 @@ export default function Lesson01() {
                         <p><strong>The Skill:</strong> Identify your personal context gaps by analyzing past conversations. Discover what information you consistently forget to provide so you can fix it upfront.</p>
                     </div>
 
+                </div>
+                <div className="lesson-header-right">
+                    <LessonNav lessonNumber={1} />
                 </div>
             </div>
 

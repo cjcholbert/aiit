@@ -4,6 +4,7 @@ import { useAuth } from '../auth/AuthContext';
 import ConnectionCallout from '../components/ConnectionCallout';
 import { useLessonStats } from '../contexts/LessonStatsContext';
 import { AccordionSection } from '../components/Accordion';
+import LessonNav from '../components/LessonNav';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
@@ -273,6 +274,9 @@ export default function Lesson12() {
                         <p>Generate your personal AI collaboration quick reference card from your learnings across all lessons.</p>
                     </div>
 
+                </div>
+                <div className="lesson-header-right">
+                    <LessonNav lessonNumber={12} />
                 </div>
             </div>
 

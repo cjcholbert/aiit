@@ -5,6 +5,7 @@ import { useLessonStats } from '../contexts/LessonStatsContext';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 import { AccordionSection } from '../components/Accordion';
 import { copyToClipboard } from '../utils/exportUtils';
+import LessonNav from '../components/LessonNav';
 
 // Frequency colors
 const FREQUENCY_COLORS = {
@@ -439,6 +440,9 @@ export default function Lesson10() {
             <p><strong>The Skill:</strong> Design AI-integrated workflows for recurring tasks. Create templates, track inputs, and measure time savings to build sustainable AI collaboration habits.</p>
           </div>
 
+        </div>
+        <div className="lesson-header-right">
+          <LessonNav lessonNumber={10} />
         </div>
       </div>
 

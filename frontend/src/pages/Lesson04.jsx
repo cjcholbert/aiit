@@ -5,6 +5,7 @@ import { useLessonStats } from '../contexts/LessonStatsContext';
 import { copyToClipboard } from '../utils/exportUtils';
 import ExamplesDropdown from '../components/ExamplesDropdown';
 import { AccordionSection } from '../components/Accordion';
+import LessonNav from '../components/LessonNav';
 
 // Priority colors
 const PRIORITY_COLORS = {
@@ -436,6 +437,9 @@ export default function Lesson04() {
             <p><strong>The Skill:</strong> Keep a living document for each project that captures what's done, what's decided, and what's next. Paste it at the start of any AI session so the conversation picks up where you left off -- no re-explaining needed.</p>
           </div>
 
+        </div>
+        <div className="lesson-header-right">
+          <LessonNav lessonNumber={4} />
         </div>
       </div>
 

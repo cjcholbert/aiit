@@ -140,14 +140,7 @@ export default function Dashboard() {
 
                     {MODULES.map((module) => (
                         <div key={module.name} className="module-section">
-                            <div
-                                className="module-section-header"
-                                style={{
-                                    '--module-bg': theme === 'dark' ? module.darkColor : module.color,
-                                    '--module-border': theme === 'dark' ? module.darkBorderColor : module.borderColor,
-                                    '--module-text': theme === 'dark' ? module.darkTextColor : module.textColor
-                                }}
-                            >
+                            <div className="module-section-header">
                                 <h2 className="module-section-title">
                                     {module.name}
                                 </h2>
