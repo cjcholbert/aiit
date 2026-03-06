@@ -51,7 +51,7 @@ export const MODULES = [
         lessons: [
             {
                 lesson: 1,
-                title: 'Context Tracker',
+                title: 'Context Pattern Tracker',
                 description: 'Analyze conversation transcripts to identify context gaps and prompting patterns.',
                 concept: 'contextAssembly',
                 status: 'active'
