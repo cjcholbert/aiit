@@ -84,22 +84,35 @@ export default function NavDropdown() {
                         <div className="nav-dropdown-divider" />
 
                         <div className="nav-dropdown-lessons">
-                            {MODULES.map((module) => (
-                                <div key={module.name} className="nav-dropdown-section">
-                                    <div className="nav-dropdown-section-title">{module.name}</div>
-                                    {module.lessons.map((lesson) => (
-                                        <NavLink
-                                            key={lesson.lesson}
-                                            to={`/lesson/${lesson.lesson}`}
-                                            className={({ isActive }) => `nav-dropdown-item nav-dropdown-lesson-item ${isActive ? 'active' : ''}`}
-                                            role="menuitem"
-                                        >
-                                            <span className="nav-dropdown-lesson-num">{lesson.lesson}</span>
-                                            <span className="nav-dropdown-lesson-title">{lesson.title}</span>
-                                        </NavLink>
-                                    ))}
-                                </div>
-                            ))}
+                            {MODULES.map((module) => {
+                                const moduleColor = theme === 'dark' ? module.darkColor : module.color;
+                                const moduleText = theme === 'dark' ? module.darkTextColor : module.textColor;
+                                const moduleBorder = theme === 'dark' ? module.darkBorderColor : module.borderColor;
+                                return (
+                                    <div
+                                        key={module.name}
+                                        className="nav-dropdown-module-section"
+                                        style={{
+                                            '--module-color': moduleColor,
+                                            '--module-text': moduleText,
+                                            '--module-border': moduleBorder,
+                                        }}
+                                    >
+                                        <div className="nav-dropdown-module-label">{module.name}</div>
+                                        {module.lessons.map((lesson) => (
+                                            <NavLink
+                                                key={lesson.lesson}
+                                                to={`/lesson/${lesson.lesson}`}
+                                                className={({ isActive }) => `nav-dropdown-item nav-dropdown-lesson-item ${isActive ? 'active' : ''}`}
+                                                role="menuitem"
+                                            >
+                                                <span className="nav-dropdown-lesson-num">{lesson.lesson}</span>
+                                                <span className="nav-dropdown-lesson-title">{lesson.title}</span>
+                                            </NavLink>
+                                        ))}
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
                 )}
