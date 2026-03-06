@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { MODULES } from '../config/modules';
 
 export default function NavDropdown() {
     const { user, logout } = useAuth();
@@ -61,7 +62,6 @@ export default function NavDropdown() {
                 {isOpen && (
                     <div className="nav-dropdown-menu" role="menu">
                         <div className="nav-dropdown-section">
-                            <div className="nav-dropdown-section-title">Pages</div>
                             <NavLink
                                 to="/"
                                 className={({ isActive }) => `nav-dropdown-item ${isActive ? 'active' : ''}`}
@@ -79,6 +79,27 @@ export default function NavDropdown() {
                                     Admin
                                 </NavLink>
                             )}
+                        </div>
+
+                        <div className="nav-dropdown-divider" />
+
+                        <div className="nav-dropdown-lessons">
+                            {MODULES.map((module) => (
+                                <div key={module.name} className="nav-dropdown-section">
+                                    <div className="nav-dropdown-section-title">{module.name}</div>
+                                    {module.lessons.map((lesson) => (
+                                        <NavLink
+                                            key={lesson.lesson}
+                                            to={`/lesson/${lesson.lesson}`}
+                                            className={({ isActive }) => `nav-dropdown-item nav-dropdown-lesson-item ${isActive ? 'active' : ''}`}
+                                            role="menuitem"
+                                        >
+                                            <span className="nav-dropdown-lesson-num">{lesson.lesson}</span>
+                                            <span className="nav-dropdown-lesson-title">{lesson.title}</span>
+                                        </NavLink>
+                                    ))}
+                                </div>
+                            ))}
                         </div>
                     </div>
                 )}
