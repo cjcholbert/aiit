@@ -30,8 +30,9 @@ export default function Login() {
         <div className="auth-container">
             <div className="auth-card">
                 <div className="auth-header">
-                    <h1 className="auth-title">The AI Collaborator</h1>
-                    <p className="auth-brought-by">brought to you by <strong>Your AI Iteration</strong></p>
+                    <Link to="/" className="auth-title-link">
+                        <h1 className="auth-title">The AI Collaborator</h1>
+                    </Link>
                     <p className="auth-subtitle">Sign in to continue your learning journey</p>
                 </div>
 
@@ -71,6 +72,10 @@ export default function Login() {
                         {loading ? 'Signing in...' : 'Sign In'}
                     </button>
                 </form>
+
+                <div className="auth-forgot">
+                    <Link to="/forgot-password" className="btn-link">Forgot password?</Link>
+                </div>
 
                 <div className="auth-footer">
                     Don't have an account?{' '}

@@ -179,6 +179,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   background: var(--bg-primary);
@@ -1329,23 +1333,30 @@ tr:hover td {
   letter-spacing: -0.5px;
 }
 
-.auth-brought-by {
-  color: var(--text-secondary);
-  font-size: 14px;
-  margin: 0 0 var(--space-md);
+.auth-title-link {
+  text-decoration: none;
+  display: inline-block;
 }
 
-.auth-brought-by strong {
-  color: var(--text-primary);
+.auth-title-link:hover .auth-title {
+  color: var(--accent-blue);
 }
 
 .auth-subtitle {
   color: var(--text-secondary);
   font-size: 14px;
+  margin: var(--space-xs) 0 0;
 }
 
 .auth-form {
   margin-bottom: var(--space-lg);
+}
+
+.auth-forgot {
+  text-align: right;
+  margin-top: calc(-1 * var(--space-sm));
+  margin-bottom: var(--space-lg);
+  font-size: 13px;
 }
 
 .auth-footer {

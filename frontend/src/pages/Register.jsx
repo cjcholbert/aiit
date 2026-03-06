@@ -42,9 +42,10 @@ export default function Register() {
         <div className="auth-container">
             <div className="auth-card">
                 <div className="auth-header">
-                    <h1 className="auth-title">The AI Collaborator</h1>
-                    <p className="auth-brought-by">brought to you by <strong>Your AI Iteration</strong></p>
-                    <p className="auth-subtitle">Create your account to start learning</p>
+                    <Link to="/" className="auth-title-link">
+                        <h1 className="auth-title">The AI Collaborator</h1>
+                    </Link>
+                    <p className="auth-subtitle">12 lessons. Build the habits that make AI work for you.</p>
                 </div>
 
                 {error && <div className="alert alert-error">{error}</div>}
