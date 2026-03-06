@@ -463,6 +463,37 @@ async def get_insights(
     )
 
 
+@router.post("/demo-analyze")
+@limiter.limit("5/minute")
+async def demo_analyze_conversation(
+    request: Request,
+    body: ConversationCreate,
+):
+    """
+    Public demo endpoint — analyzes a conversation without saving or requiring auth.
+    Used on the landing page to let visitors try the tool before signing up.
+    """
+    parsed = parse_transcript(body.raw_transcript)
+    is_valid, error_msg = validate_transcript(parsed)
+
+    if not is_valid:
+        try:
+            normalized_text = await normalize_transcript(body.raw_transcript)
+            parsed = parse_transcript(normalized_text)
+            is_valid, error_msg = validate_transcript(parsed)
+            if not is_valid:
+                raise HTTPException(status_code=400, detail=f"Could not parse conversation. {error_msg}")
+        except AnalyzerError as e:
+            raise HTTPException(status_code=500, detail=f"Normalization failed: {str(e)}")
+
+    try:
+        analysis = await analyze_transcript(parsed)
+    except AnalyzerError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+    return {"analysis": analysis.model_dump()}
+
+
 @router.get("/examples")
 async def get_examples():
     """Get example case scenarios for learning."""
