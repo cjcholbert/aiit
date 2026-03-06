@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { MODULES, CONCEPTS, APP_NAME } from '../config/modules';
 import { useTheme } from '../contexts/ThemeContext';
 import { useProgress } from '../hooks/useProgress';
@@ -85,10 +84,7 @@ export default function Dashboard() {
     return (
         <div>
             <div className="page-header">
-                <div className="page-header-row">
-                    <h1 className="page-title">Your AI <span className="accent-green-text">Collaboration Hub</span></h1>
-                    <Link to="/lesson/1" className="btn btn-primary">Begin Course</Link>
-                </div>
+                <h1 className="page-title">Your AI <span className="accent-green-text">Collaboration Hub</span></h1>
                 <p className="page-description">
                     12 hands-on lessons across 4 modules. Build systematic habits for effective AI collaboration.
                 </p>
