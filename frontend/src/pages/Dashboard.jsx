@@ -13,7 +13,7 @@ const BRAND_TEAL = '#3a9080';
 const CORE_CONCEPTS = [
     {
         id: 'contextAssembly',
-        name: 'Context Assembly',
+        name: 'Briefing Architecture',
         color: BRAND_TEAL,
         tagline: 'Curating the briefing that shapes AI output quality',
         description: 'Gathering and presenting relevant background information to enable effective AI collaboration. Identifying what information is needed, organizing it coherently, and providing sufficient detail without overwhelming noise.',
@@ -21,7 +21,7 @@ const CORE_CONCEPTS = [
     },
     {
         id: 'qualityJudgment',
-        name: 'Quality Judgment',
+        name: 'Output Calibration',
         color: BRAND_TEAL,
         tagline: 'Distinguishing "looks right" from "is right"',
         description: 'Critically evaluating AI-generated outputs for accuracy, completeness, and fitness for purpose. Recognizing errors, identifying gaps, and determining whether the output genuinely meets the intended need.',
@@ -29,7 +29,7 @@ const CORE_CONCEPTS = [
     },
     {
         id: 'taskDecomposition',
-        name: 'Task Decomposition',
+        name: 'Work Sequencing',
         color: BRAND_TEAL,
         tagline: 'Breaking complex problems into AI-appropriate chunks',
         description: 'Breaking complex problems into smaller components that can be addressed sequentially or in parallel. Understanding which subtasks are AI-appropriate and where human judgment is required.',
@@ -37,7 +37,7 @@ const CORE_CONCEPTS = [
     },
     {
         id: 'iterativeRefinement',
-        name: 'Iterative Refinement',
+        name: 'Feedback Cycles',
         color: BRAND_TEAL,
         tagline: 'Steering toward outcomes through successive approximations',
         description: 'Progressively improving outputs through cycles of feedback, adjustment, and revision. Knowing what to ask for, how to redirect, and when "good enough" has been reached.',
@@ -45,7 +45,7 @@ const CORE_CONCEPTS = [
     },
     {
         id: 'workflowIntegration',
-        name: 'Workflow Integration',
+        name: 'AI Habit Design',
         color: BRAND_TEAL,
         tagline: 'Embedding AI into sustainable work patterns',
         description: 'Embedding AI collaboration into existing work processes in sustainable, practical ways. Identifying where AI adds genuine value and creating repeatable patterns.',
@@ -53,7 +53,7 @@ const CORE_CONCEPTS = [
     },
     {
         id: 'frontierRecognition',
-        name: 'Frontier Recognition',
+        name: 'Capability Mapping',
         color: BRAND_TEAL,
         tagline: 'Knowing the boundaries of AI capability',
         description: 'Understanding the current boundaries of AI capability—what it can and cannot do reliably, where it excels versus struggles, and how those boundaries are shifting.',
@@ -86,7 +86,7 @@ export default function Dashboard() {
         <div>
             <div className="page-header">
                 <div className="page-header-row">
-                    <h1 className="page-title">Your AI <span className="gradient-accent">Collaboration</span></h1>
+                    <h1 className="page-title">Your AI <span className="accent-green-text">Collaboration Hub</span></h1>
                     <Link to="/lesson/1" className="btn btn-primary">Begin Course</Link>
                 </div>
                 <p className="page-description">

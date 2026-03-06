@@ -251,44 +251,50 @@ img, video, iframe {
 
 .header-brand-accent,
 .gradient-accent,
+.accent-green-text,
 .gradient-context-assembly,
 .gradient-quality-judgment,
 .gradient-task-decomposition,
 .gradient-iterative-refinement,
 .gradient-workflow-integration,
 .gradient-frontier-recognition {
-  background: linear-gradient(90deg, #3ab088, #2a8898);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent-green);
+  background: none;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+  background-clip: unset;
 }
 
 [data-theme="dark"] .header-brand-accent,
 [data-theme="dark"] .gradient-accent,
+[data-theme="dark"] .accent-green-text,
 [data-theme="dark"] .gradient-context-assembly,
 [data-theme="dark"] .gradient-quality-judgment,
 [data-theme="dark"] .gradient-task-decomposition,
 [data-theme="dark"] .gradient-iterative-refinement,
 [data-theme="dark"] .gradient-workflow-integration,
 [data-theme="dark"] .gradient-frontier-recognition {
-  background: linear-gradient(90deg, #4acea8, #3aaab8);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent-green);
+  background: none;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+  background-clip: unset;
 }
 
 [data-theme="high-contrast"] .header-brand-accent,
 [data-theme="high-contrast"] .gradient-accent,
+[data-theme="high-contrast"] .accent-green-text,
 [data-theme="high-contrast"] .gradient-context-assembly,
 [data-theme="high-contrast"] .gradient-quality-judgment,
 [data-theme="high-contrast"] .gradient-task-decomposition,
 [data-theme="high-contrast"] .gradient-iterative-refinement,
 [data-theme="high-contrast"] .gradient-workflow-integration,
 [data-theme="high-contrast"] .gradient-frontier-recognition {
-  background: linear-gradient(90deg, #5ce8c4, #4ac8d8);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent-green);
+  background: none;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+  background-clip: unset;
 }
 
 .header-brand-byline {
