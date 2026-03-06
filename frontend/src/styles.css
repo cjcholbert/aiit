@@ -1502,8 +1502,9 @@ tr:hover td {
 /* Skip Link - visible only on focus */
 .skip-link {
   position: absolute;
-  top: -40px;
+  top: 0;
   left: 0;
+  transform: translateY(-100%);
   background: var(--accent-blue);
   color: white;
   padding: var(--space-sm) var(--space-md);
@@ -1511,11 +1512,11 @@ tr:hover td {
   text-decoration: none;
   font-weight: 500;
   border-radius: 0 0 var(--radius-md) 0;
-  transition: top var(--transition-fast);
+  transition: transform var(--transition-fast);
 }
 
 .skip-link:focus {
-  top: 0;
+  transform: translateY(0);
   outline: 2px solid var(--accent-yellow);
   outline-offset: 2px;
 }
