@@ -41,6 +41,7 @@ export const CONCEPTS = {
 export const MODULES = [
     {
         name: 'Foundation',
+        description: 'Learn to brief AI effectively, give feedback that lands, and build reusable context templates — the three habits every productive AI user starts with.',
         color: '#e6f4ea',
         textColor: '#1a7f37',
         darkColor: '#1c3a2a',
@@ -73,6 +74,7 @@ export const MODULES = [
     },
     {
         name: 'Documentation & Trust',
+        description: 'Build the systems that make AI reliable — persistent context documents, a calibrated trust matrix, and verification checklists that catch mistakes before they land.',
         color: '#e0f0f8',
         textColor: '#1a6d8a',
         darkColor: '#1c2e3a',
@@ -105,6 +107,7 @@ export const MODULES = [
     },
     {
         name: 'Workflow',
+        description: 'Get systematic about what you hand to AI and what you keep. Decompose tasks, build delegation templates, manage iteration passes, and embed AI into your reporting.',
         color: '#fdf0e2',
         textColor: '#9a6700',
         darkColor: '#3a2e1c',
@@ -144,6 +147,7 @@ export const MODULES = [
     },
     {
         name: 'Advanced',
+        description: 'Know where AI breaks down and build your personal playbook. Map capability boundaries, log frontier encounters, and generate a reference card you can actually use.',
         color: '#fde8e8',
         textColor: '#b32d2d',
         darkColor: '#3a1c1c',

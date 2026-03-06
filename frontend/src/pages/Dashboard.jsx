@@ -148,9 +148,10 @@ export default function Dashboard() {
                                     '--module-border': moduleBorder,
                                 }}
                             >
-                                <h2 className="module-section-title">
-                                    {module.name}
-                                </h2>
+                                <h2 className="module-section-title">{module.name}</h2>
+                                {module.description && (
+                                    <p className="module-section-description">{module.description}</p>
+                                )}
                             </div>
                             <div className="module-grid">
                                 {module.lessons.map((lesson) => {

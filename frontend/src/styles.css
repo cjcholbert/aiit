@@ -6190,12 +6190,20 @@ tr:hover td {
 }
 
 .module-section-title {
-  margin: 0;
+  margin: 0 0 4px 0;
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--module-text, var(--brand-teal));
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+.module-section-description {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--module-text, var(--brand-teal));
+  opacity: 0.75;
+  line-height: 1.5;
 }
 
 .module-card--coming {
