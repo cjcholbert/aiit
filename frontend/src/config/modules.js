@@ -6,32 +6,32 @@ export const APP_NAME = 'Your AI Iteration';
 // The Six Core Managerial Concepts
 export const CONCEPTS = {
     contextAssembly: {
-        name: 'Context Assembly',
+        name: 'Briefing Architecture',
         color: '#3a9080',
         description: 'Gathering and presenting relevant background information for AI collaboration'
     },
     qualityJudgment: {
-        name: 'Quality Judgment',
+        name: 'Output Calibration',
         color: '#3a9080',
         description: 'Critically evaluating AI outputs for accuracy and fitness for purpose'
     },
     taskDecomposition: {
-        name: 'Task Decomposition',
+        name: 'Work Sequencing',
         color: '#3a9080',
         description: 'Breaking complex problems into manageable, AI-appropriate components'
     },
     iterativeRefinement: {
-        name: 'Iterative Refinement',
+        name: 'Feedback Cycles',
         color: '#3a9080',
         description: 'Progressively improving outputs through feedback cycles'
     },
     workflowIntegration: {
-        name: 'Workflow Integration',
+        name: 'AI Habit Design',
         color: '#3a9080',
         description: 'Embedding AI collaboration into existing work processes'
     },
     frontierRecognition: {
-        name: 'Frontier Recognition',
+        name: 'Capability Mapping',
         color: '#3a9080',
         description: 'Understanding the current boundaries of AI capability'
     }
