@@ -40,6 +40,7 @@
 
   /* Brand accent */
   --brand-teal: #3a9080;
+  --brand-teal-hover: #328070;
   --brand-teal-light: #e8f4f1;
   --brand-teal-bg: rgba(58, 144, 128, 0.10);
   --brand-teal-border: rgba(58, 144, 128, 0.25);
@@ -118,6 +119,7 @@
   --bg-sidebar: #242a32;
 
   --brand-teal: #4aaa98;
+  --brand-teal-hover: #5fbcaa;
   --brand-teal-light: rgba(74, 170, 152, 0.12);
   --brand-teal-bg: rgba(74, 170, 152, 0.10);
   --brand-teal-border: rgba(74, 170, 152, 0.25);
@@ -168,6 +170,7 @@
   --bg-sidebar: #111111;
 
   --brand-teal: #5cc8b4;
+  --brand-teal-hover: #7ed8c4;
   --brand-teal-light: rgba(92, 200, 180, 0.15);
   --brand-teal-bg: rgba(92, 200, 180, 0.12);
   --brand-teal-border: rgba(92, 200, 180, 0.3);
@@ -667,11 +670,11 @@ button:active:not(:disabled), .btn:active:not(:disabled) {
 
 .btn-primary {
   background: var(--brand-teal);
-  color: white;
+  color: var(--btn-text-on-color);
 }
 
 .btn-primary:hover {
-  background: #328070;
+  background: var(--brand-teal-hover);
 }
 
 .btn-secondary {
@@ -920,8 +923,8 @@ label {
 }
 
 .lesson-nav-btn:hover {
-  color: var(--brand-teal, #3a9080);
-  border-color: var(--brand-teal, #3a9080);
+  color: var(--brand-teal);
+  border-color: var(--brand-teal);
   background: var(--bg-hover);
 }
 
@@ -1565,7 +1568,7 @@ tr:hover td {
   left: 0;
   transform: translateY(-100%);
   background: var(--accent-blue);
-  color: white;
+  color: var(--btn-text-on-color);
   padding: var(--space-sm) var(--space-md);
   z-index: 10000;
   text-decoration: none;
@@ -3768,12 +3771,12 @@ tr:hover td {
 
 .getting-started-step.active .getting-started-step-number {
   background: var(--accent-blue);
-  color: white;
+  color: var(--btn-text-on-color);
 }
 
 .getting-started-step.completed .getting-started-step-number {
   background: var(--accent-green);
-  color: white;
+  color: var(--btn-text-on-color);
 }
 
 .getting-started-step-title {
@@ -4406,7 +4409,7 @@ tr:hover td {
 .btn-remove {
   background: var(--accent-red);
   border: none;
-  color: #fff;
+  color: var(--btn-text-on-color);
   padding: 4px 8px;
   border-radius: var(--radius-sm);
   cursor: pointer;
@@ -5637,7 +5640,7 @@ tr:hover td {
   font-size: 11px;
   padding: 2px 8px;
   border-radius: 10px;
-  color: white;
+  color: var(--btn-text-on-color);
 }
 
 .trust-level-card-expanded {

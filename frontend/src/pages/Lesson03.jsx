@@ -1113,7 +1113,7 @@ ${gapSections}
                         <h3 style={{ margin: 0 }}>{template.name}</h3>
                         <span
                           className="badge"
-                          style={{ backgroundColor: getCategoryColor(template.category), color: 'white' }}
+                          style={{ backgroundColor: getCategoryColor(template.category), color: 'var(--btn-text-on-color)' }}
                         >
                           {template.category}
                         </span>
@@ -1186,7 +1186,7 @@ ${gapSections}
                     <h4 style={{ margin: 0, fontSize: '14px' }}>{starter.name}</h4>
                     <span
                       className="badge"
-                      style={{ backgroundColor: getCategoryColor(starter.category), color: 'white', fontSize: '10px' }}
+                      style={{ backgroundColor: getCategoryColor(starter.category), color: 'var(--btn-text-on-color)', fontSize: '10px' }}
                     >
                       {starter.category}
                     </span>
@@ -1351,7 +1351,7 @@ ${gapSections}
                         padding: '4px 10px',
                         fontSize: '11px',
                         background: 'var(--accent-blue)',
-                        color: 'white',
+                        color: 'var(--btn-text-on-color)',
                         border: 'none',
                         borderRadius: '4px',
                         cursor: newCategoryName.trim() ? 'pointer' : 'not-allowed',
@@ -1369,7 +1369,7 @@ ${gapSections}
                         key={cat.value}
                         style={{
                           backgroundColor: 'var(--accent-blue)',
-                          color: 'white',
+                          color: 'var(--btn-text-on-color)',
                           display: 'inline-flex',
                           alignItems: 'center',
                           gap: '3px',
