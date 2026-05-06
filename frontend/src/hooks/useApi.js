@@ -45,8 +45,17 @@ const isNetworkError = (error) => {
 // Sleep utility for retry delays
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+// Shared in-flight refresh so concurrent 401s don't trigger multiple refresh calls
+let refreshInFlight = null;
+const dedupedRefresh = (refreshFn) => {
+    if (!refreshInFlight) {
+        refreshInFlight = refreshFn().finally(() => { refreshInFlight = null; });
+    }
+    return refreshInFlight;
+};
+
 export function useApi() {
-    const { getAuthHeaders, logout } = useAuth();
+    const { getAuthHeaders, logout, refreshAccessToken } = useAuth();
 
     const fetchWithAuth = async (endpoint, options = {}, retryConfig = {}) => {
         const {
@@ -78,8 +87,22 @@ export function useApi() {
 
                 clearTimeout(timeoutId);
 
-                // Handle 401 by logging out (redirects to login page)
+                // On 401, try refreshing the access token once and replay the request
                 if (res.status === 401) {
+                    const newToken = await dedupedRefresh(refreshAccessToken);
+                    if (newToken) {
+                        const retryController = new AbortController();
+                        const retryTimeoutId = setTimeout(() => retryController.abort(), timeout);
+                        const retryRes = await fetch(`${API_BASE}${endpoint}`, {
+                            ...options,
+                            headers: { ...headers, Authorization: `Bearer ${newToken}` },
+                            signal: retryController.signal
+                        });
+                        clearTimeout(retryTimeoutId);
+                        if (retryRes.status !== 401) {
+                            return retryRes;
+                        }
+                    }
                     logout();
                     throw new ApiError('Session expired. Please sign in again.', 401, false);
                 }
@@ -203,6 +226,25 @@ export function useApi() {
         });
 
         if (res.status === 401) {
+            const newToken = await dedupedRefresh(refreshAccessToken);
+            if (newToken) {
+                const retryRes = await fetch(`${API_BASE}${endpoint}`, {
+                    method: 'POST',
+                    headers: { Authorization: `Bearer ${newToken}` },
+                    body: formData
+                });
+                if (retryRes.status !== 401) {
+                    if (!retryRes.ok) {
+                        const error = await retryRes.json().catch(() => null);
+                        throw new ApiError(
+                            extractErrorMessage(error, 'Upload failed'),
+                            retryRes.status,
+                            retryRes.status >= 500
+                        );
+                    }
+                    return retryRes.json();
+                }
+            }
             logout();
             throw new ApiError('Session expired. Please sign in again.', 401, false);
         }

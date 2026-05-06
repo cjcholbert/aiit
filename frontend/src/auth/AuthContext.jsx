@@ -8,6 +8,25 @@ export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const refreshAccessToken = useCallback(async () => {
+        const refreshTokenValue = localStorage.getItem('refresh_token');
+        if (!refreshTokenValue) return null;
+        try {
+            const res = await fetch(`${API_BASE}/auth/refresh`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ refresh_token: refreshTokenValue })
+            });
+            if (!res.ok) return null;
+            const data = await res.json();
+            localStorage.setItem('access_token', data.access_token);
+            localStorage.setItem('refresh_token', data.refresh_token);
+            return data.access_token;
+        } catch {
+            return null;
+        }
+    }, []);
+
     const autoGuestLogin = useCallback(async () => {
         try {
             const guestId = Math.random().toString(36).slice(2, 10);
@@ -63,30 +82,16 @@ export function AuthProvider({ children }) {
             }
 
             // Try refresh
-            const refreshTokenValue = localStorage.getItem('refresh_token');
-            if (refreshTokenValue) {
-                try {
-                    const res = await fetch(`${API_BASE}/auth/refresh`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ refresh_token: refreshTokenValue })
-                    });
-                    if (res.ok) {
-                        const data = await res.json();
-                        localStorage.setItem('access_token', data.access_token);
-                        localStorage.setItem('refresh_token', data.refresh_token);
-                        const userRes = await fetch(`${API_BASE}/auth/me`, {
-                            headers: { 'Authorization': `Bearer ${data.access_token}` }
-                        });
-                        if (userRes.ok) {
-                            const userData = await userRes.json();
-                            setUser(userData);
-                            setLoading(false);
-                            return;
-                        }
-                    }
-                } catch (err) {
-                    // fall through
+            const newAccessToken = await refreshAccessToken();
+            if (newAccessToken) {
+                const userRes = await fetch(`${API_BASE}/auth/me`, {
+                    headers: { 'Authorization': `Bearer ${newAccessToken}` }
+                });
+                if (userRes.ok) {
+                    const userData = await userRes.json();
+                    setUser(userData);
+                    setLoading(false);
+                    return;
                 }
             }
 
@@ -97,7 +102,7 @@ export function AuthProvider({ children }) {
         };
 
         init();
-    }, []);
+    }, [refreshAccessToken]);
 
     const login = async (email, password) => {
         const res = await fetch(`${API_BASE}/auth/login`, {
@@ -167,6 +172,7 @@ export function AuthProvider({ children }) {
             register,
             logout,
             autoGuestLogin,
+            refreshAccessToken,
             getAuthHeaders,
             isAuthenticated: !!user
         }}>
