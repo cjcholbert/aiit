@@ -26,6 +26,7 @@ import Lesson09 from './pages/Lesson09';
 import Lesson10 from './pages/Lesson10';
 import Lesson11 from './pages/Lesson11';
 import Lesson12 from './pages/Lesson12';
+import ModulePage from './pages/ModulePage';
 import Admin from './pages/Admin';
 import Landing from './pages/Landing';
 
@@ -184,6 +185,14 @@ export default function App() {
                 <ProtectedRoute>
                     <AppLayout>
                         <Landing />
+                    </AppLayout>
+                </ProtectedRoute>
+            } />
+
+            <Route path="/module/:slug" element={
+                <ProtectedRoute>
+                    <AppLayout>
+                        <ModulePage />
                     </AppLayout>
                 </ProtectedRoute>
             } />

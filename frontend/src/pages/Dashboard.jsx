@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { MODULES, CONCEPTS, APP_NAME } from '../config/modules';
 import { useTheme } from '../contexts/ThemeContext';
 import { useProgress } from '../hooks/useProgress';
@@ -160,9 +161,24 @@ export default function Dashboard() {
                                     '--module-border': moduleBorder,
                                 }}
                             >
-                                <h2 className="module-section-title">{module.name}</h2>
+                                <h2 className="module-section-title">
+                                    {module.slug ? (
+                                        <Link to={`/module/${module.slug}`} className="module-section-title-link">
+                                            {module.name}
+                                        </Link>
+                                    ) : (
+                                        module.name
+                                    )}
+                                </h2>
                                 {module.description && (
                                     <p className="module-section-description">{module.description}</p>
+                                )}
+                                {module.slug && (
+                                    <p className="module-section-overview">
+                                        <Link to={`/module/${module.slug}`} className="module-section-overview-link">
+                                            Read the module overview →
+                                        </Link>
+                                    </p>
                                 )}
                             </div>
                             <div className="module-grid">
