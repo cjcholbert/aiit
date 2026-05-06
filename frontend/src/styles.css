@@ -510,6 +510,21 @@ img, video, iframe {
   margin-bottom: var(--space-xs);
 }
 
+.nav-dropdown-module-label--link {
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.nav-dropdown-module-label--link:hover {
+  text-decoration: underline;
+}
+
+.nav-dropdown-module-label--link.active {
+  outline: 2px solid var(--module-text);
+  outline-offset: 1px;
+}
+
 .nav-dropdown-lesson-item {
   display: flex;
   align-items: baseline;

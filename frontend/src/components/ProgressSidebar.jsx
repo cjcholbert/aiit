@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useProgress } from '../hooks/useProgress';
 import { useLessonStats } from '../contexts/LessonStatsContext';
 import SelfAssessmentChecklist from './SelfAssessmentChecklist';
@@ -18,10 +19,12 @@ function getModuleForLesson(lessonNumber) {
   return MODULES.find(m => m.lessons.some(l => l.lesson === lessonNumber));
 }
 
-function ProgressSidebar({ lessonNumber }) {
+function ProgressSidebar({ lessonNumber, moduleSlug }) {
   const { theme } = useTheme();
   const { progress, loading, isLessonComplete, completionPercentage } = useProgress();
   const { stats: lessonStats } = useLessonStats();
+  const moduleFromSlug = moduleSlug ? MODULES.find(m => m.slug === moduleSlug) : null;
+  const isModuleView = !lessonNumber && Boolean(moduleFromSlug);
 
   const [isOpen, setIsOpen] = useState(() => {
     const stored = localStorage.getItem('ams_sidebar_open');
@@ -53,27 +56,67 @@ function ProgressSidebar({ lessonNumber }) {
 
   const teal = TEAL_BY_THEME[theme] || TEAL_BY_THEME.light;
 
-  const currentModule = getModuleForLesson(lessonNumber);
+  const currentModule = isModuleView ? moduleFromSlug : getModuleForLesson(lessonNumber);
   const titleColor = currentModule
     ? (theme === 'dark' ? currentModule.darkTextColor : currentModule.textColor)
     : teal.main;
+  const sidebarTitle = isModuleView ? `${currentModule.name} Progress` : 'Lesson Progress';
 
   const barGradient = `linear-gradient(90deg, ${teal.main}, ${teal.dark})`;
 
+  const renderModuleLessons = () => {
+    const moduleCompleted = currentModule.lessons.filter(l => isLessonComplete(l.lesson)).length;
+    return (
+      <div className="progress-sidebar__module-lessons">
+        <div className="progress-sidebar__module-lessons-header">
+          <span className="progress-sidebar__module-lessons-label">In this module</span>
+          <span className="progress-sidebar__module-lessons-count">
+            {moduleCompleted}/{currentModule.lessons.length}
+          </span>
+        </div>
+        <ul className="progress-sidebar__module-lessons-list">
+          {currentModule.lessons.map((lesson) => {
+            const complete = isLessonComplete(lesson.lesson);
+            return (
+              <li key={lesson.lesson} className="progress-sidebar__module-lesson-item">
+                <Link
+                  to={`/lesson/${lesson.lesson}`}
+                  className={`progress-sidebar__module-lesson-link${complete ? ' progress-sidebar__module-lesson-link--complete' : ''}`}
+                >
+                  <span className="progress-sidebar__module-lesson-num">{lesson.lesson}</span>
+                  <span className="progress-sidebar__module-lesson-title">{lesson.title}</span>
+                  {complete && (
+                    <span className="progress-sidebar__module-lesson-check" aria-label="Complete">✓</span>
+                  )}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    );
+  };
+
   const renderSidebarContent = () => (
     <div className="progress-sidebar__content">
-      <div className="progress-sidebar__checklist">
-        <SelfAssessmentChecklist
-          lessonNumber={lessonNumber}
-          criteria={LESSON_CRITERIA[lessonNumber]}
-          accentColor={teal.main}
-        />
-      </div>
+      {isModuleView ? (
+        renderModuleLessons()
+      ) : (
+        <>
+          <div className="progress-sidebar__checklist">
+            <SelfAssessmentChecklist
+              lessonNumber={lessonNumber}
+              criteria={LESSON_CRITERIA[lessonNumber]}
+              accentColor={teal.main}
+            />
+          </div>
 
-      {lessonStats && (
-        <div className="progress-sidebar__stats">
-          <StatsPanel stats={lessonStats} accentColor={teal.main} />
-        </div>
+          {lessonStats && (
+            <div className="progress-sidebar__stats">
+              <StatsPanel stats={lessonStats} accentColor={teal.main} />
+            </div>
+          )}
+        </>
       )}
 
       <div className="progress-sidebar__progress-section">
@@ -96,7 +139,7 @@ function ProgressSidebar({ lessonNumber }) {
       {/* Desktop sidebar */}
       <aside className={`progress-sidebar ${isOpen ? 'progress-sidebar--open' : 'progress-sidebar--collapsed'}`}>
         <div className="progress-sidebar__toggle-bar">
-          {isOpen && <span className="progress-sidebar__title" style={{ color: titleColor }}>Lesson Progress</span>}
+          {isOpen && <span className="progress-sidebar__title" style={{ color: titleColor }}>{sidebarTitle}</span>}
           <button
             className="progress-sidebar__toggle-btn"
             onClick={() => setIsOpen(prev => !prev)}
@@ -127,7 +170,7 @@ function ProgressSidebar({ lessonNumber }) {
             onClick={e => e.stopPropagation()}
                      >
             <div className="progress-sidebar__toggle-bar">
-              <span className="progress-sidebar__title" style={{ color: titleColor }}>Lesson Progress</span>
+              <span className="progress-sidebar__title" style={{ color: titleColor }}>{sidebarTitle}</span>
               <button
                 className="progress-sidebar__toggle-btn"
                 onClick={() => setMobileOpen(false)}

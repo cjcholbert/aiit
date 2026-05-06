@@ -98,7 +98,13 @@ export default function NavDropdown() {
                                             '--module-border': moduleBorder,
                                         }}
                                     >
-                                        <div className="nav-dropdown-module-label">{module.name}</div>
+                                        <NavLink
+                                            to={`/module/${module.slug}`}
+                                            className={({ isActive }) => `nav-dropdown-module-label nav-dropdown-module-label--link${isActive ? ' active' : ''}`}
+                                            role="menuitem"
+                                        >
+                                            {module.name}
+                                        </NavLink>
                                         {module.lessons.map((lesson) => (
                                             <NavLink
                                                 key={lesson.lesson}

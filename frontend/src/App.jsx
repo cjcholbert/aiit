@@ -105,10 +105,18 @@ function AppLayout({ children }) {
     const lessonMatch = location.pathname.match(/^\/lesson\/(\d+)$/);
     const lessonNumber = lessonMatch ? parseInt(lessonMatch[1], 10) : null;
 
-    // Find current module's border color for tab accent
+    // Parse module slug from route — module pages get the same chrome as lesson pages
+    const moduleMatch = location.pathname.match(/^\/module\/([^/]+)$/);
+    const moduleSlug = moduleMatch ? moduleMatch[1] : null;
+
+    const showLessonChrome = Boolean(lessonNumber || moduleSlug);
+
+    // Find current module's border color for tab accent — works for both lesson and module pages
     const currentModule = lessonNumber
         ? MODULES.find(m => m.lessons.some(l => l.lesson === lessonNumber))
-        : null;
+        : moduleSlug
+            ? MODULES.find(m => m.slug === moduleSlug)
+            : null;
     const moduleBorderColor = currentModule
         ? (theme === 'dark' ? currentModule.darkBorderColor : currentModule.borderColor)
         : undefined;
@@ -134,15 +142,15 @@ function AppLayout({ children }) {
                         <NavDropdown />
                     </div>
 
-                    {lessonNumber && <ModuleTabNav />}
+                    {showLessonChrome && <ModuleTabNav />}
 
-                    <div className={`content-body${lessonNumber ? ' content-body--with-sidebar' : ''}`}>
+                    <div className={`content-body${showLessonChrome ? ' content-body--with-sidebar' : ''}`}>
                         <main id="main-content" className="main-content" tabIndex="-1">
                             <ErrorBoundary>{children}</ErrorBoundary>
                         </main>
 
-                        {lessonNumber && (
-                            <ProgressSidebar lessonNumber={lessonNumber} />
+                        {showLessonChrome && (
+                            <ProgressSidebar lessonNumber={lessonNumber} moduleSlug={moduleSlug} />
                         )}
                     </div>
                 </div>

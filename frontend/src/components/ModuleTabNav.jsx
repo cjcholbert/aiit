@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { MODULES } from '../config/modules';
 import { useProgress } from '../hooks/useProgress';
@@ -10,16 +10,25 @@ export default function ModuleTabNav() {
     const { isLessonComplete } = useProgress();
     const location = useLocation();
 
-    // Extract current lesson number from route (e.g. /lesson/3 -> 3)
-    const match = location.pathname.match(/^\/lesson\/(\d+)/);
-    const currentLesson = match ? parseInt(match[1], 10) : null;
+    // Extract current lesson or module from route
+    const lessonMatch = location.pathname.match(/^\/lesson\/(\d+)/);
+    const currentLesson = lessonMatch ? parseInt(lessonMatch[1], 10) : null;
+    const moduleMatch = location.pathname.match(/^\/module\/([^/]+)/);
+    const currentModuleSlug = moduleMatch ? moduleMatch[1] : null;
 
-    // Find which module contains the current lesson (for mobile accordion)
+    // Find which module is "current" — by lesson, then by module slug, fall back to 0
     const currentModuleIndex = currentLesson
         ? MODULES.findIndex(m => m.lessons.some(l => l.lesson === currentLesson))
-        : 0;
+        : currentModuleSlug
+            ? Math.max(0, MODULES.findIndex(m => m.slug === currentModuleSlug))
+            : 0;
 
     const [expandedModule, setExpandedModule] = useState(currentModuleIndex);
+
+    // Keep expansion in sync as the user navigates between lessons/modules
+    useEffect(() => {
+        setExpandedModule(currentModuleIndex);
+    }, [currentModuleIndex]);
 
     const toggleModule = useCallback((index) => {
         setExpandedModule(prev => prev === index ? -1 : index);
@@ -49,15 +58,24 @@ export default function ModuleTabNav() {
                             '--module-border': moduleBorder,
                         }}
                     >
-                        <button
-                            className="module-tab-label"
-                            onClick={() => toggleModule(moduleIndex)}
-                            aria-expanded={isExpanded}
-                        >
-                            <span className="module-tab-label-text">{module.name}</span>
-                            <span className="module-tab-label-count">{completedCount}/{module.lessons.length}</span>
-                            <span className="module-tab-label-arrow">{isExpanded ? '▾' : '▸'}</span>
-                        </button>
+                        <div className="module-tab-label">
+                            <Link
+                                to={`/module/${module.slug}`}
+                                className="module-tab-label-link"
+                                aria-current={currentModuleSlug === module.slug ? 'page' : undefined}
+                            >
+                                <span className="module-tab-label-text">{module.name}</span>
+                                <span className="module-tab-label-count">{completedCount}/{module.lessons.length}</span>
+                            </Link>
+                            <button
+                                className="module-tab-label-toggle"
+                                onClick={() => toggleModule(moduleIndex)}
+                                aria-expanded={isExpanded}
+                                aria-label={isExpanded ? `Collapse ${module.name} lessons` : `Expand ${module.name} lessons`}
+                            >
+                                <span className="module-tab-label-arrow">{isExpanded ? '▾' : '▸'}</span>
+                            </button>
+                        </div>
                         <ul className={`module-tab-lessons ${isExpanded ? 'module-tab-lessons--open' : ''}`}>
                             {module.lessons.map((lesson) => {
                                 const isCurrent = lesson.lesson === currentLesson;
